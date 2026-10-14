@@ -3,9 +3,9 @@
   "tasks": [
     { "label": "verify (build, test, import, smoke)", "type": "shell", "command": "./scripts/verify.sh", "problemMatcher": [], "group": { "kind": "test", "isDefault": true } },
     { "label": "db: start postgres", "type": "shell", "command": "docker compose up -d db", "problemMatcher": [] },
-    { "label": "import: once (nba-stats)", "type": "shell", "command": "dotnet run --project src/SportsTrivia.Importer -- --once", "problemMatcher": [] },
-    { "label": "import: once (seed)", "type": "shell", "command": "dotnet run --project src/SportsTrivia.Importer -- --once --source seed", "problemMatcher": [] },
-    { "label": "api: run", "type": "shell", "command": "dotnet run --project src/SportsTrivia.Api", "isBackground": true, "problemMatcher": [] },
-    { "label": "web: start", "type": "shell", "command": "npm start", "options": { "cwd": "web/sports-trivia" }, "isBackground": true, "problemMatcher": [] }
+    { "label": "import: once (nba-stats)", "type": "shell", "command": "dotnet run --project src/KnowBall.Importer -- --once", "problemMatcher": [] },
+    { "label": "import: once (seed)", "type": "shell", "command": "dotnet run --project src/KnowBall.Importer -- --once --source seed", "problemMatcher": [] },
+    { "label": "api: run", "type": "shell", "command": "dotnet run --project src/KnowBall.Api", "isBackground": true, "problemMatcher": [] },
+    { "label": "web: start", "type": "shell", "command": "npm start", "options": { "cwd": "web/know-ball" }, "isBackground": true, "problemMatcher": [] }
   ]
 }

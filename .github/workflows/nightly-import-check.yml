@@ -22,6 +22,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
-      - run: dotnet build src/SportsTrivia.Importer -c Release
+      - run: dotnet build src/KnowBall.Importer -c Release
       - name: Live import (history, crosswalk, ESPN rosters)
-        run: dotnet src/SportsTrivia.Importer/bin/Release/net10.0/SportsTrivia.Importer.dll --once --source espn
+        run: dotnet src/KnowBall.Importer/bin/Release/net10.0/KnowBall.Importer.dll --once --source espn

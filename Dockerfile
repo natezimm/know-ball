@@ -3,22 +3,22 @@
 
 FROM node:22-alpine AS web
 WORKDIR /web
-COPY web/sports-trivia/package.json web/sports-trivia/package-lock.json ./
+COPY web/know-ball/package.json web/know-ball/package-lock.json ./
 RUN npm ci --no-audit --no-fund
-COPY web/sports-trivia/ ./
+COPY web/know-ball/ ./
 RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY Directory.Build.props Directory.Packages.props ./
 COPY src/ src/
-RUN dotnet publish src/SportsTrivia.Api -c Release -o /out/api \
- && dotnet publish src/SportsTrivia.Importer -c Release -o /out/importer
+RUN dotnet publish src/KnowBall.Api -c Release -o /out/api \
+ && dotnet publish src/KnowBall.Importer -c Release -o /out/importer
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 COPY --from=build /out/api /app/api
 COPY --from=build /out/importer /app/importer
-COPY --from=web /web/dist/sports-trivia/browser /app/api/wwwroot
+COPY --from=web /web/dist/know-ball/browser /app/api/wwwroot
 
 # Puzzle photos are written under /data; mount a volume there so they outlive the container.
 # Forwarded headers are trusted so rate limits see each visitor's address behind a reverse proxy.
@@ -29,4 +29,4 @@ VOLUME /data
 EXPOSE 8080
 
 WORKDIR /app/api
-ENTRYPOINT ["dotnet", "SportsTrivia.Api.dll"]
+ENTRYPOINT ["dotnet", "KnowBall.Api.dll"]

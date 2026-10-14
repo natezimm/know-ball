@@ -7,8 +7,8 @@ Updated 2026-10-13: ESPN replaces balldontlie as the nightly source, the NFL has
 Spordle, is added and built. What was tested and found for every data source is in [research.md](research.md).
 
 **Names changed on 2026-10-13.** "Spordle" is now the Wordle-style word game. The player-guessing game that the
-build plan calls Spordle is now **Scouting Report**. The site itself is now called **Know Ball**; the code keeps
-its generic `SportsTrivia` names.
+build plan calls Spordle is now **Scouting Report**. The site itself is now called **Know Ball**, and on 2026-10-14 the code
+was renamed to match (`SportsTrivia` became `KnowBall`).
 
 ## 1. Where things stand
 
@@ -29,7 +29,7 @@ What is still missing is listed in [section 8](#8-whats-left).
 - **Theme**: Trading Card, chosen 2026-10-13 from nine candidates at `/mockups/themes` and applied to the whole
   app: cream card stock, navy ink, red and mustard trim; Rokkitt for text, Alfa Slab One for headings and tiles,
   Yellowtail for script wordmarks. The fonts are bundled. The palette and roles are in
-  `web/sports-trivia/src/styles.css`.
+  `web/know-ball/src/styles.css`.
 - **Version 1 is four games**: Spordle (built), Scouting Report, Career Path and Who's That Sportsman?. If the
   photo collection for the last one lags, version 1 ships with three. The other five are designed but not scheduled.
 
@@ -117,7 +117,7 @@ for archive links. The result, stats and help dialogs and the hint ladder live i
 separate components. A daily puzzle is also created on the first request of the day if the importer has not
 queued one. The answer pool is the 150 best-known active players with every clue filled in.
 
-Backend (`SportsTrivia.Application/Games`, endpoints moved out of `Program.cs` into `Api/Endpoints`):
+Backend (`KnowBall.Application/Games`, endpoints moved out of `Program.cs` into `Api/Endpoints`):
 
 - `IGame`: generate a puzzle, build the client payload, evaluate a guess.
 - `GameService`: loads the puzzle, tracks progress in `UserResult`, enforces guess limits and hint unlocks, and
@@ -129,7 +129,7 @@ Backend (`SportsTrivia.Application/Games`, endpoints moved out of `Program.cs` i
   `GET /api/{game}/archive`, `GET /api/{game}/practice`, `GET /api/me/stats`.
 - Identity: a random id created in the browser and sent as an `X-Anon-Id` header. Accounts come in Phase 2.
 
-Frontend (`web/sports-trivia/src/app`):
+Frontend (`web/know-ball/src/app`):
 
 - `core/`: `GameApi`, `GameStore` (signals: puzzle, guesses, status), anonymous id.
 - `shared/`: `GameShell` (title bar with puzzle number, help, stats), `ResultModal`, `StatsModal`, `ShareService`,
@@ -168,8 +168,8 @@ Built to match Nerdle (`nerdle.nathanzimmerman.com`) with sports words and Know 
 - **Stats**: per word length, kept in the browser: played, win %, streaks, fastest solve, fewest guesses.
 - **Limits**: games live in server memory, expire after six idle hours and are lost on restart, as in Nerdle.
   Guesses and hints are limited to 20 a minute per address, new games to 30.
-- **Code**: `src/SportsTrivia.Application/Games/Spordle`, `src/SportsTrivia.Api/Endpoints/SpordleEndpoints.cs`,
-  `web/sports-trivia/src/app/games/spordle`.
+- **Code**: `src/KnowBall.Application/Games/Spordle`, `src/KnowBall.Api/Endpoints/SpordleEndpoints.cs`,
+  `web/know-ball/src/app/games/spordle`.
 
 Not built, and worth deciding later:
 
