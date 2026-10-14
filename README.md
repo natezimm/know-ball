@@ -20,16 +20,16 @@ browser makes up an id and sends it as `X-Anon-Id`. The answer never leaves the 
 
 ```
 src/
-  SportsTrivia.Domain/          entities: League, Team, Player, PlayerExternalId, PlayerTeamStint, PlayerSeasonStat, Puzzle…
-  SportsTrivia.Application/     Import/  history, crosswalk and roster imports, player matching, popularity
+  KnowBall.Domain/          entities: League, Team, Player, PlayerExternalId, PlayerTeamStint, PlayerSeasonStat, Puzzle…
+  KnowBall.Application/     Import/  history, crosswalk and roster imports, player matching, popularity
                                 Games/   the engine (GameService, PuzzleScheduler, PuzzleCalendar) and one folder per game
-  SportsTrivia.Infrastructure/  EF Core (Postgres or SQLite), data sources, image store and silhouette renderer
-  SportsTrivia.Api/             minimal API endpoints; also serves the built Angular app when wwwroot holds it
-  SportsTrivia.Importer/        worker: history every 30 days, rosters and puzzle queues nightly at 04:00 Eastern
+  KnowBall.Infrastructure/  EF Core (Postgres or SQLite), data sources, image store and silhouette renderer
+  KnowBall.Api/             minimal API endpoints; also serves the built Angular app when wwwroot holds it
+  KnowBall.Importer/        worker: history every 30 days, rosters and puzzle queues nightly at 04:00 Eastern
 tests/
-  SportsTrivia.UnitTests/       comparers, generators, scheduler, importers, parsers (fixture CSVs in tests/fixtures)
-  SportsTrivia.IntegrationTests/ boots the API on SQLite or Postgres and plays the games through HTTP
-web/sports-trivia/              Angular 21 app: core/ (API, store, share), shared/ (GameShell, player search), games/, pages/
+  KnowBall.UnitTests/       comparers, generators, scheduler, importers, parsers (fixture CSVs in tests/fixtures)
+  KnowBall.IntegrationTests/ boots the API on SQLite or Postgres and plays the games through HTTP
+web/know-ball/              Angular 21 app: core/ (API, store, share), shared/ (GameShell, player search), games/, pages/
 docs/                           implementation plan and data source research
 ```
 
@@ -39,9 +39,9 @@ Prerequisites: .NET 10 SDK, Node 22, Docker (optional).
 
 ```bash
 docker compose up -d db                                    # Postgres on :5432 (KNOWBALL_DB_PORT to change)
-dotnet run --project src/SportsTrivia.Importer -- --once   # full history, then today's rosters (about a minute)
-dotnet run --project src/SportsTrivia.Api                  # http://localhost:5080
-cd web/sports-trivia && npm install && npm start           # http://localhost:4200
+dotnet run --project src/KnowBall.Importer -- --once   # full history, then today's rosters (about a minute)
+dotnet run --project src/KnowBall.Api                  # http://localhost:5080
+cd web/know-ball && npm install && npm start           # http://localhost:4200
 ```
 
 No Docker? Use SQLite for both the importer and the API:
@@ -55,9 +55,9 @@ A SQLite file made by an older version of the schema is refused with a message; 
 Tests:
 
 ```bash
-dotnet test tests/SportsTrivia.UnitTests
-dotnet test tests/SportsTrivia.IntegrationTests       # SQLite; set TRIVIA_TEST_POSTGRES to a connection string for Postgres
-cd web/sports-trivia && npm test
+dotnet test tests/KnowBall.UnitTests
+dotnet test tests/KnowBall.IntegrationTests       # SQLite; set TRIVIA_TEST_POSTGRES to a connection string for Postgres
+cd web/know-ball && npm test
 ```
 
 `./scripts/verify.sh` is the older all-in-one gate check and still needs updating for version 1 (see the plan).
@@ -65,10 +65,10 @@ cd web/sports-trivia && npm test
 ## The importer
 
 ```bash
-dotnet run --project src/SportsTrivia.Importer -- --once                          # one run, then exit
-dotnet run --project src/SportsTrivia.Importer -- --once --history                # reload the full history now, due or not
-dotnet run --project src/SportsTrivia.Importer -- --once --source seed --no-history  # offline: ~36 bundled players
-dotnet run --project src/SportsTrivia.Importer                                    # the nightly worker
+dotnet run --project src/KnowBall.Importer -- --once                          # one run, then exit
+dotnet run --project src/KnowBall.Importer -- --once --history                # reload the full history now, due or not
+dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history  # offline: ~36 bundled players
+dotnet run --project src/KnowBall.Importer                                    # the nightly worker
 ```
 
 Each run: reload the player history if it is due, then today's rosters, then top up every game's queue of daily
@@ -147,8 +147,8 @@ entities:
 
 ```bash
 dotnet tool install dotnet-ef --tool-path .tools
-.tools/dotnet-ef migrations add <Name> --project src/SportsTrivia.Infrastructure \
-  --startup-project src/SportsTrivia.Infrastructure --output-dir Persistence/Migrations
+.tools/dotnet-ef migrations add <Name> --project src/KnowBall.Infrastructure \
+  --startup-project src/KnowBall.Infrastructure --output-dir Persistence/Migrations
 ```
 
 SQLite (tests, quick local runs) uses `EnsureCreated` with a schema version number.
@@ -156,7 +156,7 @@ SQLite (tests, quick local runs) uses `EnsureCreated` with a schema version numb
 ## Look and feel
 
 The Trading Card theme: cream stock, navy ink, red and mustard trim, with one trim colour per game. Colours and
-their roles are CSS variables in `web/sports-trivia/src/styles.css`; shared pieces use `kb-` classes there. Fonts
+their roles are CSS variables in `web/know-ball/src/styles.css`; shared pieces use `kb-` classes there. Fonts
 (Rokkitt, Alfa Slab One, Yellowtail) come from `@fontsource` packages and are bundled. `/mockups` still holds the
 designs for the games not built yet and keeps its own dark palette.
 

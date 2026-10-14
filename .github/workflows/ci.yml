@@ -29,21 +29,21 @@ jobs:
         with:
           dotnet-version: "10.0.x"
       - name: Build
-        run: dotnet build SportsTrivia.sln -c Release
+        run: dotnet build KnowBall.sln -c Release
       - name: Unit tests
-        run: dotnet test tests/SportsTrivia.UnitTests -c Release --no-build
+        run: dotnet test tests/KnowBall.UnitTests -c Release --no-build
       - name: Integration tests (SQLite)
-        run: dotnet test tests/SportsTrivia.IntegrationTests -c Release --no-build
+        run: dotnet test tests/KnowBall.IntegrationTests -c Release --no-build
       - name: Integration tests (Postgres)
         env:
           TRIVIA_TEST_POSTGRES: Host=localhost;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
-        run: dotnet test tests/SportsTrivia.IntegrationTests -c Release --no-build
+        run: dotnet test tests/KnowBall.IntegrationTests -c Release --no-build
       - name: Importer runs against Postgres and is repeatable
         env:
           ConnectionStrings__Trivia: Host=localhost;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
           Import__MaxAttempts: "1"
         run: |
-          IMPORTER=src/SportsTrivia.Importer/bin/Release/net10.0/SportsTrivia.Importer.dll
+          IMPORTER=src/KnowBall.Importer/bin/Release/net10.0/KnowBall.Importer.dll
           dotnet $IMPORTER --once --source seed --no-history
           dotnet $IMPORTER --once --source seed --no-history | tee second.txt
           grep -q "0 new, 0 updated, 0 deactivated, 0 team changes" second.txt
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: web/sports-trivia
+        working-directory: web/know-ball
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
