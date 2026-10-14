@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
-# Phase 0 gate check: build, test, run the importer (twice, to prove it is repeatable),
-# start the nightly worker, smoke-test the API, and build/test the Angular app.
+# Pre-launch check: build, test, run the importer (twice, to prove it is repeatable), start the
+# nightly worker, smoke-test the API and the daily games, build/test the Angular app, and build
+# and smoke-test the Docker image.
 # Works on macOS (bash 3.2) and Linux. Writes artifacts/verify.log and artifacts/verify-summary.txt.
 #
-#   ./scripts/verify.sh            # everything
-#   SKIP_WEB=1 ./scripts/verify.sh # backend only
+#   ./scripts/verify.sh               # everything
+#   SKIP_WEB=1 ./scripts/verify.sh    # without the Angular app
+#   SKIP_DOCKER=1 ./scripts/verify.sh # without the Docker image
+#
+# Postgres runs in Docker on KNOWBALL_DB_PORT (default 5432); set it if that port is taken.
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -68,24 +72,12 @@ else
   exit 1
 fi
 
-section "EF Core migration"
-if ls src/KnowBall.Infrastructure/Persistence/Migrations/*InitialCreate.cs >/dev/null 2>&1; then
-  result INFO "InitialCreate migration already present"
+section "EF Core migrations"
+MIGRATIONS=src/KnowBall.Infrastructure/Persistence/Migrations
+if ls $MIGRATIONS/*_InitialCreate.cs $MIGRATIONS/*_VersionOne.cs >/dev/null 2>&1; then
+  result PASS "InitialCreate and VersionOne migrations present"
 else
-  mkdir -p .tools
-  if [ ! -x .tools/dotnet-ef ]; then
-    dotnet tool install dotnet-ef --tool-path .tools --version "${TFM_MAJOR}.*" || true
-  fi
-  if .tools/dotnet-ef migrations add InitialCreate \
-      --project src/KnowBall.Infrastructure \
-      --startup-project src/KnowBall.Infrastructure \
-      --output-dir Persistence/Migrations \
-      --configuration Release; then
-    result PASS "generated InitialCreate migration"
-    dotnet build KnowBall.sln -c Release >/dev/null || result FAIL "rebuild after migration"
-  else
-    result FAIL "could not generate migration"
-  fi
+  result FAIL "InitialCreate or VersionOne migration missing from $MIGRATIONS"
 fi
 
 section "Unit tests"
@@ -104,7 +96,8 @@ fi
 
 section "Database"
 DB_MODE="sqlite"
-PG_CS="Host=localhost;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia"
+DB_PORT="${KNOWBALL_DB_PORT:-5432}"
+PG_CS="Host=localhost;Port=$DB_PORT;Database=sports_trivia;Username=trivia;Password=trivia"
 if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
   if docker compose up -d db; then
     for _ in $(seq 1 40); do
@@ -116,13 +109,13 @@ fi
 if [ "$DB_MODE" = "postgres" ]; then
   export Database__Provider=Postgres
   export ConnectionStrings__Trivia="$PG_CS"
-  result INFO "using Postgres in Docker"
+  result INFO "using Postgres in Docker on port $DB_PORT"
 
   section "Integration tests (Postgres)"
   # A separate database so tests don't touch dev data.
   docker compose exec -T db psql -U trivia -d sports_trivia -c "DROP DATABASE IF EXISTS sports_trivia_test" >/dev/null 2>&1
   docker compose exec -T db psql -U trivia -d sports_trivia -c "CREATE DATABASE sports_trivia_test" >/dev/null 2>&1
-  if TRIVIA_TEST_POSTGRES="Host=localhost;Port=5432;Database=sports_trivia_test;Username=trivia;Password=trivia" \
+  if TRIVIA_TEST_POSTGRES="Host=localhost;Port=$DB_PORT;Database=sports_trivia_test;Username=trivia;Password=trivia" \
      dotnet test tests/KnowBall.IntegrationTests -c Release --no-build --logger "trx;LogFileName=integration-pg.trx" --results-directory artifacts/test-results; then
     result PASS "integration tests on Postgres"
   else
@@ -134,30 +127,33 @@ else
   result INFO "Docker not available; using SQLite at artifacts/trivia-dev.db (Postgres is covered in CI)"
 fi
 
+# --no-history everywhere: the full Basketball-Reference history is a long download, and the
+# nightly worker loads it on the real host.
+export Import__HistoryRefreshDays=0
 IMPORTER="src/KnowBall.Importer/bin/Release/$TriviaTfm/KnowBall.Importer.dll"
 API="src/KnowBall.Api/bin/Release/$TriviaTfm/KnowBall.Api.dll"
 
-section "Import: live NBA feed"
+section "Import: live ESPN rosters"
 LIVE_OK=0
-if Import__MaxAttempts=2 Import__RetryDelaySeconds=5 dotnet "$IMPORTER" --once --source nba-stats; then
-  result PASS "live import from stats.nba.com"
+if Import__MaxAttempts=2 Import__RetryDelaySeconds=5 dotnet "$IMPORTER" --once --source espn --no-history; then
+  result PASS "live import from ESPN"
   LIVE_OK=1
 else
-  result INFO "live import from stats.nba.com failed (see log); falling back to seed data for the rest of the run"
+  result INFO "live import from ESPN failed (see log); falling back to seed data for the rest of the run"
 fi
 
 if [ "$LIVE_OK" = "0" ]; then
   section "Import: seed data"
-  if dotnet "$IMPORTER" --once --source seed; then
+  if dotnet "$IMPORTER" --once --source seed --no-history; then
     result PASS "seed import"
   else
     result FAIL "seed import"
   fi
 fi
 
-SOURCE="seed"; [ "$LIVE_OK" = "1" ] && SOURCE="nba-stats"
+SOURCE="seed"; [ "$LIVE_OK" = "1" ] && SOURCE="espn"
 section "Import: second run must be a no-op"
-SECOND="$(Import__MaxAttempts=1 dotnet "$IMPORTER" --once --source "$SOURCE" 2>&1)"
+SECOND="$(Import__MaxAttempts=1 dotnet "$IMPORTER" --once --source "$SOURCE" --no-history 2>&1)"
 echo "$SECOND"
 if echo "$SECOND" | grep -q "Succeeded: .* 0 new, 0 updated, 0 deactivated, 0 team changes"; then
   result PASS "re-running the import changes nothing (idempotent)"
@@ -207,6 +203,23 @@ if [ -n "$GAME_ID" ] && ! echo "$GAME" | grep -qi 'answer' && echo "$BAD_GUESS" 
 else
   result FAIL "Spordle endpoints"
 fi
+
+# The daily games: today's puzzle must come without its answer, and the admin area must refuse
+# a request without the key (404 when no key is set, 401 with a wrong one).
+ANON="verify-$$"
+DAILY="$(curl -fs -H "X-Anon-Id: $ANON" http://localhost:5080/api/scouting-report/daily || true)"
+echo "scouting report daily: $DAILY"
+if echo "$DAILY" | grep -q '"puzzleId"' && echo "$DAILY" | grep -q '"answer":null'; then
+  result PASS "GET /api/scouting-report/daily returns today's puzzle without the answer"
+else
+  result FAIL "GET /api/scouting-report/daily"
+fi
+curl -fs -H "X-Anon-Id: $ANON" http://localhost:5080/api/me/today >/dev/null && result PASS "GET /api/me/today" || result FAIL "GET /api/me/today"
+ADMIN_CODE="$(curl -s -o /dev/null -w '%{http_code}' http://localhost:5080/api/admin/overview)"
+case "$ADMIN_CODE" in
+  401|404) result PASS "GET /api/admin/overview refused without the key ($ADMIN_CODE)" ;;
+  *)       result FAIL "GET /api/admin/overview without the key gave $ADMIN_CODE" ;;
+esac
 kill "$API_PID" 2>/dev/null; wait "$API_PID" 2>/dev/null; API_PID=""
 
 if [ "${SKIP_WEB:-0}" != "1" ]; then
@@ -227,6 +240,19 @@ if [ "${SKIP_WEB:-0}" != "1" ]; then
     esac
   else
     result FAIL "npm not found"
+  fi
+fi
+
+if [ "${SKIP_DOCKER:-0}" != "1" ]; then
+  section "Docker image"
+  if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+    if ./scripts/docker-smoke.sh; then
+      result PASS "Docker image builds and passes its smoke test"
+    else
+      result FAIL "Docker image smoke test"
+    fi
+  else
+    result INFO "Docker not available; image not checked (CI checks it)"
   fi
 fi
 
