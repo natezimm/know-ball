@@ -1,0 +1,27 @@
+# Daily canary: do the live sources still parse? A fresh database loads the full history
+# (Basketball-Reference mirror, Wikidata), then the ESPN rosters. Catches upstream changes
+# before the production importer's nightly run does. Uses a throwaway SQLite database.
+name: Nightly import check
+
+on:
+  schedule:
+    - cron: "17 7 * * *" # 3:17 AM Eastern (EDT)
+  workflow_dispatch:
+
+jobs:
+  live-import:
+    runs-on: ubuntu-latest
+    env:
+      TriviaTfm: net10.0
+      Database__Provider: Sqlite
+      ConnectionStrings__Trivia: Data Source=canary.db
+      Import__MaxAttempts: "2"
+      Import__RetryDelaySeconds: "30"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - run: dotnet build src/SportsTrivia.Importer -c Release
+      - name: Live import (history, crosswalk, ESPN rosters)
+        run: dotnet src/SportsTrivia.Importer/bin/Release/net10.0/SportsTrivia.Importer.dll --once --source espn

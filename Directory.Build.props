@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Default target. scripts/verify.sh passes -p:TriviaTfm=netX.0 to match the installed SDK. -->
+    <TriviaTfm Condition="'$(TriviaTfm)' == ''">net10.0</TriviaTfm>
+    <TargetFramework>$(TriviaTfm)</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+</Project>

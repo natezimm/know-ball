@@ -1,0 +1,419 @@
+player,player_id,team,season,lg,replaced
+Scottie Barnes,barnesc01,Team Stars,2026,NBA,FALSE
+Devin Booker,bookede01,Team Stars,2026,NBA,FALSE
+Cade Cunningham,cunnica01,Team Stars,2026,NBA,FALSE
+Anthony Edwards,edwaran01,Team Stars,2026,NBA,FALSE
+Jalen Johnson,johnsja05,Team Stars,2026,NBA,FALSE
+Jaylen Brown,brownja02,Team Stripes,2026,NBA,FALSE
+Jalen Brunson,brunsja01,Team Stripes,2026,NBA,FALSE
+Stephen Curry,curryst01,Team Stripes,2026,NBA,TRUE
+Kevin Durant,duranke01,Team Stripes,2026,NBA,FALSE
+De'Aaron Fox,foxde01,Team Stripes,2026,NBA,FALSE
+LeBron James,jamesle01,Team Stripes,2026,NBA,FALSE
+Kawhi Leonard,leonaka01,Team Stripes,2026,NBA,FALSE
+Donovan Mitchell,mitchdo01,Team Stripes,2026,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team World,2026,NBA,TRUE
+Luka Dončić,doncilu01,Team World,2026,NBA,FALSE
+Shai Gilgeous-Alexander,gilgesh01,Team World,2026,NBA,TRUE
+Nikola Jokić,jokicni01,Team World,2026,NBA,FALSE
+Alperen Şengün,sengual01,Team World,2026,NBA,FALSE
+Karl-Anthony Towns,townska01,Team World,2026,NBA,FALSE
+Victor Wembanyama,wembavi01,Team World,2026,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team Chuck,2025,NBA,TRUE
+Shai Gilgeous-Alexander,gilgesh01,Team Chuck,2025,NBA,FALSE
+Nikola Jokić,jokicni01,Team Chuck,2025,NBA,FALSE
+Donovan Mitchell,mitchdo01,Team Chuck,2025,NBA,FALSE
+Alperen Şengün,sengual01,Team Chuck,2025,NBA,FALSE
+Karl-Anthony Towns,townska01,Team Chuck,2025,NBA,FALSE
+Victor Wembanyama,wembavi01,Team Chuck,2025,NBA,FALSE
+Jalen Brunson,brunsja01,Team Kenny,2025,NBA,FALSE
+Cade Cunningham,cunnica01,Team Kenny,2025,NBA,FALSE
+Anthony Edwards,edwaran01,Team Kenny,2025,NBA,TRUE
+Jaylen Brown,brownja02,Team Shaq,2025,NBA,FALSE
+Stephen Curry,curryst01,Team Shaq,2025,NBA,FALSE
+Anthony Davis,davisan02,Team Shaq,2025,NBA,TRUE
+Kevin Durant,duranke01,Team Shaq,2025,NBA,FALSE
+James Harden,hardeja01,Team Shaq,2025,NBA,FALSE
+Kyrie Irving,irvinky01,Team Shaq,2025,NBA,FALSE
+LeBron James,jamesle01,Team Shaq,2025,NBA,TRUE
+Damian Lillard,lillada01,Team Shaq,2025,NBA,FALSE
+Jayson Tatum,tatumja01,Team Shaq,2025,NBA,FALSE
+Bam Adebayo,adebaba01,East,2024,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,East,2024,NBA,FALSE
+Paolo Banchero,banchpa01,East,2024,NBA,FALSE
+Scottie Barnes,barnesc01,East,2024,NBA,FALSE
+Jaylen Brown,brownja02,East,2024,NBA,FALSE
+Jalen Brunson,brunsja01,East,2024,NBA,FALSE
+Joel Embiid,embiijo01,East,2024,NBA,TRUE
+Tyrese Haliburton,halibty01,East,2024,NBA,FALSE
+Damian Lillard,lillada01,East,2024,NBA,FALSE
+Donovan Mitchell,mitchdo01,East,2024,NBA,FALSE
+Jayson Tatum,tatumja01,East,2024,NBA,FALSE
+Devin Booker,bookede01,West,2024,NBA,FALSE
+Stephen Curry,curryst01,West,2024,NBA,FALSE
+Anthony Davis,davisan02,West,2024,NBA,FALSE
+Luka Dončić,doncilu01,West,2024,NBA,FALSE
+Kevin Durant,duranke01,West,2024,NBA,FALSE
+Anthony Edwards,edwaran01,West,2024,NBA,FALSE
+Paul George,georgpa01,West,2024,NBA,FALSE
+Shai Gilgeous-Alexander,gilgesh01,West,2024,NBA,FALSE
+LeBron James,jamesle01,West,2024,NBA,FALSE
+Nikola Jokić,jokicni01,West,2024,NBA,FALSE
+Kawhi Leonard,leonaka01,West,2024,NBA,FALSE
+Karl-Anthony Towns,townska01,West,2024,NBA,FALSE
+Bam Adebayo,adebaba01,Giannis,2023,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Giannis,2023,NBA,FALSE
+Kevin Durant,duranke01,Giannis,2023,NBA,TRUE
+Shai Gilgeous-Alexander,gilgesh01,Giannis,2023,NBA,FALSE
+Damian Lillard,lillada01,Giannis,2023,NBA,FALSE
+Lauri Markkanen,markkla01,Giannis,2023,NBA,FALSE
+Donovan Mitchell,mitchdo01,Giannis,2023,NBA,FALSE
+Ja Morant,moranja01,Giannis,2023,NBA,FALSE
+Domantas Sabonis,sabondo01,Giannis,2023,NBA,FALSE
+Jayson Tatum,tatumja01,Giannis,2023,NBA,FALSE
+Jaylen Brown,brownja02,LeBron,2023,NBA,FALSE
+Stephen Curry,curryst01,LeBron,2023,NBA,TRUE
+Luka Dončić,doncilu01,LeBron,2023,NBA,FALSE
+Anthony Edwards,edwaran01,LeBron,2023,NBA,FALSE
+Joel Embiid,embiijo01,LeBron,2023,NBA,FALSE
+De'Aaron Fox,foxde01,LeBron,2023,NBA,FALSE
+Paul George,georgpa01,LeBron,2023,NBA,FALSE
+Tyrese Haliburton,halibty01,LeBron,2023,NBA,FALSE
+Kyrie Irving,irvinky01,LeBron,2023,NBA,FALSE
+LeBron James,jamesle01,LeBron,2023,NBA,FALSE
+Nikola Jokić,jokicni01,LeBron,2023,NBA,FALSE
+Zion Williamson,willizi01,LeBron,2023,NBA,TRUE
+LaMelo Ball,ballla01,Team Durant,2022,NBA,FALSE
+Devin Booker,bookede01,Team Durant,2022,NBA,FALSE
+Kevin Durant,duranke01,Team Durant,2022,NBA,TRUE
+Joel Embiid,embiijo01,Team Durant,2022,NBA,FALSE
+Ja Morant,moranja01,Team Durant,2022,NBA,FALSE
+Jayson Tatum,tatumja01,Team Durant,2022,NBA,FALSE
+Karl-Anthony Towns,townska01,Team Durant,2022,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team LeBron,2022,NBA,FALSE
+Jimmy Butler,butleji01,Team LeBron,2022,NBA,FALSE
+Stephen Curry,curryst01,Team LeBron,2022,NBA,FALSE
+Luka Dončić,doncilu01,Team LeBron,2022,NBA,FALSE
+James Harden,hardeja01,Team LeBron,2022,NBA,TRUE
+LeBron James,jamesle01,Team LeBron,2022,NBA,FALSE
+Nikola Jokić,jokicni01,Team LeBron,2022,NBA,FALSE
+Donovan Mitchell,mitchdo01,Team LeBron,2022,NBA,TRUE
+Chris Paul,paulch01,Team LeBron,2022,NBA,FALSE
+Devin Booker,bookede01,Team Durant,2021,NBA,TRUE
+Anthony Davis,davisan02,Team Durant,2021,NBA,TRUE
+Kevin Durant,duranke01,Team Durant,2021,NBA,TRUE
+Joel Embiid,embiijo01,Team Durant,2021,NBA,TRUE
+James Harden,hardeja01,Team Durant,2021,NBA,FALSE
+Kyrie Irving,irvinky01,Team Durant,2021,NBA,FALSE
+Kawhi Leonard,leonaka01,Team Durant,2021,NBA,FALSE
+Donovan Mitchell,mitchdo01,Team Durant,2021,NBA,FALSE
+Jayson Tatum,tatumja01,Team Durant,2021,NBA,FALSE
+Zion Williamson,willizi01,Team Durant,2021,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team LeBron,2021,NBA,FALSE
+Jaylen Brown,brownja02,Team LeBron,2021,NBA,FALSE
+Stephen Curry,curryst01,Team LeBron,2021,NBA,FALSE
+Luka Dončić,doncilu01,Team LeBron,2021,NBA,FALSE
+Paul George,georgpa01,Team LeBron,2021,NBA,FALSE
+LeBron James,jamesle01,Team LeBron,2021,NBA,FALSE
+Nikola Jokić,jokicni01,Team LeBron,2021,NBA,FALSE
+Damian Lillard,lillada01,Team LeBron,2021,NBA,FALSE
+Chris Paul,paulch01,Team LeBron,2021,NBA,FALSE
+Domantas Sabonis,sabondo01,Team LeBron,2021,NBA,FALSE
+Bam Adebayo,adebaba01,Team Giannis,2020,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team Giannis,2020,NBA,FALSE
+Jimmy Butler,butleji01,Team Giannis,2020,NBA,FALSE
+Joel Embiid,embiijo01,Team Giannis,2020,NBA,FALSE
+Donovan Mitchell,mitchdo01,Team Giannis,2020,NBA,FALSE
+Kemba Walker,walkeke02,Team Giannis,2020,NBA,FALSE
+Devin Booker,bookede01,Team LeBron,2020,NBA,FALSE
+Anthony Davis,davisan02,Team LeBron,2020,NBA,FALSE
+Luka Dončić,doncilu01,Team LeBron,2020,NBA,FALSE
+James Harden,hardeja01,Team LeBron,2020,NBA,FALSE
+LeBron James,jamesle01,Team LeBron,2020,NBA,FALSE
+Nikola Jokić,jokicni01,Team LeBron,2020,NBA,FALSE
+Kawhi Leonard,leonaka01,Team LeBron,2020,NBA,FALSE
+Damian Lillard,lillada01,Team LeBron,2020,NBA,TRUE
+Chris Paul,paulch01,Team LeBron,2020,NBA,FALSE
+Domantas Sabonis,sabondo01,Team LeBron,2020,NBA,FALSE
+Jayson Tatum,tatumja01,Team LeBron,2020,NBA,FALSE
+Russell Westbrook,westbru01,Team LeBron,2020,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team Giannis,2019,NBA,FALSE
+Stephen Curry,curryst01,Team Giannis,2019,NBA,FALSE
+Joel Embiid,embiijo01,Team Giannis,2019,NBA,FALSE
+Paul George,georgpa01,Team Giannis,2019,NBA,FALSE
+Nikola Jokić,jokicni01,Team Giannis,2019,NBA,FALSE
+Kemba Walker,walkeke02,Team Giannis,2019,NBA,FALSE
+Russell Westbrook,westbru01,Team Giannis,2019,NBA,FALSE
+Anthony Davis,davisan02,Team LeBron,2019,NBA,FALSE
+Kevin Durant,duranke01,Team LeBron,2019,NBA,FALSE
+James Harden,hardeja01,Team LeBron,2019,NBA,FALSE
+Kyrie Irving,irvinky01,Team LeBron,2019,NBA,FALSE
+LeBron James,jamesle01,Team LeBron,2019,NBA,FALSE
+Kawhi Leonard,leonaka01,Team LeBron,2019,NBA,FALSE
+Damian Lillard,lillada01,Team LeBron,2019,NBA,FALSE
+Karl-Anthony Towns,townska01,Team LeBron,2019,NBA,FALSE
+Anthony Davis,davisan02,Team LeBron,2018,NBA,FALSE
+Kevin Durant,duranke01,Team LeBron,2018,NBA,FALSE
+Paul George,georgpa01,Team LeBron,2018,NBA,FALSE
+Kyrie Irving,irvinky01,Team LeBron,2018,NBA,FALSE
+LeBron James,jamesle01,Team LeBron,2018,NBA,FALSE
+Kemba Walker,walkeke02,Team LeBron,2018,NBA,FALSE
+Russell Westbrook,westbru01,Team LeBron,2018,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,Team Stephen,2018,NBA,FALSE
+Jimmy Butler,butleji01,Team Stephen,2018,NBA,TRUE
+Stephen Curry,curryst01,Team Stephen,2018,NBA,FALSE
+Joel Embiid,embiijo01,Team Stephen,2018,NBA,FALSE
+James Harden,hardeja01,Team Stephen,2018,NBA,FALSE
+Damian Lillard,lillada01,Team Stephen,2018,NBA,FALSE
+Karl-Anthony Towns,townska01,Team Stephen,2018,NBA,FALSE
+Giannis Antetokounmpo,antetgi01,East,2017,NBA,FALSE
+Carmelo Anthony,anthoca01,East,2017,NBA,FALSE
+Jimmy Butler,butleji01,East,2017,NBA,FALSE
+Paul George,georgpa01,East,2017,NBA,FALSE
+Kyrie Irving,irvinky01,East,2017,NBA,FALSE
+LeBron James,jamesle01,East,2017,NBA,FALSE
+Kemba Walker,walkeke02,East,2017,NBA,FALSE
+Stephen Curry,curryst01,West,2017,NBA,FALSE
+Anthony Davis,davisan02,West,2017,NBA,FALSE
+Kevin Durant,duranke01,West,2017,NBA,FALSE
+James Harden,hardeja01,West,2017,NBA,FALSE
+Kawhi Leonard,leonaka01,West,2017,NBA,FALSE
+Russell Westbrook,westbru01,West,2017,NBA,FALSE
+Carmelo Anthony,anthoca01,East,2016,NBA,FALSE
+Jimmy Butler,butleji01,East,2016,NBA,TRUE
+Paul George,georgpa01,East,2016,NBA,FALSE
+LeBron James,jamesle01,East,2016,NBA,FALSE
+Kobe Bryant,bryanko01,West,2016,NBA,FALSE
+Stephen Curry,curryst01,West,2016,NBA,FALSE
+Anthony Davis,davisan02,West,2016,NBA,FALSE
+Kevin Durant,duranke01,West,2016,NBA,FALSE
+James Harden,hardeja01,West,2016,NBA,FALSE
+Kawhi Leonard,leonaka01,West,2016,NBA,FALSE
+Chris Paul,paulch01,West,2016,NBA,FALSE
+Russell Westbrook,westbru01,West,2016,NBA,FALSE
+Carmelo Anthony,anthoca01,East,2015,NBA,FALSE
+Jimmy Butler,butleji01,East,2015,NBA,FALSE
+Kyrie Irving,irvinky01,East,2015,NBA,FALSE
+LeBron James,jamesle01,East,2015,NBA,FALSE
+Kobe Bryant,bryanko01,West,2015,NBA,TRUE
+Stephen Curry,curryst01,West,2015,NBA,FALSE
+Anthony Davis,davisan02,West,2015,NBA,TRUE
+Tim Duncan,duncati01,West,2015,NBA,FALSE
+Kevin Durant,duranke01,West,2015,NBA,FALSE
+James Harden,hardeja01,West,2015,NBA,FALSE
+Damian Lillard,lillada01,West,2015,NBA,FALSE
+Chris Paul,paulch01,West,2015,NBA,FALSE
+Russell Westbrook,westbru01,West,2015,NBA,FALSE
+Carmelo Anthony,anthoca01,East,2014,NBA,FALSE
+Paul George,georgpa01,East,2014,NBA,FALSE
+Kyrie Irving,irvinky01,East,2014,NBA,FALSE
+LeBron James,jamesle01,East,2014,NBA,FALSE
+Kobe Bryant,bryanko01,West,2014,NBA,TRUE
+Stephen Curry,curryst01,West,2014,NBA,FALSE
+Anthony Davis,davisan02,West,2014,NBA,FALSE
+Kevin Durant,duranke01,West,2014,NBA,FALSE
+James Harden,hardeja01,West,2014,NBA,FALSE
+Dwight Howard,howardw01,West,2014,NBA,FALSE
+Damian Lillard,lillada01,West,2014,NBA,FALSE
+Chris Paul,paulch01,West,2014,NBA,FALSE
+Carmelo Anthony,anthoca01,East,2013,NBA,FALSE
+Kevin Garnett,garneke01,East,2013,NBA,FALSE
+Paul George,georgpa01,East,2013,NBA,FALSE
+Kyrie Irving,irvinky01,East,2013,NBA,FALSE
+LeBron James,jamesle01,East,2013,NBA,FALSE
+Kobe Bryant,bryanko01,West,2013,NBA,FALSE
+Tim Duncan,duncati01,West,2013,NBA,FALSE
+Kevin Durant,duranke01,West,2013,NBA,FALSE
+James Harden,hardeja01,West,2013,NBA,FALSE
+Dwight Howard,howardw01,West,2013,NBA,FALSE
+Chris Paul,paulch01,West,2013,NBA,FALSE
+Russell Westbrook,westbru01,West,2013,NBA,FALSE
+Carmelo Anthony,anthoca01,East,2012,NBA,FALSE
+Dwight Howard,howardw01,East,2012,NBA,FALSE
+LeBron James,jamesle01,East,2012,NBA,FALSE
+Derrick Rose,rosede01,East,2012,NBA,FALSE
+Kobe Bryant,bryanko01,West,2012,NBA,FALSE
+Kevin Durant,duranke01,West,2012,NBA,FALSE
+Chris Paul,paulch01,West,2012,NBA,FALSE
+Russell Westbrook,westbru01,West,2012,NBA,FALSE
+Ray Allen,allenra02,East,2011,NBA,FALSE
+Kevin Garnett,garneke01,East,2011,NBA,FALSE
+Dwight Howard,howardw01,East,2011,NBA,FALSE
+LeBron James,jamesle01,East,2011,NBA,FALSE
+Derrick Rose,rosede01,East,2011,NBA,FALSE
+Carmelo Anthony,anthoca01,West,2011,NBA,FALSE
+Kobe Bryant,bryanko01,West,2011,NBA,FALSE
+Tim Duncan,duncati01,West,2011,NBA,FALSE
+Kevin Durant,duranke01,West,2011,NBA,FALSE
+Chris Paul,paulch01,West,2011,NBA,FALSE
+Russell Westbrook,westbru01,West,2011,NBA,FALSE
+Kevin Garnett,garneke01,East,2010,NBA,FALSE
+Dwight Howard,howardw01,East,2010,NBA,FALSE
+Allen Iverson,iversal01,East,2010,NBA,TRUE
+LeBron James,jamesle01,East,2010,NBA,FALSE
+Derrick Rose,rosede01,East,2010,NBA,FALSE
+Carmelo Anthony,anthoca01,West,2010,NBA,FALSE
+Kobe Bryant,bryanko01,West,2010,NBA,TRUE
+Tim Duncan,duncati01,West,2010,NBA,FALSE
+Kevin Durant,duranke01,West,2010,NBA,FALSE
+Jason Kidd,kiddja01,West,2010,NBA,TRUE
+Chris Paul,paulch01,West,2010,NBA,TRUE
+Ray Allen,allenra02,East,2009,NBA,FALSE
+Kevin Garnett,garneke01,East,2009,NBA,FALSE
+Dwight Howard,howardw01,East,2009,NBA,FALSE
+Allen Iverson,iversal01,East,2009,NBA,FALSE
+LeBron James,jamesle01,East,2009,NBA,FALSE
+Kobe Bryant,bryanko01,West,2009,NBA,FALSE
+Tim Duncan,duncati01,West,2009,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,2009,NBA,FALSE
+Chris Paul,paulch01,West,2009,NBA,FALSE
+Ray Allen,allenra02,East,2008,NBA,TRUE
+Kevin Garnett,garneke01,East,2008,NBA,TRUE
+Dwight Howard,howardw01,East,2008,NBA,FALSE
+LeBron James,jamesle01,East,2008,NBA,FALSE
+Jason Kidd,kiddja01,East,2008,NBA,FALSE
+Carmelo Anthony,anthoca01,West,2008,NBA,FALSE
+Kobe Bryant,bryanko01,West,2008,NBA,FALSE
+Tim Duncan,duncati01,West,2008,NBA,FALSE
+Allen Iverson,iversal01,West,2008,NBA,FALSE
+Chris Paul,paulch01,West,2008,NBA,FALSE
+Vince Carter,cartevi01,East,2007,NBA,FALSE
+Dwight Howard,howardw01,East,2007,NBA,FALSE
+LeBron James,jamesle01,East,2007,NBA,FALSE
+Jason Kidd,kiddja01,East,2007,NBA,TRUE
+Shaquille O'Neal,onealsh01,East,2007,NBA,FALSE
+Ray Allen,allenra02,West,2007,NBA,TRUE
+Carmelo Anthony,anthoca01,West,2007,NBA,TRUE
+Kobe Bryant,bryanko01,West,2007,NBA,FALSE
+Tim Duncan,duncati01,West,2007,NBA,FALSE
+Kevin Garnett,garneke01,West,2007,NBA,FALSE
+Allen Iverson,iversal01,West,2007,NBA,TRUE
+Tracy McGrady,mcgratr01,West,2007,NBA,FALSE
+Vince Carter,cartevi01,East,2006,NBA,FALSE
+Allen Iverson,iversal01,East,2006,NBA,FALSE
+LeBron James,jamesle01,East,2006,NBA,FALSE
+Shaquille O'Neal,onealsh01,East,2006,NBA,FALSE
+Ray Allen,allenra02,West,2006,NBA,FALSE
+Kobe Bryant,bryanko01,West,2006,NBA,FALSE
+Tim Duncan,duncati01,West,2006,NBA,FALSE
+Kevin Garnett,garneke01,West,2006,NBA,FALSE
+Tracy McGrady,mcgratr01,West,2006,NBA,FALSE
+Vince Carter,cartevi01,East,2005,NBA,FALSE
+Allen Iverson,iversal01,East,2005,NBA,FALSE
+LeBron James,jamesle01,East,2005,NBA,FALSE
+Shaquille O'Neal,onealsh01,East,2005,NBA,FALSE
+Ray Allen,allenra02,West,2005,NBA,FALSE
+Kobe Bryant,bryanko01,West,2005,NBA,FALSE
+Tim Duncan,duncati01,West,2005,NBA,FALSE
+Kevin Garnett,garneke01,West,2005,NBA,FALSE
+Tracy McGrady,mcgratr01,West,2005,NBA,FALSE
+Vince Carter,cartevi01,East,2004,NBA,FALSE
+Allen Iverson,iversal01,East,2004,NBA,FALSE
+Jason Kidd,kiddja01,East,2004,NBA,FALSE
+Tracy McGrady,mcgratr01,East,2004,NBA,FALSE
+Ray Allen,allenra02,West,2004,NBA,FALSE
+Kobe Bryant,bryanko01,West,2004,NBA,FALSE
+Tim Duncan,duncati01,West,2004,NBA,FALSE
+Kevin Garnett,garneke01,West,2004,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,2004,NBA,FALSE
+Vince Carter,cartevi01,East,2003,NBA,FALSE
+Allen Iverson,iversal01,East,2003,NBA,FALSE
+Michael Jordan,jordami01,East,2003,NBA,FALSE
+Jason Kidd,kiddja01,East,2003,NBA,FALSE
+Tracy McGrady,mcgratr01,East,2003,NBA,FALSE
+Kobe Bryant,bryanko01,West,2003,NBA,FALSE
+Tim Duncan,duncati01,West,2003,NBA,FALSE
+Kevin Garnett,garneke01,West,2003,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,2003,NBA,FALSE
+Gary Payton,paytoga01,West,2003,NBA,FALSE
+Ray Allen,allenra02,East,2002,NBA,FALSE
+Vince Carter,cartevi01,East,2002,NBA,TRUE
+Allen Iverson,iversal01,East,2002,NBA,FALSE
+Michael Jordan,jordami01,East,2002,NBA,FALSE
+Jason Kidd,kiddja01,East,2002,NBA,FALSE
+Tracy McGrady,mcgratr01,East,2002,NBA,FALSE
+Kobe Bryant,bryanko01,West,2002,NBA,FALSE
+Tim Duncan,duncati01,West,2002,NBA,FALSE
+Kevin Garnett,garneke01,West,2002,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,2002,NBA,TRUE
+Gary Payton,paytoga01,West,2002,NBA,FALSE
+Ray Allen,allenra02,East,2001,NBA,FALSE
+Vince Carter,cartevi01,East,2001,NBA,FALSE
+Allen Iverson,iversal01,East,2001,NBA,FALSE
+Tracy McGrady,mcgratr01,East,2001,NBA,FALSE
+Kobe Bryant,bryanko01,West,2001,NBA,FALSE
+Tim Duncan,duncati01,West,2001,NBA,FALSE
+Kevin Garnett,garneke01,West,2001,NBA,FALSE
+Jason Kidd,kiddja01,West,2001,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,2001,NBA,TRUE
+Gary Payton,paytoga01,West,2001,NBA,FALSE
+Ray Allen,allenra02,East,2000,NBA,FALSE
+Vince Carter,cartevi01,East,2000,NBA,FALSE
+Allen Iverson,iversal01,East,2000,NBA,FALSE
+Kobe Bryant,bryanko01,West,2000,NBA,FALSE
+Tim Duncan,duncati01,West,2000,NBA,FALSE
+Kevin Garnett,garneke01,West,2000,NBA,FALSE
+Jason Kidd,kiddja01,West,2000,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,2000,NBA,FALSE
+Gary Payton,paytoga01,West,2000,NBA,FALSE
+Michael Jordan,jordami01,East,1998,NBA,FALSE
+Kobe Bryant,bryanko01,West,1998,NBA,FALSE
+Tim Duncan,duncati01,West,1998,NBA,FALSE
+Kevin Garnett,garneke01,West,1998,NBA,FALSE
+Jason Kidd,kiddja01,West,1998,NBA,FALSE
+Shaquille O'Neal,onealsh01,West,1998,NBA,FALSE
+Gary Payton,paytoga01,West,1998,NBA,FALSE
+Michael Jordan,jordami01,East,1997,NBA,FALSE
+Kevin Garnett,garneke01,West,1997,NBA,TRUE
+Shaquille O'Neal,onealsh01,West,1997,NBA,TRUE
+Gary Payton,paytoga01,West,1997,NBA,FALSE
+Michael Jordan,jordami01,East,1996,NBA,FALSE
+Shaquille O'Neal,onealsh01,East,1996,NBA,FALSE
+Jason Kidd,kiddja01,West,1996,NBA,FALSE
+Gary Payton,paytoga01,West,1996,NBA,FALSE
+Shaquille O'Neal,onealsh01,East,1995,NBA,FALSE
+Gary Payton,paytoga01,West,1995,NBA,FALSE
+Shaquille O'Neal,onealsh01,East,1994,NBA,FALSE
+Gary Payton,paytoga01,West,1994,NBA,TRUE
+Michael Jordan,jordami01,East,1993,NBA,FALSE
+Shaquille O'Neal,onealsh01,East,1993,NBA,FALSE
+Michael Jordan,jordami01,East,1992,NBA,FALSE
+Michael Jordan,jordami01,East,1991,NBA,FALSE
+Michael Jordan,jordami01,East,1990,NBA,FALSE
+Michael Jordan,jordami01,East,1989,NBA,FALSE
+Moses Malone,malonmo01,East,1989,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1989,NBA,TRUE
+Michael Jordan,jordami01,East,1988,NBA,FALSE
+Moses Malone,malonmo01,East,1988,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1988,NBA,FALSE
+Michael Jordan,jordami01,East,1987,NBA,FALSE
+Moses Malone,malonmo01,East,1987,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1987,NBA,FALSE
+Michael Jordan,jordami01,East,1986,NBA,TRUE
+Moses Malone,malonmo01,East,1986,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1986,NBA,FALSE
+Michael Jordan,jordami01,East,1985,NBA,FALSE
+Moses Malone,malonmo01,East,1985,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1985,NBA,FALSE
+Moses Malone,malonmo01,East,1984,NBA,TRUE
+Kareem Abdul-Jabbar,abdulka01,West,1984,NBA,FALSE
+Moses Malone,malonmo01,East,1983,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1983,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1982,NBA,FALSE
+Moses Malone,malonmo01,West,1982,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1981,NBA,FALSE
+Moses Malone,malonmo01,West,1981,NBA,FALSE
+Moses Malone,malonmo01,East,1980,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1980,NBA,FALSE
+Moses Malone,malonmo01,East,1979,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1979,NBA,FALSE
+Moses Malone,malonmo01,East,1978,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1977,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1976,NBA,FALSE
+Moses Malone,malonmo01,West,1975,ABA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1975,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1974,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1973,NBA,TRUE
+Kareem Abdul-Jabbar,abdulka01,West,1972,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,West,1971,NBA,FALSE
+Kareem Abdul-Jabbar,abdulka01,East,1970,NBA,FALSE

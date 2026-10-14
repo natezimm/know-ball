@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: sports_trivia
+          POSTGRES_USER: trivia
+          POSTGRES_PASSWORD: trivia
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U trivia -d sports_trivia"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TriviaTfm: net10.0
+      DOTNET_NOLOGO: "1"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Build
+        run: dotnet build SportsTrivia.sln -c Release
+      - name: Unit tests
+        run: dotnet test tests/SportsTrivia.UnitTests -c Release --no-build
+      - name: Integration tests (SQLite)
+        run: dotnet test tests/SportsTrivia.IntegrationTests -c Release --no-build
+      - name: Integration tests (Postgres)
+        env:
+          TRIVIA_TEST_POSTGRES: Host=localhost;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
+        run: dotnet test tests/SportsTrivia.IntegrationTests -c Release --no-build
+      - name: Importer runs against Postgres and is repeatable
+        env:
+          ConnectionStrings__Trivia: Host=localhost;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
+          Import__MaxAttempts: "1"
+        run: |
+          IMPORTER=src/SportsTrivia.Importer/bin/Release/net10.0/SportsTrivia.Importer.dll
+          dotnet $IMPORTER --once --source seed --no-history
+          dotnet $IMPORTER --once --source seed --no-history | tee second.txt
+          grep -q "0 new, 0 updated, 0 deactivated, 0 team changes" second.txt
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web/sports-trivia
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - run: npm test
+      - run: npm run build

@@ -1,0 +1,29 @@
+<Project>
+  <!-- Central package versions. Each tracks the latest patch of the major that matches the target framework. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+    <FxMajor>$([System.Text.RegularExpressions.Regex]::Match('$(TriviaTfm)', '\d+').Value)</FxMajor>
+    <FxMajor Condition="'$(FxMajor)' == ''">10</FxMajor>
+    <FxFloat>$(FxMajor).0.*</FxFloat>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(FxFloat)" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.*" />
+    <PackageVersion Include="SkiaSharp" Version="3.119.*" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.*" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageVersion Include="xunit" Version="2.*" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.*" />
+    <PackageVersion Include="coverlet.collector" Version="6.*" />
+  </ItemGroup>
+</Project>
