@@ -174,7 +174,7 @@ Built 2026-10-13.
 
 - **Answers**: 555 sports words written by hand in 26 categories: 152 of four letters, 207 of five and 196 of six.
   The categories double as the game's category clue, so they are deliberately broad ("Golf", "NFL team",
-  "Scores, results & standings"). File: `src/SportsTrivia.Application/Games/Spordle/Data/sports-words.json`.
+  "Scores, results & standings"). File: `src/KnowBall.Application/Games/Spordle/Data/sports-words.json`.
 - **Allowed guesses**: the 40,389 words of four to six letters from the `word-list` npm package, version 4.1.0
   (MIT licence), the same dictionary Nerdle validates against. Copied from Nerdle's installed copy into
   `guess-words.txt` beside the answers.
@@ -248,7 +248,7 @@ All Tested on 2026-10-13 unless marked otherwise.
 
 - Former team identities (Seattle SuperSonics, New Jersey Nets, ABA teams and so on) are kept as their own teams,
   69 of them, each linked to the franchise that exists today or existed last. The list is
-  `src/SportsTrivia.Infrastructure/Data/nba-team-history.json`.
+  `src/KnowBall.Infrastructure/Data/nba-team-history.json`.
 - Some franchises changed code without changing identity; these are treated as one: INA and IND, DNA and DEN,
   SAA and SAS, NYN and NYA, CHH and CHO.
 - Codes that differ from the NBA's: BRK is BKN, CHO is CHA, PHO is PHX.

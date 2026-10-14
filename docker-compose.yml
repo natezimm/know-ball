@@ -44,7 +44,7 @@ services:
     profiles: [site]
     image: know-ball
     working_dir: /app/importer
-    entrypoint: ["dotnet", "SportsTrivia.Importer.dll"]
+    entrypoint: ["dotnet", "KnowBall.Importer.dll"]
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
     depends_on:
