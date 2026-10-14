@@ -291,18 +291,14 @@ version 1 being live; the rest can wait.
 
 ### Before launch
 
-1. **Build and run the Docker image.** `docker compose --profile site up -d --build` has never been run; the
-   first attempt was stopped before the build. On this Mac, ports 8080 and 5432 are already used by other
-   containers, so set `KNOWBALL_PORT` and `KNOWBALL_DB_PORT` (for example 8090 and 5433). Check that:
-   - the `VersionOne` migration applies to an empty Postgres database, and to one made by `InitialCreate`;
-   - SkiaSharp loads on Linux (create a puzzle through `/admin` and see the silhouette);
-   - the importer container loads the history on its first start and queues puzzles;
-   - the America/New_York time zone resolves inside the image, so the daily puzzle changes at midnight Eastern;
-   - photos can be written to `/data/photos`. **Likely bug:** the .NET images run as the non-root `app` user,
-     but `VOLUME /data` creates the folder as root. If uploads fail, add
-     `RUN mkdir -p /data/photos && chown -R app:app /data` before `VOLUME` in the `Dockerfile`.
-2. **Postgres.** The integration tests and the importer have only been run on SQLite since the schema changed.
-   CI runs both against Postgres on every push; fix whatever it finds.
+1. **Build and run the Docker image.** Done in CI (2026-10-14): the `docker` job runs `scripts/docker-smoke.sh`,
+   which builds the image and checks, on an empty Postgres, that migrations apply, the importer loads seed data
+   and queues puzzles, the daily games hide their answers, `/admin` needs its key, the calendar is on Eastern
+   time, and a puzzle renders with SkiaSharp and saves to `/data/photos`. The image used to run as root; it now
+   runs as the non-root `app` user, which owns `/data`. Still to do once on this Mac:
+   `KNOWBALL_PORT=8090 KNOWBALL_DB_PORT=5433 docker compose --profile site up -d --build`, and watch the importer
+   container load the full history on its first start (the smoke test skips that download).
+2. **Postgres.** Done: the first CI run passed the integration tests and the importer against Postgres 17.
 3. **Who's That Sportsman? content.** 30 puzzles through `/admin`: photo, cut-out, player, year, team, caption.
    Then play one through on a phone (the Milestone 3 gate).
 4. **Hosting.** Needs one container for the site, a Postgres database, a persistent disk for photos (or blob
@@ -317,12 +313,9 @@ version 1 being live; the rest can wait.
    built-in browser, so it has not been seen working anywhere yet.
 7. **The admin upload form.** Creating a puzzle was tested through the API and integration tests, not by
    filling in the form in a browser.
-8. **`scripts/verify.sh`** is still the Phase 0 gate. It should: use `--source espn` for the live import (it
-   still tries the dead `nba-stats`); pass `--no-history` to the seed imports (otherwise they download the full
-   history); look for the `VersionOne` migration, not only `InitialCreate`; and smoke-test the daily games
-   (`GET /api/scouting-report/daily` with an `X-Anon-Id` header and no `answer` in the reply, `GET /api/me/today`,
-   `/api/admin/overview` refused without the key). Its `docker compose up -d db` will clash with the other
-   containers on port 5432 here unless `KNOWBALL_DB_PORT` is set.
+8. **`scripts/verify.sh`.** Updated (2026-10-14): ESPN for the live import, `--no-history` throughout, checks for
+   the `VersionOne` migration, smoke-tests the daily games and the admin key, honours `KNOWBALL_DB_PORT`, and
+   runs `scripts/docker-smoke.sh` at the end when Docker is available.
 
 The Milestone 0 gate (two nightly imports in a row) is met once the importer runs on the host;
 `GET /api/import-runs/latest` is the check.
