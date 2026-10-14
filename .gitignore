@@ -1,0 +1,16 @@
+bin/
+obj/
+.tools/
+artifacts/
+*.user
+.vs/
+.idea/
+*.db
+*.db-shm
+*.db-wal
+TestResults/
+.DS_Store
+node_modules/
+.env
+.transfer.tar.gz
+media/

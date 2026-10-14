@@ -1,0 +1,16 @@
+{
+  "name": "Know Ball",
+  "short_name": "Know Ball",
+  "description": "Daily sports trivia: Spordle, Scouting Report, Career Path and Who's That Sportsman?",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6ecd2",
+  "theme_color": "#1d2b53",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

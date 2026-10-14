@@ -1,0 +1,14 @@
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.angular
+.git
+.tools
+.claude
+.vscode
+artifacts
+docs
+tests
+*.db
+*.tar.gz
