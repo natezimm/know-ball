@@ -61,7 +61,7 @@ result INFO ".NET SDK $SDK_VERSION → target $TriviaTfm"
 command -v node >/dev/null 2>&1 && result INFO "node $(node -v), npm $(npm -v)" || result INFO "node not found"
 
 section "Restore and build"
-if dotnet build SportsTrivia.sln -c Release; then
+if dotnet build KnowBall.sln -c Release; then
   result PASS "dotnet build"
 else
   result FAIL "dotnet build"
@@ -69,7 +69,7 @@ else
 fi
 
 section "EF Core migration"
-if ls src/SportsTrivia.Infrastructure/Persistence/Migrations/*InitialCreate.cs >/dev/null 2>&1; then
+if ls src/KnowBall.Infrastructure/Persistence/Migrations/*InitialCreate.cs >/dev/null 2>&1; then
   result INFO "InitialCreate migration already present"
 else
   mkdir -p .tools
@@ -77,26 +77,26 @@ else
     dotnet tool install dotnet-ef --tool-path .tools --version "${TFM_MAJOR}.*" || true
   fi
   if .tools/dotnet-ef migrations add InitialCreate \
-      --project src/SportsTrivia.Infrastructure \
-      --startup-project src/SportsTrivia.Infrastructure \
+      --project src/KnowBall.Infrastructure \
+      --startup-project src/KnowBall.Infrastructure \
       --output-dir Persistence/Migrations \
       --configuration Release; then
     result PASS "generated InitialCreate migration"
-    dotnet build SportsTrivia.sln -c Release >/dev/null || result FAIL "rebuild after migration"
+    dotnet build KnowBall.sln -c Release >/dev/null || result FAIL "rebuild after migration"
   else
     result FAIL "could not generate migration"
   fi
 fi
 
 section "Unit tests"
-if dotnet test tests/SportsTrivia.UnitTests -c Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results; then
+if dotnet test tests/KnowBall.UnitTests -c Release --no-build --logger "trx;LogFileName=unit.trx" --results-directory artifacts/test-results; then
   result PASS "unit tests"
 else
   result FAIL "unit tests"
 fi
 
 section "Integration tests (SQLite)"
-if dotnet test tests/SportsTrivia.IntegrationTests -c Release --no-build --logger "trx;LogFileName=integration-sqlite.trx" --results-directory artifacts/test-results; then
+if dotnet test tests/KnowBall.IntegrationTests -c Release --no-build --logger "trx;LogFileName=integration-sqlite.trx" --results-directory artifacts/test-results; then
   result PASS "integration tests on SQLite"
 else
   result FAIL "integration tests on SQLite"
@@ -123,7 +123,7 @@ if [ "$DB_MODE" = "postgres" ]; then
   docker compose exec -T db psql -U trivia -d sports_trivia -c "DROP DATABASE IF EXISTS sports_trivia_test" >/dev/null 2>&1
   docker compose exec -T db psql -U trivia -d sports_trivia -c "CREATE DATABASE sports_trivia_test" >/dev/null 2>&1
   if TRIVIA_TEST_POSTGRES="Host=localhost;Port=5432;Database=sports_trivia_test;Username=trivia;Password=trivia" \
-     dotnet test tests/SportsTrivia.IntegrationTests -c Release --no-build --logger "trx;LogFileName=integration-pg.trx" --results-directory artifacts/test-results; then
+     dotnet test tests/KnowBall.IntegrationTests -c Release --no-build --logger "trx;LogFileName=integration-pg.trx" --results-directory artifacts/test-results; then
     result PASS "integration tests on Postgres"
   else
     result FAIL "integration tests on Postgres"
@@ -134,8 +134,8 @@ else
   result INFO "Docker not available; using SQLite at artifacts/trivia-dev.db (Postgres is covered in CI)"
 fi
 
-IMPORTER="src/SportsTrivia.Importer/bin/Release/$TriviaTfm/SportsTrivia.Importer.dll"
-API="src/SportsTrivia.Api/bin/Release/$TriviaTfm/SportsTrivia.Api.dll"
+IMPORTER="src/KnowBall.Importer/bin/Release/$TriviaTfm/KnowBall.Importer.dll"
+API="src/KnowBall.Api/bin/Release/$TriviaTfm/KnowBall.Api.dll"
 
 section "Import: live NBA feed"
 LIVE_OK=0
@@ -213,7 +213,7 @@ if [ "${SKIP_WEB:-0}" != "1" ]; then
   section "Angular"
   if command -v npm >/dev/null 2>&1; then
     (
-      cd web/sports-trivia || exit 1
+      cd web/know-ball || exit 1
       npm install --no-audit --no-fund || exit 10
       npm test || exit 11
       npm run build || exit 12
