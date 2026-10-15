@@ -1,0 +1,64 @@
+# Production: the site, its database and the nightly importer, behind the host's nginx.
+# Lives in ~/know-ball on the VM next to a .env file (see deploy/README.md). The deploy job in CI
+# copies this file there and runs:  docker compose pull && docker compose up -d
+#
+# Settings, from .env:
+#   KNOWBALL_DB_PASSWORD  the database password (any long random string; set once, never change)
+#   KNOWBALL_ADMIN_KEY    a long random string; switches the admin area on
+#   KNOWBALL_TAG          the image tag to run (default latest; CI sets the commit it deploys)
+name: knowball
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: know_ball
+      POSTGRES_USER: knowball
+      POSTGRES_PASSWORD: ${KNOWBALL_DB_PASSWORD:?set KNOWBALL_DB_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U knowball -d know_ball"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  # Only nginx on this machine can reach the site; it forwards knowball.nathanzimmerman.com here.
+  site:
+    image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
+    environment:
+      ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
+      Admin__Key: ${KNOWBALL_ADMIN_KEY:?set KNOWBALL_ADMIN_KEY in .env}
+      # nginx reaches the container from this network's gateway, so only its X-Forwarded-For counts.
+      ForwardedHeaders__KnownNetworks__0: 172.31.250.0/24
+    ports:
+      - "127.0.0.1:8090:8080"
+    volumes:
+      - photos:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Loads the player history on first start, then refreshes rosters and puzzle queues at 4am Eastern.
+  importer:
+    image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
+    working_dir: /app/importer
+    entrypoint: ["dotnet", "KnowBall.Importer.dll"]
+    environment:
+      ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
+    depends_on:
+      site:
+        condition: service_started
+    restart: unless-stopped
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.31.250.0/24
+
+volumes:
+  pgdata:
+  photos:
