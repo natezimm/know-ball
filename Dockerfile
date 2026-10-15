@@ -21,9 +21,9 @@ COPY --from=build /out/importer /app/importer
 COPY --from=web /web/dist/know-ball/browser /app/api/wwwroot
 
 # Puzzle photos are written under /data; mount a volume there so they outlive the container.
-# Forwarded headers are trusted so rate limits see each visitor's address behind a reverse proxy.
+# Behind a reverse proxy, set ForwardedHeaders__KnownNetworks__0 to the network it connects from
+# (docker-compose.prod.yml does), so rate limits see each visitor's own address.
 ENV ASPNETCORE_URLS=http://+:8080 \
-    ASPNETCORE_FORWARDEDHEADERS_ENABLED=true \
     Media__Path=/data/photos
 # Run as the image's non-root "app" user. It must own /data before VOLUME, so that a fresh volume
 # copies that ownership and the API can write photos there.

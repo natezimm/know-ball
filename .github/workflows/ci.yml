@@ -70,3 +70,71 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the image and smoke-test it
         run: ./scripts/docker-smoke.sh
+
+  # On main, once everything above passes: publish the image to GitHub's registry, then roll it out
+  # on the VM. The VM only pulls the image; it never builds. Setup: deploy/README.md.
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [backend, web, docker]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/natezimm/know-ball:latest
+            ghcr.io/natezimm/know-ball:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    concurrency: deploy
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to the VM
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$DEPLOY_HOST" ]; then
+            echo "::notice::Deploy secrets are not set yet (deploy/README.md); skipping the deploy."
+            exit 0
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          SSH="ssh -i $HOME/.ssh/deploy -o StrictHostKeyChecking=yes"
+          scp -i ~/.ssh/deploy deploy/docker-compose.yml "$DEPLOY_USER@$DEPLOY_HOST:know-ball/docker-compose.yml"
+          # The job's token can read the private image; it expires when this job ends.
+          printf '%s' "$REGISTRY_TOKEN" | $SSH "$DEPLOY_USER@$DEPLOY_HOST" "docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+          $SSH "$DEPLOY_USER@$DEPLOY_HOST" "cd know-ball && sed -i '/^KNOWBALL_TAG=/d' .env && echo 'KNOWBALL_TAG=${{ github.sha }}' >> .env && docker compose pull -q && docker compose up -d --remove-orphans && docker image prune -f"
+          for i in $(seq 1 30); do
+            if $SSH "$DEPLOY_USER@$DEPLOY_HOST" "curl -fs http://127.0.0.1:8090/health" >/dev/null; then
+              echo "Deployed ${{ github.sha }}; the site is healthy."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::The site did not become healthy after the deploy."
+          $SSH "$DEPLOY_USER@$DEPLOY_HOST" "cd know-ball && docker compose logs --tail 80 site"
+          exit 1

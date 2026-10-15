@@ -301,13 +301,12 @@ version 1 being live; the rest can wait.
 2. **Postgres.** Done: the first CI run passed the integration tests and the importer against Postgres 17.
 3. **Who's That Sportsman? content.** 30 puzzles through `/admin`: photo, cut-out, player, year, team, caption.
    Then play one through on a phone (the Milestone 3 gate).
-4. **Hosting.** Needs one container for the site, a Postgres database, a persistent disk for photos (or blob
-   storage behind `IImageStore`), and the importer either always on or run daily with `--once`. Once chosen: a
-   deploy job in CI, and the settings `ConnectionStrings__Trivia` and `Admin__Key` (a long random string; leaving
-   it empty keeps `/admin` switched off).
-5. **Rate limits behind a proxy.** The image sets `ASPNETCORE_FORWARDEDHEADERS_ENABLED`, which trusts an
-   `X-Forwarded-For` header from anyone. Once the host is known, trust only its proxy, or a visitor can dodge
-   the per-address limits.
+4. **Hosting.** Chosen 2026-10-14: Nathan's GCP VM `portfolio-vm`, behind its nginx, at
+   `knowball.nathanzimmerman.com`. CI publishes the image to GHCR and deploys over SSH; the one-time setup
+   (DNS, `.env`, nginx and certbot, deploy key and secrets, backups) is in `deploy/README.md`.
+5. **Rate limits behind a proxy.** Fixed: `ASPNETCORE_FORWARDEDHEADERS_ENABLED` is gone. `X-Forwarded-For` now
+   counts only from loopback and the networks in `ForwardedHeaders:KnownNetworks`; in production that is the
+   Docker network nginx connects through, and nginx overwrites the header with the address it saw.
 6. **A real phone.** Play each game on iOS Safari and Android Chrome, add the site to the home screen, and check
    that a new deploy reaches an installed copy. The service worker would not register in the desktop app's
    built-in browser, so it has not been seen working anywhere yet.

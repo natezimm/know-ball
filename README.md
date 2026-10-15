@@ -139,7 +139,10 @@ docker compose --profile site up -d --build      # site on http://localhost:8080
 ```
 
 `KNOWBALL_PORT` and `KNOWBALL_DB_PORT` change the published ports. Photos live on the `photos` volume. The image
-has not been built yet; the checks it still needs are in the plan's section 8.
+runs as the non-root `app` user; `./scripts/docker-smoke.sh` builds it and checks it end to end, as CI does.
+
+Production runs on a GCP VM behind nginx at https://knowball.nathanzimmerman.com, deployed by CI from `main`;
+see [deploy/README.md](deploy/README.md).
 
 ## Database migrations
 
