@@ -25,6 +25,10 @@ COPY --from=web /web/dist/know-ball/browser /app/api/wwwroot
 ENV ASPNETCORE_URLS=http://+:8080 \
     ASPNETCORE_FORWARDEDHEADERS_ENABLED=true \
     Media__Path=/data/photos
+# Run as the image's non-root "app" user. It must own /data before VOLUME, so that a fresh volume
+# copies that ownership and the API can write photos there.
+RUN mkdir -p /data/photos && chown -R "$APP_UID:$APP_UID" /data
+USER $APP_UID
 VOLUME /data
 EXPOSE 8080
 

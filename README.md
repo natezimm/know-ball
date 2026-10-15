@@ -60,7 +60,8 @@ dotnet test tests/KnowBall.IntegrationTests       # SQLite; set TRIVIA_TEST_POST
 cd web/know-ball && npm test
 ```
 
-`./scripts/verify.sh` is the older all-in-one gate check and still needs updating for version 1 (see the plan).
+`./scripts/verify.sh` runs everything above plus the importer, an API smoke test and the Docker image check
+(`./scripts/docker-smoke.sh`, which CI also runs). Set `KNOWBALL_DB_PORT` if port 5432 is taken.
 
 ## The importer
 

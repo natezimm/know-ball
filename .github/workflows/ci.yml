@@ -61,3 +61,12 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
+
+  # Builds the production image and checks it on a fresh Postgres: migrations, importer, daily
+  # games, admin key, Eastern time, and a puzzle rendered and saved to /data as the non-root user.
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image and smoke-test it
+        run: ./scripts/docker-smoke.sh
