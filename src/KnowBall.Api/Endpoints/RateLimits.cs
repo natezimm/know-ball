@@ -7,8 +7,8 @@ public sealed record ApiError(string Error);
 
 /// <summary>
 /// Per-address request limits. Each is a number of requests a minute, read from configuration
-/// when a request arrives. Behind a reverse proxy, forwarded headers must be enabled
-/// (ASPNETCORE_FORWARDEDHEADERS_ENABLED=true) or every player shares one address.
+/// when a request arrives. Behind a reverse proxy, the proxy must be trusted through
+/// ForwardedHeaders:KnownNetworks (see Program.cs) or every player shares one address.
 /// </summary>
 public static class RateLimits
 {
