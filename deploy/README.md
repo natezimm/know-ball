@@ -58,8 +58,8 @@ renews the certificate with the others.
 ```sh
 ssh-keygen -t ed25519 -f ~/.ssh/knowball_deploy -N "" -C knowball-deploy
 cat ~/.ssh/knowball_deploy.pub >> ~/.ssh/authorized_keys
-cat ~/.ssh/knowball_deploy                                          # → secret DEPLOY_SSH_KEY
-awk '{print "203.0.113.10", $1, $2}' /etc/ssh/ssh_host_ed25519_key.pub   # → secret DEPLOY_KNOWN_HOSTS
+cat ~/.ssh/knowball_deploy                                          # → secret GCP_SSH_KEY
+awk '{print "203.0.113.10", $1, $2}' /etc/ssh/ssh_host_ed25519_key.pub   # → secret GCP_KNOWN_HOSTS (optional)
 rm ~/.ssh/knowball_deploy                                           # once the secret is saved
 ```
 
@@ -67,10 +67,10 @@ Then in GitHub, **Settings → Secrets and variables → Actions → New reposit
 
 | Secret | Value |
 | --- | --- |
-| `DEPLOY_HOST` | `203.0.113.10` |
-| `DEPLOY_USER` | your user on the VM (`deploy-user`) |
-| `DEPLOY_SSH_KEY` | the private key printed above, all of it |
-| `DEPLOY_KNOWN_HOSTS` | the line the `awk` command printed |
+| `GCP_HOST` | `203.0.113.10` |
+| `GCP_USER` | your user on the VM (`deploy-user`) |
+| `GCP_SSH_KEY` | the private key printed above, all of it |
+| `GCP_KNOWN_HOSTS` | optional: the line the `awk` command printed. It pins the VM's identity; without it the job trusts whatever key the VM shows at deploy time |
 
 If the deploy job says `Permission denied (publickey)`, the VM probably uses OS Login, which ignores
 `~/.ssh/authorized_keys`. Turn it off for this VM (metadata `enable-oslogin=FALSE`) or ask Claude to switch the
@@ -79,7 +79,7 @@ job to a service account. GCP's default firewall rule already lets SSH in from a
 ### 6. First deploy
 
 Re-run the latest CI run on `main` (Actions → CI → Re-run all jobs) or merge anything. The `deploy` job
-skips with a notice until `DEPLOY_HOST` is set.
+skips with a notice until `GCP_HOST` is set.
 
 On its first start the importer downloads the full player history, which takes a while; follow it with
 `cd ~/know-ball && docker compose logs -f importer`, and watch memory with `docker stats`. When it is done,
