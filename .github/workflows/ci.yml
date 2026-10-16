@@ -106,35 +106,40 @@ jobs:
       packages: read
     concurrency: deploy
     env:
-      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      GCP_HOST: ${{ secrets.GCP_HOST }}
+      GCP_USER: ${{ secrets.GCP_USER }}
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to the VM
         env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
+          GCP_KNOWN_HOSTS: ${{ secrets.GCP_KNOWN_HOSTS }}
           REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -z "$DEPLOY_HOST" ]; then
+          if [ -z "$GCP_HOST" ]; then
             echo "::notice::Deploy secrets are not set yet (deploy/README.md); skipping the deploy."
             exit 0
           fi
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          printf '%s\n' "$GCP_SSH_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          # GCP_KNOWN_HOSTS pins the VM's host key; without it, trust the key the VM presents now.
+          if [ -n "$GCP_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$GCP_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -t ed25519 "$GCP_HOST" > ~/.ssh/known_hosts
+          fi
           SSH="ssh -i $HOME/.ssh/deploy -o StrictHostKeyChecking=yes"
-          scp -i ~/.ssh/deploy deploy/docker-compose.yml "$DEPLOY_USER@$DEPLOY_HOST:know-ball/docker-compose.yml"
+          scp -i ~/.ssh/deploy deploy/docker-compose.yml "$GCP_USER@$GCP_HOST:know-ball/docker-compose.yml"
           # The job's token can read the private image; it expires when this job ends.
-          printf '%s' "$REGISTRY_TOKEN" | $SSH "$DEPLOY_USER@$DEPLOY_HOST" "docker login ghcr.io -u ${{ github.actor }} --password-stdin"
-          $SSH "$DEPLOY_USER@$DEPLOY_HOST" "cd know-ball && sed -i '/^KNOWBALL_TAG=/d' .env && echo 'KNOWBALL_TAG=${{ github.sha }}' >> .env && docker compose pull -q && docker compose up -d --remove-orphans && docker image prune -f"
+          printf '%s' "$REGISTRY_TOKEN" | $SSH "$GCP_USER@$GCP_HOST" "docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+          $SSH "$GCP_USER@$GCP_HOST" "cd know-ball && sed -i '/^KNOWBALL_TAG=/d' .env && echo 'KNOWBALL_TAG=${{ github.sha }}' >> .env && docker compose pull -q && docker compose up -d --remove-orphans && docker image prune -f"
           for i in $(seq 1 30); do
-            if $SSH "$DEPLOY_USER@$DEPLOY_HOST" "curl -fs http://127.0.0.1:8090/health" >/dev/null; then
+            if $SSH "$GCP_USER@$GCP_HOST" "curl -fs http://127.0.0.1:8090/health" >/dev/null; then
               echo "Deployed ${{ github.sha }}; the site is healthy."
               exit 0
             fi
             sleep 5
           done
           echo "::error::The site did not become healthy after the deploy."
-          $SSH "$DEPLOY_USER@$DEPLOY_HOST" "cd know-ball && docker compose logs --tail 80 site"
+          $SSH "$GCP_USER@$GCP_HOST" "cd know-ball && docker compose logs --tail 80 site"
           exit 1
