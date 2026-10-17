@@ -93,15 +93,74 @@ cd ~/know-ball && docker compose exec db psql -U knowball -d know_ball -c \
 
 Every `docker compose` command needs to run from `~/know-ball`, where the compose file is.
 
-### 7. Nightly backups
+### 7. Production evidence, backups and recovery
 
-`crontab -e` and add:
+After the operations workflow is merged to main, open **Actions → Production operations → Run workflow**.
+It reuses `GCP_HOST`, `GCP_USER`, `GCP_SSH_KEY` and optional `GCP_KNOWN_HOSTS`; no new credentials are needed.
+It serializes with CI deployments, and only runs from main.
 
+| Action | What it does |
+| --- | --- |
+| `audit` (default) | Copies the operations helper to the VM, then reads production import timestamps/status, player/headshot counts, puzzle queues, selected scheduler messages and the managed backup cron state. It does not run an import or change application data. |
+| `backup-and-restore` | Audits, saves a paired database/photos bundle on the VM, and restores it on the disposable GitHub runner. The drill completes Scouting Report and Career Path through the HTTP API and checks all stored photo references and served files. |
+| `install-backups` | Also installs/updates a managed cron block for daily paired backups, then takes a backup and runs the restore drill immediately. Other cron jobs are preserved. |
+
+The VM needs Python 3.12+ (Ubuntu 24.04 provides it), Docker Compose and `crontab`. The helper remains at
+`~/know-ball/operations.py` for cron. The restore runs on GitHub's runner to avoid loading another Postgres/API
+pair onto the shared VM. Only sanitized JSON reports become workflow artifacts (14-day retention). Database
+dumps, photos and credentials are not uploaded as artifacts; the runner's temporary backup copy is removed.
+The VM retains bundles under `~/know-ball/backups/knowball-<UTC timestamp>-<suffix>/`.
+
+A bundle contains `database.dump` (Postgres custom format), `photos.tar.gz`, and a manifest with checksums,
+timestamps and the exact deployed commit-tagged image. A failed dump never publishes a completed bundle or
+prunes old backups. Retention removes only complete, tool-named bundles older than 14 days, after a new backup
+succeeds. Keep an off-VM copy through snapshots as described below.
+
+**Before installing:** remove the old example cron line that starts with
+`15 3 * * * docker exec knowball-db-1 pg_dump`, if present. It backed up only the database, and its shell pipeline
+could hide a failed dump. The new helper does not delete unrelated cron entries. Its schedule is **07:15 in the
+VM host's timezone**; inspect `hostTimeZone` in the audit report and adjust the managed cron block if needed.
+Each install restores the documented 07:15 host-time schedule.
+
+Avoid admin uploads, deletes and reordering while a paired backup runs. The database dump has its own consistent
+snapshot, but the photo copy is a separate operation. Reads and guesses may continue. The restore drill rejects
+missing photo references instead of claiming a complete media restore. If no curated puzzles exist yet, it
+reports that photo validation is pending; the synthetic CI drill separately tests a real three-file bundle.
+
+To use the helper directly after it has been copied to the VM:
+
+```sh
+python3 ~/know-ball/operations.py audit
+python3 ~/know-ball/operations.py install-backups
+python3 ~/know-ball/operations.py backup
 ```
-15 3 * * * docker exec knowball-db-1 pg_dump -U knowball know_ball | gzip > ~/know-ball/backups/know_ball-$(date +\%F).sql.gz && find ~/know-ball/backups -mtime +14 -delete
+
+Do not run the restore drill on the shared VM by default. On an isolated Docker host with registry access and
+Python 3.12+, copy one complete bundle and run:
+
+```sh
+python3 deploy/operations.py restore --backup /absolute/path/to/backup-bundle
 ```
 
-Photos live in the `knowball_photos` volume; a GCP snapshot schedule on the VM's disk covers both.
+The drill checks checksums before starting Docker, creates a private temporary network and new database/API
+containers, mounts only extracted backup photos, binds the API to a random loopback port and removes only its
+own resources. It never restores into production or starts an importer. The cloned database contains anonymous
+game history and puzzle answers: handle the bundle as private data.
+
+**Record gate evidence:** attach the workflow run URL and timestamps to
+[the launch checklist](../docs/implementation-plan.md#8-whats-left). `ImportRuns` has no trigger field, so
+timestamps near 04:00 Eastern are candidates, not proof of a scheduled run. Correlate them with the worker's
+scheduler messages, VM/container restarts and any manual imports. Check two consecutive nights; on October 17,
+the planned October 18 run has not happened yet. Neither a green canary nor a restore drill closes that gate.
+
+### 8. GCP disk snapshots (still a separate check)
+
+In GCP Compute Engine, inspect the VM's disks and confirm that the disk holding Docker's volumes has a snapshot
+schedule attached. Record its retention, a recent successful snapshot and the VM/disk name in the launch
+checklist. Do not assume a snapshot policy exists because Docker volumes are persistent.
+
+The workflow has SSH credentials, not GCP API credentials, and does not create or verify snapshot schedules.
+Keep the backup and recovery gates open until the reports and this GCP evidence have been reviewed.
 
 ## Everyday
 
@@ -115,3 +174,4 @@ docker compose restart site
 To roll back, set `KNOWBALL_TAG` in `.env` to an earlier commit's full SHA and run `docker compose up -d`.
 The deploy job only has a registry login while it runs, so before a manual `docker compose pull`, log in with
 a GitHub token that can read packages: `docker login ghcr.io -u natezimm`.
+

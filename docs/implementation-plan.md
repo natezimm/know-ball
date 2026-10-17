@@ -310,6 +310,16 @@ production scheduling, real-device behavior or the current production photo inve
 | Live-source import canary | [Successful run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39029555678); [workflow](../.github/workflows/nightly-import-check.yml) loads fresh disposable SQLite, not production Postgres |
 | Version 1 verification script updated | [scripts/verify.sh](../scripts/verify.sh): live ESPN import, API checks and Docker smoke checks when Docker is available |
 
+### Operations tooling (implementation, not production evidence)
+
+Production audit, paired database/photo backups, a daily-backup cron installer and a disposable restore drill
+are available through [deploy/operations.py](../deploy/operations.py) and the manual
+[Production operations workflow](../.github/workflows/production-operations.yml). See
+[deployment instructions](../deploy/README.md#7-production-evidence-backups-and-recovery) for the action choices.
+The CI Docker job exercises a fixture backup/restore, including three rendered images, separately from the
+production workflow. Until a production run and GCP snapshot review are recorded, the gates below remain open.
+Import runs do not currently store their trigger; scheduled-run evidence requires log/timestamp correlation.
+
 ### Remaining launch checklist
 
 | Done | Gate | Acceptance evidence to record |
@@ -345,3 +355,4 @@ playthrough. Desktop Chromium tests do not close the real-phone or installed-PWA
   ESPN hosts prove insufficient.
 - Optional local housekeeping: the old `.transfer.tar.gz` archive and `sports-trivia-db` container can be
   reviewed and removed on the development machine.
+
