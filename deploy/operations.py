@@ -221,7 +221,9 @@ def restore(bundle):
         os.chmod(temp / "photos", 0o755)
         password = uuid.uuid4().hex
         try:
-            run(["docker", "network", "create", "--internal", network])
+            # A separate bridge keeps the drill apart from production while supporting
+            # the loopback-only published API port used by the host-side HTTP checks.
+            run(["docker", "network", "create", network])
             run(["docker", "run", "-d", "--name", db, "--network", network,
                  "-e", "POSTGRES_USER=knowball", "-e", "POSTGRES_DB=know_ball", "-e", "POSTGRES_PASSWORD=" + password, "postgres:17"])
             for attempt in range(60):
