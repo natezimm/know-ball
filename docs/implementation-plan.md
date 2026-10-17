@@ -295,15 +295,16 @@ version 1 being live; the rest can wait.
    which builds the image and checks, on an empty Postgres, that migrations apply, the importer loads seed data
    and queues puzzles, the daily games hide their answers, `/admin` needs its key, the calendar is on Eastern
    time, and a puzzle renders with SkiaSharp and saves to `/data/photos`. The image used to run as root; it now
-   runs as the non-root `app` user, which owns `/data`. Still to do once on this Mac:
-   `KNOWBALL_PORT=8090 KNOWBALL_DB_PORT=5433 docker compose --profile site up -d --build`, and watch the importer
-   container load the full history on its first start (the smoke test skips that download).
+   runs as the non-root `app` user, which owns `/data`. The full-history download the smoke test skips ran on
+   the VM's first start (2026-10-16): 5416 players and 99 teams from bref, 5397 Wikidata links, 630 ESPN
+   players, 30 Scouting Report and 29 Career Path puzzles queued.
 2. **Postgres.** Done: the first CI run passed the integration tests and the importer against Postgres 17.
 3. **Who's That Sportsman? content.** 30 puzzles through `/admin`: photo, cut-out, player, year, team, caption.
    Then play one through on a phone (the Milestone 3 gate).
 4. **Hosting.** Chosen 2026-10-14: Nathan's GCP VM `nz-portfolio-vm`, behind its nginx, at
    `knowball.nathanzimmerman.com`. CI publishes the image to GHCR and deploys over SSH; the one-time setup
-   (DNS, `.env`, nginx and certbot, deploy key and secrets, backups) is in `deploy/README.md`.
+   (DNS, `.env`, nginx and certbot, deploy key and secrets, backups) is in `deploy/README.md`. Live since
+   2026-10-16. Still to confirm: the nightly backup cron (step 7) and a GCP snapshot schedule.
 5. **Rate limits behind a proxy.** Fixed: `ASPNETCORE_FORWARDEDHEADERS_ENABLED` is gone. `X-Forwarded-For` now
    counts only from loopback and the networks in `ForwardedHeaders:KnownNetworks`; in production that is the
    Docker network nginx connects through, and nginx overwrites the header with the address it saw.
@@ -316,8 +317,8 @@ version 1 being live; the rest can wait.
    the `VersionOne` migration, smoke-tests the daily games and the admin key, honours `KNOWBALL_DB_PORT`, and
    runs `scripts/docker-smoke.sh` at the end when Docker is available.
 
-The Milestone 0 gate (two nightly imports in a row) is met once the importer runs on the host;
-`GET /api/import-runs/latest` is the check.
+The Milestone 0 gate (two nightly imports in a row) is met after the 4am runs on 2026-10-17 and 10-18
+succeed; the `ImportRuns` query in `deploy/README.md` (step 6) is the check.
 
 ### Soon after launch
 
