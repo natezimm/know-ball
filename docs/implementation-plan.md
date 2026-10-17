@@ -3,8 +3,10 @@
 Written 2026-10-12, after the design picks. It replaces the "Roadmap" section of the original build plan;
 everything else in that plan (stack, architecture, API contract) still stands.
 
-Updated 2026-10-13: ESPN replaces balldontlie as the nightly source, the NFL has a plan, and a ninth game,
-Spordle, is added and built. What was tested and found for every data source is in [research.md](research.md).
+Updated 2026-10-17: reconciled launch status with main at `2cf5164`, merged PRs and GitHub Actions.
+Deployment, Docker/Postgres checks and Playwright gameplay are implemented and passing; production operations,
+real-device validation and curated content still need evidence. Section 8 is the single launch checklist.
+Data-source research retains its dated findings in [research.md](research.md).
 
 **Names changed on 2026-10-13.** "Spordle" is now the Wordle-style word game. The player-guessing game that the
 build plan calls Spordle is now **Scouting Report**. The site itself is now called **Know Ball**, and on 2026-10-14 the code
@@ -12,19 +14,23 @@ was renamed to match (`SportsTrivia` became `KnowBall`).
 
 ## 1. Where things stand
 
-Updated 2026-10-13, end of day. **The version 1 code is written** (Milestones 0 to 4), but it is not live yet.
-What is still missing is listed in [section 8](#8-whats-left).
+Updated 2026-10-17. **The version 1 code is written and the site is deployed**, but launch validation is
+incomplete. Current evidence and remaining gates are in [section 8](#8-whats-left).
 
-- **Playable**: Spordle, Scouting Report and Career Path, each with a daily puzzle, practice rounds (not
-  Spordle, which is always random), an archive, stats and a share card.
-- **Built, but no puzzles yet**: Who's That Sportsman?. The game, the admin area and the image pipeline are done
-  and tested. It needs about 30 photos uploaded through `/admin`; until then the home page shows "Coming soon".
-- **Live data works**: a fresh database fills in 30 to 50 seconds from the Basketball-Reference mirror, Wikidata
-  and ESPN (5,533 players), and a second run changes nothing.
-- **Tests**: 213 unit, 26 integration (SQLite) and 99 Angular, all passing on 2026-10-13. Postgres has not been
-  run against the new schema yet; CI does that on every push.
-- **Not done**: the Docker image has never been built, there is no host, and the site has not been tried on a
-  real phone.
+- **Playable**: Scouting Report and Career Path have daily puzzles, practice, archives, stats and share cards.
+  Spordle is a random play-anytime word game with browser-local stats; it has no daily puzzle or archive.
+- **Built; production content unverified**: Who's That Sportsman?, its admin area and image pipeline are
+  implemented and tested with synthetic images. The last recorded status has no curated production collection;
+  30 reviewed puzzles and a phone playthrough remain the Milestone 3 gate.
+- **Production data loaded**: the first VM import on 2026-10-16 recorded 5,416 history players, 99 team
+  identities, 5,397 Wikidata links and 630 ESPN roster players. These are per-source counts, not a current total.
+- **Automated verification**: the latest CI passed backend and Angular tests, integration tests on SQLite and
+  Postgres, importer repeatability, Docker smoke checks, and nine Playwright tests that win and lose all four
+  games. See the run linked in section 8 rather than treating older test counts as current.
+- **Hosted**: GCP VM `portfolio-vm`, behind nginx, deployed from main through GHCR and SSH.
+- **Still unverified**: two scheduled production imports in succession, backups and restore, the admin form in
+  a browser, and real-phone/PWA installation and update behavior. A green live-source canary is separate from
+  the production nightly-import gate.
 - **Design**: one option chosen per game from the `/mockups` gallery (below).
 - **Theme**: Trading Card, chosen 2026-10-13 from nine candidates at `/mockups/themes` and applied to the whole
   app: cream card stock, navy ink, red and mustard trim; Rokkitt for text, Alfa Slab One for headings and tiles,
@@ -72,25 +78,27 @@ Details to handle in the importer:
 
 - Basketball-Reference names seasons by their end year (2026 is 2025-26); this codebase uses the start year.
 - Its team codes differ from the NBA's (BRK, CHO, PHO); `Team Abbrev.csv` maps them.
-- A traded player has several team rows in one season. `PlayerSeasonStat` is currently unique per player and
-  season, so the key becomes player, season and team, with one combined row.
-- ESPN's feed is unofficial and has had outages on one of its two hosts, so the importer tries the second host,
-  then balldontlie (needs a free key), then leaves yesterday's data in place.
+- A traded player has several team rows in one season. The implemented `PlayerSeasonStat` key includes player,
+  season and team, with one combined row.
+- ESPN's feed is unofficial and has had outages on one of its two hosts. The importer tries the second host,
+  then keeps yesterday's data on failure. A balldontlie fallback is not implemented.
 - The mirror has no licence file and the headshots are the NBA's. Fine for a personal project; revisit if that changes.
 
 ## 4. Milestones
 
-Sizes are relative: S is a sitting, M is a few, L is many. A milestone starts only when the previous gate is met.
+Sizes are relative: S is a sitting, M is a few, L is many. The original sequence below describes the build.
+Implementation has reached Milestone 4; unfinished validation gates remain open in section 8.
 
 Version 1 is Milestones 0 to 4: three or four games, live on mobile. Everything under "Later" is unscheduled.
 
 ### Milestone 0: finish Foundation (L)
 
-**Status: built. Gate not met**, because no scheduled run happens until the site is hosted. Differences from the
-plan: the balldontlie fallback was not built (the importer tries ESPN's second host, then keeps yesterday's
-data); the stray `.transfer.tar.gz` was kept and is ignored by git instead of deleted.
+**Status: built; production gate awaiting evidence.** The site is hosted and the first production import
+completed. Verify two successive scheduled 04:00 America/New_York runs in the production database (section 8).
+The GitHub live-import canary uses disposable SQLite and does not establish this gate. Differences from the
+original plan: no balldontlie fallback; the local `.transfer.tar.gz` was ignored rather than deleted.
 
-1. `git init`, delete the stray `.transfer.tar.gz`, push to GitHub, get CI green.
+1. Repository pushed to GitHub; CI is green. Local archive cleanup is optional housekeeping.
 2. Schema changes (second migration):
    - `PlayerExternalId` (player, source, id) so one player can carry Basketball-Reference, NBA and ESPN ids.
    - `Player`: birthplace name and coordinates, Hall of Fame flag, last season.
@@ -111,7 +119,8 @@ holds the full player history with headshots for current players.
 
 The engine is built once, with Scouting Report as the first game on it.
 
-**Status: built.** Gate met in the desktop browser at phone size (375 by 812), not yet on a real phone.
+**Status: built; automated checks pass, real-phone gate awaiting evidence.** Desktop testing at phone size
+(375 by 812) and Playwright gameplay are covered; they do not replace a physical-device check.
 Differences from the plan: practice is `POST /api/{game}/practice`, and `GET /api/{game}/puzzles/{id}` was added
 for archive links. The result, stats and help dialogs and the hint ladder live inside `GameShell` rather than as
 separate components. A daily puzzle is also created on the first request of the day if the importer has not
@@ -126,7 +135,7 @@ Backend (`KnowBall.Application/Games`, endpoints moved out of `Program.cs` into 
 - `PuzzleGenerationJob` in the nightly worker: keep 30 days of puzzles queued per generated game; the payload is a
   snapshot taken at generation time.
 - Endpoints, as in the build plan: `GET /api/{game}/daily`, `POST /api/{game}/{puzzleId}/guess`,
-  `GET /api/{game}/archive`, `GET /api/{game}/practice`, `GET /api/me/stats`.
+  `GET /api/{game}/archive`, `POST /api/{game}/practice`, `GET /api/me/stats`.
 - Identity: a random id created in the browser and sent as an `X-Anon-Id` header. Accounts come in Phase 2.
 
 Frontend (`web/know-ball/src/app`):
@@ -192,17 +201,18 @@ one season since 1990. A wrong guess is told which stops it shares with the answ
 
 ### Milestone 3: admin area and Who's That Sportsman? (L)
 
-**Status: built; gate not met (no puzzles yet).** Differences from the plan: SkiaSharp renders the images instead
+**Status: built; content and phone gate awaiting evidence.** Automated gameplay uses synthetic images, not
+a verified production collection. Differences from the plan: SkiaSharp renders the images instead
 of ImageSharp (see [research.md](research.md)); images are served from `/photos`; the schedule is reordered with
 Earlier and Later buttons rather than by dragging; "published" is not stored but means scheduled for today or
 earlier; there is no "preview as a player" view; images are stored on local disk only.
 
-- Admin area (`/admin`, protected by a single key from config): puzzle queue with draft, scheduled and published
-  states; drag to reorder the schedule; preview as a player.
-- Image storage behind `IImageStore`: a local `media/` folder in development, blob storage at deploy time.
-  Files get random names so a URL can't be guessed.
+- Admin area (`/admin`, protected by a single key from config): draft, scheduled and published lists with
+  Earlier/Later buttons. Draft editing, drag reordering and a player-view preview are not implemented.
+- Image storage behind `IImageStore`: local disk in development and a persistent Docker photos volume in
+  production. Blob storage is not implemented. Files get random names so a URL can't be guessed.
 - Creating a puzzle: upload the photo and a transparent cut-out of the subject, pick the answer player, enter the
-  year, team and a caption. The server (ImageSharp) renders the black silhouette and the blurred version.
+  year, team and a caption. The server (SkiaSharp) renders the black silhouette and the blurred version.
 - Play: five guesses. Ladder: silhouette, then year, then team, then blurred photo. Each image URL is released
   by the server only when its step unlocks; the full photo and caption appear at the end.
 - Content: about 30 photos are needed before the daily can launch. Collecting them can start during Milestone 1.
@@ -211,10 +221,10 @@ earlier; there is no "preview as a player" view; images are stored on local disk
 
 ### Milestone 4: MVP polish and launch (M)
 
-**Status: partly done.** Done: stats dialog, archive, share on every game, home page with today's state for each
-game, the built games' mockups removed, a mobile pass at phone size, a web app manifest and service worker, a
-Dockerfile and a `site` profile in `docker-compose.yml`. Not done: hosting, a deploy step, building the image,
-checking that the site installs as an app, and Playwright tests.
+**Status: implemented; launch validation incomplete.** Done: stats and sharing, archives for daily player
+games, home-page daily state, removal of built-game mockups, a mobile layout pass, manifest and service worker,
+Docker image, GCP hosting, CI deployment and Playwright gameplay. Real-phone behavior, installed-PWA updates,
+production operations and the admin/content workflow remain open in section 8.
 
 - Stats modal (played, win %, streaks, guess distribution), archive of past dailies, share on every game.
 - Home page shows the version 1 games and today's state for each. Remove their pages from `/mockups`.
@@ -255,7 +265,9 @@ checking that the site installs as an app, and Playwright tests.
 
 - Unit tests for every comparer, generator and scoring rule; these are pure classes by design.
 - One integration test per game for the daily and guess contract, including the answer-leak check.
-- Component tests for the shared Angular pieces. Playwright end-to-end tests start at Milestone 4.
+- Component tests for the shared Angular pieces. Playwright now wins and loses all four games in Chromium
+  against the real API and production build; player-game coverage includes reload, stats and archive checks.
+  Who's That puzzles are created through the admin API; the admin browser form is not covered.
 - `scripts/verify.sh` stays the single gate check and grows a step per milestone.
 
 ## 6. Decisions I've assumed
@@ -267,64 +279,69 @@ Each has a default so work isn't blocked; say so if you'd choose differently.
 | Curated queue runs dry | Replay the oldest puzzle rather than show nothing |
 | Making cut-outs | Done by hand before upload (Preview's "Copy Subject" on a Mac); automatic background removal later if it becomes a chore |
 | Career Path jersey hint | Dropped for lack of data; position, draft and college hints instead |
-| Nightly source | ESPN's unofficial feed, with balldontlie as the fallback; no paid tier |
-| Spordle | Play-anytime like Nerdle for now; a daily word comes with the game engine |
+| Nightly source | ESPN's unofficial feed, trying its second host on failure; keep existing data if both fail. No balldontlie fallback is implemented |
+| Spordle | Play-anytime like Nerdle; daily mode is a proposed post-launch increment, not implemented |
 | Admin protection | One key in config; proper accounts in Phase 2 |
-| Hosting | Still open; see section 8 |
+| Hosting | GCP VM `portfolio-vm`, nginx, GHCR image and SSH deployment from CI; see deploy/README.md |
 | Champions by season | Not entered for version 1; it comes with Who's the GOAT? and Sportle, which need it |
 | A different theme per game | No. One theme for the site; each game gets its own trim colour, like cards from one set |
 | Which game drops if version 1 is three | Who's That Sportsman?, since it is the only one waiting on hand-collected photos |
 
-## 7. What I need from you
+## 7. Inputs and deferred decisions
 
-1. Iconic photos for Who's That Sportsman?, about 30 to start, each with a cut-out of the player
-   (on a Mac: open the photo in Preview, Tools → Remove Background, export as PNG).
-2. A hosting choice (section 8, item 4).
-3. Whether to rename Sportle, the Phase 3 game, since it is one letter from Spordle.
-
-No API key is needed. A free balldontlie key is only worth getting if ESPN's feed starts failing.
+Launch evidence and photo preparation are tracked only in section 8. Hosting is already chosen; no API key is
+needed for the current sources. Renaming Sportle (one letter from Spordle) is a deferred Phase 3 decision.
 
 ## 8. What's left
 
-Recorded 2026-10-13, when the build stopped to put the code on GitHub. Items 1 to 8 stand between the code and
-version 1 being live; the rest can wait.
+Updated 2026-10-17 against main at `2cf5164`. This is the single launch checklist. Check a remaining item only
+after adding dated evidence here. Code and CI establish automated behavior; they do not prove VM configuration,
+production scheduling, real-device behavior or the current production photo inventory.
 
-### Before launch
+### Completed work and evidence
 
-1. **Build and run the Docker image.** Done in CI (2026-10-14): the `docker` job runs `scripts/docker-smoke.sh`,
-   which builds the image and checks, on an empty Postgres, that migrations apply, the importer loads seed data
-   and queues puzzles, the daily games hide their answers, `/admin` needs its key, the calendar is on Eastern
-   time, and a puzzle renders with SkiaSharp and saves to `/data/photos`. The image used to run as root; it now
-   runs as the non-root `app` user, which owns `/data`. The full-history download the smoke test skips ran on
-   the VM's first start (2026-10-16): 5416 players and 99 teams from bref, 5397 Wikidata links, 630 ESPN
-   players, 30 Scouting Report and 29 Career Path puzzles queued.
-2. **Postgres.** Done: the first CI run passed the integration tests and the importer against Postgres 17.
-3. **Who's That Sportsman? content.** 30 puzzles through `/admin`: photo, cut-out, player, year, team, caption.
-   Then play one through on a phone (the Milestone 3 gate).
-4. **Hosting.** Chosen 2026-10-14: Nathan's GCP VM `portfolio-vm`, behind its nginx, at
-   `knowball.nathanzimmerman.com`. CI publishes the image to GHCR and deploys over SSH; the one-time setup
-   (DNS, `.env`, nginx and certbot, deploy key and secrets, backups) is in `deploy/README.md`. Live since
-   2026-10-16. Still to confirm: the nightly backup cron (step 7) and a GCP snapshot schedule.
-5. **Rate limits behind a proxy.** Fixed: `ASPNETCORE_FORWARDEDHEADERS_ENABLED` is gone. `X-Forwarded-For` now
-   counts only from loopback and the networks in `ForwardedHeaders:KnownNetworks`; in production that is the
-   Docker network nginx connects through, and nginx overwrites the header with the address it saw.
-6. **A real phone.** Play each game on iOS Safari and Android Chrome, add the site to the home screen, and check
-   that a new deploy reaches an installed copy. The service worker would not register in the desktop app's
-   built-in browser, so it has not been seen working anywhere yet.
-7. **The admin upload form.** Creating a puzzle was tested through the API and integration tests, not by
-   filling in the form in a browser.
-8. **`scripts/verify.sh`.** Updated (2026-10-14): ESPN for the live import, `--no-history` throughout, checks for
-   the `VersionOne` migration, smoke-tests the daily games and the admin key, honours `KNOWBALL_DB_PORT`, and
-   runs `scripts/docker-smoke.sh` at the end when Docker is available.
+| Work | Evidence |
+| --- | --- |
+| Docker image runs as non-root; smoke checks cover migrations, importer, answer hiding, admin protection, Eastern calendar, SkiaSharp and stored photos | [PR #2](https://github.com/natezimm/know-ball/pull/2), [smoke script](../scripts/docker-smoke.sh), latest CI below |
+| SQLite and Postgres integration, importer repeatability, Angular tests and production build | [CI workflow](../.github/workflows/ci.yml); [successful main run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39035184904) |
+| Hosting, proxy-aware rate limits, image publication and deployment | [PR #3](https://github.com/natezimm/know-ball/pull/3), [PR #4](https://github.com/natezimm/know-ball/pull/4), successful publish/deploy jobs in the main run above; site recorded live since 2026-10-16 |
+| First production history and roster import | [PR #5](https://github.com/natezimm/know-ball/pull/5): 5,416 history players, 99 teams, 5,397 Wikidata links, 630 ESPN players; 30 Scouting Report and 29 Career Path puzzles initially queued |
+| Nine Playwright tests win and lose all four games in Chromium against the real API | [Merged PR #6](https://github.com/natezimm/know-ball/pull/6), [browser tests](../web/know-ball/e2e), successful e2e job in the main run above |
+| Live-source import canary | [Successful run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39029555678); [workflow](../.github/workflows/nightly-import-check.yml) loads fresh disposable SQLite, not production Postgres |
+| Version 1 verification script updated | [scripts/verify.sh](../scripts/verify.sh): live ESPN import, API checks and Docker smoke checks when Docker is available |
 
-The Milestone 0 gate (two nightly imports in a row) is met after the 4am runs on 2026-10-17 and 10-18
-succeed; the `ImportRuns` query in `deploy/README.md` (step 6) is the check.
+### Remaining launch checklist
 
-### Soon after launch
+| Done | Gate | Acceptance evidence to record |
+| --- | --- | --- |
+| [ ] | **Production nightly imports — Milestone 0** | Production `ImportRuns` rows and worker logs show two successive scheduled 04:00 America/New_York runs succeeding, with full history present and current-player headshots. Check October 17 and 18 first; if either fails, use the next successful consecutive pair. Distinguish scheduled runs from startup/manual imports and confirm puzzle queues were replenished. Use the query in [deploy/README.md, step 6](../deploy/README.md#6-first-deploy). |
+| [ ] | **Backups configured** | Dated confirmation of the VM backup cron, a successful nonempty database dump, retention, and a GCP disk snapshot schedule covering database and photos. Setup is in [deploy/README.md, step 7](../deploy/README.md#7-nightly-backups). |
+| [ ] | **Recovery verified** | Restore a database backup and matching photos into an isolated environment; record backup/snapshot timestamps, restored puzzle counts, successful image loads and a game playthrough. Keep production untouched during the drill. |
+| [ ] | **Admin upload workflow in a browser — four-game launch** | Upload a real photo and transparent cut-out through `/admin`; select a player, create a draft, review all three images, then schedule it. Record browser and result, including validation/error behavior. Current Playwright tests create puzzles through the API instead of filling this form. |
+| [ ] | **Real-phone gameplay — Milestones 1 and 4** | Record device/browser and date for iOS Safari and Android Chrome: play each available game, use player search/on-screen keyboard, reload/resume, finish and share; check scrolling and dialogs. Include Who's That once real content is scheduled. |
+| [ ] | **Installed PWA — Milestone 4** | On iOS and Android, install from the browser, launch from the home screen and verify an updated deployment reaches the installed copy. Record versions/commit and results. Shell caching does not provide offline gameplay; APIs remain network-only. |
+| [ ] | **Who's That content — Milestone 3; required for four-game launch** | Verify production inventory, start with five reviewed puzzles, then reach 30 consecutive scheduled dates. Each needs source/credit evidence, the actual photo's year and team, a transparent cut-out and a readable black silhouette. Record queue dates/count and a complete phone playthrough. No collection was verified by this documentation update. |
 
-- Playwright tests: one per game that starts it, guesses, reloads and finishes.
-- Admin: a "preview as a player" view, and drag to reorder if the buttons get tedious.
-- balldontlie as a third roster source, if both ESPN hosts fail for more than a day.
-- A daily Spordle, the same word for everyone, on the shared engine; today's game becomes its practice mode.
-- Housekeeping on this Mac: the stray `.transfer.tar.gz` (an old copy of the source from 10-10) can be deleted,
-  and the old `sports-trivia-db` container is left over from before `docker-compose.yml` stopped naming it.
+**Release rule:** the production operations and three available games can complete a three-game launch while
+Who's That remains coming soon. A four-game launch additionally requires its content gate and real-phone
+playthrough. Desktop Chromium tests do not close the real-phone or installed-PWA gates.
+
+### Suggested sequence after this documentation update
+
+1. Verify production imports, backups and recovery; begin photo sourcing alongside those checks.
+2. Improve Who's That authoring: editable drafts, a player-view preview outside player stats, and structured
+   attribution displayed on reveal. These are proposed work, not existing features or new blanket launch
+   blockers. Today the caption is a 160-character plain-text input; scheduling for today locks the puzzle.
+3. Validate five actual puzzles through the admin form and on a phone before scaling to 30.
+4. Close the real-phone and installed-PWA checks and record the release decision above.
+
+### After launch (proposed, not scheduled)
+
+- Daily Spordle on the shared engine, keeping the current random game as practice; define daily progress,
+  stats and sharing before implementation.
+- Use replay/return-play evidence to prioritize improvements and the next game (Stat Quiz is the current
+  recommendation). The Phase 2/3 catalog remains unscheduled.
+- Add drag reordering if Earlier/Later buttons become tedious; consider a third roster source only if both
+  ESPN hosts prove insufficient.
+- Optional local housekeeping: the old `.transfer.tar.gz` archive and `sports-trivia-db` container can be
+  reviewed and removed on the development machine.

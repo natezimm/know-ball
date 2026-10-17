@@ -2,8 +2,15 @@
 
 Daily sports trivia games: Angular front end, ASP.NET Core API, PostgreSQL. A personal project.
 
-Version 1 is four NBA games. The code for all four is written; the site is not hosted yet. What is left before
-launch is in [docs/implementation-plan.md, section 8](docs/implementation-plan.md#8-whats-left).
+Version 1 targets four NBA games. The site has been live on GCP since 2026-10-16 at
+[knowball.nathanzimmerman.com](https://knowball.nathanzimmerman.com); Who's That Sportsman? still needs its
+reviewed photo collection. As of 2026-10-17, CI covers backend and Angular tests, SQLite and Postgres integration,
+Docker smoke checks, and Playwright gameplay for all four games.
+
+The remaining launch gates are production nightly-import evidence, backup and restore verification, real-phone
+and installed-PWA checks, and the admin upload/content workflow. The single launch checklist and evidence links
+are in [docs/implementation-plan.md, section 8](docs/implementation-plan.md#8-whats-left). A three-game launch
+can proceed while the photo collection is prepared.
 
 | Game | Route | How it plays | State |
 | --- | --- | --- | --- |
