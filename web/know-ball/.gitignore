@@ -4,3 +4,5 @@
 /.angular/cache
 /coverage
 *.log
+/test-results
+/playwright-report
