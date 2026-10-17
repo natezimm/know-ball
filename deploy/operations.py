@@ -225,7 +225,9 @@ def restore(bundle):
             run(["docker", "run", "-d", "--name", db, "--network", network,
                  "-e", "POSTGRES_USER=knowball", "-e", "POSTGRES_DB=know_ball", "-e", "POSTGRES_PASSWORD=" + password, "postgres:17"])
             for attempt in range(60):
-                if run(["docker", "exec", db, "pg_isready", "-U", "knowball"], check=False).returncode == 0:
+                # The entrypoint's bootstrap server accepts Unix sockets before initdb finishes.
+                # TCP readiness waits for the final server and its created database.
+                if run(["docker", "exec", db, "pg_isready", "-h", "127.0.0.1", "-U", "knowball", "-d", "know_ball"], check=False).returncode == 0:
                     break
                 time.sleep(1)
             else:

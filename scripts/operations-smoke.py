@@ -35,7 +35,7 @@ with tempfile.TemporaryDirectory(prefix="knowball-ops-smoke-") as directory:
     try:
         ops.compose(root, "up", "-d", "db")
         for attempt in range(60):
-            if ops.compose(root, "exec", "-T", "db", "pg_isready", "-U", "knowball", check=False).returncode == 0:
+            if ops.compose(root, "exec", "-T", "db", "pg_isready", "-h", "127.0.0.1", "-U", "knowball", "-d", "know_ball", check=False).returncode == 0:
                 break
             time.sleep(1)
         else:
