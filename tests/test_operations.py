@@ -15,6 +15,13 @@ spec.loader.exec_module(ops)
 
 
 class OperationsTests(unittest.TestCase):
+    def test_health_wait_retries_startup_connection_resets_and_has_a_limit(self):
+        with patch.object(ops, "request", side_effect=[ConnectionResetError(), b"Healthy"]), patch.object(ops.time, "sleep"):
+            ops.wait_for_health("http://127.0.0.1:1234", attempts=2)
+        with patch.object(ops, "request", side_effect=ConnectionResetError()), patch.object(ops.time, "sleep"):
+            with self.assertRaisesRegex(RuntimeError, "did not become healthy"):
+                ops.wait_for_health("http://127.0.0.1:1234", attempts=2)
+
     def test_cron_install_is_idempotent_and_preserves_other_jobs(self):
         other = "0 2 * * * /usr/local/bin/other-backup\n"
         root = Path("/home/deploy/know-ball")
