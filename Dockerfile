@@ -22,9 +22,14 @@ COPY --from=web /web/dist/know-ball/browser /app/api/wwwroot
 
 # Puzzle photos are written under /data; mount a volume there so they outlive the container.
 # Behind a reverse proxy, set ForwardedHeaders__KnownNetworks__0 to the network it connects from
-# (docker-compose.prod.yml does), so rate limits see each visitor's own address.
+# (deploy/docker-compose.yml does), so rate limits see each visitor's own address.
 ENV ASPNETCORE_URLS=http://+:8080 \
     Media__Path=/data/photos
+# Npgsql loads the Kerberos library when it opens a connection; without it every start logs
+# "Cannot load library libgssapi_krb5.so.2". We never use Kerberos, but the noise hides real errors.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends libgssapi-krb5-2 \
+ && rm -rf /var/lib/apt/lists/*
 # Run as the image's non-root "app" user. It must own /data before VOLUME, so that a fresh volume
 # copies that ownership and the API can write photos there.
 RUN mkdir -p /data/photos && chown -R "$APP_UID:$APP_UID" /data

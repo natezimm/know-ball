@@ -82,8 +82,16 @@ Re-run the latest CI run on `main` (Actions → CI → Re-run all jobs) or merge
 skips with a notice until `GCP_HOST` is set.
 
 On its first start the importer downloads the full player history, which takes a while; follow it with
-`cd ~/know-ball && docker compose logs -f importer`, and watch memory with `docker stats`. When it is done,
-`curl -s https://knowball.nathanzimmerman.com/api/import-runs/latest` reports `Succeeded`.
+`cd ~/know-ball && docker compose logs -f importer`, and watch memory with `docker stats`. It is done when
+the log says `Next import at ...`. To see every run, history included (`/api/import-runs/latest` shows only
+the newest, which is the ESPN roster run):
+
+```sh
+cd ~/know-ball && docker compose exec db psql -U knowball -d know_ball -c \
+  'select "Id", "Source", "Status", "StartedAt", "FinishedAt", "PlayersInserted", "PlayersUpdated", "Error" from "ImportRuns" order by "Id";'
+```
+
+Every `docker compose` command needs to run from `~/know-ball`, where the compose file is.
 
 ### 7. Nightly backups
 
