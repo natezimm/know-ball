@@ -207,6 +207,17 @@ def request(base, path, payload=None):
 DRILL_ID = uuid.uuid4().hex[:12]
 
 
+def wait_for_health(base, attempts=60):
+    for attempt in range(attempts):
+        try:
+            request(base, "/health")
+            return
+        except OSError:
+            # Published ports can reset connections before Kestrel starts listening.
+            time.sleep(1)
+    raise RuntimeError("Restored API did not become healthy")
+
+
 def restore(bundle):
     manifest = validate_bundle(bundle)
     prefix = "knowball-restore-" + DRILL_ID
@@ -254,14 +265,7 @@ def restore(bundle):
                  "-e", "Database__ApplyMigrationsOnStartup=false", "-v", f"{temp / 'photos'}:/data/photos:ro", manifest["image"]])
             port = run(["docker", "port", site, "8080/tcp"]).stdout.decode().strip().rsplit(":", 1)[1]
             base = "http://127.0.0.1:" + port
-            for attempt in range(60):
-                try:
-                    request(base, "/health")
-                    break
-                except (urllib.error.URLError, TimeoutError):
-                    time.sleep(1)
-            else:
-                raise RuntimeError("Restored API did not become healthy")
+            wait_for_health(base)
             played = []
             pool = [int(value) for value in sql('SELECT "Id" FROM "Players" WHERE "IsActive" ORDER BY "Id" LIMIT 8;').splitlines()]
             for slug in ("scouting-report", "career-path"):
