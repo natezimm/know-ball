@@ -58,7 +58,13 @@ Tests:
 dotnet test tests/KnowBall.UnitTests
 dotnet test tests/KnowBall.IntegrationTests       # SQLite; set TRIVIA_TEST_POSTGRES to a connection string for Postgres
 cd web/know-ball && npm test
+cd web/know-ball && npm run e2e                    # Playwright: every game played in Chromium against the real API
 ```
+
+The end-to-end tests start their own site (`web/know-ball/e2e/serve.sh`) on port 5180 with a fresh SQLite
+database loaded offline from the test fixtures and seed rosters, so they need the .NET SDK too. They win and lose
+each game: the player games learn today's answer by playing it through the API first, and Spordle solves its
+random word from the hints and scores. Run `npx playwright install chromium` once before the first run.
 
 `./scripts/verify.sh` runs everything above plus the importer, an API smoke test and the Docker image check
 (`./scripts/docker-smoke.sh`, which CI also runs). Set `KNOWBALL_DB_PORT` if port 5432 is taken.
