@@ -205,14 +205,17 @@ one season since 1990. A wrong guess is told which stops it shares with the answ
 a verified production collection. Differences from the plan: SkiaSharp renders the images instead
 of ImageSharp (see [research.md](research.md)); images are served from `/photos`; the schedule is reordered with
 Earlier and Later buttons rather than by dragging; "published" is not stored but means scheduled for today or
-earlier; there is no "preview as a player" view; images are stored on local disk only.
+earlier; the admin now has a read-only player-view preview; images are stored on local disk only.
 
 - Admin area (`/admin`, protected by a single key from config): draft, scheduled and published lists with
-  Earlier/Later buttons. Draft editing, drag reordering and a player-view preview are not implemented.
+  Earlier/Later buttons. Draft metadata and paired-image replacement are editable; future puzzles must be
+  unscheduled before editing, and live/past puzzles stay locked. Preview steps through the real server-side
+  hint/reveal rules without recording guesses or results. Drag reordering is not implemented.
 - Image storage behind `IImageStore`: local disk in development and a persistent Docker photos volume in
   production. Blob storage is not implemented. Files get random names so a URL can't be guessed.
 - Creating a puzzle: upload the photo and a transparent cut-out of the subject, pick the answer player, enter the
-  year, team and a caption. The server (SkiaSharp) renders the black silhouette and the blurred version.
+  year, team, caption and optional structured source URL/credit/license. Attribution appears only on reveal.
+  The server (SkiaSharp) renders the black silhouette and the blurred version.
 - Play: five guesses. Ladder: silhouette, then year, then team, then blurred photo. Each image URL is released
   by the server only when its step unlocks; the full photo and caption appear at the end.
 - Content: about 30 photos are needed before the daily can launch. Collecting them can start during Milestone 1.
@@ -267,7 +270,8 @@ production operations and the admin/content workflow remain open in section 8.
 - One integration test per game for the daily and guess contract, including the answer-leak check.
 - Component tests for the shared Angular pieces. Playwright now wins and loses all four games in Chromium
   against the real API and production build; player-game coverage includes reload, stats and archive checks.
-  Who's That puzzles are created through the admin API; the admin browser form is not covered.
+  Who's That gameplay uses API-created puzzles; a separate browser test uploads through the admin form, edits a
+  draft, previews the hint/reveal stages, checks stats are unchanged, and schedules a future date.
 - `scripts/verify.sh` stays the single gate check and grows a step per milestone.
 
 ## 6. Decisions I've assumed
@@ -327,7 +331,7 @@ Import runs do not currently store their trigger; scheduled-run evidence require
 | [ ] | **Production nightly imports — Milestone 0** | Production `ImportRuns` rows and worker logs show two successive scheduled 04:00 America/New_York runs succeeding, with full history present and current-player headshots. Check October 17 and 18 first; if either fails, use the next successful consecutive pair. Distinguish scheduled runs from startup/manual imports and confirm puzzle queues were replenished. Use the query in [deploy/README.md, step 6](../deploy/README.md#6-first-deploy). |
 | [ ] | **Backups configured** | Dated confirmation of the VM backup cron, a successful nonempty database dump, retention, and a GCP disk snapshot schedule covering database and photos. Setup is in [deploy/README.md, step 7](../deploy/README.md#7-nightly-backups). |
 | [ ] | **Recovery verified** | Restore a database backup and matching photos into an isolated environment; record backup/snapshot timestamps, restored puzzle counts, successful image loads and a game playthrough. Keep production untouched during the drill. |
-| [ ] | **Admin upload workflow in a browser — four-game launch** | Upload a real photo and transparent cut-out through `/admin`; select a player, create a draft, review all three images, then schedule it. Record browser and result, including validation/error behavior. Current Playwright tests create puzzles through the API instead of filling this form. |
+| [ ] | **Admin upload workflow in a browser — four-game launch** | Upload a real photo and transparent cut-out through `/admin`; select a player, create a draft, review all three images, then schedule it. Record browser and result, including validation/error behavior. Automated Playwright coverage now fills this form, edits, previews and schedules synthetic images. The real-photo production check remains open. |
 | [ ] | **Real-phone gameplay — Milestones 1 and 4** | Record device/browser and date for iOS Safari and Android Chrome: play each available game, use player search/on-screen keyboard, reload/resume, finish and share; check scrolling and dialogs. Include Who's That once real content is scheduled. |
 | [ ] | **Installed PWA — Milestone 4** | On iOS and Android, install from the browser, launch from the home screen and verify an updated deployment reaches the installed copy. Record versions/commit and results. Shell caching does not provide offline gameplay; APIs remain network-only. |
 | [ ] | **Who's That content — Milestone 3; required for four-game launch** | Verify production inventory, start with five reviewed puzzles, then reach 30 consecutive scheduled dates. Each needs source/credit evidence, the actual photo's year and team, a transparent cut-out and a readable black silhouette. Record queue dates/count and a complete phone playthrough. No collection was verified by this documentation update. |
@@ -339,9 +343,10 @@ playthrough. Desktop Chromium tests do not close the real-phone or installed-PWA
 ### Suggested sequence after this documentation update
 
 1. Verify production imports, backups and recovery; begin photo sourcing alongside those checks.
-2. Improve Who's That authoring: editable drafts, a player-view preview outside player stats, and structured
-   attribution displayed on reveal. These are proposed work, not existing features or new blanket launch
-   blockers. Today the caption is a 160-character plain-text input; scheduling for today locks the puzzle.
+2. Who's That authoring improvements are implemented (2026-10-18): editable drafts, a shared player-view photo
+   stage with a read-only hint/reveal preview, and structured attribution displayed on reveal. The caption
+   remains a 160-character plain-text input; scheduling for today locks the puzzle. These improvements do not
+   close production-content or real-device gates.
 3. Validate five actual puzzles through the admin form and on a phone before scaling to 30.
 4. Close the real-phone and installed-PWA checks and record the release decision above.
 
@@ -355,4 +360,3 @@ playthrough. Desktop Chromium tests do not close the real-phone or installed-PWA
   ESPN hosts prove insufficient.
 - Optional local housekeeping: the old `.transfer.tar.gz` archive and `sports-trivia-db` container can be
   reviewed and removed on the development machine.
-

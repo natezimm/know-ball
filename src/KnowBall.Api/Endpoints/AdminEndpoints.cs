@@ -31,6 +31,12 @@ public static class AdminEndpoints
         puzzles.MapGet("/", async (CuratedPuzzleService service, CancellationToken ct) => Results.Ok(await service.ListAsync(ct)))
             .WithName("AdminListPuzzles");
 
+        puzzles.MapPut("/{id:int}", Update).DisableAntiforgery().WithName("AdminUpdatePuzzle");
+
+        puzzles.MapGet("/{id:int}/preview", async (int id, int? misses, bool? reveal, CuratedPuzzleService service, CancellationToken ct) =>
+            Respond(await service.PreviewAsync(id, misses ?? 0, reveal ?? false, ct)))
+            .WithName("AdminPreviewPuzzle");
+
         puzzles.MapPost("/", Create)
             .DisableAntiforgery() // the key header, which a cross-site form cannot send, is the protection
             .WithName("AdminCreatePuzzle")
@@ -89,10 +95,32 @@ public static class AdminEndpoints
         await using var photoStream = photo.OpenReadStream();
         await using var cutoutStream = cutout.OpenReadStream();
         var outcome = await service.CreateAsync(
-            new NewWhosThatPuzzle(playerId, year, form["team"].ToString(), form["caption"].ToString()), photoStream, cutoutStream, ct);
+            new NewWhosThatPuzzle(playerId, year, form["team"].ToString(), form["caption"].ToString(), Attribution(form)), photoStream, cutoutStream, ct);
         return outcome.Ok
             ? Results.Json(outcome.Result, statusCode: StatusCodes.Status201Created)
             : GameEndpoints.Error(outcome.Failure, outcome.Error);
+    }
+
+    private static PhotoAttribution Attribution(IFormCollection form) =>
+        new(form["sourceUrl"].ToString(), form["credit"].ToString(), form["license"].ToString());
+
+    private static async Task<IResult> Update(int id, HttpRequest request, CuratedPuzzleService service, CancellationToken ct)
+    {
+        if (!request.HasFormContentType) return GameEndpoints.Error(GameFailure.Invalid, "Send the puzzle as a form.");
+        var form = await request.ReadFormAsync(ct);
+        if (!int.TryParse(form["playerId"], out var playerId)) return GameEndpoints.Error(GameFailure.Invalid, "Pick the player in the photo from the list.");
+        if (!int.TryParse(form["year"], out var year)) return GameEndpoints.Error(GameFailure.Invalid, "Enter the year the photo was taken.");
+        var photo = form.Files.GetFile("photo");
+        var cutout = form.Files.GetFile("cutout");
+        // Browsers may include empty file inputs when keeping the existing images.
+        if (photo?.Length == 0) photo = null;
+        if (cutout?.Length == 0) cutout = null;
+        if (photo?.Length > MaxUploadBytes || cutout?.Length > MaxUploadBytes)
+            return GameEndpoints.Error(GameFailure.Invalid, "Each image must be under 20 MB.");
+        await using var photoStream = photo?.OpenReadStream();
+        await using var cutoutStream = cutout?.OpenReadStream();
+        return Respond(await service.UpdateAsync(id,
+            new NewWhosThatPuzzle(playerId, year, form["team"].ToString(), form["caption"].ToString(), Attribution(form)), photoStream, cutoutStream, ct));
     }
 
     private static async Task<IResult> Overview(ITriviaDb db, GameRegistry games, PuzzleCalendar calendar, CancellationToken ct)

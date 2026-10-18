@@ -80,9 +80,9 @@ describe('Admin', () => {
     const sections = [...el.querySelectorAll('section')].slice(2);
     const buttons = (i: number) => [...sections[i].querySelectorAll<HTMLButtonElement>('.acts button')].map((b) => `${b.textContent?.trim()}${b.disabled ? ' (off)' : ''}`);
     expect(sections.map((s) => s.querySelector('h2')?.textContent?.replace(/\s+/g, ' ').trim())).toEqual(['Drafts 1', 'Coming up 2', 'Published 1']);
-    expect(buttons(0)).toEqual(['Schedule', 'Delete']);
-    expect(buttons(1)).toEqual(['Earlier (off)', 'Later', 'Unschedule', 'Earlier', 'Later (off)', 'Unschedule']);
-    expect(buttons(2)).toEqual([]); // a live puzzle is locked
+    expect(buttons(0)).toEqual(['Preview', 'Edit', 'Schedule', 'Delete']);
+    expect(buttons(1)).toEqual(['Preview', 'Earlier (off)', 'Later', 'Unschedule', 'Preview', 'Earlier', 'Later (off)', 'Unschedule']);
+    expect(buttons(2)).toEqual(['Preview']); // a live puzzle is locked
   });
 
   it('schedules a draft on the first free day when no date is picked, then reloads', async () => {
@@ -121,4 +121,48 @@ describe('Admin', () => {
     expect(sessionStorage.getItem('knowball.adminKey')).toBeNull();
     expect(el.querySelector('.gate')).not.toBeNull();
   });
+  it('prefills a draft and saves metadata without requiring replacement images', async () => {
+    await unlock([puzzle(3, 'draft', 'Tim Duncan')]);
+    [...el.querySelectorAll<HTMLButtonElement>('button')].find(b => b.textContent?.trim() === 'Edit')!.click();
+    await fixture.whenStable();
+    const form = el.querySelector<HTMLFormElement>('form.new')!;
+    expect(form.querySelector<HTMLInputElement>('[name="year"]')!.value).toBe('2000');
+    expect(form.querySelector<HTMLInputElement>('[name="photo"]')!.required).toBe(false);
+    form.querySelector<HTMLInputElement>('[name="caption"]')!.value = 'Corrected story';
+    form.dispatchEvent(new Event('submit'));
+    const req = http.expectOne('/api/admin/whos-that/puzzles/3');
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body.get('caption')).toBe('Corrected story');
+    expect(req.request.body.get('playerId')).toBe('3');
+    req.flush(puzzle(3, 'draft', 'Tim Duncan'));
+    http.expectOne('/api/admin/overview').flush(overview);
+    http.expectOne('/api/admin/whos-that/puzzles').flush([puzzle(3, 'draft', 'Tim Duncan')]);
+    await fixture.whenStable();
+    expect(form.isConnected).toBe(false);
+    expect(el.textContent).toContain('New Who');
+  });
+
+  it('previews stages through the admin API and clears a reveal before the next request', async () => {
+    await unlock([puzzle(3, 'draft', 'Tim Duncan')]);
+    el.querySelector<HTMLButtonElement>('.preview-button')!.click();
+    const req = http.expectOne(r => r.url.endsWith('/3/preview'));
+    expect(req.request.headers.get('X-Admin-Key')).toBe('the-key');
+    expect(req.request.params.get('reveal')).toBe('false');
+    req.flush({ clues: { silhouetteUrl: '/photos/s3.png', year: null, team: null, blurredUrl: null }, answer: null });
+    await fixture.whenStable();
+    const preview = el.querySelector('.preview')!;
+    expect(preview.textContent).toContain('Locked until 1 miss');
+    [...preview.querySelectorAll<HTMLButtonElement>('button')].find(b => b.textContent === 'Reveal')!.click();
+    const reveal = http.expectOne(r => r.url.endsWith('/3/preview'));
+    expect(reveal.request.params.get('reveal')).toBe('true');
+    reveal.flush({ clues: null, answer: { name: 'Tim Duncan', photoUrl: '/photos/p3.jpg', caption: 'The story', attribution: { credit: 'Credit', sourceUrl: 'https://example.com/photo' } } });
+    await fixture.whenStable();
+    expect(preview.querySelector('a')?.href).toBe('https://example.com/photo');
+    [...preview.querySelectorAll<HTMLButtonElement>('button')].find(b => b.textContent === 'Silhouette')!.click();
+    await fixture.whenStable();
+    expect(preview.querySelector('a')).toBeNull();
+    http.expectOne(r => r.url.endsWith('/3/preview')).flush({ clues: null, answer: null });
+    await fixture.whenStable();
+  });
+
 });
