@@ -347,7 +347,7 @@ playthrough. Desktop Chromium tests do not close the real-phone or installed-PWA
    stage with a read-only hint/reveal preview, and structured attribution displayed on reveal. The caption
    remains a 160-character plain-text input; scheduling for today locks the puzzle. These improvements do not
    close production-content or real-device gates.
-3. Validate five actual puzzles through the admin form and on a phone before scaling to 30.
+3. Prepare and review the [first-five source manifest and draft loader](whos-that-content.md). Sources, photo\n   dates, team hints and attribution are recorded; actual images/cut-outs, rendered preview, production draft\n   IDs and phone evidence remain pending. Validate five actual puzzles before scaling to 30.
 4. Close the real-phone and installed-PWA checks and record the release decision above.
 
 ### After launch (proposed, not scheduled)
