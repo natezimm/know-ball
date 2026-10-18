@@ -22,6 +22,14 @@ class OperationsTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "did not become healthy"):
                 ops.wait_for_health("http://127.0.0.1:1234", attempts=2)
 
+    def test_missing_crontab_is_reportable_and_installed_for_backup_action(self):
+        with patch.object(ops.shutil, "which", return_value=None):
+            with self.assertRaisesRegex(RuntimeError, "crontab is not installed"):
+                ops.cron_text()
+        with patch.object(ops.shutil, "which", side_effect=[None, "/usr/bin/apt-get", "/usr/bin/sudo", "/usr/bin/crontab"]), patch.object(ops, "run") as run:
+            ops.ensure_cron()
+            self.assertEqual(run.call_count, 3)
+
     def test_cron_install_is_idempotent_and_preserves_other_jobs(self):
         other = "0 2 * * * /usr/local/bin/other-backup\n"
         root = Path("/home/deploy/know-ball")
