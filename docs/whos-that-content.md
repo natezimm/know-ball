@@ -6,7 +6,7 @@ This is the next content-preparation step in the [launch plan](implementation-pl
 The [starter manifest](../content/whos-that/starter-five.json) contains five sourced candidates, their
 photo-specific facts, proposed captions, credits and license URLs. The source descriptions and metadata
 were checked; image quality, transparent cut-outs, silhouettes and phone gameplay have **not** been approved.
-No originals or cut-outs are bundled, and no production puzzles were created or scheduled by this change.
+Media is kept outside git. No production puzzles have been created or scheduled.
 These are recognizable action-photo candidates; review whether their silhouettes make satisfying puzzles
 before treating them as the final iconic-moment collection.
 
@@ -23,6 +23,32 @@ including Bagumba's existing edits to the Kobe crop. The manifest credits also d
 cut-out, silhouette, blur and resize transformations. Its displayed license field includes the license URL;
 the CC BY-SA candidates explicitly carry the same license for adapted images. Review those notices against
 the files actually used, and preserve them if the assets are exported or reused elsewhere.
+
+## Media preparation checkpoint — 2026-10-18
+
+All five original photographs were downloaded unchanged. Four provisional AI-assisted cut-outs
+(Kobe, Curry, Durant and Giannis) were run through the application's `SilhouetteRenderer` at
+commit `64ce3bfdb5ef729268624e27ab43e6e8e087a7e0`. Decoding, transparency and rendering
+succeeded; all visible silhouette pixels were black. See the
+[machine validation report](../content/whos-that/starter-five-media-validation.json) for dimensions
+and input SHA-256 hashes. These checks do **not** establish source-faithful outlines or approve gameplay.
+
+The separate `KnowBall_Starter_Photo_Media.zip` review pack contains the unchanged originals,
+four provisional cuts, rendered silhouette/blur/reveal outputs, attribution, and `review.html`.
+Extract its `starter-five/` directory under `artifacts/whos-that/` to use the loader commands below.
+The pack's README identifies the provisional images; do not publish them as approved source extractions.
+
+Open issues:
+- LeBron's cut-out is missing: the image editor rejected the extraction twice.
+- The four generated cuts alter some source edges and proportions. Correct the masks against the originals.
+  Durant's net-occluded hand and Giannis's backboard-occluded arms need particular care;
+  preserve visible source anatomy rather than inventing hidden parts.
+- Kobe's low-resolution source and Curry's cropped pose still need phone review.
+- Full-batch preflight fails on LeBron's missing cut-out. The other four pass file preflight only.
+- Admin preview, production draft IDs, physical-phone gameplay and installed-PWA checks remain pending.
+
+Complete faithful masks and rerun rendering before creating drafts. No launch gate is closed by
+this checkpoint.
 
 ## Prepare the assets
 
