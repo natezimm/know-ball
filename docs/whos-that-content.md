@@ -1,4 +1,9 @@
-# Who's That: first five photo candidates
+# Who's That: retired first-five photo candidates
+
+> **Superseded 2026-10-18:** the user requires iconic photographs and signature moments only.
+> All five routine-action candidates below are rejected for content selection. Their files and renderer
+> results remain historical evidence, not draft approval. Follow the [iconic-photo selection brief](whos-that-iconic-photos.md)
+> for replacement targets. The loader blocks this batch even with all images present.
 
 Prepared 2026-10-18 after [PR #11](https://github.com/natezimm/know-ball/pull/11).
 This is the next content-preparation step in the [launch plan](implementation-plan.md#8-whats-left).
@@ -47,8 +52,8 @@ Open issues:
 - Full-batch preflight fails on LeBron's missing cut-out. The other four pass file preflight only.
 - Admin preview, production draft IDs, physical-phone gameplay and installed-PWA checks remain pending.
 
-Complete faithful masks and rerun rendering before creating drafts. No launch gate is closed by
-this checkpoint.
+Do not create drafts from this retired batch. Select iconic replacement photographs first.
+No launch gate is closed by this historical checkpoint.
 
 ## Prepare the assets
 
@@ -67,7 +72,7 @@ media or an admin key to git. A complete set has ten input files. Each must be n
 The server performs actual image decoding and transparency validation; the local check validates metadata,
 paths, extensions and file sizes only.
 
-## Check and create drafts
+## Check and create drafts (future approved replacement manifests)
 
 Python 3.10+ and the standard library are sufficient. From the repository root:
 
@@ -75,7 +80,9 @@ Python 3.10+ and the standard library are sufficient. From the repository root:
 python3 scripts/curated-puzzles.py check --assets artifacts/whos-that/starter-five
 ```
 
-This command is offline, needs no key and lists every missing pair. It exits 1 while preparation is incomplete.
+This command is offline and needs no key. It reports missing files and iconic-review issues. The retired
+starter batch exits 1 even if all pairs exist. Use --manifest with a replacement manifest after selecting
+and approving the exact iconic photographs described in the selection brief.
 Select one or more prepared candidates by repeating `--only <candidate-key>` on either command.
 
 After the selected pairs are ready, set `KNOWBALL_ADMIN_KEY` in the terminal environment using your password
