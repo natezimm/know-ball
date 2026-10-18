@@ -334,7 +334,7 @@ Import runs do not currently store their trigger; scheduled-run evidence require
 | [ ] | **Admin upload workflow in a browser — four-game launch** | Upload a real photo and transparent cut-out through `/admin`; select a player, create a draft, review all three images, then schedule it. Record browser and result, including validation/error behavior. Automated Playwright coverage now fills this form, edits, previews and schedules synthetic images. The real-photo production check remains open. |
 | [ ] | **Real-phone gameplay — Milestones 1 and 4** | Record device/browser and date for iOS Safari and Android Chrome: play each available game, use player search/on-screen keyboard, reload/resume, finish and share; check scrolling and dialogs. Include Who's That once real content is scheduled. |
 | [ ] | **Installed PWA — Milestone 4** | On iOS and Android, install from the browser, launch from the home screen and verify an updated deployment reaches the installed copy. Record versions/commit and results. Shell caching does not provide offline gameplay; APIs remain network-only. |
-| [ ] | **Who's That content — Milestone 3; required for four-game launch** | Verify production inventory, start with five reviewed puzzles, then reach 30 consecutive scheduled dates. Each needs source/credit evidence, the actual photo's year and team, a transparent cut-out and a readable black silhouette. Record queue dates/count and a complete phone playthrough. No collection was verified by this documentation update. |
+| [ ] | **Who's That content — Milestone 3; required for four-game launch** | Verify production inventory, start with five reviewed puzzles, then reach 30 consecutive scheduled dates. Each needs an approved iconic photograph/signature moment, source/credit and permission evidence, the actual photo's year and team, a transparent cut-out and a readable black silhouette. Record queue dates/count and a complete phone playthrough. No collection was verified by this documentation update. |
 
 **Release rule:** the production operations and three available games can complete a three-game launch while
 Who's That remains coming soon. A four-game launch additionally requires its content gate and real-phone
@@ -347,9 +347,11 @@ playthrough. Desktop Chromium tests do not close the real-phone or installed-PWA
    stage with a read-only hint/reveal preview, and structured attribution displayed on reveal. The caption
    remains a 160-character plain-text input; scheduling for today locks the puzzle. These improvements do not
    close production-content or real-device gates.
-3. Prepare and review the [first-five source manifest and draft loader](whos-that-content.md). Sources, photo
-   dates, team hints and attribution are recorded; actual images/cut-outs, rendered preview, production draft
-   IDs and phone evidence remain pending. Validate five actual puzzles before scaling to 30.
+3. Source exact famous photographs from the [iconic-photo selection brief](whos-that-iconic-photos.md).
+   The ordinary-action first-five batch is retired; image-file completeness cannot override iconic-photo
+   review. Acquire usable originals/permissions, make faithful masks, review rendered stages and create
+   five approved drafts with the [loader](whos-that-content.md) before scaling to 30. Production draft IDs
+   and phone evidence remain pending.
 4. Close the real-phone and installed-PWA checks and record the release decision above.
 
 ### After launch (proposed, not scheduled)
