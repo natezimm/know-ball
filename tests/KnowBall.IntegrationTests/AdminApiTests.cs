@@ -4,6 +4,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using SkiaSharp;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using KnowBall.Application.Games.Silhouette;
 
 namespace KnowBall.IntegrationTests;
 
@@ -119,7 +122,9 @@ public sealed class AdminApiTests(ApiFactory factory) : IAsyncLifetime
         var vince = await PlayerId("Vince Carter");
 
         // ---- Make it and put it on today -------------------------------------------------
-        var created = await admin.PostAsync("/api/admin/whos-that/puzzles", Form(vince, Image(clear: false), Image(clear: true)));
+        var upload = Form(vince, Image(clear: false), Image(clear: true));
+        upload.Add(new StringContent("Example photographer"), "credit");
+        var created = await admin.PostAsync("/api/admin/whos-that/puzzles", upload);
         Assert.Equal(HttpStatusCode.Created, created.StatusCode);
         var draft = await Json(created);
         Assert.Equal(("draft", "Vince Carter", 2000, "Team USA"),
@@ -161,6 +166,7 @@ public sealed class AdminApiTests(ApiFactory factory) : IAsyncLifetime
             Assert.DoesNotContain(photoUrl, body);
             Assert.DoesNotContain("Carter", body);
             Assert.DoesNotContain("Weis", body);
+            Assert.DoesNotContain("Example photographer", body);
         }
 
         var won = await Json(await player.PostAsJsonAsync($"/api/whos-that/{puzzleId}/guess", new { playerId = vince }));
@@ -168,6 +174,8 @@ public sealed class AdminApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(("Vince Carter", photoUrl, "The dunk over Frédéric Weis"),
             (won.GetProperty("answer").GetProperty("name").GetString(), won.GetProperty("answer").GetProperty("photoUrl").GetString(), won.GetProperty("answer").GetProperty("caption").GetString()));
         Assert.Equal("image/jpeg", (await player.GetAsync(photoUrl)).Content.Headers.ContentType?.MediaType);
+        Assert.Equal("Example photographer", won.GetProperty("answer").GetProperty("attribution").GetProperty("credit").GetString());
+        Assert.Equal(HttpStatusCode.Conflict, (await admin.PutAsync($"/api/admin/whos-that/puzzles/{id}", Metadata(vince))).StatusCode);
 
         // ---- A live puzzle is locked -----------------------------------------------------
         Assert.Equal(HttpStatusCode.Conflict, (await admin.DeleteAsync($"/api/admin/whos-that/puzzles/{id}")).StatusCode);
@@ -211,4 +219,172 @@ public sealed class AdminApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NoContent, (await admin.DeleteAsync($"/api/admin/whos-that/puzzles/{id}")).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await factory.CreateClient().GetAsync(silhouetteUrl)).StatusCode); // its images go with it
     }
+    private static MultipartFormDataContent Metadata(int playerId, string source = "https://example.com/photo") => new()
+    {
+        { new StringContent(playerId.ToString()), "playerId" },
+        { new StringContent("2001"), "year" },
+        { new StringContent("San Antonio Spurs"), "team" },
+        { new StringContent("An edited caption"), "caption" },
+        { new StringContent(source), "sourceUrl" },
+        { new StringContent("Example photographer"), "credit" },
+        { new StringContent("Used with permission"), "license" },
+    };
+
+    [Fact]
+    public async Task Editing_a_draft_keeps_its_id_and_images_and_previews_without_player_results()
+    {
+        var admin = Admin();
+        var vince = await PlayerId("Vince Carter");
+        var tim = await PlayerId("Tim Duncan");
+        var draft = await Json(await admin.PostAsync("/api/admin/whos-that/puzzles", Form(vince, Image(false), Image(true))));
+        var id = draft.GetProperty("id").GetInt32();
+        var path = $"/api/admin/whos-that/puzzles/{id}";
+        var edited = await Json(await admin.PutAsync(path, Metadata(tim)));
+        Assert.Equal(id, edited.GetProperty("id").GetInt32());
+        Assert.Equal("Tim Duncan", edited.GetProperty("playerName").GetString());
+        Assert.Equal("draft", edited.GetProperty("state").GetString());
+        foreach (var image in new[] { "silhouetteUrl", "blurredUrl", "photoUrl" })
+            Assert.Equal(draft.GetProperty(image).GetString(), edited.GetProperty(image).GetString());
+
+        var player = NewPlayer();
+        var statsBefore = await player.GetStringAsync("/api/me/stats");
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<KnowBall.Application.ITriviaDb>();
+        var resultsBefore = await db.UserResults.CountAsync();
+        for (var misses = 0; misses <= 4; misses++)
+        {
+            var preview = await Json(await admin.GetAsync($"{path}/preview?misses={misses}"));
+            Assert.Equal(JsonValueKind.Null, preview.GetProperty("answer").ValueKind);
+            var clues = preview.GetProperty("clues");
+            Assert.Equal(misses >= 1, clues.GetProperty("year").ValueKind == JsonValueKind.Number);
+            Assert.Equal(misses >= 2, clues.GetProperty("team").ValueKind == JsonValueKind.String);
+            Assert.Equal(misses >= 3, clues.GetProperty("blurredUrl").ValueKind == JsonValueKind.String);
+            Assert.DoesNotContain("Example photographer", preview.GetRawText());
+            Assert.DoesNotContain(edited.GetProperty("photoUrl").GetString()!, preview.GetRawText());
+        }
+        var reveal = await Json(await admin.GetAsync($"{path}/preview?reveal=true"));
+        Assert.Equal("https://example.com/photo", reveal.GetProperty("answer").GetProperty("attribution").GetProperty("sourceUrl").GetString());
+        Assert.Equal("Tim Duncan", reveal.GetProperty("answer").GetProperty("name").GetString());
+        Assert.Equal(resultsBefore, await db.UserResults.CountAsync());
+        Assert.Equal(statsBefore, await player.GetStringAsync("/api/me/stats"));
+        Assert.Equal(HttpStatusCode.NotFound, (await player.GetAsync($"/api/whos-that/puzzles/{id}")).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await factory.CreateClient().GetAsync($"{path}/preview")).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await factory.CreateClient().PutAsync(path, Metadata(tim))).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await admin.GetAsync($"{path}/preview?misses=5")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await admin.GetAsync("/api/admin/whos-that/puzzles/2147483647/preview")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await admin.PutAsync("/api/admin/whos-that/puzzles/2147483647", Metadata(tim))).StatusCode);
+
+        var future = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(110);
+        await Json(await admin.PostAsJsonAsync($"{path}/schedule", new { date = future.ToString("yyyy-MM-dd") }));
+        Assert.Equal(HttpStatusCode.Conflict, (await admin.PutAsync(path, Metadata(vince))).StatusCode);
+        await Json(await admin.PostAsync($"{path}/unschedule", null));
+        Assert.True((await admin.PutAsync(path, Metadata(tim))).IsSuccessStatusCode);
+        await admin.DeleteAsync(path);
+    }
+
+    [Theory]
+    [InlineData("javascript:alert(1)")]
+    [InlineData("data:text/html,no")]
+    [InlineData("https://user:secret@example.com/photo")]
+    [InlineData("not a URL")]
+    public async Task Unsafe_attribution_is_rejected_on_create_and_edit(string source)
+    {
+        var admin = Admin();
+        var tim = await PlayerId("Tim Duncan");
+        var form = Form(tim, Image(false), Image(true));
+        form.Add(new StringContent(source), "sourceUrl");
+        Assert.Equal(HttpStatusCode.BadRequest, (await admin.PostAsync("/api/admin/whos-that/puzzles", form)).StatusCode);
+        var draft = await Json(await admin.PostAsync("/api/admin/whos-that/puzzles", Form(tim, Image(false), Image(true))));
+        var path = $"/api/admin/whos-that/puzzles/{draft.GetProperty("id").GetInt32()}";
+        Assert.Equal(HttpStatusCode.BadRequest, (await admin.PutAsync(path, Metadata(tim, source))).StatusCode);
+        await admin.DeleteAsync(path);
+    }
+
+    [Fact]
+    public async Task Draft_image_replacement_is_optional_but_must_be_a_valid_pair()
+    {
+        var admin = Admin();
+        var tim = await PlayerId("Tim Duncan");
+        var draft = await Json(await admin.PostAsync("/api/admin/whos-that/puzzles", Form(tim, Image(false), Image(true))));
+        var path = $"/api/admin/whos-that/puzzles/{draft.GetProperty("id").GetInt32()}";
+        var incomplete = Metadata(tim);
+        incomplete.Add(new ByteArrayContent(Image(false)), "photo", "photo.jpg");
+        Assert.Equal(HttpStatusCode.BadRequest, (await admin.PutAsync(path, incomplete)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await admin.PutAsync(path, Form(tim, Image(false), Image(false)))).StatusCode);
+        var unchanged = await Json(await admin.GetAsync($"{path}/preview?reveal=true"));
+        Assert.Equal(draft.GetProperty("photoUrl").GetString(), unchanged.GetProperty("answer").GetProperty("photoUrl").GetString());
+        var updated = await Json(await admin.PutAsync(path, Form(tim, Image(false), Image(true))));
+        foreach (var image in new[] { "photoUrl", "silhouetteUrl", "blurredUrl" })
+        {
+            Assert.NotEqual(draft.GetProperty(image).GetString(), updated.GetProperty(image).GetString());
+            Assert.Equal(HttpStatusCode.OK, (await admin.GetAsync(updated.GetProperty(image).GetString())).StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, (await admin.GetAsync(draft.GetProperty(image).GetString())).StatusCode);
+        }
+        await admin.DeleteAsync(path);
+    }
+
+    [Fact]
+    public async Task Scheduling_during_image_rendering_rejects_the_edit_and_removes_only_new_images()
+    {
+        var admin = Admin();
+        var tim = await PlayerId("Tim Duncan");
+        var draft = await Json(await admin.PostAsync("/api/admin/whos-that/puzzles", Form(tim, Image(false), Image(true))));
+        var path = $"/api/admin/whos-that/puzzles/{draft.GetProperty("id").GetInt32()}";
+        var renderer = new PausedRenderer(factory.Services.GetRequiredService<ISilhouetteRenderer>());
+        var store = new RecordingImages(factory.Services.GetRequiredService<IImageStore>());
+        using var concurrent = factory.WithWebHostBuilder(b => b.ConfigureServices(services =>
+        {
+            services.AddSingleton<ISilhouetteRenderer>(renderer);
+            services.AddSingleton<IImageStore>(store);
+        }));
+        var editor = concurrent.CreateClient();
+        editor.DefaultRequestHeaders.Add("X-Admin-Key", ApiFactory.AdminKey);
+        var pending = editor.PutAsync(path, Form(tim, Image(false), Image(true)));
+        try
+        {
+            await renderer.Started.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            var date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(130).ToString("yyyy-MM-dd");
+            await Json(await admin.PostAsJsonAsync($"{path}/schedule", new { date }));
+        }
+        finally { renderer.Resume.TrySetResult(); }
+        Assert.Equal(HttpStatusCode.Conflict, (await pending).StatusCode);
+        Assert.Equal(3, store.Saved.Count);
+        Assert.Equal(store.Saved, store.Deleted);
+        foreach (var url in store.Saved) Assert.Equal(HttpStatusCode.NotFound, (await admin.GetAsync(url)).StatusCode);
+        var preview = await Json(await admin.GetAsync($"{path}/preview?reveal=true"));
+        Assert.Equal(draft.GetProperty("photoUrl").GetString(), preview.GetProperty("answer").GetProperty("photoUrl").GetString());
+        Assert.Equal(HttpStatusCode.OK, (await admin.GetAsync(draft.GetProperty("photoUrl").GetString())).StatusCode);
+        await admin.PostAsync($"{path}/unschedule", null);
+        await admin.DeleteAsync(path);
+    }
+
+    private sealed class PausedRenderer(ISilhouetteRenderer inner) : ISilhouetteRenderer
+    {
+        public TaskCompletionSource Started { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource Resume { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public async Task<SilhouetteImages> RenderAsync(Stream photo, Stream cutout, CancellationToken ct)
+        {
+            Started.TrySetResult();
+            await Resume.Task.WaitAsync(ct);
+            return await inner.RenderAsync(photo, cutout, ct);
+        }
+    }
+
+    private sealed class RecordingImages(IImageStore inner) : IImageStore
+    {
+        public List<string> Saved { get; } = [];
+        public List<string> Deleted { get; } = [];
+        public async Task<string> SaveAsync(byte[] content, string extension, CancellationToken ct)
+        {
+            var url = await inner.SaveAsync(content, extension, ct);
+            Saved.Add(url);
+            return url;
+        }
+        public Task DeleteAsync(string url, CancellationToken ct)
+        {
+            Deleted.Add(url);
+            return inner.DeleteAsync(url, ct);
+        }
+    }
+
 }
