@@ -73,12 +73,27 @@ def lock(root):
 
 
 def cron_text():
+    if not shutil.which("crontab"):
+        raise RuntimeError("crontab is not installed")
     result = run(["crontab", "-l"], check=False)
     if result.returncode == 1 and b"no crontab for" in result.stderr.lower():
         return ""
     if result.returncode:
         raise RuntimeError("Cannot read the current user's crontab")
     return result.stdout.decode()
+
+
+def ensure_cron():
+    if shutil.which("crontab"):
+        return
+    if not shutil.which("apt-get") or not shutil.which("sudo"):
+        raise RuntimeError("crontab is missing; install the cron package on this Ubuntu host and rerun install-backups")
+    # The install-backups action includes provisioning its scheduler dependency.
+    run(["sudo", "-n", "apt-get", "update", "-qq"])
+    run(["sudo", "-n", "apt-get", "install", "-y", "cron"])
+    run(["sudo", "-n", "systemctl", "enable", "--now", "cron"])
+    if not shutil.which("crontab"):
+        raise RuntimeError("cron installation completed but crontab is still unavailable")
 
 
 def managed_cron(existing, root, script):
@@ -116,7 +131,8 @@ def audit(root):
             "importer": importer,
             "schedulerMessages": scheduling[-20:],
             "hostTimeZone": dt.datetime.now().astimezone().tzname(),
-            "managedBackupCron": BEGIN in cron_text(),
+            "cronAvailable": bool(shutil.which("crontab")),
+            "managedBackupCron": BEGIN in cron_text() if shutil.which("crontab") else False,
             "nightlyGate": "REVIEW_REQUIRED: ImportRuns has no trigger field; correlate timestamps with worker logs, restarts and manual runs",
             "gcpSnapshots": "NOT_CHECKED: verify schedule attachment and a recent successful snapshot in GCP"}
 
@@ -311,6 +327,7 @@ def main():
             script = Path(__file__).resolve()
             if script.parent != root:
                 raise RuntimeError("Install operations.py in the production directory first")
+            ensure_cron()
             with lock(root):
                 updated = managed_cron(cron_text(), root, script)
                 (root / "backup.log").touch(mode=0o600, exist_ok=True)
