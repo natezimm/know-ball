@@ -16,7 +16,10 @@ public sealed record WhosThatSecret(
     int Year,
     string Team,
     string? Caption,
-    string? HeadshotUrl = null);
+    string? HeadshotUrl = null,
+    PhotoAttribution? Attribution = null);
+
+public sealed record PhotoAttribution(string? SourceUrl, string? Credit, string? License);
 
 /// <summary>
 /// Name the player from the outline of an iconic photo. Five guesses; each miss releases the
@@ -62,6 +65,7 @@ public sealed class WhosThatGame : IGame
             ["headshotUrl"] = secret.HeadshotUrl,
             ["photoUrl"] = secret.PhotoUrl,
             ["caption"] = secret.Caption,
+            ["attribution"] = secret.Attribution is null ? null : GameJson.Node(secret.Attribution),
             ["year"] = secret.Year,
             ["team"] = secret.Team,
         };

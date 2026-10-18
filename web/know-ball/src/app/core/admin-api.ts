@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
+import { WhosThatAnswer, WhosThatClues } from '../games/whos-that/whos-that-stage';
 import { Observable } from 'rxjs';
 
 const KEY_STORAGE = 'knowball.adminKey';
@@ -24,7 +25,10 @@ export interface CuratedPuzzle {
   silhouetteUrl: string;
   blurredUrl: string;
   photoUrl: string;
+  attribution?: { sourceUrl: string | null; credit: string | null; license: string | null } | null;
 }
+
+export interface CuratedPreview { clues: WhosThatClues | null; answer: WhosThatAnswer | null; }
 
 /**
  * The admin area's API. Every call carries the admin key, which is kept for this browser tab
@@ -58,6 +62,16 @@ export class AdminApi {
 
   create(form: FormData): Observable<CuratedPuzzle> {
     return this.http.post<CuratedPuzzle>(this.puzzles, form, { headers: this.headers() });
+  }
+
+  update(id: number, form: FormData): Observable<CuratedPuzzle> {
+    return this.http.put<CuratedPuzzle>(`${this.puzzles}/${id}`, form, { headers: this.headers() });
+  }
+
+  preview(id: number, misses: number, reveal: boolean): Observable<CuratedPreview> {
+    return this.http.get<CuratedPreview>(`${this.puzzles}/${id}/preview`, {
+      headers: this.headers(), params: { misses, reveal },
+    });
   }
 
   /** With no date the puzzle takes the first free day. */

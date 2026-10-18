@@ -136,7 +136,15 @@ every admin endpoint answers 404. The page asks for the key once per browser tab
 To add a puzzle: upload the photo and a PNG cut-out of the player (on a Mac, Preview → Tools → Remove Background),
 pick the player, and enter the year, team and caption. The server makes the black silhouette and the blurred
 version and stores all three under random file names in `Media:Path`, served from `/photos`. Puzzles start as
-drafts; schedule them, reorder them, or move them back to drafts. If the queue runs dry, the oldest puzzle is
+drafts; edit their player, hint facts and caption, schedule them, reorder them, or move future puzzles back to
+drafts. Draft edits can keep the existing images or replace both uploads together. Live and past puzzles stay
+locked. Use **Preview** to step through the silhouette, missed-guess hints and final reveal without changing
+player progress or stats. Preview shows the last saved draft, so save corrections first.
+
+The optional photo source URL, credit and license/permission fields are stored separately from the caption and
+displayed with the final reveal. Source URLs must use HTTP(S), without embedded credentials. Existing puzzles
+continue working without these fields. Attribution is documentation of the source; review permission to use
+each image when curating the collection. If the queue runs dry, the oldest puzzle is
 replayed rather than showing nothing.
 
 In development the `api` entry in `.claude/launch.json` reads the key from `artifacts/dev-admin-key` and creates
