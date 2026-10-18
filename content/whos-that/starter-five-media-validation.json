@@ -1,0 +1,65 @@
+{
+  "checkedOn": "2026-10-18",
+  "renderer": "KnowBall SilhouetteRenderer from main",
+  "reports": [
+    {
+      "key": "curry-jumper-2011",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 1748,
+      "originalHeight": 3029,
+      "silhouetteWidth": 520,
+      "silhouetteHeight": 900,
+      "transparentFraction": 0.4679,
+      "nonBlackPixels": 0,
+      "photoSha256": "ce3bb79289e944723daa9bfb0914593c7cd0e8bbbe37f25a26de3ed397de7f80",
+      "cutoutSha256": "0d637b11d09520236a20574c9ec2351642e35429c5f5c81cef8924e6b9e9e936",
+      "extraction": "AI-assisted; source pose is approximate, not a pixel-exact segmentation"
+    },
+    {
+      "key": "durant-dunk-2011",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 2519,
+      "originalHeight": 4273,
+      "silhouetteWidth": 531,
+      "silhouetteHeight": 900,
+      "transparentFraction": 0.5731,
+      "nonBlackPixels": 0,
+      "photoSha256": "5c9b7092e0fc0acf1bbb2a492f70ede11be0a8dd7808e18d51eb25093090b68a",
+      "cutoutSha256": "5ba6dc05c6e1d97b6edb6651fceab71bc1fd64c141f63b9a66d0dc9efeae5fa7",
+      "extraction": "AI-assisted; source pose is approximate, not a pixel-exact segmentation"
+    },
+    {
+      "key": "giannis-dunk-2018",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 3337,
+      "originalHeight": 4941,
+      "silhouetteWidth": 607,
+      "silhouetteHeight": 900,
+      "transparentFraction": 0.6957,
+      "nonBlackPixels": 0,
+      "photoSha256": "642b3271edf8a3f08f0e565e55beb53898de2a1a95151f1696c7751783b2b46a",
+      "cutoutSha256": "e9070045d38256623eedff70421040798df92e5395f08ae1f8ba8825e83c45c1",
+      "extraction": "AI-assisted; source pose is approximate, not a pixel-exact segmentation"
+    },
+    {
+      "key": "kobe-dunk-2013",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 519,
+      "originalHeight": 741,
+      "silhouetteWidth": 631,
+      "silhouetteHeight": 900,
+      "transparentFraction": 0.8448,
+      "nonBlackPixels": 0,
+      "photoSha256": "34ea8e7de6b83250d6def378c0eac96cc6785d9179227f50f0b1ec5e26fd3340",
+      "cutoutSha256": "5f4f752a2904e65bebf0364a9761d476228fdcaf294c6746c80507475823b50c",
+      "extraction": "AI-assisted; source pose is approximate, not a pixel-exact segmentation"
+    },
+    {
+      "key": "lebron-finals-2016",
+      "status": "missing-cutout",
+      "originalWidth": 6000,
+      "originalHeight": 4000,
+      "photoSha256": "e2454f5c0acb8846bce01a4f87c3e633935af874efb24ef23139ef40ccd00c80"
+    }
+  ]
+}
