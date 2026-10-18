@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, Injector, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminApi, AdminOverview, CuratedPuzzle } from '../../core/admin-api';
+import { AdminApi, AdminOverview, CuratedPuzzle, CuratedPreview } from '../../core/admin-api';
 import { serverMessage } from '../../core/game-store';
 import { PlayerSearchResult } from '../../core/player-search.service';
+import { WhosThatStage } from '../../games/whos-that/whos-that-stage';
 import { PlayerSearch } from '../../shared/player-search/player-search';
 
 /**
@@ -13,7 +14,7 @@ import { PlayerSearch } from '../../shared/player-search/player-search';
  */
 @Component({
   selector: 'app-admin',
-  imports: [DatePipe, PlayerSearch],
+  imports: [DatePipe, PlayerSearch, WhosThatStage],
   template: `
     <h1>Admin</h1>
 
@@ -53,14 +54,16 @@ import { PlayerSearch } from '../../shared/player-search/player-search';
       </section>
 
       <section>
-        <h2>New Who's That Sportsman? puzzle</h2>
+        <h2 #editorHeading tabindex="-1">{{ editing() ? "Edit draft" : "New Who's That Sportsman? puzzle" }}</h2>
+        @for (formKey of [editing()?.id ?? 0]; track formKey) {
         <form class="new" (submit)="create($event)">
-          <label>Photo <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" required /></label>
+          <label>Photo <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" [required]="!editing()" /></label>
           <label>
             Cut-out
-            <input type="file" name="cutout" accept="image/png,image/webp" required />
+            <input type="file" name="cutout" accept="image/png,image/webp" [required]="!editing()" />
             <small>A PNG of just the player with the background removed. In Preview: Tools → Remove Background.</small>
           </label>
+          @if (editing()) { <p class="fine wide">Leave both image fields empty to keep the current images, or choose both to replace them.</p> }
           <div class="who">
             <span>Player in the photo</span>
             @if (player(); as p) {
@@ -69,11 +72,16 @@ import { PlayerSearch } from '../../shared/player-search/player-search';
               <app-player-search includeInactive label="Player in the photo" placeholder="Type a player's name…" (selected)="player.set($event)" />
             }
           </div>
-          <label>Year <input type="number" name="year" min="1940" max="2100" required /></label>
-          <label>Team at the time <input type="text" name="team" maxlength="60" required /></label>
-          <label class="wide">Caption, shown with the photo at the end <input type="text" name="caption" maxlength="160" /></label>
-          <button type="submit" class="kb-btn primary" [disabled]="busy()">Make draft</button>
+          <label>Year <input type="number" name="year" [value]="editing()?.year ?? ''" min="1940" max="2100" required /></label>
+          <label>Team at the time <input type="text" name="team" [value]="editing()?.team ?? ''" maxlength="60" required /></label>
+          <label class="wide">Caption, shown with the photo at the end <input type="text" name="caption" [value]="editing()?.caption ?? ''" maxlength="160" /></label>
+          <label class="wide">Photo source URL <input type="url" name="sourceUrl" maxlength="2048" [value]="editing()?.attribution?.sourceUrl ?? ''" /></label>
+          <label>Photo credit <input type="text" name="credit" maxlength="200" [value]="editing()?.attribution?.credit ?? ''" /></label>
+          <label>License or permission <input type="text" name="license" maxlength="200" [value]="editing()?.attribution?.license ?? ''" /></label>
+          <button type="submit" class="kb-btn primary" [disabled]="busy()">{{ editing() ? 'Save draft' : 'Make draft' }}</button>
+          @if (editing()) { <button type="button" class="kb-btn" [disabled]="busy()" (click)="cancelEdit()">Cancel edit</button> }
         </form>
+        }
       </section>
 
       @for (group of groups(); track group.title) {
@@ -98,8 +106,10 @@ import { PlayerSearch } from '../../shared/player-search/player-search';
                   }
                 </div>
                 <span class="acts">
+                  <button type="button" class="kb-btn preview-button" [disabled]="busy()" (click)="openPreview(p)">Preview</button>
                   @switch (p.state) {
                     @case ('draft') {
+                      <button type="button" class="kb-btn" [disabled]="busy()" (click)="edit(p)">Edit</button>
                       <input #day type="date" [min]="o.today" [attr.aria-label]="'Date for ' + p.playerName" />
                       <button type="button" class="kb-btn primary" [disabled]="busy()" (click)="run(api.schedule(p.id, day.value || null))">
                         Schedule
@@ -121,6 +131,23 @@ import { PlayerSearch } from '../../shared/player-search/player-search';
         </section>
       }
 
+      @if (previewPuzzle(); as p) {
+        <section class="preview" aria-label="Player preview">
+          <h2 #previewHeading tabindex="-1">Player preview</h2>
+          <p class="fine">Saved puzzle · {{ p.playerName }}. Preview does not change player progress or stats.</p>
+          <div class="preview-controls" role="group" aria-label="Preview stage">
+            @for (stage of previewStages; track $index) {
+              <button type="button" class="kb-btn" [disabled]="previewBusy()" [attr.aria-pressed]="previewStep() === $index" (click)="loadPreview($index)">{{ stage }}</button>
+            }
+          </div>
+          @if (preview(); as frame) {
+            <app-whos-that-stage [clues]="frame.clues" [reveal]="frame.answer" />
+            <p>Year: {{ frame.clues?.year ?? 'Locked until 1 miss' }}</p>
+            <p>Team: {{ frame.clues?.team ?? 'Locked until 2 misses' }}</p>
+          }
+          <button type="button" class="kb-btn" [disabled]="previewBusy()" (click)="closePreview()">Close preview</button>
+        </section>
+      }
       <button type="button" class="kb-btn" (click)="lock()">Lock</button>
     }
 
@@ -148,6 +175,10 @@ import { PlayerSearch } from '../../shared/player-search/player-search';
 
     .new { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 16px; align-items: start; }
     .new label, .who { display: grid; gap: 4px; font-weight: 700; min-width: 0; }
+    .preview { max-width: 540px; padding: 14px; border: 2px solid var(--navy); border-radius: 6px; }
+    .preview-controls { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .preview [aria-pressed="true"] { background: var(--navy); color: var(--cream); }
+    .preview app-whos-that-stage { margin-bottom: 16px; }
     .new .wide, .new .who { grid-column: 1 / -1; }
     .new button[type="submit"] { justify-self: start; }
     .picked { display: flex; align-items: center; gap: 10px; font: 400 19px var(--display); }
@@ -178,6 +209,16 @@ export class Admin {
   protected readonly puzzles = signal<CuratedPuzzle[]>([]);
   protected readonly player = signal<PlayerSearchResult | null>(null);
   protected readonly busy = signal(false);
+  protected readonly editing = signal<CuratedPuzzle | null>(null);
+  protected readonly previewPuzzle = signal<CuratedPuzzle | null>(null);
+  protected readonly preview = signal<CuratedPreview | null>(null);
+  protected readonly previewBusy = signal(false);
+  protected readonly previewStep = signal(0);
+  protected readonly previewStages = ['Silhouette', '1 miss', '2 misses', '3 misses', '4 misses', 'Reveal'];
+  private previewVersion = 0;
+  private readonly injector = inject(Injector);
+  private readonly editorHeading = viewChild<ElementRef<HTMLElement>>('editorHeading');
+  private readonly previewHeading = viewChild<ElementRef<HTMLElement>>('previewHeading');
   protected readonly message = signal('');
 
   protected readonly groups = computed(() => {
@@ -216,6 +257,8 @@ export class Admin {
   }
 
   protected lock(): void {
+    this.cancelEdit();
+    this.closePreview();
     this.api.setKey('');
     this.overview.set(null);
     this.puzzles.set([]);
@@ -233,8 +276,12 @@ export class Admin {
     const form = new FormData(formElement);
     form.set('playerId', String(player.id));
     this.busy.set(true);
-    this.api.create(form).subscribe({
+    const editing = this.editing();
+    const action = editing ? this.api.update(editing.id, form) : this.api.create(form);
+    action.subscribe({
       next: () => {
+        this.cancelEdit();
+        this.closePreview();
         formElement.reset();
         this.player.set(null);
         this.busy.set(false);
@@ -244,8 +291,56 @@ export class Admin {
     });
   }
 
+  protected edit(puzzle: CuratedPuzzle): void {
+    this.editing.set(puzzle);
+    this.player.set({ id: puzzle.playerId, fullName: puzzle.playerName, headshotUrl: null, position: null, teamAbbreviation: null, teamName: null });
+    this.closePreview();
+    afterNextRender(() => this.editorHeading()?.nativeElement.focus(), { injector: this.injector });
+  }
+
+  protected cancelEdit(): void {
+    this.editing.set(null);
+    this.player.set(null);
+  }
+
+  protected openPreview(puzzle: CuratedPuzzle): void {
+    this.previewPuzzle.set(puzzle);
+    this.loadPreview(0);
+    afterNextRender(() => this.previewHeading()?.nativeElement.focus(), { injector: this.injector });
+  }
+
+  protected loadPreview(step: number): void {
+    const puzzle = this.previewPuzzle();
+    if (!puzzle) return;
+    const version = ++this.previewVersion;
+    this.previewBusy.set(true);
+    this.preview.set(null);
+    this.api.preview(puzzle.id, Math.min(step, 4), step === 5).subscribe({
+      next: (frame) => {
+        if (version !== this.previewVersion) return;
+        this.preview.set(frame);
+        this.previewStep.set(step);
+        this.previewBusy.set(false);
+      },
+      error: (error) => {
+        if (version !== this.previewVersion) return;
+        this.previewBusy.set(false);
+        this.show(serverMessage(error) ?? 'The preview could not be loaded.');
+      },
+    });
+  }
+
+  protected closePreview(): void {
+    this.previewVersion++;
+    this.previewPuzzle.set(null);
+    this.preview.set(null);
+    this.previewBusy.set(false);
+  }
+
   /** Runs a change and then reloads the lists, since scheduling and moving shift other rows too. */
   protected run(action: Observable<unknown>): void {
+    this.cancelEdit();
+    this.closePreview();
     this.busy.set(true);
     action.subscribe({
       next: () => {

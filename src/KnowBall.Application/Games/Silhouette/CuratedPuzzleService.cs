@@ -1,9 +1,10 @@
+using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using KnowBall.Domain;
 
 namespace KnowBall.Application.Games.Silhouette;
 
-public sealed record NewWhosThatPuzzle(int PlayerId, int Year, string Team, string? Caption);
+public sealed record NewWhosThatPuzzle(int PlayerId, int Year, string Team, string? Caption, PhotoAttribution? Attribution = null);
 
 /// <summary>A hand-made puzzle as the admin area lists it, answer and all.</summary>
 /// <param name="State">"draft", "scheduled" (date still to come) or "published".</param>
@@ -19,7 +20,10 @@ public sealed record CuratedPuzzle(
     string? Caption,
     string SilhouetteUrl,
     string BlurredUrl,
-    string PhotoUrl);
+    string PhotoUrl,
+    PhotoAttribution? Attribution = null);
+
+public sealed record CuratedPreview(JsonNode? Clues, JsonNode? Answer);
 
 /// <summary>
 /// The admin side of Who's That Sportsman?: make a puzzle from an uploaded photo, put it on the
@@ -55,9 +59,11 @@ public sealed class CuratedPuzzleService(
     {
         var league = await db.Leagues.FirstOrDefaultAsync(l => l.Code == PuzzleScheduler.DefaultLeague, ct);
         var player = await db.Players.AsNoTracking().FirstOrDefaultAsync(p => p.Id == input.PlayerId, ct);
-        if (league is null || player is null) return GameOutcome<CuratedPuzzle>.Invalid("Pick the player in the photo from the list.");
+        if (league is null || player is null || player.LeagueId != league.Id) return GameOutcome<CuratedPuzzle>.Invalid("Pick the player in the photo from the list.");
         if (input.Year is < 1940 or > 2100) return GameOutcome<CuratedPuzzle>.Invalid("Enter the year the photo was taken.");
         if (string.IsNullOrWhiteSpace(input.Team)) return GameOutcome<CuratedPuzzle>.Invalid("Enter the team the player was on.");
+
+        if (Validate(input) is { } error) return GameOutcome<CuratedPuzzle>.Invalid(error);
 
         SilhouetteImages rendered;
         try
@@ -78,7 +84,8 @@ public sealed class CuratedPuzzleService(
             input.Year,
             input.Team.Trim(),
             string.IsNullOrWhiteSpace(input.Caption) ? null : input.Caption.Trim(),
-            player.HeadshotUrl);
+            player.HeadshotUrl,
+            Normalize(input.Attribution));
 
         var puzzle = new Puzzle
         {
@@ -92,6 +99,101 @@ public sealed class CuratedPuzzleService(
         db.Puzzles.Add(puzzle);
         await db.SaveChangesAsync(ct);
         return GameOutcome<CuratedPuzzle>.Success(View(puzzle, calendar.Today));
+    }
+
+    /// <summary>Only drafts can be changed. Unschedule a future puzzle first; live puzzles stay locked.</summary>
+    public async Task<GameOutcome<CuratedPuzzle>> UpdateAsync(int puzzleId, NewWhosThatPuzzle input, Stream? photo, Stream? cutout, CancellationToken ct)
+    {
+        var puzzle = await db.Puzzles.AsNoTracking().FirstOrDefaultAsync(p => p.Id == puzzleId && p.GameType == game.Type && p.Status != PuzzleStatus.Practice, ct);
+        if (puzzle is null) return GameOutcome<CuratedPuzzle>.NotFound("Puzzle not found.");
+        if (puzzle.Status != PuzzleStatus.Draft) return GameOutcome<CuratedPuzzle>.Conflict("Only drafts can be edited. Unschedule a future puzzle first.");
+        if (Validate(input) is { } error) return GameOutcome<CuratedPuzzle>.Invalid(error);
+        var player = await db.Players.AsNoTracking().FirstOrDefaultAsync(p => p.Id == input.PlayerId && p.LeagueId == puzzle.LeagueId, ct);
+        if (player is null) return GameOutcome<CuratedPuzzle>.Invalid("Pick the player in the photo from the list.");
+        if ((photo is null) != (cutout is null)) return GameOutcome<CuratedPuzzle>.Invalid("To replace images, choose both the photo and the cut-out.");
+
+        var old = GameJson.Read<WhosThatSecret>(puzzle.SecretJson);
+        var secret = old with
+        {
+            PlayerId = player.Id, Name = player.FullName, HeadshotUrl = player.HeadshotUrl,
+            Year = input.Year, Team = input.Team.Trim(), Caption = Clean(input.Caption), Attribution = Normalize(input.Attribution),
+        };
+        var saved = new List<string>();
+        try
+        {
+            if (photo is not null && cutout is not null)
+            {
+                SilhouetteImages rendered;
+                try { rendered = await renderer.RenderAsync(photo, cutout, ct); }
+                catch (InvalidImageException ex) { return GameOutcome<CuratedPuzzle>.Invalid(ex.Message); }
+                async Task<string> Save(byte[] bytes, string extension)
+                {
+                    var url = await images.SaveAsync(bytes, extension, ct);
+                    saved.Add(url);
+                    return url;
+                }
+                secret = secret with
+                {
+                    SilhouetteUrl = await Save(rendered.Silhouette, ".png"),
+                    BlurredUrl = await Save(rendered.Blurred, ".jpg"),
+                    PhotoUrl = await Save(rendered.Photo, ".jpg"),
+                };
+            }
+            var originalJson = puzzle.SecretJson;
+            var updatedJson = GameJson.Write(secret);
+            // Recheck at the write: another tab may schedule, delete or edit during image rendering.
+            var changed = await db.Puzzles
+                .Where(p => p.Id == puzzleId && p.Status == PuzzleStatus.Draft && p.SecretJson == originalJson)
+                .ExecuteUpdateAsync(set => set.SetProperty(p => p.SecretJson, updatedJson)
+                    .SetProperty(p => p.AnswerPlayerId, player.Id), ct);
+            if (changed == 0)
+            {
+                foreach (var url in saved) await images.DeleteAsync(url, CancellationToken.None);
+                return GameOutcome<CuratedPuzzle>.Conflict("The draft changed while saving. Reload before editing again.");
+            }
+            puzzle.SecretJson = updatedJson;
+            puzzle.AnswerPlayerId = player.Id;
+        }
+        catch
+        {
+            // A rejected replacement must leave the old, referenced images available.
+            foreach (var url in saved) await images.DeleteAsync(url, CancellationToken.None);
+            throw;
+        }
+        if (saved.Count > 0)
+            foreach (var url in new[] { old.SilhouetteUrl, old.BlurredUrl, old.PhotoUrl })
+                await images.DeleteAsync(url, CancellationToken.None);
+        return GameOutcome<CuratedPuzzle>.Success(View(puzzle, calendar.Today));
+    }
+
+    /// <summary>A read-only look at the same hint/reveal rules as gameplay. No user result is loaded or written.</summary>
+    public async Task<GameOutcome<CuratedPreview>> PreviewAsync(int puzzleId, int misses, bool reveal, CancellationToken ct)
+    {
+        if (misses is < 0 or > 4) return GameOutcome<CuratedPreview>.Invalid("Preview misses must be between 0 and 4.");
+        var puzzle = await db.Puzzles.AsNoTracking().FirstOrDefaultAsync(p => p.Id == puzzleId && p.GameType == game.Type && p.Status != PuzzleStatus.Practice, ct);
+        return puzzle is null
+            ? GameOutcome<CuratedPreview>.NotFound("Puzzle not found.")
+            : GameOutcome<CuratedPreview>.Success(new(game.Clues(puzzle, misses, reveal), reveal ? game.Reveal(puzzle) : null));
+    }
+
+    private static string? Clean(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
+    private static PhotoAttribution? Normalize(PhotoAttribution? value)
+    {
+        var result = new PhotoAttribution(Clean(value?.SourceUrl), Clean(value?.Credit), Clean(value?.License));
+        return result.SourceUrl is null && result.Credit is null && result.License is null ? null : result;
+    }
+
+    private static string? Validate(NewWhosThatPuzzle input)
+    {
+        if (input.Year is < 1940 or > 2100) return "Enter the year the photo was taken.";
+        if (string.IsNullOrWhiteSpace(input.Team) || input.Team.Trim().Length > 60) return "Enter a team of up to 60 characters.";
+        if (input.Caption?.Length > 160) return "Keep the caption to 160 characters.";
+        var attribution = Normalize(input.Attribution);
+        if (attribution?.Credit?.Length > 200 || attribution?.License?.Length > 200) return "Keep photo credit and license to 200 characters each.";
+        if (attribution?.SourceUrl is { } source && (source.Length > 2048 || !Uri.TryCreate(source, UriKind.Absolute, out var uri) || uri.Scheme is not ("http" or "https") || !string.IsNullOrEmpty(uri.UserInfo)))
+            return "Photo source must be an http or https URL without credentials, up to 2048 characters.";
+        return null;
     }
 
     /// <summary>
@@ -196,6 +298,6 @@ public sealed class CuratedPuzzleService(
         var state = puzzle.Status == PuzzleStatus.Draft ? "draft" : puzzle.Date > today ? "scheduled" : "published";
         return new CuratedPuzzle(
             puzzle.Id, state, puzzle.Date, puzzle.Number, secret.PlayerId, secret.Name, secret.Year, secret.Team, secret.Caption,
-            secret.SilhouetteUrl, secret.BlurredUrl, secret.PhotoUrl);
+            secret.SilhouetteUrl, secret.BlurredUrl, secret.PhotoUrl, secret.Attribution);
     }
 }
