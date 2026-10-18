@@ -1,0 +1,99 @@
+name: Production operations
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Audit only, create and restore a backup, or also install daily backups
+        required: true
+        default: audit
+        type: choice
+        options: [audit, backup-and-restore, install-backups]
+
+permissions:
+  contents: read
+  packages: read
+
+# Serialize against the existing CI deploy job. Never cancel an in-progress deploy or backup.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  operations:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GCP_HOST: ${{ secrets.GCP_HOST }}
+      GCP_USER: ${{ secrets.GCP_USER }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up SSH using existing deploy secrets
+        env:
+          GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
+          GCP_KNOWN_HOSTS: ${{ secrets.GCP_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$GCP_HOST" && test -n "$GCP_USER" && test -n "$GCP_SSH_KEY"
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$GCP_SSH_KEY" > ~/.ssh/operations
+          chmod 600 ~/.ssh/operations
+          if [ -n "$GCP_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$GCP_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -t ed25519 "$GCP_HOST" > ~/.ssh/known_hosts
+          fi
+          scp -i ~/.ssh/operations -o StrictHostKeyChecking=yes deploy/operations.py "$GCP_USER@$GCP_HOST:know-ball/operations.py"
+          ssh -i ~/.ssh/operations -o StrictHostKeyChecking=yes "$GCP_USER@$GCP_HOST" 'chmod 600 ~/know-ball/operations.py'
+      - name: Collect production evidence
+        run: |
+          set -euo pipefail
+          mkdir -p reports
+          ssh -i ~/.ssh/operations -o StrictHostKeyChecking=yes "$GCP_USER@$GCP_HOST" \
+            'python3 ~/know-ball/operations.py audit' > reports/production-audit.json
+          cat reports/production-audit.json
+      - name: Install the daily backup cron
+        if: inputs.action == 'install-backups'
+        run: |
+          ssh -i ~/.ssh/operations -o StrictHostKeyChecking=yes "$GCP_USER@$GCP_HOST" \
+            'python3 ~/know-ball/operations.py install-backups'
+      - name: Create and transfer a paired backup
+        if: inputs.action != 'audit'
+        run: |
+          set -euo pipefail
+          umask 077
+          BACKUP_LOCAL="$RUNNER_TEMP/knowball-backup"
+          ssh -i ~/.ssh/operations -o StrictHostKeyChecking=yes "$GCP_USER@$GCP_HOST" \
+            'python3 ~/know-ball/operations.py backup' > backup-result.json
+          BUNDLE=$(python3 -c 'import json,pathlib,re; n=pathlib.Path(json.load(open("backup-result.json"))["backup"]).name; assert re.fullmatch(r"knowball-\d{8}T\d{6}Z-[0-9a-f]{8}", n); print(n)')
+          mkdir -p "$BACKUP_LOCAL"
+          scp -r -i ~/.ssh/operations -o StrictHostKeyChecking=yes \
+            "$GCP_USER@$GCP_HOST:know-ball/backups/$BUNDLE/." "$BACKUP_LOCAL/"
+      - name: Log in to the private image registry for the restore drill
+        if: inputs.action != 'audit'
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+      - name: Restore on the disposable runner and play the games
+        if: inputs.action != 'audit'
+        run: python3 deploy/operations.py restore --backup "$RUNNER_TEMP/knowball-backup" > reports/restore-drill.json
+      - name: Collect evidence after operations
+        if: inputs.action != 'audit'
+        run: |
+          ssh -i ~/.ssh/operations -o StrictHostKeyChecking=yes "$GCP_USER@$GCP_HOST" \
+            'python3 ~/know-ball/operations.py audit' > reports/production-audit-after.json
+      - name: Save reports only (never database dumps, photos, or credentials)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-operations-reports
+          path: reports/*.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Remove runner copies of private data and credentials
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/knowball-backup"
+          rm -f backup-result.json ~/.ssh/operations
+          docker logout ghcr.io || true

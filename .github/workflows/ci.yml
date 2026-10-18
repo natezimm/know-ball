@@ -99,8 +99,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Backup tooling failure-path tests
+        run: python3 -m unittest discover -s tests -p test_operations.py -v
       - name: Build the image and smoke-test it
         run: ./scripts/docker-smoke.sh
+      - name: Back up and restore offline fixture data and images
+        run: python3 scripts/operations-smoke.py
 
   # On main, once everything above passes: publish the image to GitHub's registry, then roll it out
   # on the VM. The VM only pulls the image; it never builds. Setup: deploy/README.md.
@@ -174,3 +178,4 @@ jobs:
           echo "::error::The site did not become healthy after the deploy."
           $SSH "$GCP_USER@$GCP_HOST" "cd know-ball && docker compose logs --tail 80 site"
           exit 1
+
