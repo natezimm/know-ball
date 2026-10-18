@@ -101,6 +101,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Backup tooling failure-path tests
         run: python3 -m unittest discover -s tests -p test_operations.py -v
+      - name: Curated photo batch preflight and draft-upload tests
+        run: python3 -m unittest discover -s tests -p test_curated_puzzles.py -v
       - name: Build the image and smoke-test it
         run: ./scripts/docker-smoke.sh
       - name: Back up and restore offline fixture data and images
@@ -178,4 +180,3 @@ jobs:
           echo "::error::The site did not become healthy after the deploy."
           $SSH "$GCP_USER@$GCP_HOST" "cd know-ball && docker compose logs --tail 80 site"
           exit 1
-
