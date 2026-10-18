@@ -86,6 +86,17 @@ def check_assets(items, root):
     report = []
     for item in items:
         issues = []
+        review = item.get("iconicReview")
+        if not isinstance(review, dict) or review.get("status") != "approved":
+            issues.append("iconic photo review is not approved; select a famous photo or signature moment first")
+        else:
+            for field in ("moment", "reason"):
+                if not isinstance(review.get(field), str) or not review[field].strip():
+                    issues.append(f"iconic review needs {field}")
+            try:
+                web_url(review.get("evidenceUrl"))
+            except BatchError:
+                issues.append("iconic review needs a valid evidenceUrl for the selected photograph/moment")
         for field in ("photo", "cutout"):
             path = asset_path(root, item[field])
             if not path.is_file():
@@ -153,7 +164,7 @@ def multipart(item, player_id, root):
 def upload(items, root, client):
     report = check_assets(items, root)
     if any(not row["readyForDraft"] for row in report):
-        raise BatchError("Prepare all selected photo/cut-out pairs first; run check for the missing paths. No requests were sent.")
+        raise BatchError("Selected content is not ready for drafts; run check for image and iconic-review issues. No requests were sent.")
     existing = client.request("GET", API, admin=True)
     planned = []
     for item in items:

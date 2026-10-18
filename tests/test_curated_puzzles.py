@@ -46,6 +46,10 @@ class CuratedBatchTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.items = batch.load_manifest(ROOT / "content/whos-that/starter-five.json")
+        # These are separately reviewed upload fixtures, not approval of the retired batch.
+        for item in self.items:
+            item["iconicReview"] = {"status": "approved", "moment": "Reviewed test moment",
+                                   "reason": "Test fixture only", "evidenceUrl": item["sourceUrl"]}
 
     def assets(self, items=None):
         for item in items or self.items:
@@ -64,14 +68,33 @@ class CuratedBatchTests(unittest.TestCase):
         for item in self.items:
             self.assertEqual(item["year"], int(item["photoDate"][:4]))
             self.assertIn(item["licenseUrl"], item["license"])
-            self.assertIn("needs-", item["reviewStatus"])
+            self.assertEqual("rejected-non-iconic", item["reviewStatus"])
 
     def test_check_reports_all_missing_assets_without_network_or_key(self):
         with patch.dict("os.environ", {}, clear=True), patch.object(batch, "Client", side_effect=AssertionError("No network for check")), contextlib.redirect_stdout(io.StringIO()) as output:
             self.assertEqual(1, batch.main(["check", "--assets", str(self.root)]))
         rows = json.loads(output.getvalue())["candidates"]
         self.assertEqual(5, len(rows))
-        self.assertTrue(all(len(p["issues"]) == 2 for p in rows))
+        self.assertTrue(all(len(p["issues"]) == 3 for p in rows))
+
+    def test_retired_batch_stays_blocked_even_with_all_media_present(self):
+        retired = batch.load_manifest(ROOT / "content/whos-that/starter-five.json")
+        self.assets(retired)
+        client = FakeClient(retired)
+        self.assertTrue(all(not row["readyForDraft"] for row in batch.check_assets(retired, self.root)))
+        with self.assertRaises(batch.BatchError):
+            self.upload(client, retired)
+        self.assertEqual([], client.calls)
+
+    def test_iconic_approval_requires_evidence_and_named_moment_before_network(self):
+        self.assets()
+        for review in (None, {}, {"status": "pending"}, {"status": "approved"},
+                       {"status": "approved", "moment": "Moment", "reason": "Famous", "evidenceUrl": "javascript:bad"}):
+            items = [dict(self.items[0], iconicReview=review)]
+            client = FakeClient(items)
+            with self.subTest(review=review), self.assertRaises(batch.BatchError):
+                self.upload(client, items)
+            self.assertEqual([], client.calls)
 
     def test_metadata_rejects_unsafe_sources_traversal_and_duplicate_keys(self):
         for change in ({"sourceUrl": "javascript:alert(1)"}, {"cutout": "../outside.png"}, {"year": True}, {"team": "x" * 61}, {"license": "missing URL"}):
