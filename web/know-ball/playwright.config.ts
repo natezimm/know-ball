@@ -38,7 +38,8 @@ export default defineConfig({
     command: 'bash e2e/serve.sh',
     url: `http://127.0.0.1:${port}/health`,
     env: { E2E_PORT: String(port) },
-    reuseExistingServer: !process.env['CI'],
+    // Real-photo review imports drafts; always give it its own disposable fixture database.
+    reuseExistingServer: !process.env['CI'] && !process.env['E2E_CURATED_ASSETS'],
     timeout: 240_000,
     stdout: 'ignore',
     stderr: 'pipe',
