@@ -1,0 +1,19 @@
+{
+  "checkedOn": "2026-10-19",
+  "renderer": "KnowBall SilhouetteRenderer from main",
+  "reports": [
+    {
+      "key": "wilt-100-1962",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 2070,
+      "originalHeight": 2472,
+      "silhouetteWidth": 754,
+      "silhouetteHeight": 900,
+      "transparentFraction": 0.3701,
+      "nonBlackPixels": 0,
+      "photoSha256": "73511e2cf4587747be3306180f59f5d859341f83ee974851d12223c7b99a0287",
+      "cutoutSha256": "c254ef2bf2916448d1ad50d4cbad6e9e4e414ac0ea17a469ac066c1eba60d9f1",
+      "extraction": "Manual alpha mask with narrow-band GrabCut refinement; retained RGB matches source exactly; no generated anatomy"
+    }
+  ]
+}

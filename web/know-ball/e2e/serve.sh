@@ -30,7 +30,7 @@ mkdir -p "$WORK/media"
 export Database__Provider=Sqlite
 export ConnectionStrings__Trivia="Data Source=$WORK/trivia.db"
 
-# The opt-in real-photo review needs two additional answer names. These sparse fixture rows
+# The opt-in real-photo review needs additional retired answer names. These sparse fixture rows
 # deliberately supply no biographical facts and never change the bundled production seed.
 HISTORY="$ROOT/tests/fixtures/bref"
 if [ -n "${E2E_CURATED_ASSETS:-}" ]; then

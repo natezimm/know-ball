@@ -7,7 +7,7 @@ import { expect, repoRoot, test } from './support';
 // Opt-in: the licensed media packs live outside git. The ordinary CI suite skips these tests.
 const assets = process.env['E2E_CURATED_ASSETS'];
 const admin = { 'X-Admin-Key': process.env['E2E_ADMIN_KEY'] ?? 'e2e-admin-key' };
-const batches = ['iconic-pair', 'next-pair'];
+const batches = ['iconic-pair', 'next-pair', 'wilt-100'];
 interface Photo {
   key: string; player: string; year: number; team: string; caption: string;
   sourceUrl: string; credit: string; license: string; photo: string; cutout: string;
@@ -18,7 +18,7 @@ const ids = new Map<string, number>();
 
 test.describe('prepared iconic photographs', () => {
   test.describe.configure({ mode: 'serial', timeout: 120_000 });
-  test.skip(!assets, 'Extract both media packs and set E2E_CURATED_ASSETS to their parent folder.');
+  test.skip(!assets, 'Extract all three media packs and set E2E_CURATED_ASSETS to their parent folder.');
 
   test.beforeAll(async ({ request, baseURL }) => {
     if (new URL(baseURL!).hostname !== '127.0.0.1') throw new Error('Photo review requires the disposable loopback server.');
