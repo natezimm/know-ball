@@ -44,14 +44,23 @@ The three ordinary admin/Who's That browser tests pass, including the new portra
 The local browser was Chromium 153.0.8010.0, launched through Playwright's existing executable
 override because its bundled browser download was unavailable in this environment.
 
-The opt-in run adds two name-only fixture rows (Dr. J and Dirk) to the disposable history
+The initial opt-in run added two name-only fixture rows (Dr. J and Dirk) to the disposable history
 import, with no invented biographical values. The bundled seed and production data are unchanged.
 Real licensed photographs remain outside git; the existing media packs retain their credits.
 
 ## Repeat the review
 
-Extract both `KnowBall_Iconic_Pair_Media.zip` and `KnowBall_DrJ_Kobe_Media.zip` so that their
-`iconic-pair/` and `next-pair/` folders share a parent such as `artifacts/whos-that/`.
+### Wilt extension — October 19, 2026
+
+The review now includes [Wilt's released “100” crop](whos-that-wilt-100.md) as the fifth prepared
+photo. All ten cases (five inputs at both widths) pass, including Wilt's stored attribution,
+all preview stages, loaded images, frame containment, unclipped credit text, unchanged stats
+and unscheduled draft state. Wilt adds a third name-only retired-player fixture row. The original
+eight-case result above remains a dated checkpoint.
+
+Extract `KnowBall_Iconic_Pair_Media.zip`, `KnowBall_DrJ_Kobe_Media.zip` and
+`KnowBall_Wilt_100_Media.zip` so that their `iconic-pair/`, `next-pair/` and `wilt-100/`
+folders share a parent such as `artifacts/whos-that/`.
 Use .NET 10, Node 22+ and Python 3.10+. From `web/know-ball`, run:
 
 ```sh
@@ -65,7 +74,7 @@ The flag forces a new local server rather than reusing an existing one. The test
 its disposable `artifacts/e2e` SQLite database and media directory. The run replaces that
 test workspace, imports local fixture data and uses a test admin key. Never point this
 workflow at production. Input-file errors or hash mismatches fail the opt-in run. Without
-the flag, normal CI skips the eight cases and still runs the synthetic portrait regression.
+the flag, normal CI skips the ten cases and still runs the synthetic portrait regression.
 Optional `E2E_CHROMIUM` selects an installed browser; it is not required normally.
 
 Local screenshots are written to each test's output folder for visual inspection. They are
@@ -74,8 +83,8 @@ review aids, not physical-device evidence. No admin key or licensed media is com
 ## Remaining gates
 
 This completes a local admin-preview checkpoint. It does not approve the collection for
-production or close the launch checklist. The first-five pilot still needs a fifth prepared
-photo. Mask/difficulty approval, a real-photo browser-form upload in the production workflow,
+production or close the launch checklist. The five-photo pilot's media is now prepared.
+Mask/difficulty approval, a real-photo browser-form upload in the production workflow,
 production draft IDs and scheduled dates, physical iOS/Android gameplay, and installed-PWA
-checks remain pending. The released Wilt “100” crop remains the strongest next candidate
-documented in [the next-pair report](whos-that-next-pair.md).
+checks remain pending. Wilt's source scope and preparation are documented in
+[the fifth-photo report](whos-that-wilt-100.md).
