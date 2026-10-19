@@ -30,9 +30,19 @@ mkdir -p "$WORK/media"
 export Database__Provider=Sqlite
 export ConnectionStrings__Trivia="Data Source=$WORK/trivia.db"
 
+# The opt-in real-photo review needs two additional answer names. These sparse fixture rows
+# deliberately supply no biographical facts and never change the bundled production seed.
+HISTORY="$ROOT/tests/fixtures/bref"
+if [ -n "${E2E_CURATED_ASSETS:-}" ]; then
+  HISTORY="$WORK/history"
+  mkdir -p "$HISTORY"
+  cp "$ROOT/tests/fixtures/bref/"*.csv "$HISTORY/"
+  tail -n +2 "$ROOT/tests/fixtures/curated-photos/Player Career Info.csv" >> "$HISTORY/Player Career Info.csv"
+fi
+
 # Career Path needs the history, read here from the fixtures. Wikidata is pointed at a closed port,
 # so that step fails at once and the import stays offline.
-Sources__Bref__Directory="$ROOT/tests/fixtures/bref" Sources__Wikidata__Endpoint="http://127.0.0.1:9/sparql" \
+Sources__Bref__Directory="$HISTORY" Sources__Wikidata__Endpoint="http://127.0.0.1:9/sparql" \
   dotnet "$ROOT/src/KnowBall.Importer/bin/Release/$TFM/KnowBall.Importer.dll" --once --source seed --history
 
 # The tests play many rounds from one address, so the per-address limits are raised.

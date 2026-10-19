@@ -324,6 +324,20 @@ The CI Docker job exercises a fixture backup/restore, including three rendered i
 production workflow. Until a production run and GCP snapshot review are recorded, the gates below remain open.
 Import runs do not currently store their trigger; scheduled-run evidence requires log/timestamp correlation.
 
+### Real-photo browser checkpoint — October 19, 2026
+
+The four prepared LeBron, Dirk, Dr. J and Kobe photo pairs were imported into disposable local
+SQLite and previewed in Chromium at 390px and 1280px. All eight real-content browser checks pass,
+including exact input hashes, loader rerun behavior, hint/reveal stages, credits, loaded images,
+frame sizing, unclipped license text, horizontal overflow and unchanged stats. Tall-portrait sizing
+and clipped credit URLs found during this check are fixed in the shared stage, with a synthetic
+portrait/long-license regression in normal CI.
+See [the dated review and repeatable commands](whos-that-browser-review.md).
+
+These are local unscheduled drafts created through the loader, not production inventory or a
+real-photo upload through the browser form. Physical-phone, installed-PWA and production gates
+below remain open. The collection still has four prepared photos; the first-five pilot is incomplete.
+
 ### Remaining launch checklist
 
 | Done | Gate | Acceptance evidence to record |
