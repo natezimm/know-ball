@@ -338,6 +338,14 @@ These are local unscheduled drafts created through the loader, not production in
 real-photo upload through the browser form. Physical-phone, installed-PWA and production gates
 below remain open. The collection still has four prepared photos; the first-five pilot is incomplete.
 
+### Fifth prepared photo — October 19, 2026
+
+[Wilt's released “100” crop](whos-that-wilt-100.md) is now prepared with a manual mask,
+source-specific credit/status notes, renderer evidence and local browser preview at both widths.
+The extended ten-case browser run passes for all five photos. The pilot's five media pairs are
+prepared; final mask/difficulty approval, production inventory and scheduling, physical-phone
+gameplay and installed-PWA evidence remain open. No production change occurred.
+
 ### Remaining launch checklist
 
 | Done | Gate | Acceptance evidence to record |
