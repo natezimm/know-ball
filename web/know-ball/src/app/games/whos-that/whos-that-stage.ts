@@ -64,19 +64,21 @@ export interface WhosThatAnswer {
       border: 2px solid var(--navy); border-radius: 6px; box-shadow: 0 0 0 2px var(--cream), 0 0 0 6px var(--navy);
     }
     .frame {
-      aspect-ratio: 4 / 3; display: grid; place-items: end center;
+      aspect-ratio: 4 / 3; position: relative;
       background: radial-gradient(circle at 50% 38%, #fbe9b4, var(--mustard) 52%, #9a6a12);
     }
-    .frame img { max-width: 92%; max-height: 94%; display: block; }
-    .frame.photo { place-items: center; background: var(--navy); }
-    .frame.photo img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: contain; }
+    /* Images stay out of layout so tall portraits cannot enlarge the aspect-ratio frame. */
+    .frame img { position: absolute; left: 4%; bottom: 0; width: 92%; height: 94%; display: block; object-fit: contain; object-position: center bottom; }
+    .frame.photo { background: var(--navy); }
+    .frame.photo img { inset: 0; width: 100%; height: 100%; object-position: center; }
     figcaption { padding: 8px 12px 9px; color: var(--cream); font-size: 16px; font-style: italic; line-height: 1.25; }
 
     .views { display: flex; gap: 6px; margin-top: 4px; }
     .views [aria-pressed="true"] { background: var(--navy); color: var(--cream); }
 
 
-    .credit { display: flex; flex-wrap: wrap; gap: 6px 12px; font-style: normal; }
+    .credit { display: flex; flex-wrap: wrap; gap: 6px 12px; font-style: normal; overflow-wrap: anywhere; }
+    .credit > span { min-width: 0; max-width: 100%; }
     .credit a { color: var(--cream); text-decoration: underline; overflow-wrap: anywhere; }
   `,
 })
