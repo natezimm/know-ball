@@ -20,7 +20,17 @@ photo or redesign that puzzle deliberately rather than silently including multip
 Use faithful masks of the actual source pixels. Do not generate replacement poses or hidden
 anatomy. Technical decoding/transparency checks do not approve fame, source fidelity or gameplay.
 
-## First choices to source
+
+## Selected open-license pilot — 2026-10-18
+
+The user selected **LeBron's chalk toss first, then Dirk's fadeaway**. Both are prepared from
+Keith Allison photographs under CC BY-SA 2.0, with source-faithful manual masks and actual
+renderer previews. Use the [iconic-pair manifest](../content/whos-that/iconic-pair.json), not the
+retired starter batch. The [preparation and renewed-search report](whos-that-photo-search-followup.md)
+has source/license evidence, import commands, validation results and unresolved exact-photo leads.
+Admin preview, production draft creation and phone testing remain pending.
+
+## Other iconic targets to source
 
 These are editorial targets, **not an upload manifest and not acquired media**. Exact frame and
 permissions remain open. The references identify the moment or agency listing, not a license
@@ -34,8 +44,8 @@ already held by Know Ball. No stock-photo purchase has been made.
 | 4 | Allen Iverson | Step-over of Tyronn Lue, 2001 Finals Game 1, 2001-06-06 | [Getty asset 638822](https://www.gettyimages.co.uk/detail/news-photo/allen-iverson-of-the-philadelphia-76ers-steps-over-tyronn-news-photo/638822); [NBA moment](https://www.nba.com/news/history-finals-moments-allen-iverson-crossover-2001) | Original/permissions needed; test whether Iverson alone preserves the pose |
 | 5 | Stephen Curry | “Night night” after the late dagger against France, Paris gold-medal game, 2024-08-10 | [Getty late-game celebration candidate, asset 2165755114](https://www.gettyimages.ie/detail/news-photo/august-10-2024-usas-stephen-curry-celebrates-the-win-news-photo/2165755114) | Verify this exact frame shows the signature gesture; original/permissions needed |
 
-This is a proposed five-photo pilot, not a claim that every player's most famous image has one
-objective answer. Prefer these defining photographs over retaining the old five-player roster.
+These remain additional sourcing targets; the selected open-license pair above is the active pilot.
+A player's most famous image need not have one objective answer.
 Durant's 2017 Finals Game 3 pull-up over LeBron and Giannis's 2021 Finals Game 4 block on Ayton
 are additional moment targets; neither old generic dunk qualifies as a replacement.
 
