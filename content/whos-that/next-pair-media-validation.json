@@ -1,0 +1,32 @@
+{
+  "checkedOn": "2026-10-19",
+  "renderer": "KnowBall SilhouetteRenderer from main",
+  "reports": [
+    {
+      "key": "dr-j-dunk-1981",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 905,
+      "originalHeight": 1417,
+      "silhouetteWidth": 329,
+      "silhouetteHeight": 805,
+      "transparentFraction": 0.6894,
+      "nonBlackPixels": 0,
+      "photoSha256": "1e803c3c67cd08b548bb79109b9fbb103dda22d690132f7f3d92d9e09b6086ef",
+      "cutoutSha256": "cae155edea21609b9b7449603dbd719e4e48b803c4f2a58ce6c1ef036ef60045",
+      "extraction": "Manual alpha mask with narrow-band GrabCut refinement; retained RGB matches source exactly; no generated anatomy"
+    },
+    {
+      "key": "kobe-rim-2005",
+      "status": "renderer-passed-human-review-required",
+      "originalWidth": 2048,
+      "originalHeight": 3072,
+      "silhouetteWidth": 386,
+      "silhouetteHeight": 900,
+      "transparentFraction": 0.5988,
+      "nonBlackPixels": 0,
+      "photoSha256": "ba2316149575583e661fcbb68df9d7323a94f5dff72b4f4384fa83ba04242e5e",
+      "cutoutSha256": "1390c7057caeda8e696b1aab140b066afbcf151c01b0fb9b0670637e9e28d7b3",
+      "extraction": "Manual alpha mask with narrow-band GrabCut refinement; retained RGB matches source exactly; no generated anatomy"
+    }
+  ]
+}

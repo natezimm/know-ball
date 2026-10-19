@@ -1,5 +1,9 @@
 # Who's That: selected open-license pair and renewed search
 
+Update October 19, 2026: [Dr. J and Kobe are now prepared](whos-that-next-pair.md), with
+six additional candidate checks including Wilt's released “100” crop. The exact-target
+search below remains dated October 18; these alternatives depict different moments.
+
 Checked 2026-10-18 America/New_York. The user selected LeBron's chalk toss first, then Dirk's
 fadeaway, and requested another search for the other iconic photographs. This records findings;
 an unsuccessful search does not prove that no open-license copy exists anywhere.
