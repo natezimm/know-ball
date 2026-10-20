@@ -5,19 +5,25 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <header class="bar">
+    <header class="bar" id="site-header">
       <a class="brand" routerLink="/">
         <span class="mark" aria-hidden="true">★</span>
         <span>KNOW BALL</span>
       </a>
       <nav aria-label="Main">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Games</a>
-        <a routerLink="/mockups" routerLinkActive="active">Mockups</a>
       </nav>
     </header>
     <main>
       <router-outlet />
     </main>
+    <footer class="footer">
+      <span>Built by <a href="https://www.nathanzimmerman.com/">Nathan Zimmerman</a></span>
+      <nav aria-label="Project">
+        <a href="https://github.com/natezimm/know-ball">GitHub</a>
+        <a routerLink="/mockups">Design Lab</a>
+      </nav>
+    </footer>
   `,
   styles: `
     /* A navy banner with the card's red, cream and navy border running along its bottom edge. */
@@ -40,6 +46,14 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     nav a:hover { color: var(--cream); }
     nav a.active { color: var(--mustard); }
     main { max-width: 1040px; margin: 0 auto; padding: 36px 20px 64px; }
+    .footer {
+      max-width: 1040px; margin: 0 auto; padding: 18px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 20px;
+      border-top: 1px solid var(--tan); color: var(--muted); font-size: 15px;
+    }
+    .footer > span a { text-underline-offset: 3px; }
+    .footer nav a { color: var(--muted); font-size: 12px; }
+    .footer a:hover { color: var(--navy); }
     @media (max-width: 480px) {
       .bar { padding: 10px 14px; gap: 8px; }
       .brand { font-size: 16px; gap: 7px; }

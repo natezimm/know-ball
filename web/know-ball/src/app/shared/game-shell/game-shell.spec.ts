@@ -128,7 +128,7 @@ describe('GameShell', () => {
     expect(bars[1].style.width).toBe('50%');
   });
 
-  it("lists past puzzles, linking today's to the game and older ones to their own address", async () => {
+  it('links every archive row to its explicit puzzle id, including the first row', async () => {
     await flushDaily();
     el.querySelector<HTMLButtonElement>('[aria-label="Past puzzles"]')!.click();
     http.expectOne('/api/scouting-report/archive').flush([
@@ -141,7 +141,7 @@ describe('GameShell', () => {
 
     const rows = [...el.querySelectorAll<HTMLAnchorElement>('.archive a')];
     expect(rows.map((a) => a.getAttribute('href'))).toEqual([
-      '/scouting-report',
+      '/scouting-report/puzzle/7',
       '/scouting-report/puzzle/6',
       '/scouting-report/puzzle/5',
       '/scouting-report/puzzle/4',

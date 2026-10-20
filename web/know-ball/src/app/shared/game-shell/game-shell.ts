@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ArchiveEntry, GameApi, GameState, GameStats } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
@@ -94,7 +94,7 @@ const NOTICE_MS = 3500;
           <ng-content />
 
           @if (!store.over()) {
-            <div class="dock">
+            <div class="dock" [style.bottom.px]="keyboardInset()">
               <app-player-search
                 dropUp
                 label="Guess a player"
@@ -158,7 +158,7 @@ const NOTICE_MS = 3500;
         <ol class="archive">
           @for (entry of entries; track entry.puzzleId) {
             <li>
-              <a [routerLink]="$first ? ['/', store.game()] : ['/', store.game(), 'puzzle', entry.puzzleId]" (click)="archiveDialog.close()">
+              <a [routerLink]="['/', store.game(), 'puzzle', entry.puzzleId]" (click)="archiveDialog.close()">
                 <b>No. {{ entry.number }}</b>
                 <span>{{ entry.date | date: 'MMM d' }}</span>
                 <em [class]="entry.status">{{ archiveLabel(entry) }}</em>
@@ -207,7 +207,8 @@ const NOTICE_MS = 3500;
     .count { margin-left: auto; font-size: 16px; white-space: nowrap; }
 
     .dock {
-      position: sticky; bottom: 0; z-index: 4; margin: auto -20px 0; padding: 10px 20px 14px;
+      position: sticky; bottom: 0; z-index: 4; margin: auto -20px 0;
+      padding: 10px 20px calc(14px + env(safe-area-inset-bottom, 0px));
       background: var(--cream); border-top: 2px solid var(--navy);
     }
 
@@ -265,6 +266,7 @@ export class GameShell {
   protected readonly archive = signal<ArchiveEntry[] | null>(null);
   protected readonly dialogError = signal('');
   protected readonly shareLabel = signal('Share');
+  protected readonly keyboardInset = signal(0);
 
   /** One dot per allowed guess: a miss, the winning guess, or still to come. */
   protected readonly dots = computed(() => {
@@ -280,6 +282,19 @@ export class GameShell {
   private readonly archiveDialog = viewChild.required<ElementRef<HTMLDialogElement>>('archiveDialog');
 
   constructor() {
+    // iOS can shrink only the visual viewport when the keyboard opens, leaving the layout
+    // viewport (and a sticky bottom: 0) behind it. Keep the dock above that covered area.
+    const viewport = window.visualViewport;
+    if (viewport) {
+      const update = () => this.keyboardInset.set(viewport.scale === 1 ? Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop) : 0);
+      viewport.addEventListener('resize', update);
+      viewport.addEventListener('scroll', update);
+      inject(DestroyRef).onDestroy(() => {
+        viewport.removeEventListener('resize', update);
+        viewport.removeEventListener('scroll', update);
+      });
+      update();
+    }
     effect((onCleanup) => {
       if (!this.store.notice()) return;
       const timer = setTimeout(() => this.store.notice.set(''), NOTICE_MS);
@@ -359,4 +374,3 @@ export class GameShell {
     if (event.target === dialog) dialog.close();
   }
 }
-
