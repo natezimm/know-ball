@@ -119,11 +119,18 @@ returns under half the active players fails the run instead of retiring the leag
 | `GET /api/{game}/archive` | past dailies with this player's result on each |
 | `GET /api/me/stats`, `GET /api/me/today` | stats per game; today's state for the home page |
 | `GET /api/players/search?q=&includeInactive=` | autocomplete |
-| `POST /api/spordle/games`, `.../{id}/guesses`, `.../{id}/hint` | Spordle (games held in memory for six idle hours) |
+| `POST /api/spordle/games`, `.../{id}/guesses`, `.../{id}/hint` | Spordle (database-backed rounds; six-hour idle expiry) |
 | `GET /api/import-runs/latest`, `GET /api/stats/summary`, `GET /health` | monitoring |
 
 The game endpoints need an `X-Anon-Id` header. Guesses are limited per address: `Games:GuessesPerMinute` (60),
 `Spordle:GuessesPerMinute` (20) and `Spordle:GamesPerMinute` (30).
+
+Spordle stores rounds in the existing database, retaining attempts and hints across API restarts.
+Guess bodies accept an optional UUID `requestId`: retry the same word with the same ID to receive its
+original result without spending another attempt. Reusing the ID for a different word returns 409.
+Older clients can omit it. Rounds expire after six idle hours; new rounds and the nightly importer
+delete expired rows. Expired rounds offer a fresh game without recording a loss. The server session
+is persisted; restoring the displayed board after a browser reload is not implemented.
 
 ## Docker
 
@@ -141,7 +148,10 @@ see [deploy/README.md](deploy/README.md).
 
 ## Database migrations
 
-Postgres uses EF Core migrations, applied when the API starts (`InitialCreate`, then `VersionOne`). After changing
+Postgres uses EF Core migrations, applied when the API starts (`InitialCreate`, `VersionOne`, then
+`PersistSpordleSessions`). The latest migration adds only the sessions table and expiry index; player
+and daily-game data is unchanged. The first deployment cannot recover previous in-memory rounds.
+After changing
 entities:
 
 ```bash
@@ -151,6 +161,8 @@ dotnet tool install dotnet-ef --tool-path .tools
 ```
 
 SQLite (tests, quick local runs) uses `EnsureCreated` with a schema version number.
+The current schema is version 3; older local SQLite files must be rebuilt and re-imported as directed by
+the startup error. Production Postgres is migrated in place.
 
 ## Look and feel
 
