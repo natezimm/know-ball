@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
+    "social-card": "node scripts/render-social-card.mjs",
     "test": "ng test --watch=false",
     "e2e": "ng build && playwright test",
     "watch": "ng build --watch --configuration development"

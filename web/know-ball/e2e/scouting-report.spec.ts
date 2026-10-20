@@ -23,6 +23,13 @@ test('a wrong guess gets a scouting card, and the answer wins', async ({ page })
   await expect(first.locator('.chips small')).toHaveText(['Team', 'Conf', 'Division', 'Pos', 'Height', 'Age', 'No.']);
   await expect(page.getByRole('img', { name: '1 of 8 guesses used' })).toBeVisible();
 
+  await page.getByRole('combobox', { name: 'Guess a player' }).fill(wrong[0].fullName);
+  const duplicate = page.waitForResponse((r) => r.request().method() === 'POST' && /\/guess$/.test(r.url()));
+  await page.getByRole('option').filter({ hasText: wrong[0].fullName }).first().click();
+  expect((await duplicate).status()).toBe(400);
+  await expect(page.locator('.kb-toast')).toContainText('You already guessed');
+  await expect(page.getByRole('img', { name: '1 of 8 guesses used' })).toBeVisible();
+
   await guessPlayer(page, answer.fullName);
   const result = page.locator('.result');
   await expect(result).toContainText('Solved in 2 guesses');

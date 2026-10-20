@@ -63,6 +63,17 @@ describe('PlayerSearch', () => {
     expect(fixture.nativeElement.querySelectorAll('[role="option"]').length).toBe(0);
   });
 
+  it('searches the same player again immediately after a selection clears the box', async () => {
+    await type('jam');
+    http.expectOne((r) => r.url === '/api/players/search').flush(rows);
+    await fixture.whenStable();
+    fixture.nativeElement.querySelector('[role="option"]').dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    await type('jam');
+    http.expectOne((r) => r.url === '/api/players/search' && r.params.get('q') === 'jam').flush(rows);
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelectorAll('[role="option"]')).toHaveLength(2);
+  });
+
   it('says so when nothing matches', async () => {
     await type('zzz');
     http.expectOne((r) => r.url === '/api/players/search').flush([]);

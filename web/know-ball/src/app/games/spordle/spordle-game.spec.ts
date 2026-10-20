@@ -72,6 +72,29 @@ describe('SpordleGame', () => {
     expect(localStorage.getItem('knowball.spordle.wordLength')).toBe('6');
   });
 
+  for (const action of ['guess', 'hint']) {
+    it(`offers a fresh game after an expired ${action}, without recording a loss`, () => {
+      startGame();
+      guess('punts', miss);
+      if (action === 'guess') {
+        type('about');
+        game.press('Enter');
+      } else {
+        game.revealHint('category');
+      }
+      http.expectOne(action === 'guess' ? GUESSES : HINT).flush({ error: 'Game not found or expired' }, { status: 404, statusText: 'Not Found' });
+      expect(game.status()).toBe('expired');
+      expect(game.attempts()).toHaveLength(1);
+      expect(game.hintLoading()).toBe(false);
+      expect(getStats(game.wordLength()).totalGames).toBe(0);
+      game.newGame();
+      http.expectOne('/api/spordle/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
+      expect(game.status()).toBe('playing');
+      expect(game.attempts()).toHaveLength(0);
+      expect(getStats(game.wordLength()).totalGames).toBe(0);
+    });
+  }
+
   it('reports a game that cannot start', () => {
     game.start();
     http.expectOne('/api/spordle/games').flush(null, { status: 500, statusText: 'Server Error' });
@@ -176,9 +199,9 @@ describe('SpordleGame', () => {
     startGame();
     type('punts');
     game.press('Enter');
-    http.expectOne(GUESSES).flush({ error: 'Game not found or expired' }, { status: 404, statusText: 'Not Found' });
+    http.expectOne(GUESSES).flush({ error: 'Guess must be 5 letters' }, { status: 400, statusText: 'Bad Request' });
 
-    expect(game.message()).toBe('Game not found or expired');
+    expect(game.message()).toBe('Guess must be 5 letters');
     expect(game.status()).toBe('playing');
   });
 
