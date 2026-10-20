@@ -1,3 +1,7 @@
+using System.Text.Json;
+using KnowBall.Domain;
+using Microsoft.EntityFrameworkCore;
+
 namespace KnowBall.Application.Games.Spordle;
 
 public sealed record SpordleGameStarted(string GameId, int WordLength, int MaxAttempts);
@@ -36,174 +40,146 @@ public readonly record struct SpordleOutcome<T>(T? Result, SpordleFailure Failur
 }
 
 /// <summary>
-/// Runs Spordle games. The answer stays on the server: a browser gets an opaque game id and
-/// per-letter scores, and sees the word only once the game is over.
-/// Games are held in memory, expire after six idle hours and do not survive a restart.
+/// Rounds survive process restarts. Revision checks serialize writes across API instances.
+/// Only response DTOs leave the server; the stored answer is never returned before completion.
 /// </summary>
 public sealed class SpordleGameService
 {
     public const int MaxAttempts = 6;
-    public const int MaxActiveGames = 10_000;
     public static readonly TimeSpan IdleLifetime = TimeSpan.FromHours(6);
-
-    private static readonly TimeSpan SweepInterval = TimeSpan.FromMinutes(1);
-
+    private const int MaxWriteAttempts = 8;
     private readonly SpordleWordBank _words;
     private readonly TimeProvider _clock;
+    private readonly ITriviaDb _db;
     private readonly Random _random;
-    private readonly int _maxActiveGames;
-    private readonly object _gate = new();
-    private readonly Dictionary<string, Game> _games = new(StringComparer.Ordinal);
-    private long _created;
-    private DateTimeOffset _lastSweep;
 
-    public SpordleGameService(SpordleWordBank words, TimeProvider clock)
-        : this(words, clock, Random.Shared, MaxActiveGames)
-    {
-    }
+    public SpordleGameService(SpordleWordBank words, TimeProvider clock, ITriviaDb db)
+        : this(words, clock, db, Random.Shared) { }
 
-    internal SpordleGameService(SpordleWordBank words, TimeProvider clock, Random random, int maxActiveGames)
+    internal SpordleGameService(SpordleWordBank words, TimeProvider clock, ITriviaDb db, Random random)
     {
         _words = words;
         _clock = clock;
+        _db = db;
         _random = random;
-        _maxActiveGames = maxActiveGames;
-        _lastSweep = clock.GetUtcNow();
     }
 
-    public SpordleGameStarted CreateGame(int? requestedLength)
+    public async Task<SpordleGameStarted> CreateGameAsync(int? requestedLength, CancellationToken ct = default)
     {
-        var wordLength = SpordleWordBank.NormalizeLength(requestedLength);
-        var answers = _words.Answers(wordLength);
-        var gameId = Guid.NewGuid().ToString();
-
-        lock (_gate)
+        await PurgeExpiredAsync(ct);
+        var length = SpordleWordBank.NormalizeLength(requestedLength);
+        var answers = _words.Answers(length);
+        var answer = answers[_random.Next(answers.Count)];
+        var session = new SpordleSession
         {
-            var now = _clock.GetUtcNow();
-            RemoveExpired(now, force: true);
-            while (_games.Count >= _maxActiveGames)
-                _games.Remove(_games.MinBy(g => g.Value.Sequence).Key);
-
-            _games[gameId] = new Game(answers[_random.Next(answers.Count)], ++_created, now);
-        }
-
-        return new SpordleGameStarted(gameId, wordLength, MaxAttempts);
+            Id = Guid.NewGuid(), Answer = answer, Category = _words.CategoryOf(answer),
+            ExpiresAtUtc = _clock.GetUtcNow().UtcDateTime + IdleLifetime,
+        };
+        _db.SpordleSessions.Add(session);
+        await _db.SaveChangesAsync(ct);
+        return new(session.Id.ToString(), length, MaxAttempts);
     }
 
-    public SpordleOutcome<SpordleGuessResult> SubmitGuess(string gameId, string? rawGuess)
+    public Task<int> PurgeExpiredAsync(CancellationToken ct = default)
     {
-        lock (_gate)
-        {
-            if (!TryGetActive(gameId, out var game, out var failure, out var error))
-                return SpordleOutcome<SpordleGuessResult>.Fail(failure, error);
+        var now = _clock.GetUtcNow().UtcDateTime;
+        return _db.SpordleSessions.Where(s => s.ExpiresAtUtc <= now).ExecuteDeleteAsync(ct);
+    }
 
+    public Task<SpordleOutcome<SpordleGuessResult>> SubmitGuessAsync(
+        string gameId, string? rawGuess, Guid? requestId = null, CancellationToken ct = default)
+    {
+        // Older clients can omit an ID. New clients retain one until a guess is acknowledged.
+        var id = requestId ?? Guid.NewGuid();
+        return UpdateAsync<SpordleGuessResult>(gameId, session =>
+        {
+            var receipts = JsonSerializer.Deserialize<List<GuessReceipt>>(session.GuessesJson)!;
+            var guess = rawGuess?.ToLowerInvariant();
+            var previous = receipts.FirstOrDefault(r => r.RequestId == id);
+            if (previous is not null)
+                return previous.Word == guess
+                    ? new(previous.Result)
+                    : SpordleOutcome<SpordleGuessResult>.Fail(SpordleFailure.Conflict, "Request ID was already used for a different guess");
+            if (session.Complete)
+                return SpordleOutcome<SpordleGuessResult>.Fail(SpordleFailure.Conflict, "Game is already complete");
             if (string.IsNullOrEmpty(rawGuess) || rawGuess.Length > 10)
                 return SpordleOutcome<SpordleGuessResult>.Fail(SpordleFailure.Invalid, "Invalid word: must be 1-10 characters");
             if (!rawGuess.All(char.IsAsciiLetter))
                 return SpordleOutcome<SpordleGuessResult>.Fail(SpordleFailure.Invalid, "Invalid word: alphabetic characters only");
-            if (rawGuess.Length != game.Answer.Length)
-                return SpordleOutcome<SpordleGuessResult>.Fail(SpordleFailure.Invalid, $"Guess must be {game.Answer.Length} letters");
-
-            var guess = rawGuess.ToLowerInvariant();
-            if (!_words.IsAllowedGuess(guess))
+            if (rawGuess.Length != session.Answer.Length)
+                return SpordleOutcome<SpordleGuessResult>.Fail(SpordleFailure.Invalid, $"Guess must be {session.Answer.Length} letters");
+            if (!_words.IsAllowedGuess(guess!))
                 return new(new SpordleGuessResult(Valid: false));
 
-            game.Attempts++;
-            var score = SpordleScorer.Score(game.Answer, guess);
+            session.Attempts++;
+            var score = SpordleScorer.Score(session.Answer, guess!);
             for (var i = 0; i < score.Length; i++)
-            {
-                if (score[i] == LetterStatus.Correct) game.SolvedPositions.Add(i);
-            }
-
-            var won = guess == game.Answer;
-            game.Complete = won || game.Attempts >= MaxAttempts;
-
-            return new(new SpordleGuessResult(
-                Valid: true,
-                Score: score,
-                Won: won,
-                Complete: game.Complete,
-                AttemptsRemaining: MaxAttempts - game.Attempts,
-                Answer: game.Complete ? game.Answer : null));
-        }
+                if (score[i] == LetterStatus.Correct) session.SolvedPositions |= 1 << i;
+            var won = guess == session.Answer;
+            session.Complete = won || session.Attempts >= MaxAttempts;
+            var result = new SpordleGuessResult(true, score, won, session.Complete,
+                MaxAttempts - session.Attempts, session.Complete ? session.Answer : null);
+            receipts.Add(new(id, guess!, result));
+            session.GuessesJson = JsonSerializer.Serialize(receipts);
+            return new(result);
+        }, ct);
     }
 
-    /// <summary>
-    /// Hints cost no guesses. The category can be asked for freely; the letter hint is drawn once
-    /// per game from the positions not yet solved, and then stays the same.
-    /// </summary>
-    public SpordleOutcome<SpordleHint> GetHint(string gameId, SpordleHintType type)
-    {
-        lock (_gate)
+    public Task<SpordleOutcome<SpordleHint>> GetHintAsync(
+        string gameId, SpordleHintType type, CancellationToken ct = default) =>
+        UpdateAsync<SpordleHint>(gameId, session =>
         {
-            if (!TryGetActive(gameId, out var game, out var failure, out var error))
-                return SpordleOutcome<SpordleHint>.Fail(failure, error);
-
+            if (session.Complete)
+                return SpordleOutcome<SpordleHint>.Fail(SpordleFailure.Conflict, "Game is already complete");
             if (type == SpordleHintType.Category)
-                return new(new SpordleHint(Category: _words.CategoryOf(game.Answer)));
-
-            if (game.LetterHint is null)
+                return new(new SpordleHint(Category: session.Category));
+            if (session.LetterHintPosition is null)
             {
-                var open = Enumerable.Range(0, game.Answer.Length).Where(i => !game.SolvedPositions.Contains(i)).ToList();
+                var open = Enumerable.Range(0, session.Answer.Length)
+                    .Where(i => (session.SolvedPositions & (1 << i)) == 0).ToList();
                 if (open.Count == 0)
-                {
-                    return SpordleOutcome<SpordleHint>.Fail(
-                        SpordleFailure.Conflict,
+                    return SpordleOutcome<SpordleHint>.Fail(SpordleFailure.Conflict,
                         "You've already found every letter's position. Use your green tiles to finish!");
-                }
-
-                var index = open[_random.Next(open.Count)];
-                game.LetterHint = new SpordleHint(Position: index + 1, Letter: game.Answer[index]);
+                session.LetterHintPosition = open[_random.Next(open.Count)] + 1;
             }
+            var position = session.LetterHintPosition.Value;
+            return new(new SpordleHint(Position: position, Letter: session.Answer[position - 1]));
+        }, ct);
 
-            return new(game.LetterHint);
-        }
-    }
-
-    private bool TryGetActive(string gameId, out Game game, out SpordleFailure failure, out string error)
+    private async Task<SpordleOutcome<T>> UpdateAsync<T>(
+        string gameId, Func<SpordleSession, SpordleOutcome<T>> apply, CancellationToken ct)
     {
-        var now = _clock.GetUtcNow();
-        RemoveExpired(now, force: false);
-
-        if (!_games.TryGetValue(gameId, out game!) || IsExpired(game, now))
+        if (!Guid.TryParse(gameId, out var id))
+            return SpordleOutcome<T>.Fail(SpordleFailure.NotFound, "Game not found or expired");
+        for (var attempt = 0; attempt < MaxWriteAttempts; attempt++)
         {
-            _games.Remove(gameId);
-            (failure, error) = (SpordleFailure.NotFound, "Game not found or expired");
-            return false;
+            // Reload committed state after a conflict: duplicate guesses see their receipt,
+            // and competing hints see the letter already chosen by the winning write.
+            _db.ClearTracked();
+            var session = await _db.SpordleSessions.SingleOrDefaultAsync(s => s.Id == id, ct);
+            var now = _clock.GetUtcNow().UtcDateTime;
+            if (session is null || session.ExpiresAtUtc <= now)
+                return SpordleOutcome<T>.Fail(SpordleFailure.NotFound, "Game not found or expired");
+            var outcome = apply(session);
+            if (!outcome.Ok) return outcome;
+            session.ExpiresAtUtc = now + IdleLifetime;
+            session.Revision++;
+            try
+            {
+                await _db.SaveChangesAsync(ct);
+                return outcome;
+            }
+            catch (DbUpdateConcurrencyException) when (attempt < MaxWriteAttempts - 1)
+            {
+                // The database arbitrates writes, including across different API processes.
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return SpordleOutcome<T>.Fail(SpordleFailure.Conflict, "The round changed. Please retry your request.");
+            }
         }
-
-        if (game.Complete)
-        {
-            (failure, error) = (SpordleFailure.Conflict, "Game is already complete");
-            return false;
-        }
-
-        game.LastActiveAt = now;
-        (failure, error) = (SpordleFailure.None, "");
-        return true;
+        throw new InvalidOperationException("Unreachable concurrency retry state.");
     }
 
-    // A full scan, so outside game creation it runs at most once a minute.
-    private void RemoveExpired(DateTimeOffset now, bool force)
-    {
-        if (!force && now - _lastSweep < SweepInterval) return;
-        _lastSweep = now;
-
-        foreach (var id in _games.Where(g => IsExpired(g.Value, now)).Select(g => g.Key).ToList())
-            _games.Remove(id);
-    }
-
-    private static bool IsExpired(Game game, DateTimeOffset now) => now - game.LastActiveAt >= IdleLifetime;
-
-    private sealed class Game(string answer, long sequence, DateTimeOffset createdAt)
-    {
-        public string Answer { get; } = answer;
-        /// <summary>Creation order; the lowest is evicted first when the store is full.</summary>
-        public long Sequence { get; } = sequence;
-        public HashSet<int> SolvedPositions { get; } = [];
-        public int Attempts { get; set; }
-        public bool Complete { get; set; }
-        public SpordleHint? LetterHint { get; set; }
-        public DateTimeOffset LastActiveAt { get; set; } = createdAt;
-    }
+    private sealed record GuessReceipt(Guid RequestId, string Word, SpordleGuessResult Result);
 }

@@ -36,8 +36,8 @@ export class SpordleApi {
     return this.http.post<StartedGame>('/api/spordle/games', { wordLength });
   }
 
-  submitGuess(gameId: string, word: string): Observable<GuessResult> {
-    return this.http.post<GuessResult>(`/api/spordle/games/${encodeURIComponent(gameId)}/guesses`, { word });
+  submitGuess(gameId: string, word: string, requestId: string): Observable<GuessResult> {
+    return this.http.post<GuessResult>(`/api/spordle/games/${encodeURIComponent(gameId)}/guesses`, { word, requestId });
   }
 
   requestHint(gameId: string, type: HintType): Observable<HintResult> {

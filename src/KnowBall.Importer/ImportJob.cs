@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using KnowBall.Application;
 using KnowBall.Application.Games;
+using KnowBall.Application.Games.Spordle;
 using KnowBall.Application.Import;
 using KnowBall.Domain;
 using KnowBall.Infrastructure;
@@ -133,6 +134,8 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
 
             var purged = await scheduler.PurgePracticeAsync(TimeSpan.FromDays(opts.PracticeRetentionDays), ct);
             if (purged > 0) logger.LogInformation("Deleted {Count} old practice rounds", purged);
+            var expired = await scope.ServiceProvider.GetRequiredService<SpordleGameService>().PurgeExpiredAsync(ct);
+            if (expired > 0) logger.LogInformation("Deleted {Count} expired Spordle sessions", expired);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

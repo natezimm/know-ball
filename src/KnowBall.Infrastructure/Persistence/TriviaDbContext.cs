@@ -16,11 +16,20 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
     public DbSet<Puzzle> Puzzles => Set<Puzzle>();
     public DbSet<UserResult> UserResults => Set<UserResult>();
     public DbSet<ImportRun> ImportRuns => Set<ImportRun>();
+    public DbSet<SpordleSession> SpordleSessions => Set<SpordleSession>();
 
     public void ClearTracked() => ChangeTracker.Clear();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
+        b.Entity<SpordleSession>(e =>
+        {
+            e.Property(x => x.Answer).HasMaxLength(6);
+            e.Property(x => x.Category).HasMaxLength(128);
+            e.Property(x => x.Revision).IsConcurrencyToken();
+            e.HasIndex(x => x.ExpiresAtUtc);
+        });
+
         b.Entity<League>(e =>
         {
             e.Property(x => x.Code).HasMaxLength(16);

@@ -43,6 +43,7 @@ export class SpordleGame {
   private request?: Subscription;
   private hintRequest?: Subscription;
   private startedAt = 0;
+  private pendingGuess?: { word: string; id: string };
 
   readonly wordLength = signal<WordLength>(readStoredLength());
   readonly gameId = signal('');
@@ -70,6 +71,7 @@ export class SpordleGame {
   /** Begins a fresh game, dropping whatever was on the board. */
   start(length: WordLength = this.wordLength()): void {
     this.cancel();
+    this.pendingGuess = undefined;
     this.wordLength.set(length);
     try {
       localStorage.setItem(LENGTH_KEY, String(length));
@@ -163,8 +165,13 @@ export class SpordleGame {
 
     this.message.set('');
     this.status.set('validating');
-    this.request = this.api.submitGuess(this.gameId(), guess).subscribe({
-      next: (result) => this.applyResult(guess, result),
+    // A failed response may still have committed on the server. Retry with the same ID.
+    if (this.pendingGuess?.word !== guess) this.pendingGuess = { word: guess, id: crypto.randomUUID() };
+    this.request = this.api.submitGuess(this.gameId(), guess, this.pendingGuess.id).subscribe({
+      next: (result) => {
+        this.pendingGuess = undefined;
+        this.applyResult(guess, result);
+      },
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) {
           this.expire();
