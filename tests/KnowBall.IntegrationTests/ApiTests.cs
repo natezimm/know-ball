@@ -16,10 +16,8 @@ namespace KnowBall.IntegrationTests;
 /// </summary>
 public sealed class ApiFactory : WebApplicationFactory<Program>
 {
-    public const string AdminKey = "test-admin-key";
 
     private readonly string _sqlitePath = Path.Combine(Path.GetTempPath(), $"trivia-test-{Guid.NewGuid():N}.db");
-    private readonly string _mediaPath = Path.Combine(Path.GetTempPath(), $"trivia-test-media-{Guid.NewGuid():N}");
     private readonly SemaphoreSlim _historyLock = new(1, 1);
     private bool _historyLoaded;
 
@@ -31,8 +29,6 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         Environment.SetEnvironmentVariable("Database__Provider", pg is null ? "Sqlite" : "Postgres");
         Environment.SetEnvironmentVariable("ConnectionStrings__Trivia", pg ?? $"Data Source={_sqlitePath}");
         Environment.SetEnvironmentVariable("Sources__Bref__Directory", FindFixtures());
-        Environment.SetEnvironmentVariable("Media__Path", _mediaPath);
-        Environment.SetEnvironmentVariable("Admin__Key", AdminKey);
     }
 
     /// <summary>
@@ -77,7 +73,6 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     {
         base.Dispose(disposing);
         try { File.Delete(_sqlitePath); } catch { /* best effort */ }
-        try { Directory.Delete(_mediaPath, recursive: true); } catch { /* best effort */ }
     }
 }
 

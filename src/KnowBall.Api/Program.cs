@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.FileProviders;
 using KnowBall.Api.Endpoints;
 using KnowBall.Application;
 using KnowBall.Infrastructure;
-using KnowBall.Infrastructure.Images;
 using KnowBall.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,15 +45,6 @@ app.UseExceptionHandler();
 app.UseCors();
 app.UseRateLimiter();
 
-// Puzzle images made in the admin area.
-var media = app.Services.GetRequiredService<LocalImageStore>();
-Directory.CreateDirectory(media.Root);
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(media.Root),
-    RequestPath = app.Configuration["Media:RequestPath"] ?? "/photos",
-});
-
 // When the built Angular app sits in wwwroot (the Docker image), this one process serves the whole site.
 var servesSite = File.Exists(Path.Combine(app.Environment.WebRootPath ?? "", "index.html"));
 if (servesSite)
@@ -73,7 +62,6 @@ var api = app.MapGroup("/api");
 api.MapData();
 api.MapSpordle();
 api.MapGames();
-api.MapAdmin();
 
 app.MapHealthChecks("/health");
 

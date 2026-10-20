@@ -250,10 +250,9 @@ public class GameServiceTests : IDisposable
         using var engine = _world.NewEngine();
         var today = await engine.Service.GetTodayAsync(Me, default);
 
-        Assert.Equal(["scouting-report", "career-path", "whos-that"], today.Select(t => t.Game));
+        Assert.Equal(["scouting-report", "career-path"], today.Select(t => t.Game));
         Assert.Equal((true, 1, GameStatus.Playing, 1, 8), (today[0].Available, today[0].Number, today[0].Status, today[0].Guesses, today[0].MaxGuesses));
         Assert.Equal((true, GameStatus.New), (today[1].Available, today[1].Status));
-        Assert.False(today[2].Available); // nobody has made a Who's That puzzle yet
     }
 
     public void Dispose() => _world.Dispose();

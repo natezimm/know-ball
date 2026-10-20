@@ -4,7 +4,6 @@
 #
 # Settings, from .env:
 #   KNOWBALL_DB_PASSWORD  the database password (any long random string; set once, never change)
-#   KNOWBALL_ADMIN_KEY    a long random string; switches the admin area on
 #   KNOWBALL_TAG          the image tag to run (default latest; CI sets the commit it deploys)
 name: knowball
 
@@ -29,7 +28,6 @@ services:
     image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
-      Admin__Key: ${KNOWBALL_ADMIN_KEY:?set KNOWBALL_ADMIN_KEY in .env}
       # nginx reaches the container from this network's gateway, so only its X-Forwarded-For counts.
       ForwardedHeaders__KnownNetworks__0: 172.31.250.0/24
     ports:
