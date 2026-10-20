@@ -54,6 +54,13 @@ const MESSAGE_MS = 3000;
         <span class="status" role="status">{{ statusText() }}</span>
       </div>
 
+      @if (game.status() === 'expired') {
+        <div class="expired" role="alert">
+          <p>This round is no longer available. It may have expired or the server restarted. Your stats are unchanged.</p>
+          <button type="button" class="btn primary" (click)="game.start()">Start a fresh game</button>
+        </div>
+      }
+
       @if (game.result(); as result) {
         <div class="outcome" [class.won]="result.won">
           <p>
@@ -222,6 +229,8 @@ const MESSAGE_MS = 3000;
     .outcome p { margin: 0; font-size: 18px; }
     .outcome strong { font: 400 20px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
     .outcome.won p { color: var(--ok); font-weight: 700; }
+    .expired { padding: 12px; border: 2px solid var(--accent); border-radius: var(--radius); background: var(--surface); }
+    .expired p { margin: 0 0 10px; }
 
     /* Tiles shrink to fit the narrower of the screen's width and its spare height. */
     .board {
@@ -295,6 +304,8 @@ export class Spordle {
         return 'Starting…';
       case 'error':
         return 'Unavailable';
+      case 'expired':
+        return 'Round unavailable';
       case 'validating':
         return 'Checking…';
       case 'revealing':
@@ -311,6 +322,13 @@ export class Spordle {
 
   constructor() {
     this.game.start();
+
+    effect(() => {
+      if (this.game.status() !== 'expired') return;
+      const dialog = this.hintDialog().nativeElement;
+      if (dialog.open && typeof dialog.close === 'function') dialog.close();
+      else dialog.removeAttribute('open');
+    });
 
     effect((onCleanup) => {
       if (!this.game.message()) return;
@@ -384,4 +402,3 @@ function openDialog(dialog: HTMLDialogElement): void {
   if (typeof dialog.showModal === 'function') dialog.showModal();
   else dialog.setAttribute('open', '');
 }
-

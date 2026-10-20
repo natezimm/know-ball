@@ -12,7 +12,7 @@ export const FLIP_DURATION_MS = 500;
 
 const LENGTH_KEY = 'knowball.spordle.wordLength';
 
-export type GameStatus = 'loading' | 'playing' | 'validating' | 'revealing' | 'complete' | 'error';
+export type GameStatus = 'loading' | 'playing' | 'validating' | 'revealing' | 'complete' | 'expired' | 'error';
 
 export interface Attempt {
   word: string;
@@ -138,6 +138,10 @@ export class SpordleGame {
         this.hintLoading.set(false);
       },
       error: (error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.expire();
+          return;
+        }
         this.hintError.set(serverMessage(error) ?? 'Could not load your hint. Please try again.');
         this.hintLoading.set(false);
       },
@@ -162,10 +166,24 @@ export class SpordleGame {
     this.request = this.api.submitGuess(this.gameId(), guess).subscribe({
       next: (result) => this.applyResult(guess, result),
       error: (error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.expire();
+          return;
+        }
         this.message.set(serverMessage(error) ?? 'Error checking the word. Please try again.');
         this.status.set('playing');
       },
     });
+  }
+
+  private expire(): void {
+    this.cancel();
+    this.hintLoading.set(false);
+    this.hintError.set('');
+    this.message.set('');
+    // A missing server session is not a player's loss. Keep their board visible until
+    // they choose a fresh game, and do not write a result to local statistics.
+    this.status.set('expired');
   }
 
   private applyResult(guess: string, result: GuessResult): void {

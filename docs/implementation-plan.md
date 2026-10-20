@@ -337,6 +337,10 @@ close the real-phone or installed-PWA gates.
 
 ### After launch (proposed, not scheduled)
 
+- Persist Spordle sessions across container restarts. They currently live in process memory and expire
+  after six idle hours. The client now offers a fresh round without recording a loss when a session
+  disappears; that recovery does not preserve the old round. A persistence change needs expiry/cleanup,
+  concurrency and retry behavior, plus a restart integration test before rollout.
 - Daily Spordle on the shared engine, keeping the current random game as practice; define daily progress,
   stats and sharing before implementation.
 - Use replay/return-play evidence to prioritize improvements and the next game (no fourth game is selected). The Phase 2/3 catalog remains unscheduled.
