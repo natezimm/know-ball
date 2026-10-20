@@ -37,7 +37,7 @@ describe('Home', () => {
     ]);
 
     expect([...el.querySelectorAll('h2')].map((h) => h.textContent)).toEqual(['Spordle', 'Scouting Report', 'Career Path', "Who's That Sportsman?"]);
-    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'Coming soon']);
+    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'No puzzle today']);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/scouting-report', '/career-path']);
     expect(el.querySelector('h1')?.textContent).toContain('Three ways');
     expect(el.querySelector('.badge.done')?.textContent?.trim()).toBe('Solved in 2');
@@ -56,6 +56,22 @@ describe('Home', () => {
     expect(el.querySelectorAll('a.badge').length).toBe(4);
   });
 
+  it('waits for availability before offering daily games', async () => {
+    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    const fixture = TestBed.createComponent(Home);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', 'Checking today…']);
+    expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle']);
+
+    TestBed.inject(HttpTestingController).expectOne('/api/me/today').flush([
+      entry({}), entry({ game: 'career-path' }), entry({ game: 'whos-that', available: false, number: null }),
+    ]);
+    await fixture.whenStable();
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'No puzzle today']);
+    expect(el.querySelector('a[href="/whos-that"]')).toBeNull();
+  });
+
   it('words each state of a card', () => {
     const daily = { daily: 'scouting-report' as const };
     expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true).label).toBe('Solved in 1 guess');
@@ -64,3 +80,4 @@ describe('Home', () => {
     expect(cardStatus(daily, undefined, false)).toEqual({ label: 'Play today', open: true });
   });
 });
+

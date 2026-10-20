@@ -174,8 +174,8 @@ const NOTICE_MS = 3500;
     </dialog>
   `,
   styles: `
-    :host { display: block; margin: -24px 0 -44px; }
-    .game { max-width: 520px; min-height: calc(100dvh - 96px); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    :host { display: block; margin: 0 0 -44px; }
+    .game { max-width: 520px; min-height: calc(100dvh - 120px); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
     .top, .meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .kb-wordmark { font-size: clamp(30px, 9.4vw, 46px); }
@@ -359,3 +359,4 @@ export class GameShell {
     if (event.target === dialog) dialog.close();
   }
 }
+

@@ -176,7 +176,7 @@ const MESSAGE_MS = 3000;
   `,
   styles: `
 
-    :host { display: block; margin: -24px 0 -44px; }
+    :host { display: block; margin: 0 0 -44px; }
     .spordle { max-width: 480px; margin: 0 auto; display: grid; gap: 12px; }
 
     .top, .toolbar, .hints, .outcome { display: flex; align-items: center; gap: 8px; }
@@ -384,3 +384,4 @@ function openDialog(dialog: HTMLDialogElement): void {
   if (typeof dialog.showModal === 'function') dialog.showModal();
   else dialog.setAttribute('open', '');
 }
+
