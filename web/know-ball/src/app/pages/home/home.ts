@@ -14,10 +14,11 @@ interface GameCard {
 }
 
 /** What a card says under its blurb, and whether it can be opened. */
-export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | undefined, loaded: boolean): { label: string; open: boolean; done?: boolean } {
+export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
   if (!card.daily) return { label: 'Play anytime', open: true };
+  if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
-  if (!today.available) return { label: 'Coming soon', open: false };
+  if (!today.available) return { label: 'No puzzle today', open: false };
 
   switch (today.status) {
     case 'won':
@@ -134,16 +135,18 @@ export class Home {
   /** Designed but not scheduled; replay numbers after version 1 decide which comes first. */
   protected readonly later = ['Stat Quiz', 'Geo Sports', 'Sportle', 'Sound It Out', "Who's the GOAT?"];
 
-  private readonly today = signal<TodayEntry[] | null>(null);
+  // Undefined while checking availability; null after a failed request.
+  private readonly today = signal<TodayEntry[] | null | undefined>(undefined);
 
   protected readonly cards = computed(() => {
     const today = this.today();
-    return this.games.map((card) => ({ ...card, status: cardStatus(card, today?.find((t) => t.game === card.daily), today !== null) }));
+    return this.games.map((card) => ({ ...card, status: cardStatus(card, today?.find((t) => t.game === card.daily), today === undefined ? null : today !== null) }));
   });
-  protected readonly countWord = computed(() => COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Four');
+  protected readonly countWord = computed(() => this.today() === undefined ? 'Four' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Four');
 
   constructor() {
     // If the API is down the cards still link to the games, which report the problem themselves.
     inject(GameApi).today().subscribe({ next: (entries) => this.today.set(entries), error: () => this.today.set(null) });
   }
 }
+
