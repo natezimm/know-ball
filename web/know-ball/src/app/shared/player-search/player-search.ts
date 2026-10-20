@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, booleanAttribute, inject, input, output, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, afterRenderEffect, booleanAttribute, inject, input, output, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, catchError, debounce, distinctUntilChanged, map, of, switchMap, tap, timer } from 'rxjs';
 import { MIN_QUERY_LENGTH, PlayerSearchResult, PlayerSearchService } from '../../core/player-search.service';
@@ -39,7 +39,7 @@ let nextId = 0;
         <span class="spinner" aria-hidden="true"></span>
       }
       @if (open()) {
-        <ul class="list" role="listbox" [id]="listId">
+        <ul class="list" role="listbox" [id]="listId" [style.--results-height.px]="resultsHeight()">
           @for (p of results(); track p.id; let i = $index) {
             <li
               role="option"
@@ -83,7 +83,7 @@ let nextId = 0;
     .open input { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
     /* Docked at the foot of a game, the list opens upward so the keyboard does not cover it. */
     .up.open input { border-radius: 0 0 var(--radius) var(--radius); }
-    .up .list { bottom: 100%; border-top: 2px solid var(--accent); border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0; max-height: min(320px, 45dvh); }
+    .up .list { bottom: 100%; border-top: 2px solid var(--accent); border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0; max-height: var(--results-height, min(320px, 45dvh)); }
     .spinner {
       position: absolute; right: 16px; top: 50%; width: 16px; height: 16px; margin-top: -8px;
       border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%;
@@ -136,15 +136,42 @@ export class PlayerSearch {
   protected readonly loading = signal(false);
   protected readonly error = signal(false);
   protected readonly noMatches = signal(false);
+  protected readonly resultsHeight = signal(320);
 
   private readonly box = viewChild.required<ElementRef<HTMLInputElement>>('box');
   private readonly typed$ = new Subject<string>();
 
   constructor() {
+    const measure = () => {
+      if (!this.open() || !this.dropUp()) return;
+      const top = Math.max(window.visualViewport?.offsetTop ?? 0, document.getElementById('site-header')?.getBoundingClientRect().bottom ?? 0);
+      const room = this.box().nativeElement.getBoundingClientRect().top - top - 8;
+      this.resultsHeight.set(Math.max(0, Math.min(320, room)));
+    };
+    afterRenderEffect(measure);
+    // Follow the dock after a viewport or scroll change has been painted.
+    let frame = 0;
+    const onResize = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('scroll', onResize, true);
+    window.visualViewport?.addEventListener('resize', onResize);
+    window.visualViewport?.addEventListener('scroll', onResize);
+    inject(DestroyRef).onDestroy(() => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('scroll', onResize, true);
+      window.visualViewport?.removeEventListener('resize', onResize);
+      window.visualViewport?.removeEventListener('scroll', onResize);
+    });
     this.typed$
       .pipe(
         map((q) => q.trim()),
-        debounce(() => timer(this.debounceMs())),
+        // Clearing must cancel the previous query immediately and reset distinctUntilChanged;
+        // otherwise retyping the same player just after a guess can be silently ignored.
+        debounce((q) => q.length < MIN_QUERY_LENGTH ? of(0) : timer(this.debounceMs())),
         distinctUntilChanged(),
         tap(() => this.error.set(false)),
         switchMap((q) => {
