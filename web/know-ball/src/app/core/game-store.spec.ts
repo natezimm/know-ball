@@ -36,18 +36,18 @@ describe('GameStore', () => {
   });
 
   it('says why when there is no puzzle, and tells that apart from a failure', () => {
-    store.load('whos-that');
-    http.expectOne('/api/whos-that/daily').flush({ error: "There is no Who's That Sportsman? puzzle today." }, { status: 404, statusText: 'Not Found' });
+    store.load('career-path');
+    http.expectOne('/api/career-path/daily').flush({ error: "There is no Career Path puzzle today." }, { status: 404, statusText: 'Not Found' });
 
     expect(store.phase()).toBe('unavailable');
-    expect(store.reason()).toBe("There is no Who's That Sportsman? puzzle today.");
+    expect(store.reason()).toBe("There is no Career Path puzzle today.");
 
-    store.load('whos-that');
-    http.expectOne('/api/whos-that/daily').flush('boom', { status: 500, statusText: 'Server Error' });
+    store.load('career-path');
+    http.expectOne('/api/career-path/daily').flush('boom', { status: 500, statusText: 'Server Error' });
     expect(store.phase()).toBe('error');
 
     store.retry();
-    http.expectOne('/api/whos-that/daily').flush(gameState({ game: 'whos-that' }));
+    http.expectOne('/api/career-path/daily').flush(gameState({ game: 'career-path' }));
     expect(store.phase()).toBe('ready');
   });
 

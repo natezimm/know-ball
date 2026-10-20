@@ -2,25 +2,23 @@
 
 Daily sports trivia games: Angular front end, ASP.NET Core API, PostgreSQL. A personal project.
 
-Version 1 targets four NBA games. The site has been live on GCP since 2026-10-16 at
-[knowball.nathanzimmerman.com](https://knowball.nathanzimmerman.com); Who's That Sportsman? still needs its
-reviewed photo collection. As of 2026-10-17, CI covers backend and Angular tests, SQLite and Postgres integration,
-Docker smoke checks, and Playwright gameplay for all four games.
+Version 1 contains three games: Spordle, Scouting Report and Career Path. The site has been live on GCP since
+2026-10-16 at [knowball.nathanzimmerman.com](https://knowball.nathanzimmerman.com).
+
+Who's That Sportsman? was removed from the active project on 2026-10-20 after the photo/cutout review.
+It remains a [future enhancement](docs/future-games.md); the fourth game is undecided.
 
 The remaining launch gates are production nightly-import evidence, backup and restore verification, real-phone
-and installed-PWA checks, and the admin upload/content workflow. The single launch checklist and evidence links
-are in [docs/implementation-plan.md, section 8](docs/implementation-plan.md#8-whats-left). A three-game launch
-can proceed while the photo collection is prepared.
+and installed-PWA checks. See [the launch checklist](docs/implementation-plan.md#8-whats-left).
 
 | Game | Route | How it plays | State |
 | --- | --- | --- | --- |
 | Spordle | `/spordle` | A sports word of 4, 5 or 6 letters in six tries, like Wordle | Playable |
 | Scouting Report | `/scouting-report` | Guess today's player in eight tries; each guess is graded on team, conference, division, position, height, age and number | Playable |
 | Career Path | `/career-path` | Every team a player has been on, in order; six tries, a hint per miss | Playable |
-| Who's That Sportsman? | `/whos-that` | A famous photo: silhouette, then year, team and a blurred photo; five tries | Built; waiting for photos |
 
-The three player games share one engine: a daily puzzle that changes at midnight Eastern, practice rounds (not
-Who's That), an archive of past dailies, per-game stats and streaks, and a share card. Players are anonymous: the
+The two player games share one engine: a daily puzzle that changes at midnight Eastern, practice rounds,
+an archive of past dailies, per-game stats and streaks, and a share card. Players are anonymous: the
 browser makes up an id and sends it as `X-Anon-Id`. The answer never leaves the server until a game is over.
 
 ## What's here
@@ -30,7 +28,7 @@ src/
   KnowBall.Domain/          entities: League, Team, Player, PlayerExternalId, PlayerTeamStint, PlayerSeasonStat, Puzzle…
   KnowBall.Application/     Import/  history, crosswalk and roster imports, player matching, popularity
                                 Games/   the engine (GameService, PuzzleScheduler, PuzzleCalendar) and one folder per game
-  KnowBall.Infrastructure/  EF Core (Postgres or SQLite), data sources, image store and silhouette renderer
+  KnowBall.Infrastructure/  EF Core (Postgres or SQLite), data sources
   KnowBall.Api/             minimal API endpoints; also serves the built Angular app when wwwroot holds it
   KnowBall.Importer/        worker: history every 30 days, rosters and puzzle queues nightly at 04:00 Eastern
 tests/
@@ -114,52 +112,28 @@ returns under half the active players fails the run instead of retiring the leag
 
 | Endpoint | Purpose |
 | --- | --- |
-| `GET /api/{game}/daily` | today's puzzle and this player's progress (`game` is `scouting-report`, `career-path` or `whos-that`) |
+| `GET /api/{game}/daily` | today's puzzle and this player's progress (`game` is `scouting-report` or `career-path`) |
 | `GET /api/{game}/puzzles/{id}` | a past daily or a practice round |
 | `POST /api/{game}/{id}/guess` | `{ "playerId": 123 }` |
-| `POST /api/{game}/practice` | a new practice round (not Who's That) |
+| `POST /api/{game}/practice` | a new practice round |
 | `GET /api/{game}/archive` | past dailies with this player's result on each |
 | `GET /api/me/stats`, `GET /api/me/today` | stats per game; today's state for the home page |
 | `GET /api/players/search?q=&includeInactive=` | autocomplete |
 | `POST /api/spordle/games`, `.../{id}/guesses`, `.../{id}/hint` | Spordle (games held in memory for six idle hours) |
 | `GET /api/import-runs/latest`, `GET /api/stats/summary`, `GET /health` | monitoring |
-| `/api/admin/...` | admin area, below |
 
 The game endpoints need an `X-Anon-Id` header. Guesses are limited per address: `Games:GuessesPerMinute` (60),
 `Spordle:GuessesPerMinute` (20) and `Spordle:GamesPerMinute` (30).
-
-## Admin: Who's That Sportsman? puzzles
-
-`/admin` is off until `Admin:Key` is set (environment variable `Admin__Key`, a long random string); with no key
-every admin endpoint answers 404. The page asks for the key once per browser tab.
-
-To add a puzzle: upload the photo and a PNG cut-out of the player (on a Mac, Preview → Tools → Remove Background),
-pick the player, and enter the year, team and caption. The server makes the black silhouette and the blurred
-version and stores all three under random file names in `Media:Path`, served from `/photos`. Puzzles start as
-drafts; edit their player, hint facts and caption, schedule them, reorder them, or move future puzzles back to
-drafts. Draft edits can keep the existing images or replace both uploads together. Live and past puzzles stay
-locked. Use **Preview** to step through the silhouette, missed-guess hints and final reveal without changing
-player progress or stats. Preview shows the last saved draft, so save corrections first.
-
-The optional photo source URL, credit and license/permission fields are stored separately from the caption and
-displayed with the final reveal. Source URLs must use HTTP(S), without embedded credentials. Existing puzzles
-continue working without these fields. Attribution is documentation of the source; review permission to use
-each image when curating the collection. If the queue runs dry, the oldest puzzle is
-replayed rather than showing nothing.
-
-In development the `api` entry in `.claude/launch.json` reads the key from `artifacts/dev-admin-key` and creates
-that file if it is missing. The `artifacts/` folder is not committed.
 
 ## Docker
 
 One image holds the API and the built Angular app; the same image runs the importer.
 
 ```bash
-echo "KNOWBALL_ADMIN_KEY=$(openssl rand -hex 24)" > .env
 docker compose --profile site up -d --build      # site on http://localhost:8080
 ```
 
-`KNOWBALL_PORT` and `KNOWBALL_DB_PORT` change the published ports. Photos live on the `photos` volume. The image
+`KNOWBALL_PORT` and `KNOWBALL_DB_PORT` change the published ports. The legacy `photos` volume is retained for backup compatibility; active games do not upload or serve images. The image
 runs as the non-root `app` user; `./scripts/docker-smoke.sh` builds it and checks it end to end, as CI does.
 
 Production runs on a GCP VM behind nginx at https://knowball.nathanzimmerman.com, deployed by CI from `main`;

@@ -2,7 +2,6 @@
 # Whole site:   docker compose --profile site up -d --build   (site on http://localhost:8080)
 #
 # Settings, read from the shell or from a .env file beside this one:
-#   KNOWBALL_ADMIN_KEY   a long random string; switches the admin area on. Without it /admin stays off.
 #   KNOWBALL_PORT        the port the site is published on (default 8080)
 #   KNOWBALL_DB_PORT     the port Postgres is published on (default 5432)
 services:
@@ -29,7 +28,6 @@ services:
     image: know-ball
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
-      Admin__Key: ${KNOWBALL_ADMIN_KEY:-}
     ports:
       - "${KNOWBALL_PORT:-8080}:8080"
     volumes:

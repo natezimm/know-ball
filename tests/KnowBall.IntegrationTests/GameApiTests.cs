@@ -179,7 +179,19 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         var again = await Json(await client.GetAsync($"/api/scouting-report/puzzles/{practice.GetProperty("puzzleId").GetInt32()}"));
         Assert.True(again.GetProperty("practice").GetBoolean());
 
-        Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsync("/api/whos-that/practice", null)).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await client.PostAsync("/api/whos-that/practice", null)).StatusCode);
+    }
+
+    [Theory]
+    [InlineData("/api/whos-that/daily")]
+    [InlineData("/api/whos-that/archive")]
+    [InlineData("/api/admin/overview")]
+    [InlineData("/api/admin/whos-that/puzzles")]
+    public async Task Removed_photo_game_endpoints_are_not_available(string path)
+    {
+        Assert.Equal(HttpStatusCode.NotFound, (await NewPlayer().GetAsync(path)).StatusCode);
+        var today = await Json(await NewPlayer().GetAsync("/api/me/today"));
+        Assert.Equal(["scouting-report", "career-path"], today.EnumerateArray().Select(t => t.GetProperty("game").GetString()));
     }
 
     [Fact]

@@ -204,8 +204,8 @@ else
   result FAIL "Spordle endpoints"
 fi
 
-# The daily games: today's puzzle must come without its answer, and the admin area must refuse
-# a request without the key (404 when no key is set, 401 with a wrong one).
+# The daily games: today's puzzle must come without its answer, and the retired admin API must refuse
+# all requests now that the photo feature has been removed.
 ANON="verify-$$"
 DAILY="$(curl -fs -H "X-Anon-Id: $ANON" http://localhost:5080/api/scouting-report/daily || true)"
 echo "scouting report daily: $DAILY"
@@ -217,8 +217,8 @@ fi
 curl -fs -H "X-Anon-Id: $ANON" http://localhost:5080/api/me/today >/dev/null && result PASS "GET /api/me/today" || result FAIL "GET /api/me/today"
 ADMIN_CODE="$(curl -s -o /dev/null -w '%{http_code}' http://localhost:5080/api/admin/overview)"
 case "$ADMIN_CODE" in
-  401|404) result PASS "GET /api/admin/overview refused without the key ($ADMIN_CODE)" ;;
-  *)       result FAIL "GET /api/admin/overview without the key gave $ADMIN_CODE" ;;
+  404) result PASS "GET /api/admin/overview is removed ($ADMIN_CODE)" ;;
+  *)       result FAIL "removed /api/admin/overview gave $ADMIN_CODE" ;;
 esac
 kill "$API_PID" 2>/dev/null; wait "$API_PID" 2>/dev/null; API_PID=""
 

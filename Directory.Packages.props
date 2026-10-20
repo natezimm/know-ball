@@ -19,8 +19,6 @@
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(FxFloat)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(FxFloat)" />
     <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.*" />
-    <PackageVersion Include="SkiaSharp" Version="3.119.*" />
-    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.*" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.*" />
     <PackageVersion Include="xunit" Version="2.*" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.*" />
