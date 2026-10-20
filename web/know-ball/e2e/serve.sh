@@ -26,19 +26,11 @@ if [ "${E2E_SKIP_DOTNET_BUILD:-0}" != "1" ]; then
 fi
 
 rm -rf "$WORK"
-mkdir -p "$WORK/media"
+mkdir -p "$WORK"
 export Database__Provider=Sqlite
 export ConnectionStrings__Trivia="Data Source=$WORK/trivia.db"
 
-# The opt-in real-photo review needs additional retired answer names. These sparse fixture rows
-# deliberately supply no biographical facts and never change the bundled production seed.
 HISTORY="$ROOT/tests/fixtures/bref"
-if [ -n "${E2E_CURATED_ASSETS:-}" ]; then
-  HISTORY="$WORK/history"
-  mkdir -p "$HISTORY"
-  cp "$ROOT/tests/fixtures/bref/"*.csv "$HISTORY/"
-  tail -n +2 "$ROOT/tests/fixtures/curated-photos/Player Career Info.csv" >> "$HISTORY/Player Career Info.csv"
-fi
 
 # Career Path needs the history, read here from the fixtures. Wikidata is pointed at a closed port,
 # so that step fails at once and the import stays offline.
@@ -48,8 +40,6 @@ Sources__Bref__Directory="$HISTORY" Sources__Wikidata__Endpoint="http://127.0.0.
 # The tests play many rounds from one address, so the per-address limits are raised.
 export ASPNETCORE_URLS="http://127.0.0.1:${E2E_PORT:-5180}"
 export ASPNETCORE_WEBROOT="$SITE"
-export Admin__Key="${E2E_ADMIN_KEY:-e2e-admin-key}"
-export Media__Path="$WORK/media"
 export Games__GuessesPerMinute=10000
 export Spordle__GuessesPerMinute=10000
 export Spordle__GamesPerMinute=10000

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Time.Testing;
 using KnowBall.Application.Games;
 using KnowBall.Application.Games.CareerPath;
 using KnowBall.Application.Games.ScoutingReport;
-using KnowBall.Application.Games.Silhouette;
 using KnowBall.Application.Text;
 using KnowBall.Domain;
 using KnowBall.Infrastructure.Persistence;
@@ -96,52 +95,21 @@ public sealed class GameWorld : IDisposable
     public int Id(string name) => Players[name].Id;
 
     /// <summary>The engine over a fresh context, like one web request. <paramref name="seed"/> makes puzzle choice repeatable.</summary>
-    public Engine NewEngine(int seed = 1, IImageStore? images = null, ISilhouetteRenderer? renderer = null)
+    public Engine NewEngine(int seed = 1)
     {
         var ctx = Db.NewContext();
         var calendar = new PuzzleCalendar(Clock);
-        var whosThat = new WhosThatGame();
-        var registry = new GameRegistry([new ScoutingReportGame(ctx), new CareerPathGame(ctx), whosThat]);
+        var registry = new GameRegistry([new ScoutingReportGame(ctx), new CareerPathGame(ctx)]);
         var scheduler = new PuzzleScheduler(ctx, calendar, Clock, NullLogger<PuzzleScheduler>.Instance) { Random = new Random(seed) };
         var service = new GameService(ctx, registry, scheduler, calendar, Clock);
-        var curated = new CuratedPuzzleService(ctx, calendar, scheduler, whosThat, images ?? new FakeImages(), renderer ?? new FakeRenderer(), Clock);
-        return new Engine(ctx, registry, scheduler, service, curated, calendar);
+        return new Engine(ctx, registry, scheduler, service, calendar);
     }
 
     public void Dispose() => Db.Dispose();
 
     public sealed record Engine(
-        TriviaDbContext Db, GameRegistry Games, PuzzleScheduler Scheduler, GameService Service, CuratedPuzzleService Curated, PuzzleCalendar Calendar) : IDisposable
+        TriviaDbContext Db, GameRegistry Games, PuzzleScheduler Scheduler, GameService Service, PuzzleCalendar Calendar) : IDisposable
     {
         public void Dispose() => Db.Dispose();
-    }
-
-    public sealed class FakeImages : IImageStore
-    {
-        public List<string> Saved { get; } = [];
-        public List<string> Deleted { get; } = [];
-
-        public Task<string> SaveAsync(byte[] content, string extension, CancellationToken cancellationToken)
-        {
-            var url = $"/media/img{Saved.Count + 1}{extension}";
-            Saved.Add(url);
-            return Task.FromResult(url);
-        }
-
-        public Task DeleteAsync(string url, CancellationToken cancellationToken)
-        {
-            Deleted.Add(url);
-            return Task.CompletedTask;
-        }
-    }
-
-    public sealed class FakeRenderer : ISilhouetteRenderer
-    {
-        public string? RejectWith { get; set; }
-
-        public Task<SilhouetteImages> RenderAsync(Stream photo, Stream cutout, CancellationToken cancellationToken) =>
-            RejectWith is null
-                ? Task.FromResult(new SilhouetteImages([1], [2], [3]))
-                : throw new InvalidImageException(RejectWith);
     }
 }

@@ -94,18 +94,16 @@ jobs:
           retention-days: 7
 
   # Builds the production image and checks it on a fresh Postgres: migrations, importer, daily
-  # games, admin key, Eastern time, and a puzzle rendered and saved to /data as the non-root user.
+  # games and Eastern calendar behavior as the non-root user.
   docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Backup tooling failure-path tests
         run: python3 -m unittest discover -s tests -p test_operations.py -v
-      - name: Curated photo batch preflight and draft-upload tests
-        run: python3 -m unittest discover -s tests -p test_curated_puzzles.py -v
       - name: Build the image and smoke-test it
         run: ./scripts/docker-smoke.sh
-      - name: Back up and restore offline fixture data and images
+      - name: Back up and restore offline fixture data
         run: python3 scripts/operations-smoke.py
 
   # On main, once everything above passes: publish the image to GitHub's registry, then roll it out

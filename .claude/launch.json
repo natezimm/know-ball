@@ -16,7 +16,7 @@
       "runtimeExecutable": "bash",
       "runtimeArgs": [
         "-c",
-        "export PATH=\"$HOME/.dotnet:$PATH\"; mkdir -p artifacts; [ -s artifacts/dev-admin-key ] || openssl rand -hex 12 > artifacts/dev-admin-key; Database__Provider=Sqlite ConnectionStrings__Trivia=\"Data Source=$PWD/artifacts/trivia-dev.db\" Media__Path=\"$PWD/artifacts/media\" Admin__Key=\"$(cat artifacts/dev-admin-key)\" ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://localhost:5080 dotnet run --project src/KnowBall.Api --no-launch-profile"
+        "export PATH=\"$HOME/.dotnet:$PATH\"; mkdir -p artifacts; Database__Provider=Sqlite ConnectionStrings__Trivia=\"Data Source=$PWD/artifacts/trivia-dev.db\" ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://localhost:5080 dotnet run --project src/KnowBall.Api --no-launch-profile"
       ],
       "port": 5080
     }

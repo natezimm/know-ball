@@ -66,6 +66,7 @@ public class Player
     public int? CurrentTeamId { get; set; }
     public Team? CurrentTeam { get; set; }
     public string? HeadshotUrl { get; set; }
+    /// <summary>Legacy photo-game field retained for database compatibility; unused by active games.</summary>
     public string? SilhouetteUrl { get; set; }
     public bool IsActive { get; set; } = true;
     /// <summary>0-100. Daily puzzles favour well-known players.</summary>
@@ -143,6 +144,7 @@ public class Award
 public enum GameType
 {
     ScoutingReport = 1,
+    // Reserved for existing stored puzzles. Do not reuse this value for a new fourth game.
     Silhouette = 2,
     CareerPath = 3,
     StatQuiz = 4,

@@ -27,14 +27,13 @@ docker compose version
 
 ### 3. Settings
 
-Two random secrets in `~/know-ball/.env`. Keep a copy of the admin key in your password manager; it is what
-you type into `/admin`.
+One database secret in `~/know-ball/.env`. The photo-game admin was removed; an existing
+`KNOWBALL_ADMIN_KEY` entry is ignored and does not need to be changed for deployment.
 
 ```sh
 mkdir -p ~/know-ball/backups
-printf 'KNOWBALL_DB_PASSWORD=%s\nKNOWBALL_ADMIN_KEY=%s\n' "$(openssl rand -hex 24)" "$(openssl rand -hex 24)" > ~/know-ball/.env
+printf 'KNOWBALL_DB_PASSWORD=%s\n' "$(openssl rand -hex 24)" > ~/know-ball/.env
 chmod 600 ~/know-ball/.env
-grep ADMIN ~/know-ball/.env
 ```
 
 Never change `KNOWBALL_DB_PASSWORD` after the first start: Postgres keeps the one it was created with.
@@ -102,7 +101,7 @@ It serializes with CI deployments, and only runs from main.
 | Action | What it does |
 | --- | --- |
 | `audit` (default) | Copies the operations helper to the VM, then reads production import timestamps/status, player/headshot counts, puzzle queues, selected scheduler messages and the managed backup cron state. It does not run an import or change application data. |
-| `backup-and-restore` | Audits, saves a paired database/photos bundle on the VM, and restores it on the disposable GitHub runner. The drill completes Scouting Report and Career Path through the HTTP API and checks all stored photo references and served files. |
+| `backup-and-restore` | Audits, saves a paired database/photos bundle on the VM, and restores it on the disposable GitHub runner. The drill completes Scouting Report and Career Path through the HTTP API and checks all stored legacy photo references against archived files. |
 | `install-backups` | Also installs/updates a managed cron block for daily paired backups, then takes a backup and runs the restore drill immediately. Other cron jobs are preserved. |
 
 The VM needs Python 3.12+ (Ubuntu 24.04 provides it), Docker Compose and `crontab`. The helper remains at
@@ -122,10 +121,9 @@ could hide a failed dump. The new helper does not delete unrelated cron entries.
 VM host's timezone**; inspect `hostTimeZone` in the audit report and adjust the managed cron block if needed.
 Each install restores the documented 07:15 host-time schedule.
 
-Avoid admin uploads, deletes and reordering while a paired backup runs. The database dump has its own consistent
-snapshot, but the photo copy is a separate operation. Reads and guesses may continue. The restore drill rejects
-missing photo references instead of claiming a complete media restore. If no curated puzzles exist yet, it
-reports that photo validation is pending; the synthetic CI drill separately tests a real three-file bundle.
+The backup still pairs the database dump with the legacy photo volume. Existing archived photo references
+are checked against restored files, even though the retired game no longer serves them. A database with no
+photo puzzles is a valid three-game deployment; no photo inventory is required for launch.
 
 To use the helper directly after it has been copied to the VM:
 
@@ -174,4 +172,3 @@ docker compose restart site
 To roll back, set `KNOWBALL_TAG` in `.env` to an earlier commit's full SHA and run `docker compose up -d`.
 The deploy job only has a registry login while it runs, so before a manual `docker compose pull`, log in with
 a GitHub token that can read packages: `docker login ghcr.io -u natezimm`.
-

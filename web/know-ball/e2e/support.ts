@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-export type Game = 'scouting-report' | 'career-path' | 'whos-that';
+export type Game = 'scouting-report' | 'career-path';
 
 export interface Player {
   id: number;

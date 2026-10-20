@@ -32,7 +32,7 @@ export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | un
   }
 }
 
-const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
+const COUNT_WORDS = ['No', 'One', 'Two', 'Three'];
 
 @Component({
   selector: 'app-home',
@@ -78,7 +78,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
 
     .grid {
       list-style: none; margin: 0; padding: 0;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;
     }
     /* Each game is a card from the same set: trim colour outside, then a cream gap and a navy line. */
     .card {
@@ -115,7 +115,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
   `,
 })
 export class Home {
-  /** Version 1: these four. */
+  /** Version 1: these three. A fourth game is undecided. */
   private readonly games: GameCard[] = [
     { name: 'Spordle', link: '/spordle', glyph: '▦', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
@@ -125,10 +125,6 @@ export class Home {
     {
       name: 'Career Path', link: '/career-path', daily: 'career-path', glyph: '→', trim: 'var(--mustard)',
       blurb: 'Every team they played for, in order. Who is it?',
-    },
-    {
-      name: "Who's That Sportsman?", link: '/whos-that', daily: 'whos-that', glyph: '◐', trim: 'var(--navy)',
-      blurb: 'Name the player from the outline of an iconic photo.',
     },
   ];
 
@@ -142,11 +138,10 @@ export class Home {
     const today = this.today();
     return this.games.map((card) => ({ ...card, status: cardStatus(card, today?.find((t) => t.game === card.daily), today === undefined ? null : today !== null) }));
   });
-  protected readonly countWord = computed(() => this.today() === undefined ? 'Four' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Four');
+  protected readonly countWord = computed(() => this.today() === undefined ? 'Three' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Three');
 
   constructor() {
     // If the API is down the cards still link to the games, which report the problem themselves.
     inject(GameApi).today().subscribe({ next: (entries) => this.today.set(entries), error: () => this.today.set(null) });
   }
 }
-
