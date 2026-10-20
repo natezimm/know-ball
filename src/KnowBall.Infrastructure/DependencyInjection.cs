@@ -3,9 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using KnowBall.Application;
-using KnowBall.Application.Games.Silhouette;
 using KnowBall.Application.Import;
-using KnowBall.Infrastructure.Images;
 using KnowBall.Infrastructure.Persistence;
 using KnowBall.Infrastructure.Sources;
 
@@ -66,11 +64,6 @@ public static class DependencyInjection
         services.AddScoped<PlayerSourceResolver>();
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<BrefCsvSource>());
         services.AddScoped<ICrosswalkSource>(sp => sp.GetRequiredService<WikidataCrosswalkSource>());
-
-        services.Configure<MediaOptions>(config.GetSection("Media"));
-        services.AddSingleton<LocalImageStore>();
-        services.AddSingleton<IImageStore>(sp => sp.GetRequiredService<LocalImageStore>());
-        services.AddSingleton<ISilhouetteRenderer, SilhouetteRenderer>();
 
         return services;
     }

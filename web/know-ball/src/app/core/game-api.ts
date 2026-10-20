@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export type GameSlug = 'scouting-report' | 'career-path' | 'whos-that';
+export type GameSlug = 'scouting-report' | 'career-path';
 export type PlayStatus = 'playing' | 'won' | 'lost';
 /** As shown in lists: a puzzle not yet started is "new". */
 export type ResultStatus = PlayStatus | 'new';

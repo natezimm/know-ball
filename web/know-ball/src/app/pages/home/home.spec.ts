@@ -29,31 +29,30 @@ describe('Home', () => {
 
   const badges = (el: HTMLElement) => [...el.querySelectorAll('.badge')].map((b) => b.textContent?.trim());
 
-  it("shows each game with today's state, and holds back one that has no puzzle", async () => {
+  it("shows only the three launch games with today's state", async () => {
     const el = await render([
       entry({ status: 'playing', guesses: 3 }),
       entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 2, maxGuesses: 6 }),
-      entry({ game: 'whos-that', name: "Who's That Sportsman?", available: false, number: null }),
     ]);
 
-    expect([...el.querySelectorAll('h2')].map((h) => h.textContent)).toEqual(['Spordle', 'Scouting Report', 'Career Path', "Who's That Sportsman?"]);
-    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'No puzzle today']);
+    expect([...el.querySelectorAll('h2')].map((h) => h.textContent)).toEqual(['Spordle', 'Scouting Report', 'Career Path']);
+    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2']);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/scouting-report', '/career-path']);
     expect(el.querySelector('h1')?.textContent).toContain('Three ways');
     expect(el.querySelector('.badge.done')?.textContent?.trim()).toBe('Solved in 2');
   });
 
-  it('counts four ways when every game has a puzzle', async () => {
-    const el = await render([entry({}), entry({ game: 'career-path' }), entry({ game: 'whos-that', number: 4 })]);
+  it('counts three ways when every game has a puzzle', async () => {
+    const el = await render([entry({}), entry({ game: 'career-path' })]);
 
-    expect(el.querySelector('h1')?.textContent).toContain('Four ways');
-    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'Play No. 4']);
+    expect(el.querySelector('h1')?.textContent).toContain('Three ways');
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12']);
   });
 
   it('still links to every game when the API is down', async () => {
     const el = await render('down');
 
-    expect(el.querySelectorAll('a.badge').length).toBe(4);
+    expect(el.querySelectorAll('a.badge').length).toBe(3);
   });
 
   it('waits for availability before offering daily games', async () => {
@@ -61,15 +60,15 @@ describe('Home', () => {
     const fixture = TestBed.createComponent(Home);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', 'Checking today…']);
+    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…']);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle']);
 
     TestBed.inject(HttpTestingController).expectOne('/api/me/today').flush([
-      entry({}), entry({ game: 'career-path' }), entry({ game: 'whos-that', available: false, number: null }),
+      entry({}), entry({ game: 'career-path', available: false, number: null }),
     ]);
     await fixture.whenStable();
-    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'No puzzle today']);
-    expect(el.querySelector('a[href="/whos-that"]')).toBeNull();
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'No puzzle today']);
+    expect(el.querySelector('a[href="/career-path"]')).toBeNull();
   });
 
   it('words each state of a card', () => {
@@ -80,4 +79,3 @@ describe('Home', () => {
     expect(cardStatus(daily, undefined, false)).toEqual({ label: 'Play today', open: true });
   });
 });
-

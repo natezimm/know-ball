@@ -18,7 +18,7 @@ import { MockupPicks } from './picks';
         <h1 class="mk-title">The games still on deck</h1>
         <p class="mk-sub">
           Static sketches with sample data, drawn at phone size, for the theme and the five games that come after
-          version 1. The four games that are built have left this gallery. Star the options you like; picks are saved
+          version 1. The three games that are built have left this gallery. Star the options you like; picks are saved
           in this browser.
         </p>
       </header>
