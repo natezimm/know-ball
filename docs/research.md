@@ -162,11 +162,14 @@ nflverse covers more than any of these, for free, so none is needed.
 
 ## Images
 
+- **Who's That photo catalog**: [selected photos, attribution text and iconic-moment search backlog](whos-that-photo-catalog.md),
+  researched 2026-10-18. Prepare LeBron's chalk toss first, then Dirk's fadeaway; other exact moments remain sourcing leads.
 - **Headshots**: NBA CDN by NBA id (current and retired), ESPN by ESPN id (current), NFL.com URLs in nflverse (99% of players).
 - **Logos**: NBA CDN for the 30 current teams; ESPN logo URLs for NFL teams are listed in nflverse.
 - **Iconic photos**: no feed exists; they are collected and cut out by hand. Licensed photo libraries (AP, Getty, Imagn) are the
   commercial route, per Sportradar's own terms.
-- This is a personal project and the images above are used as found. Revisit if it ever carries ads or revenue.
+- For curated Who's That photos, track each file's license and attribution in the catalog above; the selected
+  LeBron and Dirk sources have explicit adaptation licenses. Other image sources have separate terms.
 
 ## Spordle word lists
 
