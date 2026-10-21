@@ -3,7 +3,8 @@
 Updated October 21, 2026. The active release contains **Spordle, Scouting Report and Career Path**.
 **Numbers Don't Lie** (formerly Stat Quiz) is the proposed fourth game. Its
 [implementation plan](numbers-dont-lie-implementation-plan.md) covers the recommended five-question,
-four-sport daily quiz, content proof and release gates. It is not implemented or a three-game launch requirement.
+four-sport shared daily quiz, customizable practice with remembered league selection, content proof and
+release gates. It is not implemented or a three-game launch requirement.
 
 ## Who's That Sportsman? — deferred
 
