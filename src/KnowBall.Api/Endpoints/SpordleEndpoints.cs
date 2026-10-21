@@ -13,27 +13,27 @@ public static class SpordleEndpoints
     {
         var games = api.MapGroup("/spordle/games");
 
-        games.MapPost("/", (StartGameRequest? request, SpordleGameService service) =>
-                Results.Json(service.CreateGame(request?.WordLength), statusCode: StatusCodes.Status201Created))
+        games.MapPost("/", async (StartGameRequest? request, SpordleGameService service, CancellationToken ct) =>
+                Results.Json(await service.CreateGameAsync(request?.WordLength, ct), statusCode: StatusCodes.Status201Created))
             .RequireRateLimiting(RateLimits.SpordleStart)
             .WithName("StartSpordleGame")
             .WithSummary("Start a game with a random 4, 5 or 6 letter sports word. The answer is not returned.");
 
-        games.MapPost("/{gameId}/guesses", (string gameId, GuessRequest? request, SpordleGameService service) =>
+        games.MapPost("/{gameId}/guesses", async (string gameId, GuessRequest? request, SpordleGameService service, CancellationToken ct) =>
             {
-                var outcome = service.SubmitGuess(gameId, request?.Word);
+                var outcome = await service.SubmitGuessAsync(gameId, request?.Word, request?.RequestId, ct);
                 return outcome.Ok ? Results.Ok(GuessResponse.From(outcome.Result!)) : Failure(outcome.Failure, outcome.Error);
             })
             .RequireRateLimiting(RateLimits.SpordlePlay)
             .WithName("SubmitSpordleGuess")
             .WithSummary("Score a guess. Words that are not in the dictionary do not use an attempt.");
 
-        games.MapPost("/{gameId}/hint", (string gameId, HintRequest? request, SpordleGameService service) =>
+        games.MapPost("/{gameId}/hint", async (string gameId, HintRequest? request, SpordleGameService service, CancellationToken ct) =>
             {
                 if (!TryParseHintType(request?.Type, out var type))
                     return Failure(SpordleFailure.Invalid, "Unknown hint type");
 
-                var outcome = service.GetHint(gameId, type);
+                var outcome = await service.GetHintAsync(gameId, type, ct);
                 return outcome.Ok ? Results.Ok(HintResponse.From(outcome.Result!)) : Failure(outcome.Failure, outcome.Error);
             })
             .RequireRateLimiting(RateLimits.SpordlePlay)
@@ -69,7 +69,7 @@ public static class SpordleEndpoints
 
     private sealed record StartGameRequest(int? WordLength);
 
-    private sealed record GuessRequest(string? Word);
+    private sealed record GuessRequest(string? Word, Guid? RequestId);
 
     private sealed record HintRequest(string? Type);
 

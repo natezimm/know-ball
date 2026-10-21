@@ -177,7 +177,10 @@ Built to match Nerdle (`nerdle.nathanzimmerman.com`) with sports words and Know 
 - **Hints**: the category is free to ask; the letter hint is drawn once per game from positions not yet solved
   and also appears faintly in its tile. Neither uses a guess.
 - **Stats**: per word length, kept in the browser: played, win %, streaks, fastest solve, fewest guesses.
-- **Limits**: games live in server memory, expire after six idle hours and are lost on restart, as in Nerdle.
+- **Persistence (2026-10-20)**: rounds live in the existing database and survive API restarts. Attempts,
+  solved positions, the answer and the one-time hint are saved together. Optimistic concurrency handles
+  writes from multiple API instances; guess request IDs replay stored results without another attempt.
+- **Limits**: rounds expire after six idle hours. New rounds and the nightly importer purge expired rows.
   Guesses and hints are limited to 20 a minute per address, new games to 30.
 - **Code**: `src/KnowBall.Application/Games/Spordle`, `src/KnowBall.Api/Endpoints/SpordleEndpoints.cs`,
   `web/know-ball/src/app/games/spordle`.
@@ -337,10 +340,6 @@ close the real-phone or installed-PWA gates.
 
 ### After launch (proposed, not scheduled)
 
-- Persist Spordle sessions across container restarts. They currently live in process memory and expire
-  after six idle hours. The client now offers a fresh round without recording a loss when a session
-  disappears; that recovery does not preserve the old round. A persistence change needs expiry/cleanup,
-  concurrency and retry behavior, plus a restart integration test before rollout.
 - Daily Spordle on the shared engine, keeping the current random game as practice; define daily progress,
   stats and sharing before implementation.
 - Use replay/return-play evidence to prioritize improvements and the next game (no fourth game is selected). The Phase 2/3 catalog remains unscheduled.

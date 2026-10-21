@@ -1,5 +1,6 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using KnowBall.Infrastructure.Persistence;
 
 namespace KnowBall.UnitTests;
@@ -20,7 +21,8 @@ public sealed class TestDb : IDisposable
     }
 
     /// <summary>A fresh context, like a new request or a new nightly run.</summary>
-    public TriviaDbContext NewContext() => new(_options);
+    public TriviaDbContext NewContext(params IInterceptor[] interceptors) =>
+        new(new DbContextOptionsBuilder<TriviaDbContext>(_options).AddInterceptors(interceptors).Options);
 
     public void Dispose() => _connection.Dispose();
 }
