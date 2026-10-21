@@ -6,7 +6,9 @@ Version 1 contains three games: Spordle, Scouting Report and Career Path. The si
 2026-10-16 at [knowball.nathanzimmerman.com](https://knowball.nathanzimmerman.com).
 
 Who's That Sportsman? was removed from the active project on 2026-10-20 after the photo/cutout review.
-It remains a [future enhancement](docs/future-games.md); the fourth game is undecided.
+It remains a [future enhancement](docs/future-games.md). **Numbers Don't Lie**, a cross-sport statistics quiz,
+is the proposed fourth game; its [implementation plan](docs/numbers-dont-lie-implementation-plan.md)
+defines the recommended rules, data proof and release gates. It is not implemented or launched.
 
 The remaining launch gates are production nightly-import evidence, backup and restore verification, real-phone
 and installed-PWA checks. See [the launch checklist](docs/implementation-plan.md#8-whats-left).

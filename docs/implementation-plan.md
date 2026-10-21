@@ -4,7 +4,10 @@ Written 2026-10-12, after the design picks. It replaces the "Roadmap" section of
 everything else in that plan (stack, architecture, API contract) still stands.
 
 Updated 2026-10-20: Who's That Sportsman? and its authoring/image pipeline are removed from the active project.
-Version 1 is three games; the fourth game is undecided. See [future games](future-games.md).
+Version 1 is three games. Updated 2026-10-21: **Numbers Don't Lie** (formerly Stat Quiz) is the proposed
+fourth game; see its [implementation plan](numbers-dont-lie-implementation-plan.md) for the recommended
+five-question, four-sport format and content/release gates. It is not implemented. See [future games](future-games.md)
+for the deferred photo concept and other alternatives.
 The earlier implementation history below is retained where relevant.
 
 Historical review, 2026-10-17: reconciled launch status with main at `2cf5164`, merged PRs and GitHub Actions.
@@ -39,7 +42,8 @@ incomplete. Current evidence and remaining gates are in [section 8](#8-whats-lef
   Yellowtail for script wordmarks. The fonts are bundled. The palette and roles are in
   `web/know-ball/src/styles.css`.
 - **Version 1 is three games**: Spordle, Scouting Report and Career Path. A fourth game may replace
-  Who's That, but no replacement has been chosen. Other game designs remain unscheduled.
+  Who's That. Numbers Don't Lie is now the proposed fourth-game direction, subject to its data and
+  prototype gates. Other game designs remain unscheduled.
 
 ## 2. Design picks and what each one commits us to
 
@@ -48,7 +52,7 @@ incomplete. Current evidence and remaining gates are in [section 8](#8-whats-lef
 | Scouting Report | B, Guess cards | Headshot on every guess, so players need NBA ids. Guess box docked at the bottom. The share grid is generated from the clue colours, since the cards themselves don't make one. |
 | Who's That Sportsman? | Deferred | Removed from the active project on 2026-10-20; cutouts did not meet the quality bar. See [future games](future-games.md). |
 | Career Path | B, Journey list | Needs every player's team history with years. Team names are shown as text, so defunct teams (Sonics, Nets in New Jersey) can use a text badge where no logo exists. |
-| Stat Quiz | A, Multiple choice | Needs season stats for every season. Questions come from templates; answers are checked one question at a time on the server. |
+| Numbers Don't Lie (formerly Stat Quiz) | Multiple choice, proposed | Cross-sport daily quiz; recommended five questions, four options, untimed. The [new plan](numbers-dont-lie-implementation-plan.md) supersedes the earlier timer/speed-bonus sketch. |
 | Geo Sports | B, Card, map, result | A real map library (Leaflet). Arena coordinates already exist; hometown rounds need birthplace coordinates. |
 | Sportle | B, Trading card back | Needs season stats plus three written hints per puzzle, generated from templates with an admin override. |
 | Sound It Out | B, Letter bank | Hand-made puzzles (would need a new authoring area and image storage). No typing, so no autocomplete. |
@@ -208,7 +212,7 @@ one season since 1990. A wrong guess is told which stops it shares with the answ
 
 **Status: removed from the active project, 2026-10-20.** The prepared cutouts did not meet the visual
 quality bar. The game, authoring UI/API, image renderer and content tooling are removed. Existing database
-rows and the legacy media volume remain intact. A future fourth game is undecided and does not block launch.
+rows and the legacy media volume remain intact. Numbers Don't Lie is the proposed fourth game and does not block the three-game launch.
 The concept and revisit criteria are retained in [future games](future-games.md).
 
 ### Milestone 4: MVP polish and launch (M)
@@ -226,11 +230,12 @@ production operations remain open in section 8.
 
 ### Later: Phase 2 (not scheduled)
 
-- **Fourth game — undecided**: compare the candidates in [future games](future-games.md) after the three-game launch.
+- **Fourth game — Numbers Don't Lie, proposed**: begin with the four-league content proof and prototype in
+  its [implementation plan](numbers-dont-lie-implementation-plan.md). The active release remains three games.
 - **Who's That Sportsman? — deferred**: revisit only with a stronger photo/cutout approach; no current implementation or launch requirement.
-- **Stat Quiz** (M): question templates over season stats ("Who led the league in {stat} in {season}?"), three
-  distractors from that season's top ten, ten questions, 15-second timer, speed bonus. The client receives one
-  question at a time.
+- **Numbers Don't Lie (formerly Stat Quiz)**: proposed five-question daily quiz across NBA, NFL, MLB and NHL,
+  four choices, untimed scoring and explanations after submission. Source proof, reviewed content and
+  server-persisted progress precede launch. The dedicated plan supersedes the old ten-question/timer proposal.
 - **Geo Sports** (M): Leaflet with OpenStreetMap tiles, five rounds mixing arenas and hometowns, Haversine
   distance and scoring on the server, result card with the line between guess and answer.
 - **Accounts and sync** (M).
@@ -240,7 +245,8 @@ production operations remain open in section 8.
     for birthplaces; hand lists for MVPs, early Super Bowl winners and stadium coordinates.
   - League switch: the API already takes `league=`; the Angular shell gets a switcher and each game reads it.
   - Per game: Scouting Report and Career Path can extend to NFL data; any photo game remains deferred
-    here. Stat Quiz and Sportle need per-position stat templates and start at 1999. GOAT needs a rethink, most
+    here. Numbers Don't Lie has its own scoped cross-sport catalogue plan; Sportle needs per-position
+    stat templates and starts at 1999. GOAT needs a rethink, most
     likely a ranking per position.
   - Popularity for NFL players comes from Pro Bowls, All-Pro picks and games started, not points.
 
