@@ -1,7 +1,9 @@
 # Future games
 
-Updated October 20, 2026. The active release contains **Spordle, Scouting Report and Career Path**.
-A fourth game is undecided and may replace Who's That Sportsman?. These ideas are not launch requirements.
+Updated October 21, 2026. The active release contains **Spordle, Scouting Report and Career Path**.
+**Numbers Don't Lie** (formerly Stat Quiz) is the proposed fourth game. Its
+[implementation plan](numbers-dont-lie-implementation-plan.md) covers the recommended five-question,
+four-sport daily quiz, content proof and release gates. It is not implemented or a three-game launch requirement.
 
 ## Who's That Sportsman? — deferred
 
@@ -26,14 +28,15 @@ The separately saved photo packs remain available. Existing database rows, the r
 value and legacy media storage are preserved for compatibility; there is no active photo API or admin route.
 Reintroducing the game would require a fresh implementation decision and review of the earlier rights evidence.
 
-## Possible fourth games
+## Fourth-game plan and alternatives
 
-No replacement is selected. Compare a small prototype's replay value, data availability and maintenance
-cost before committing. The existing design gallery and implementation plan describe these candidates:
+Numbers Don't Lie is selected for planning, with NBA, NFL, MLB and NHL as the proposed first leagues.
+Start with the 24-question source proof and Trading Card prototype described in its plan before building
+or enabling the full game. The remaining candidates are unscheduled alternatives:
 
 | Candidate | What needs proving |
 | --- | --- |
-| Stat Quiz | Reliable season-stat question templates, unambiguous answers and enough variety without manual daily writing |
+| Numbers Don't Lie (formerly Stat Quiz) | Four-sport source proof, unambiguous reviewed questions, an enjoyable short daily quiz and sustainable content supply |
 | Geo Sports | Arena/birthplace coordinates, map interaction on phones and a useful scoring model |
 | Sportle | Distinct identity from Spordle, season-stat clues and automated content quality |
 | Sound It Out | A sustainable licensed image collection and new authoring tools |
