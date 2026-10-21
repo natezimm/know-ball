@@ -1,8 +1,9 @@
 # Numbers Don't Lie — implementation plan
 
 Written October 21, 2026 against main at `a7ab2676300e9a815d923a7fc0b542a89949121f`.
-Status: proposed implementation, with a chosen name and cross-sport scope. The active site still has
-three games. This document is the implementation reference for the former Stat Quiz concept.
+Status: proposed implementation, with a chosen name and cross-sport scope. Updated October 21, 2026:
+the user approved a shared daily challenge plus practice with multi-select league preferences.
+The active site still has three games. This document is the implementation reference for the former Stat Quiz concept.
 
 ## 1. Product and first-release decisions
 
@@ -10,8 +11,8 @@ three games. This document is the implementation reference for the former Stat Q
 multiple-choice questions, learn the numbers behind each answer, and share a spoiler-free result.
 The public route will be `/numbers-dont-lie`; the subtitle is **Daily sports stats trivia**.
 
-The user's decisions are the name and a game across sports. The following rules are recommended
-defaults for reviewing and implementing that direction; they have not been separately approved:
+The user's decisions are the name, cross-sport scope, a shared mixed-league daily challenge and
+customizable practice with any combination of leagues. Other rules below remain recommended defaults:
 
 | Decision | Recommended first release |
 | --- | --- |
@@ -23,7 +24,9 @@ defaults for reviewing and implementing that direction; they have not been separ
 | Score | One point per correct answer; final result 0–5 |
 | Difficulty | Two approachable, two medium and one harder question, with varied positions in the sequence |
 | Timing | Untimed; players can pause, reload and resume |
-| Modes | Daily, past daily quizzes, results, statistics and sharing |
+| Modes | Shared daily, customizable practice, past daily quizzes, results, statistics and sharing |
+| Practice leagues | Select any nonempty combination of NBA, NFL, MLB and NHL; All leagues by default; remember preferences |
+| Daily comparability | League preferences affect practice only; every player receives the same daily set |
 | Images | Text, numbers and sport labels; photographs and headshots are unnecessary |
 
 Five questions should take roughly two to three minutes in a prototype; measure this with people
@@ -33,7 +36,8 @@ accessibility and mobile connection failures easier to handle. The earlier mocku
 
 The quiz is its own format: players choose among four answers instead of repeatedly guessing one
 athlete. Keep higher/lower, ranking, free-text numerical answers and league-specific daily modes
-for later. Multi-sport does not yet mean every sport or global competition.
+for later. League-specific daily challenges remain deferred: personalization belongs in practice.
+Multi-sport does not yet mean every sport or global competition.
 
 ## 2. Experience from home page to result
 
@@ -63,6 +67,30 @@ knowball.nathanzimmerman.com/numbers-dont-lie
 
 Include the date or an archive link so a result remains meaningful after midnight. Do not include
 questions, player names, answer values or league ordering that could spoil the quiz.
+
+### Customizable practice
+
+Add a **Practice** entry on the quiz page and result screen, with its own setup view:
+
+- Four labelled checkboxes for NBA, NFL, MLB and NHL. **All leagues** selects all four; it is a shortcut,
+  not a fifth league. Support all 15 nonempty combinations, including a single league.
+- Require at least one league and explain an empty selection before Start. Do not auto-start a round
+  as checkboxes change. Show the selected leagues next to **Start practice**.
+- Remember the canonical selection locally. Default to all leagues on first visit; blocked storage
+  keeps the preference for that visit. Ignore obsolete stored codes safely, explain unavailable
+  selections and never submit an empty list.
+- Start a five-question round using only the chosen leagues. Allocate questions as evenly as possible:
+  one league gets five; two get three/two; three get two/two/one; four get two/one/one/one.
+  Vary which selected league gets each extra question between rounds. Persist the round's order.
+- Label the page and result **Practice**, with the league names. A practice share uses
+  **Practice · NBA + NFL · 4/5**, without a daily quiz number. Link shares to practice setup, not the
+  private round URL that another visitor cannot open.
+- Practice never affects daily scores, completion streaks, perfect-daily counts or the daily archive.
+  The first release needs a round result, not another practice analytics dashboard.
+- Freeze the round's league selection after Start. Changing leagues starts a new round after confirmation
+  if answers have been submitted; leaving practice does not record a daily loss.
+- Use explicit practice-round URLs so reloads and API restarts restore the same leagues, answers
+  and pending explanation. Practice is a mode within this game, not another home-page game card.
 
 ## 3. Content is the first gate
 
@@ -150,6 +178,16 @@ Generate at least 30 complete daily quizzes before launch. Enforce no repeated f
 Simulate 120 scheduled days with the same rules to prove the pool remains schedulable; report shortages
 by league and difficulty. Do not silently relax the rules or create a partial quiz when supply is short.
 
+Practice uses the same approved catalogue with a separate selection policy. Filter by the canonical
+requested league set before choosing questions or distractors. Exclude fact families used in today's
+daily and already queued future dailies so practice does not reveal their answers. Prefer variety
+between practice rounds without a strict per-player no-repeat rule that exhausts a small selection.
+This does not guarantee against overlap with future quizzes that have not yet been scheduled.
+
+After reserving the daily queue, prove that all 15 league combinations can still produce five eligible
+practice questions with the target difficulty mix. If a requested selection cannot, return a clear
+unavailable response before creating a partial round. Never borrow from an unselected league.
+
 ## 4. Backend architecture
 
 Reuse `PuzzleCalendar`, `TimeProvider`, the anonymous ID, EF/Postgres infrastructure, rate-limit
@@ -162,13 +200,18 @@ as a prerequisite. A small dedicated service and two tables are the recommended 
 
 | Model | Responsibility and constraints |
 | --- | --- |
-| `NumbersDailyQuiz` | ID, unique date, quiz number, content/schema version, immutable five-question snapshot, created time |
+| `NumbersQuiz` | ID, mode (daily/practice), nullable date/number, canonical selected leagues, content/schema version, immutable five-question snapshot, created time; unique daily date; practice owner and start-request receipt |
 | `NumbersQuizAttempt` | ID, quiz/user key with a unique composite index, bounded answer receipts, correct count, feedback-acknowledged position, start/completion times, revision concurrency token |
 
-The daily snapshot includes server-only correct answers, values and explanations; API DTOs expose only
+The daily or practice snapshot includes server-only correct answers, values and explanations; API DTOs expose only
 what that particular player has unlocked. Store option order once so everyone gets the same choices
 and a reload cannot reshuffle them. Quiz numbering must use a stable configured launch date, not change
 when old rows are deleted. Add date/completion indexes appropriate to archive and statistics queries.
+Enforce daily date/number versus practice owner/no-date invariants in validation and database constraints.
+A unique nullable daily-date index allows undated practice rows on Postgres and SQLite. Only the owning
+anonymous user may read or mutate a practice round. Retain practice for a configurable 30 days, then
+delete its snapshot, attempt and receipts together; never apply that cleanup to daily quizzes.
+Document an unavailable/restart action for expired practice URLs.
 
 No `LeagueId = nba` placeholder or fabricated multi-sport League row is needed in this separate table.
 Leave existing `GameType` values intact, including reserved photo-game value 2. The old StatQuiz value 4
@@ -215,6 +258,11 @@ Next acknowledgement is idempotent and persisted, so a reload restores the same 
 an unrevealed or future question is rejected. Completed attempts remain read-only; retrying their final
 accepted request still succeeds. Store everything needed to resume across API process restarts.
 
+Practice creation also accepts a UUID request ID. Retrying the same start request and canonical league
+set returns the same round; reusing the ID for another set returns 409. Scope that receipt to the owning
+user and retain it for the round's lifetime. Enforce league filtering and answer/progress rules on the
+server in both modes; frontend filtering alone is insufficient.
+
 Only submitted questions reveal their correct choices and explanations. No future answer,
 correctness flag, source value or explanation may leak through daily, state, archive, home status,
 error responses or generated frontend assets. Source attribution can be revealed alongside the answer.
@@ -229,9 +277,10 @@ Proposed endpoints, all under `/api/numbers-dont-lie`:
 
 | Method and path | Contract |
 | --- | --- |
-| `GET /availability` | Enabled/available state only; lets the home page omit the unreleased game |
+| `GET /availability` | Enabled/available state and supported practice league codes/labels/availability; lets the home page omit the unreleased game |
 | `GET /daily` | Today's quiz metadata, answered progress and current question or pending explanation |
-| `GET /quizzes/{id}` | Resume a playable past/current quiz; future and withdrawn quizzes cannot expose questions |
+| `GET /quizzes/{id}` | Resume a playable daily or the visitor's own practice round; future, withdrawn and other users' practice rounds cannot expose questions |
+| `POST /practice` | `{ leagues: ["nba", "nfl"], requestId: "UUID" }`; validate, generate and persist a private five-question round |
 | `POST /quizzes/{id}/answers` | `questionId`, `optionId`, UUID `requestId`, `expectedRevision`; score on the server |
 | `POST /quizzes/{id}/continue` | Idempotently acknowledge an answered question's explanation |
 | `GET /archive` | Published past/current dates and that visitor's saved progress/result |
@@ -242,16 +291,23 @@ Apply bounded request sizes, pagination and existing per-address rate-limit conv
 Use 400 for invalid fields, 404 for unknown/future quizzes, 409 for state conflicts and 429 for rate limits.
 A withdrawn quiz returns a safe unavailable response with its correction notice, without a question payload.
 
-Use a dedicated `NumbersQuizState`: quiz ID/date/number, status (new/inProgress/completed),
+For practice starts, accept supported league codes only, deduplicate and canonicalize them, and reject
+empty/unknown lists with 400. Insufficient eligible content returns 503 with a safe retryable explanation,
+without creating a partial round or including another league. Rate-limit practice starts as well as
+answers. Other users' practice IDs return 404.
+
+Use a dedicated `NumbersQuizState`: quiz ID, mode, selected leagues, nullable date/number, status (new/inProgress/completed),
 question count, answered count, correct count, revision, current public question, and unlocked review.
-Completed state includes the five answered items. It is not a player `GameState`.
+Completed state includes the five answered items. Practice has no daily date or quiz number.
+It is not a player `GameState`.
 
 Retain the existing `/api/me/today` and `/api/me/stats` contracts for the player games.
 Compose the new game's separate availability/state in Home rather than fabricating `maxGuesses`,
 win rates or NBA league fields. Extract a neutral shared DTO only if implementation demonstrates a need.
 
 Viewing a quiz without answering does not count as played. Statistics count completed daily sets once;
-partially answered sets appear as in progress. Track completion streak and perfect-score count separately.
+partially answered daily sets appear as in progress. Exclude practice in the underlying stats/archive
+queries, not only in the UI. Track completion streak and perfect-score count separately.
 Compute streaks from quiz dates, with a defined current-day grace and neutral unavailable/withdrawn days.
 An unanswered available past date breaks a completion streak. Repeated submission cannot duplicate a result.
 Archives use explicit quiz IDs; opening an archive entry must not navigate back to an ambiguous daily URL.
@@ -265,6 +321,8 @@ forcing a player-search dock, guess dots and won/lost dialogs into the new forma
 Recommended files:
 
 - `games/numbers-dont-lie/numbers-dont-lie.ts`: page and route integration.
+- Practice setup: native league checkboxes, preference storage and an explicit Start action.
+- Routes `/numbers-dont-lie/practice` for setup and `/numbers-dont-lie/practice/:quizId` for saved rounds.
 - `numbers-quiz-api.ts` and `numbers-quiz-store.ts`: typed HTTP contract, signals and saved-state handling.
 - Small question/choice and explanation/review components where they improve readability.
 - Reuse `core/share.ts` transport with a quiz-specific result formatter.
@@ -277,6 +335,8 @@ Use native radio controls and a form with a separate submit button, visible focu
 large touch targets and logical tab order. Announce saving and answer feedback with restrained live
 regions. After Next, focus the next question heading; after completion, focus the result heading.
 Respect reduced motion, text zoom and safe-area spacing. Layout must work at 320px without clipped choices.
+League selection uses labelled checkbox groups and a visible nonempty-selection error. Clearly label daily
+and practice controls; remembered practice preferences never change the daily quiz.
 
 Network behavior:
 
@@ -294,10 +354,10 @@ Do not implement deferred higher/lower, ranking, timed rounds or the removed pho
 
 | PR | Deliverable | Exit evidence |
 | --- | --- | --- |
-| 1. Rules and data proof | Confirm recommended rules, verify six real questions per league, document sources/terms, measure authoring effort and produce a static Trading Card prototype | Review all 24 questions for accuracy, ambiguity and quality; test the flow on a real phone; source proof for all four sports |
-| 2. Catalogue and daily sets | Schema/validator, explicit import CLI, deterministic selector, two tables/migration and immutable snapshots | Invalid content rejected; repeatable import; 120-day schedule simulation; date uniqueness on Postgres and SQLite |
-| 3. Saved gameplay API | Per-question state, answer/continue endpoints, receipts, revision conflicts, restart recovery and reveal filtering | End-to-end HTTP quiz, adversarial reveal checks, simultaneous requests and restart/resume tests |
-| 4. Playable interface | Accessible question/answer/reveal/result flow, durable reloads, retries and mobile layout | Component tests and browser tests against the real API; phone review with actual content |
+| 1. Rules and data proof | Confirm recommended rules, verify six real questions per league, document sources/terms, measure authoring effort and produce a static Trading Card prototype | Review all 24 questions for accuracy, ambiguity and quality; test daily/practice flows and league selection on a real phone; source proof for all four sports |
+| 2. Catalogue and quiz sets | Schema/validator, explicit import CLI, daily/practice selectors, two tables/migration and immutable snapshots | Invalid content rejected; repeatable import; 120-day daily simulation; all 15 practice selections; date uniqueness on Postgres and SQLite |
+| 3. Saved gameplay API | Daily/practice state, private practice starts, answer/continue endpoints, receipts, revision conflicts, restart recovery and reveal filtering | HTTP quizzes, server-enforced leagues/ownership, safe start retries, adversarial reveal checks and restart/resume tests |
+| 4. Playable interface | Daily/practice navigation, remembered multi-select league setup, accessible quiz flow, durable reloads, retries and mobile layout | Component/browser tests against the real API; phone review; preferences never alter daily content |
 | 5. Daily product integration | Quiz-specific stats/archive/share, midnight behavior, feature gate, home card and rename of the Stat Quiz design references | Correct counts/streaks, explicit archive links, unavailable states and three-game regressions |
 | 6. Content and release | At least 240 approved families, 30 queued sets, operational/backup checks, documentation and enablement | All release gates below; public four-game card/metadata appears only when enabled |
 
@@ -319,11 +379,19 @@ Integration tests run against SQLite and Postgres:
 - A fresh API host restores score, pending feedback, continuation position and final result.
 - Correct answers remain absent before submission and future answers stay private throughout.
 - Midnight/DST, archive bounds, withdrawn days, final-attempt replay and stats counted once.
+- All 15 practice league combinations return only selected leagues with balanced question counts.
+- Empty/unknown league lists, duplicate codes, unavailable pools and tampered league preferences.
+- Practice start retries create one round; mismatched retry payloads conflict; ownership is enforced.
+- Practice excludes today's/queued daily fact families, never changes the daily set and never enters
+  daily statistics, streaks, perfect counts or archives. Retention deletes practice data only.
 - Existing player-game and Spordle API contracts continue to pass.
 
 Browser coverage should play mixed correct/incorrect and perfect quizzes, reload at each state, drop
 a committed response and retry it, use two tabs, navigate an archive, share a result and exercise
-keyboard/touch layouts. Production assets must contain no catalogue answer data.
+keyboard/touch layouts. Include single/multiple/all-league selection, remembered preferences and blocked
+storage, empty selection, changing leagues mid-round, practice reload and clearly labelled practice
+sharing. Verify the daily quiz is identical for visitors with different practice preferences.
+Production assets must contain no catalogue answer data.
 Keep ordinary browser tests independent of live sports APIs using approved, attributed fixtures.
 
 Before enabling `NumbersDontLie:Enabled` in production:
@@ -332,6 +400,8 @@ Before enabling `NumbersDontLie:Enabled` in production:
 - [ ] All four league sources have passed the data/terms and repeatable-snapshot gate.
 - [ ] At least 240 approved independent families and a successful 120-day scheduling simulation.
 - [ ] At least 30 complete daily sets queued; shortage/withdrawal behavior tested.
+- [ ] All 15 league selections support complete practice rounds without spoiling queued dailies;
+      practice ownership, retries, retention and exclusion from daily statistics are verified.
 - [ ] Migration, API/component/browser suites and existing CI checks pass.
 - [ ] Backup and restore retain daily snapshots and attempts; verify additive deployment/rollback behavior.
 - [ ] Real iPhone/Safari and Android/Chrome play, text zoom, focus, dialogs and installed-PWA behavior checked.
@@ -349,13 +419,14 @@ do not claim a measured hosting cost before that evidence exists.
 
 ## 9. Deferred improvements
 
-Evaluate after real replay feedback: untimed practice, league-specific quizzes, timed challenge mode,
+Evaluate after real replay feedback: league-specific daily quizzes, timed challenge mode,
 higher/lower, ranking, records/milestones, full automatic multi-sport imports, more sports/competitions,
 accounts, leaderboards and richer per-sport analytics. Each needs its own content and scoring decision.
 Who's That Sportsman remains a separate deferred idea and is not a dependency of Numbers Don't Lie.
 
 ## 10. Starting point
 
-Begin with PR 1: the 24-question four-league source proof and a five-question Trading Card prototype.
+Begin with PR 1: the 24-question four-league source proof and a five-question Trading Card prototype
+covering both shared daily play and practice with league selection.
 Resolve rules and content feasibility there. This planning PR adds documentation only; it does not
 register a route, change the home page, import a new league or re-enable any removed game.
