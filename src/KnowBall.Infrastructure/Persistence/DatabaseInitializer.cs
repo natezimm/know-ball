@@ -10,7 +10,7 @@ public static class DatabaseInitializer
     /// Bump whenever the model changes. SQLite databases are created straight from the model with
     /// no migrations, so an older file cannot be brought up to date and has to be rebuilt.
     /// </summary>
-    public const int SqliteSchemaVersion = 2;
+    public const int SqliteSchemaVersion = 3;
 
     /// <summary>Applies migrations (Postgres) or creates the schema (SQLite).</summary>
     public static async Task InitializeAsync(IServiceProvider services, CancellationToken ct = default)

@@ -18,7 +18,7 @@ public static class DependencyInjection
         services.AddScoped<CrosswalkImportService>();
         services.AddScoped<PlayerSearchService>();
         services.AddSingleton(_ => SpordleWordBank.LoadEmbedded());
-        services.AddSingleton<SpordleGameService>();
+        services.AddScoped<SpordleGameService>();
 
         // The daily games, in the order the home page shows them.
         services.AddScoped<ScoutingReportGame>();

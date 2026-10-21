@@ -1,10 +1,13 @@
 using Microsoft.Extensions.Time.Testing;
+using KnowBall.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using KnowBall.Application.Games.Spordle;
 using static KnowBall.Application.Games.Spordle.LetterStatus;
 
 namespace KnowBall.UnitTests;
 
-public class SpordleGameServiceTests
+public class SpordleGameServiceTests : IDisposable
 {
     // One answer per length, so every game's answer is known: "dunk", "blitz" or "tackle".
     private static readonly SpordleWordBank Bank = new(
@@ -13,13 +16,25 @@ public class SpordleGameServiceTests
 
     private readonly FakeTimeProvider _clock = new(new DateTimeOffset(2026, 10, 13, 12, 0, 0, TimeSpan.Zero));
 
-    private SpordleGameService NewService(int maxActiveGames = SpordleGameService.MaxActiveGames) =>
-        new(Bank, _clock, new Random(1), maxActiveGames);
+    private readonly TestDb _database = new();
+    private readonly List<TriviaDbContext> _contexts = [];
+    private SpordleGameService NewService()
+    {
+        var db = _database.NewContext();
+        _contexts.Add(db);
+        return new(Bank, _clock, db, new Random(1));
+    }
+
+    public void Dispose()
+    {
+        foreach (var db in _contexts) db.Dispose();
+        _database.Dispose();
+    }
 
     [Fact]
-    public void Starting_a_game_returns_an_id_and_limits_but_no_answer()
+    public async Task Starting_a_game_returns_an_id_and_limits_but_no_answer()
     {
-        var game = NewService().CreateGame(4);
+        var game = (await NewService().CreateGameAsync(4));
 
         Assert.True(Guid.TryParse(game.GameId, out _));
         Assert.Equal(4, game.WordLength);
@@ -27,19 +42,19 @@ public class SpordleGameServiceTests
     }
 
     [Fact]
-    public void An_unsupported_length_starts_a_five_letter_game()
+    public async Task An_unsupported_length_starts_a_five_letter_game()
     {
-        Assert.Equal(5, NewService().CreateGame(9).WordLength);
-        Assert.Equal(5, NewService().CreateGame(null).WordLength);
+        Assert.Equal(5, (await NewService().CreateGameAsync(9)).WordLength);
+        Assert.Equal(5, (await NewService().CreateGameAsync(null)).WordLength);
     }
 
     [Fact]
-    public void A_wrong_guess_is_scored_without_revealing_the_answer()
+    public async Task A_wrong_guess_is_scored_without_revealing_the_answer()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
+        var game = await service.CreateGameAsync(5);
 
-        var result = service.SubmitGuess(game.GameId, "PUNTS").Result!;
+        var result = (await service.SubmitGuessAsync(game.GameId, "PUNTS")).Result!;
 
         Assert.True(result.Valid);
         Assert.Equal([Absent, Absent, Absent, Correct, Absent], result.Score);
@@ -50,28 +65,28 @@ public class SpordleGameServiceTests
     }
 
     [Fact]
-    public void Winning_completes_the_game_and_reveals_the_answer()
+    public async Task Winning_completes_the_game_and_reveals_the_answer()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
+        var game = await service.CreateGameAsync(5);
 
-        var result = service.SubmitGuess(game.GameId, "blitz").Result!;
+        var result = (await service.SubmitGuessAsync(game.GameId, "blitz")).Result!;
 
         Assert.True(result.Won);
         Assert.True(result.Complete);
         Assert.Equal("blitz", result.Answer);
-        Assert.Equal(SpordleFailure.Conflict, service.SubmitGuess(game.GameId, "blitz").Failure);
+        Assert.Equal(SpordleFailure.Conflict, (await service.SubmitGuessAsync(game.GameId, "blitz")).Failure);
     }
 
     [Fact]
-    public void The_sixth_miss_ends_the_game_and_reveals_the_answer()
+    public async Task The_sixth_miss_ends_the_game_and_reveals_the_answer()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
+        var game = await service.CreateGameAsync(5);
 
         SpordleGuessResult last = null!;
         foreach (var word in new[] { "about", "other", "which", "their", "there", "would" })
-            last = service.SubmitGuess(game.GameId, word).Result!;
+            last = (await service.SubmitGuessAsync(game.GameId, word)).Result!;
 
         Assert.False(last.Won);
         Assert.True(last.Complete);
@@ -80,13 +95,13 @@ public class SpordleGameServiceTests
     }
 
     [Fact]
-    public void A_word_outside_the_dictionary_does_not_use_an_attempt()
+    public async Task A_word_outside_the_dictionary_does_not_use_an_attempt()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
+        var game = await service.CreateGameAsync(5);
 
-        var invalid = service.SubmitGuess(game.GameId, "zzzzz").Result!;
-        var next = service.SubmitGuess(game.GameId, "punts").Result!;
+        var invalid = (await service.SubmitGuessAsync(game.GameId, "zzzzz")).Result!;
+        var next = (await service.SubmitGuessAsync(game.GameId, "punts")).Result!;
 
         Assert.False(invalid.Valid);
         Assert.Null(invalid.Score);
@@ -100,83 +115,84 @@ public class SpordleGameServiceTests
     [InlineData("bl1tz")]
     [InlineData("bli z")]
     [InlineData("dunk")]
-    public void Malformed_and_wrong_length_guesses_are_rejected(string? guess)
+    public async Task Malformed_and_wrong_length_guesses_are_rejected(string? guess)
     {
         var service = NewService();
-        var game = service.CreateGame(5);
+        var game = await service.CreateGameAsync(5);
 
-        var outcome = service.SubmitGuess(game.GameId, guess);
+        var outcome = (await service.SubmitGuessAsync(game.GameId, guess));
 
         Assert.Equal(SpordleFailure.Invalid, outcome.Failure);
-        Assert.Equal(6, service.SubmitGuess(game.GameId, "blitz").Result!.AttemptsRemaining + 1);
+        Assert.Equal(6, (await service.SubmitGuessAsync(game.GameId, "blitz")).Result!.AttemptsRemaining + 1);
     }
 
     [Fact]
-    public void Unknown_and_expired_games_are_not_found()
+    public async Task Unknown_and_expired_games_are_not_found()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
+        var game = await service.CreateGameAsync(5);
 
-        Assert.Equal(SpordleFailure.NotFound, service.SubmitGuess("nope", "blitz").Failure);
+        Assert.Equal(SpordleFailure.NotFound, (await service.SubmitGuessAsync("nope", "blitz")).Failure);
 
         _clock.Advance(SpordleGameService.IdleLifetime - TimeSpan.FromMinutes(1));
-        Assert.True(service.SubmitGuess(game.GameId, "punts").Ok); // activity keeps it alive
+        Assert.True((await service.SubmitGuessAsync(game.GameId, "punts")).Ok); // activity keeps it alive
 
         _clock.Advance(SpordleGameService.IdleLifetime);
-        Assert.Equal(SpordleFailure.NotFound, service.SubmitGuess(game.GameId, "blitz").Failure);
-        Assert.Equal(SpordleFailure.NotFound, service.GetHint(game.GameId, SpordleHintType.Letter).Failure);
+        Assert.Equal(SpordleFailure.NotFound, (await service.SubmitGuessAsync(game.GameId, "blitz")).Failure);
+        Assert.Equal(SpordleFailure.NotFound, (await service.GetHintAsync(game.GameId, SpordleHintType.Letter)).Failure);
     }
 
     [Fact]
-    public void The_oldest_game_is_evicted_when_the_store_is_full()
+    public async Task Expired_rows_are_purged_without_evicting_live_rounds()
     {
-        var service = NewService(maxActiveGames: 2);
-        var first = service.CreateGame(5);
-        var second = service.CreateGame(5);
-        var third = service.CreateGame(5);
-
-        Assert.Equal(SpordleFailure.NotFound, service.SubmitGuess(first.GameId, "blitz").Failure);
-        Assert.True(service.SubmitGuess(second.GameId, "punts").Ok);
-        Assert.True(service.SubmitGuess(third.GameId, "punts").Ok);
+        var old = await NewService().CreateGameAsync(5);
+        _clock.Advance(SpordleGameService.IdleLifetime);
+        var live = await NewService().CreateGameAsync(5);
+        using var db = _database.NewContext();
+        Assert.False(await db.SpordleSessions.AnyAsync(s => s.Id == Guid.Parse(old.GameId)));
+        Assert.True((await NewService().SubmitGuessAsync(live.GameId, "punts")).Ok);
+        Assert.Equal(SpordleFailure.NotFound, (await NewService().SubmitGuessAsync(old.GameId, "blitz")).Failure);
     }
 
     [Fact]
-    public void The_category_hint_names_the_answers_group_and_costs_nothing()
+    public async Task The_category_hint_names_the_answers_group_and_costs_nothing()
     {
         var service = NewService();
-        var game = service.CreateGame(6);
+        var game = await service.CreateGameAsync(6);
 
-        var hint = service.GetHint(game.GameId, SpordleHintType.Category).Result!;
+        var hint = (await service.GetHintAsync(game.GameId, SpordleHintType.Category)).Result!;
 
         Assert.Equal("Football", hint.Category);
         Assert.Null(hint.Letter);
-        Assert.Equal(5, service.SubmitGuess(game.GameId, "tackle").Result!.AttemptsRemaining);
+        Assert.Equal(5, (await service.SubmitGuessAsync(game.GameId, "tackle")).Result!.AttemptsRemaining);
     }
 
     [Fact]
-    public void The_letter_hint_skips_solved_positions_and_then_stays_the_same()
+    public async Task The_letter_hint_skips_solved_positions_and_then_stays_the_same()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
-        service.SubmitGuess(game.GameId, "glitz"); // solves every position but the first
+        var game = await service.CreateGameAsync(5);
+        await service.SubmitGuessAsync(game.GameId, "glitz"); // solves every position but the first
 
-        var hint = service.GetHint(game.GameId, SpordleHintType.Letter).Result!;
-        var again = service.GetHint(game.GameId, SpordleHintType.Letter).Result!;
+        var hint = (await service.GetHintAsync(game.GameId, SpordleHintType.Letter)).Result!;
+        var again = (await service.GetHintAsync(game.GameId, SpordleHintType.Letter)).Result!;
 
         Assert.Equal(1, hint.Position);
         Assert.Equal('b', hint.Letter);
         Assert.Equal(hint, again);
-        Assert.Equal(4, service.SubmitGuess(game.GameId, "punts").Result!.AttemptsRemaining);
+        Assert.Equal(4, (await service.SubmitGuessAsync(game.GameId, "punts")).Result!.AttemptsRemaining);
     }
 
     [Fact]
-    public void The_letter_hint_is_drawn_once_even_when_several_positions_are_open()
+    public async Task The_letter_hint_is_drawn_once_even_when_several_positions_are_open()
     {
         var service = NewService();
-        var game = service.CreateGame(6);
+        var game = await service.CreateGameAsync(6);
 
-        var hint = service.GetHint(game.GameId, SpordleHintType.Letter).Result!;
-        var repeats = Enumerable.Range(0, 10).Select(_ => service.GetHint(game.GameId, SpordleHintType.Letter).Result!);
+        var hint = (await service.GetHintAsync(game.GameId, SpordleHintType.Letter)).Result!;
+        var repeats = new List<SpordleHint>();
+        for (var i = 0; i < 10; i++)
+            repeats.Add((await service.GetHintAsync(game.GameId, SpordleHintType.Letter)).Result!);
 
         Assert.InRange(hint.Position!.Value, 1, 6);
         Assert.Equal("tackle"[hint.Position.Value - 1], hint.Letter);
@@ -184,13 +200,77 @@ public class SpordleGameServiceTests
     }
 
     [Fact]
-    public void Hints_are_refused_once_the_game_is_over()
+    public async Task Hints_are_refused_once_the_game_is_over()
     {
         var service = NewService();
-        var game = service.CreateGame(5);
-        service.SubmitGuess(game.GameId, "blitz");
+        var game = await service.CreateGameAsync(5);
+        await service.SubmitGuessAsync(game.GameId, "blitz");
 
-        Assert.Equal(SpordleFailure.Conflict, service.GetHint(game.GameId, SpordleHintType.Category).Failure);
-        Assert.Equal(SpordleFailure.Conflict, service.GetHint(game.GameId, SpordleHintType.Letter).Failure);
+        Assert.Equal(SpordleFailure.Conflict, (await service.GetHintAsync(game.GameId, SpordleHintType.Category)).Failure);
+        Assert.Equal(SpordleFailure.Conflict, (await service.GetHintAsync(game.GameId, SpordleHintType.Letter)).Failure);
     }
+    [Fact]
+    public async Task Fresh_services_retain_progress_hints_and_completion()
+    {
+        var game = await NewService().CreateGameAsync(5);
+        await NewService().SubmitGuessAsync(game.GameId, "glitz");
+        var hint = (await NewService().GetHintAsync(game.GameId, SpordleHintType.Letter)).Result!;
+        Assert.Equal(1, hint.Position);
+        Assert.Equal('b', hint.Letter);
+        Assert.Equal(hint, (await NewService().GetHintAsync(game.GameId, SpordleHintType.Letter)).Result);
+        Assert.Equal("Football", (await NewService().GetHintAsync(game.GameId, SpordleHintType.Category)).Result!.Category);
+        var won = (await NewService().SubmitGuessAsync(game.GameId, "blitz")).Result!;
+        Assert.True(won.Won);
+        Assert.Equal(4, won.AttemptsRemaining);
+        Assert.Equal(SpordleFailure.Conflict, (await NewService().SubmitGuessAsync(game.GameId, "about")).Failure);
+    }
+
+    [Fact]
+    public async Task Request_ids_replay_results_without_spending_another_attempt_even_after_completion()
+    {
+        var game = await NewService().CreateGameAsync(5);
+        var requestId = Guid.NewGuid();
+        var first = (await NewService().SubmitGuessAsync(game.GameId, "punts", requestId)).Result!;
+        var replay = (await NewService().SubmitGuessAsync(game.GameId, "PUNTS", requestId)).Result!;
+        Assert.Equal(first.AttemptsRemaining, replay.AttemptsRemaining);
+        Assert.Equal(first.Score, replay.Score);
+        Assert.Equal(SpordleFailure.Conflict, (await NewService().SubmitGuessAsync(game.GameId, "about", requestId)).Failure);
+        var winningId = Guid.NewGuid();
+        Assert.True((await NewService().SubmitGuessAsync(game.GameId, "blitz", winningId)).Result!.Won);
+        var wonAgain = (await NewService().SubmitGuessAsync(game.GameId, "blitz", winningId)).Result!;
+        Assert.True(wonAgain.Won);
+        Assert.Equal(4, wonAgain.AttemptsRemaining);
+    }
+
+    [Fact]
+    public async Task A_stale_write_reloads_and_scores_against_the_committed_attempt_count()
+    {
+        var game = await NewService().CreateGameAsync(5);
+        var conflict = new CompetingWrite(async () =>
+            Assert.True((await NewService().SubmitGuessAsync(game.GameId, "punts")).Ok));
+        using var db = _database.NewContext(conflict);
+        var service = new SpordleGameService(Bank, _clock, db, new Random(1));
+        var result = (await service.SubmitGuessAsync(game.GameId, "about")).Result!;
+        Assert.True(conflict.Ran);
+        Assert.Equal(4, result.AttemptsRemaining);
+        Assert.Equal(3, (await NewService().SubmitGuessAsync(game.GameId, "other")).Result!.AttemptsRemaining);
+    }
+
+    // Commit another request after this request reads, but before it saves. This guarantees
+    // that the revision check and retry execute without relying on thread timing.
+    private sealed class CompetingWrite(Func<Task> write) : SaveChangesInterceptor
+    {
+        public bool Ran { get; private set; }
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData, InterceptionResult<int> result, CancellationToken ct = default)
+        {
+            if (!Ran)
+            {
+                Ran = true;
+                await write();
+            }
+            return result;
+        }
+    }
+
 }

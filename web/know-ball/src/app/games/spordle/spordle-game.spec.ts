@@ -143,7 +143,7 @@ describe('SpordleGame', () => {
     type('punts');
     game.press('Enter');
     const request = http.expectOne(GUESSES);
-    expect(request.request.body).toEqual({ word: 'punts' });
+    expect(request.request.body).toEqual({ word: 'punts', requestId: expect.any(String) });
     request.flush(miss);
 
     expect(game.attempts()).toEqual([{ word: 'punts', score: miss.score }]);
@@ -203,6 +203,29 @@ describe('SpordleGame', () => {
 
     expect(game.message()).toBe('Guess must be 5 letters');
     expect(game.status()).toBe('playing');
+  });
+
+  it('reuses the request ID after a lost response, but not for the next scored row', () => {
+    startGame();
+    type('punts');
+    game.press('Enter');
+    const first = http.expectOne(GUESSES);
+    const id = first.request.body.requestId;
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    first.error(new ProgressEvent('error'));
+    game.press('Enter');
+    const retry = http.expectOne(GUESSES);
+    expect(retry.request.body.requestId).toBe(id);
+    retry.flush(miss);
+    vi.runAllTimers();
+    expect(game.attempts()).toHaveLength(1);
+    type('punts');
+    game.press('Enter');
+    const next = http.expectOne(GUESSES);
+    expect(next.request.body.requestId).not.toBe(id);
+    next.flush(miss);
+    vi.runAllTimers();
+    expect(game.attempts()).toHaveLength(2);
   });
 
   it('counts an abandoned game as a loss, but not an untouched one', () => {
