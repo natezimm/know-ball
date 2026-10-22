@@ -8,7 +8,9 @@ Version 1 contains three games: Spordle, Scouting Report and Career Path. The si
 Who's That Sportsman? was removed from the active project on 2026-10-20 after the photo/cutout review.
 It remains a [future enhancement](docs/future-games.md). **Numbers Don't Lie**, a cross-sport statistics quiz,
 is the proposed fourth game; its [implementation plan](docs/numbers-dont-lie-implementation-plan.md)
-defines the recommended rules, data proof and release gates. It is not implemented or launched.
+defines the recommended rules, data proof and release gates. A private [playable prototype](docs/prototypes/numbers-dont-lie/README.md)
+and [24-question source review](docs/numbers-dont-lie-data-sources.md) now support the first review gate.
+The production game is not implemented or launched.
 
 The remaining launch gates are production nightly-import evidence, backup and restore verification, real-phone
 and installed-PWA checks. See [the launch checklist](docs/implementation-plan.md#8-whats-left).
@@ -178,3 +180,4 @@ designs for the games not built yet and keeps its own dark palette.
 Player data comes from the Basketball-Reference mirror, Wikidata and ESPN's public feed; headshots and logos are
 the NBA's, linked from its CDN. This is fine for a personal project and would need revisiting for anything
 commercial. Details in [docs/research.md](docs/research.md).
+
