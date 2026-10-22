@@ -426,7 +426,13 @@ Who's That Sportsman remains a separate deferred idea and is not a dependency of
 
 ## 10. Starting point
 
+Delivery PR 1 now has a [private static prototype](prototypes/numbers-dont-lie/README.md) and
+[24-question source proof](numbers-dont-lie-data-sources.md). Source values have been checked; human review,
+physical-phone testing, repeatable NHL retrieval and production source approval remain open.
+The prototype is outside public routes/assets and does not implement the saved gameplay API.
+
 Begin with PR 1: the 24-question four-league source proof and a five-question Trading Card prototype
 covering both shared daily play and practice with league selection.
 Resolve rules and content feasibility there. This planning PR adds documentation only; it does not
 register a route, change the home page, import a new league or re-enable any removed game.
+

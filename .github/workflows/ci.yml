@@ -60,6 +60,8 @@ jobs:
           node-version: "22"
       - run: npm install --no-audit --no-fund
       - run: npm test
+      - name: Numbers Don't Lie prototype invariants
+        run: node --test ../../docs/prototypes/numbers-dont-lie/model.test.mjs
       - run: npm run build
 
   # Plays every game in Chromium against the real API and the production build, on SQLite with
@@ -84,6 +86,8 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
+      - name: Numbers Don't Lie prototype browser checks
+        run: node ../../docs/prototypes/numbers-dont-lie/browser-check.mjs
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
