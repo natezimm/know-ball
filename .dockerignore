@@ -8,7 +8,14 @@
 .claude
 .vscode
 artifacts
-docs
+docs/**
+!docs/prototypes/
+!docs/prototypes/numbers-dont-lie/
+!docs/prototypes/numbers-dont-lie/index.html
+!docs/prototypes/numbers-dont-lie/style.css
+!docs/prototypes/numbers-dont-lie/app.mjs
+!docs/prototypes/numbers-dont-lie/model.mjs
+!docs/prototypes/numbers-dont-lie/questions.json
 tests
 *.db
 *.tar.gz

@@ -2,6 +2,11 @@
 
 Checked October 22, 2026 (UTC). Delivery PR 1. **Status: 24 source-checked prototype questions; not approved production content.**
 
+October 23: the user requested hosting the existing review sample for on-site testing. The preview now
+publishes these 24 questions and credits at `/preview/numbers-dont-lie/index.html`; it is labeled as a
+sample and contains its answers in client assets. This is a packaging decision for the experiment,
+not a new finding about source permissions or approval of the future production catalogue.
+
 The [playable prototype](prototypes/numbers-dont-lie/README.md) tests five untimed questions, four choices,
 feedback after submission and daily versus league-selectable practice. The source values are checked;
 human editorial review, difficulty calibration, physical-phone review and the four-league production

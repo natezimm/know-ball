@@ -8,9 +8,10 @@ Version 1 contains three games: Spordle, Scouting Report and Career Path. The si
 Who's That Sportsman? was removed from the active project on 2026-10-20 after the photo/cutout review.
 It remains a [future enhancement](docs/future-games.md). **Numbers Don't Lie**, a cross-sport statistics quiz,
 is the proposed fourth game; its [implementation plan](docs/numbers-dont-lie-implementation-plan.md)
-defines the recommended rules, data proof and release gates. A private [playable prototype](docs/prototypes/numbers-dont-lie/README.md)
+defines the recommended rules, data proof and release gates. A [playable preview](docs/prototypes/numbers-dont-lie/README.md)
 and [24-question source review](docs/numbers-dont-lie-data-sources.md) now support the first review gate.
-The production game is not implemented or launched.
+The footer links to the hosted review sample at `/preview/numbers-dont-lie/index.html?ngsw-bypass=true`.
+It supports daily-preview and practice rounds; reloading resets progress. The full daily game is not launched.
 
 The remaining launch gates are production nightly-import evidence, backup and restore verification, real-phone
 and installed-PWA checks. See [the launch checklist](docs/implementation-plan.md#8-whats-left).

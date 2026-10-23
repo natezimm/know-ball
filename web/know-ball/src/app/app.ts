@@ -22,6 +22,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <nav aria-label="Project">
         <a href="https://github.com/natezimm/know-ball">GitHub</a>
         <a routerLink="/mockups">Design Lab</a>
+        <a href="/preview/numbers-dont-lie/index.html?ngsw-bypass=true">Numbers Don't Lie preview</a>
       </nav>
     </footer>
   `,
@@ -52,7 +53,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       border-top: 1px solid var(--tan); color: var(--muted); font-size: 15px;
     }
     .footer > span a { text-underline-offset: 3px; }
-    .footer nav a { color: var(--muted); font-size: 12px; }
+    .footer nav { flex-wrap: wrap; }
+    .footer nav a { color: var(--muted); font-size: 12px; white-space: normal; }
     .footer a:hover { color: var(--navy); }
     @media (max-width: 480px) {
       .bar { padding: 10px 14px; gap: 8px; }

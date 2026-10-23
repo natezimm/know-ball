@@ -6,9 +6,10 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
+    "postbuild": "node scripts/package-numbers-preview.mjs",
     "social-card": "node scripts/render-social-card.mjs",
     "test": "ng test --watch=false",
-    "e2e": "ng build && playwright test",
+    "e2e": "npm run build && playwright test",
     "watch": "ng build --watch --configuration development"
   },
   "dependencies": {
