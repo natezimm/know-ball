@@ -6,6 +6,7 @@ WORKDIR /web
 COPY web/know-ball/package.json web/know-ball/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY web/know-ball/ ./
+COPY docs/prototypes/numbers-dont-lie/ /docs/prototypes/numbers-dont-lie/
 RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
