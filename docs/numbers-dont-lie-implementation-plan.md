@@ -426,10 +426,17 @@ Who's That Sportsman remains a separate deferred idea and is not a dependency of
 
 ## 10. Starting point
 
+October 23 update: the user requested a hosted, reversible preview to test the design on the site before
+committing to the full implementation. The existing sample is now packaged at
+`/preview/numbers-dont-lie/index.html?ngsw-bypass=true`, linked from the footer and marked as a preview.
+This explicitly supersedes the local-only packaging restriction for these 24 review questions.
+The sample contains answers in browser assets, resets on reload and makes no database changes.
+Full-game content approval and backend/release gates below remain future work; preview hosting does not complete them.
+
 Delivery PR 1 now has a [private static prototype](prototypes/numbers-dont-lie/README.md) and
 [24-question source proof](numbers-dont-lie-data-sources.md). Source values have been checked; human review,
 physical-phone testing, repeatable NHL retrieval and production source approval remain open.
-The prototype is outside public routes/assets and does not implement the saved gameplay API.
+The preview does not implement the saved gameplay API.
 
 Begin with PR 1: the 24-question four-league source proof and a five-question Trading Card prototype
 covering both shared daily play and practice with league selection.

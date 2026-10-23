@@ -1,9 +1,22 @@
-# Numbers Don't Lie: private design proof
+# Numbers Don't Lie: design preview
 
 This is delivery PR 1 from the [implementation plan](../../numbers-dont-lie-implementation-plan.md).
-It is a static product/content review, outside Angular assets, routing, service-worker caching and the public home page.
-The three existing games remain the release. Do not copy this folder into `public`, `wwwroot` or a production bundle:
-**the JSON intentionally contains all answers.** Production scoring and answer filtering belong to the later saved API.
+On October 23, the user requested hosting this sample to review it on the actual site and decide whether to
+keep, tweak or revert it. After the hosted-preview PR is merged and deployed, open
+<https://knowball.nathanzimmerman.com/preview/numbers-dont-lie/index.html?ngsw-bypass=true>
+or use **Numbers Don't Lie preview** in the site footer.
+
+This is a labeled review sample. **Its JSON intentionally contains all answers.** Production scoring and
+answer filtering still belong to the later saved API. The preview has no daily stats or database writes.
+Reloading resets the round; league preferences persist locally. It uses the same source files as the local proof.
+
+`npm run build` packages only the five playback files and bundled fonts into `/preview/numbers-dont-lie/`.
+Tests, research notes and raw source data are excluded. JS/CSS/JSON have content-hashed names for updates;
+preview files stay outside service-worker precaching. The explicit HTML URL with `ngsw-bypass=true` also
+works for visitors with an older app worker. The page is marked noindex; it is publicly accessible, not access-controlled.
+
+To undo the hosted experiment, revert the hosted-preview PR and deploy main normally. There is no database
+migration or saved-game cleanup; the original source proof remains in docs for future work.
 
 ## Run
 
