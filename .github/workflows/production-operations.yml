@@ -28,7 +28,7 @@ jobs:
       GCP_HOST: ${{ secrets.GCP_HOST }}
       GCP_USER: ${{ secrets.GCP_USER }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up SSH using existing deploy secrets
         env:
           GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
@@ -39,11 +39,11 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$GCP_SSH_KEY" > ~/.ssh/operations
           chmod 600 ~/.ssh/operations
-          if [ -n "$GCP_KNOWN_HOSTS" ]; then
-            printf '%s\n' "$GCP_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          else
-            ssh-keyscan -t ed25519 "$GCP_HOST" > ~/.ssh/known_hosts
+          if [ -z "$GCP_KNOWN_HOSTS" ]; then
+            echo "::error::The GCP_KNOWN_HOSTS secret is not set (deploy/README.md)."
+            exit 1
           fi
+          printf '%s\n' "$GCP_KNOWN_HOSTS" > ~/.ssh/known_hosts
           scp -i ~/.ssh/operations -o StrictHostKeyChecking=yes deploy/operations.py "$GCP_USER@$GCP_HOST:know-ball/operations.py"
           ssh -i ~/.ssh/operations -o StrictHostKeyChecking=yes "$GCP_USER@$GCP_HOST" 'chmod 600 ~/know-ball/operations.py'
       - name: Collect production evidence
