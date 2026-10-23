@@ -58,7 +58,7 @@ renews the certificate with the others.
 ssh-keygen -t ed25519 -f ~/.ssh/knowball_deploy -N "" -C knowball-deploy
 cat ~/.ssh/knowball_deploy.pub >> ~/.ssh/authorized_keys
 cat ~/.ssh/knowball_deploy                                          # → secret GCP_SSH_KEY
-awk '{print "104.196.14.53", $1, $2}' /etc/ssh/ssh_host_ed25519_key.pub   # → secret GCP_KNOWN_HOSTS (optional)
+awk '{print "104.196.14.53", $1, $2}' /etc/ssh/ssh_host_ed25519_key.pub   # → secret GCP_KNOWN_HOSTS
 rm ~/.ssh/knowball_deploy                                           # once the secret is saved
 ```
 
@@ -69,7 +69,7 @@ Then in GitHub, **Settings → Secrets and variables → Actions → New reposit
 | `GCP_HOST` | `104.196.14.53` |
 | `GCP_USER` | your user on the VM (`nathan_a_zimmerman`) |
 | `GCP_SSH_KEY` | the private key printed above, all of it |
-| `GCP_KNOWN_HOSTS` | optional: the line the `awk` command printed. It pins the VM's identity; without it the job trusts whatever key the VM shows at deploy time |
+| `GCP_KNOWN_HOSTS` | the line the `awk` command printed. It pins the VM's identity, and the deploy refuses to run without it |
 
 If the deploy job says `Permission denied (publickey)`, the VM probably uses OS Login, which ignores
 `~/.ssh/authorized_keys`. Turn it off for this VM (metadata `enable-oslogin=FALSE`) or ask Claude to switch the
@@ -95,7 +95,7 @@ Every `docker compose` command needs to run from `~/know-ball`, where the compos
 ### 7. Production evidence, backups and recovery
 
 After the operations workflow is merged to main, open **Actions → Production operations → Run workflow**.
-It reuses `GCP_HOST`, `GCP_USER`, `GCP_SSH_KEY` and optional `GCP_KNOWN_HOSTS`; no new credentials are needed.
+It reuses `GCP_HOST`, `GCP_USER`, `GCP_SSH_KEY` and `GCP_KNOWN_HOSTS`; no new credentials are needed.
 It serializes with CI deployments, and only runs from main.
 
 | Action | What it does |
