@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "purpose": "Private design proof. Contains answers; never ship as production assets.",
+  "purpose": "Hosted prototype; answers are public. Not a production catalogue.",
   "questions": [
     {
       "id": "nba-points-2024",
@@ -46,7 +46,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nba-rebounds-2024",
@@ -92,7 +93,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nba-assists-2024",
@@ -138,7 +140,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nba-blocks-2024",
@@ -184,7 +187,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nba-steals-2024",
@@ -230,7 +234,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nba-threes-2024",
@@ -276,7 +281,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nfl-passing-2023",
@@ -324,7 +330,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nfl-rushing-2023",
@@ -372,7 +379,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nfl-receiving-2023",
@@ -420,7 +428,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nfl-passing-2022",
@@ -468,7 +477,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nfl-rushing-2022",
@@ -516,7 +526,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nfl-receiving-2022",
@@ -564,7 +575,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "mlb-homeRuns-2023",
@@ -610,7 +622,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "mlb-hits-2023",
@@ -656,7 +669,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "mlb-rbi-2023",
@@ -702,7 +716,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "mlb-homeRuns-2022",
@@ -748,7 +763,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "mlb-hits-2022",
@@ -794,7 +810,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "mlb-rbi-2022",
@@ -840,7 +857,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nhl-points-2024",
@@ -886,7 +904,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nhl-goals-2024",
@@ -932,7 +951,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nhl-assists-2024",
@@ -978,7 +998,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nhl-points-2023",
@@ -1024,7 +1045,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nhl-goals-2023",
@@ -1070,7 +1092,8 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
     },
     {
       "id": "nhl-assists-2023",
@@ -1116,6 +1139,1255 @@
       },
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-awards-2010",
+      "revision": 1,
+      "factFamily": "nba-awards-2010",
+      "league": "nba",
+      "season": "2010–11",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2010–11 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Derrick Rose"
+        },
+        {
+          "id": "p1",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p2",
+          "label": "Kobe Bryant"
+        },
+        {
+          "id": "p3",
+          "label": "Kevin Durant"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Derrick Rose received the NBA regular-season MVP for 2010–11. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-awards-2006",
+      "revision": 1,
+      "factFamily": "nba-awards-2006",
+      "league": "nba",
+      "season": "2006–07",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2006–07 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dirk Nowitzki"
+        },
+        {
+          "id": "p1",
+          "label": "Steve Nash"
+        },
+        {
+          "id": "p2",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p3",
+          "label": "Kobe Bryant"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dirk Nowitzki received the NBA regular-season MVP for 2006–07. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-awards-2013",
+      "revision": 1,
+      "factFamily": "nba-awards-2013",
+      "league": "nba",
+      "season": "2013–14",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2013–14 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kevin Durant"
+        },
+        {
+          "id": "p1",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p2",
+          "label": "Stephen Curry"
+        },
+        {
+          "id": "p3",
+          "label": "James Harden"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kevin Durant received the NBA regular-season MVP for 2013–14. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-1997",
+      "revision": 1,
+      "factFamily": "nhl-awards-1997",
+      "league": "nhl",
+      "season": "1997–98",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 1997–98 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dominik Hasek"
+        },
+        {
+          "id": "p1",
+          "label": "Jaromir Jagr"
+        },
+        {
+          "id": "p2",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Sakic"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dominik Hasek received the Hart Memorial Trophy for 1997–98. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-2002",
+      "revision": 1,
+      "factFamily": "nhl-awards-2002",
+      "league": "nhl",
+      "season": "2002–03",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 2002–03 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Peter Forsberg"
+        },
+        {
+          "id": "p1",
+          "label": "Joe Sakic"
+        },
+        {
+          "id": "p2",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p3",
+          "label": "Jaromir Jagr"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Peter Forsberg received the Hart Memorial Trophy for 2002–03. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-2014",
+      "revision": 1,
+      "factFamily": "nhl-awards-2014",
+      "league": "nhl",
+      "season": "2014–15",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 2014–15 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carey Price"
+        },
+        {
+          "id": "p1",
+          "label": "Sidney Crosby"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Ovechkin"
+        },
+        {
+          "id": "p3",
+          "label": "Patrick Kane"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Carey Price received the Hart Memorial Trophy for 2014–15. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-1997",
+      "revision": 1,
+      "factFamily": "mlb-awards-1997",
+      "league": "mlb",
+      "season": "1997",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the American League MVP for the 1997 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ken Griffey Jr."
+        },
+        {
+          "id": "p1",
+          "label": "Frank Thomas"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Rodriguez"
+        },
+        {
+          "id": "p3",
+          "label": "Juan Gonzalez"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ken Griffey Jr. received the American League MVP for 1997. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-2001",
+      "revision": 1,
+      "factFamily": "mlb-awards-2001",
+      "league": "mlb",
+      "season": "2001",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the American League MVP for the 2001 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ichiro Suzuki"
+        },
+        {
+          "id": "p1",
+          "label": "Jason Giambi"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Rodriguez"
+        },
+        {
+          "id": "p3",
+          "label": "Manny Ramirez"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ichiro Suzuki received the American League MVP for 2001. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-2018",
+      "revision": 1,
+      "factFamily": "mlb-awards-2018",
+      "league": "mlb",
+      "season": "2018",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the American League MVP for the 2018 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Mookie Betts"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Trout"
+        },
+        {
+          "id": "p2",
+          "label": "Jose Altuve"
+        },
+        {
+          "id": "p3",
+          "label": "Aaron Judge"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Mookie Betts received the American League MVP for 2018. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2007",
+      "revision": 1,
+      "factFamily": "nfl-awards-2007",
+      "league": "nfl",
+      "season": "2007",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2007 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Peyton Manning"
+        },
+        {
+          "id": "p2",
+          "label": "Brett Favre"
+        },
+        {
+          "id": "p3",
+          "label": "Randy Moss"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tom Brady received the AP NFL MVP for 2007. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.patriots.com/news/tom-brady-bio",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2010",
+      "revision": 1,
+      "factFamily": "nfl-awards-2010",
+      "league": "nfl",
+      "season": "2010",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2010 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Michael Vick"
+        },
+        {
+          "id": "p2",
+          "label": "Aaron Rodgers"
+        },
+        {
+          "id": "p3",
+          "label": "Philip Rivers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tom Brady received the AP NFL MVP for 2010. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.patriots.com/news/tom-brady-bio",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2017",
+      "revision": 1,
+      "factFamily": "nfl-awards-2017",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2017 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Carson Wentz"
+        },
+        {
+          "id": "p2",
+          "label": "Todd Gurley"
+        },
+        {
+          "id": "p3",
+          "label": "Antonio Brown"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tom Brady received the AP NFL MVP for 2017. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.patriots.com/news/tom-brady-bio",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2010",
+      "revision": 1,
+      "factFamily": "nba-teams-2010",
+      "league": "nba",
+      "season": "2010–11",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2010–11 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dallas Mavericks"
+        },
+        {
+          "id": "p1",
+          "label": "Miami Heat"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Lakers"
+        },
+        {
+          "id": "p3",
+          "label": "Boston Celtics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dallas Mavericks won the NBA championship for 2010–11. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2003",
+      "revision": 1,
+      "factFamily": "nba-teams-2003",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2003–04 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Detroit Pistons"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Lakers"
+        },
+        {
+          "id": "p2",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p3",
+          "label": "Indiana Pacers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Detroit Pistons won the NBA championship for 2003–04. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2018",
+      "revision": 1,
+      "factFamily": "nba-teams-2018",
+      "league": "nba",
+      "season": "2018–19",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2018–19 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Toronto Raptors"
+        },
+        {
+          "id": "p1",
+          "label": "Golden State Warriors"
+        },
+        {
+          "id": "p2",
+          "label": "Milwaukee Bucks"
+        },
+        {
+          "id": "p3",
+          "label": "Philadelphia 76ers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Toronto Raptors won the NBA championship for 2018–19. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-1998",
+      "revision": 1,
+      "factFamily": "nhl-teams-1998",
+      "league": "nhl",
+      "season": "1998–99",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 1998–99 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dallas Stars"
+        },
+        {
+          "id": "p1",
+          "label": "Buffalo Sabres"
+        },
+        {
+          "id": "p2",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p3",
+          "label": "Colorado Avalanche"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dallas Stars won the Stanley Cup for 1998–99. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-2002",
+      "revision": 1,
+      "factFamily": "nhl-teams-2002",
+      "league": "nhl",
+      "season": "2002–03",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 2002–03 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New Jersey Devils"
+        },
+        {
+          "id": "p1",
+          "label": "Mighty Ducks of Anaheim"
+        },
+        {
+          "id": "p2",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p3",
+          "label": "Ottawa Senators"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "New Jersey Devils won the Stanley Cup for 2002–03. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-2018",
+      "revision": 1,
+      "factFamily": "nhl-teams-2018",
+      "league": "nhl",
+      "season": "2018–19",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 2018–19 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "St. Louis Blues"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Bruins"
+        },
+        {
+          "id": "p2",
+          "label": "Washington Capitals"
+        },
+        {
+          "id": "p3",
+          "label": "Tampa Bay Lightning"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "St. Louis Blues won the Stanley Cup for 2018–19. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2016",
+      "revision": 1,
+      "factFamily": "mlb-teams-2016",
+      "league": "mlb",
+      "season": "2016",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2016 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Chicago Cubs"
+        },
+        {
+          "id": "p1",
+          "label": "Cleveland Indians"
+        },
+        {
+          "id": "p2",
+          "label": "Boston Red Sox"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Dodgers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chicago Cubs won the World Series for 2016. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/world-series",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2015",
+      "revision": 1,
+      "factFamily": "mlb-teams-2015",
+      "league": "mlb",
+      "season": "2015",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2015 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kansas City Royals"
+        },
+        {
+          "id": "p1",
+          "label": "New York Mets"
+        },
+        {
+          "id": "p2",
+          "label": "Toronto Blue Jays"
+        },
+        {
+          "id": "p3",
+          "label": "St. Louis Cardinals"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kansas City Royals won the World Series for 2015. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/world-series",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2019",
+      "revision": 1,
+      "factFamily": "mlb-teams-2019",
+      "league": "mlb",
+      "season": "2019",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2019 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Washington Nationals"
+        },
+        {
+          "id": "p1",
+          "label": "Houston Astros"
+        },
+        {
+          "id": "p2",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Braves"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Washington Nationals won the World Series for 2019. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/world-series",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-1985",
+      "revision": 1,
+      "factFamily": "nfl-teams-1985",
+      "league": "nfl",
+      "season": "1985",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 1985 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Chicago Bears"
+        },
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Miami Dolphins"
+        },
+        {
+          "id": "p3",
+          "label": "Dallas Cowboys"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chicago Bears won the Super Bowl for 1985. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.espn.com/nfl/superbowl/history/winners",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-1999",
+      "revision": 1,
+      "factFamily": "nfl-teams-1999",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 1999 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "St. Louis Rams"
+        },
+        {
+          "id": "p1",
+          "label": "Tennessee Titans"
+        },
+        {
+          "id": "p2",
+          "label": "Denver Broncos"
+        },
+        {
+          "id": "p3",
+          "label": "Minnesota Vikings"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "St. Louis Rams won the Super Bowl for 1999. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.espn.com/nfl/superbowl/history/winners",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-2017",
+      "revision": 1,
+      "factFamily": "nfl-teams-2017",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 2017 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Philadelphia Eagles"
+        },
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Pittsburgh Steelers"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Falcons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Philadelphia Eagles won the Super Bowl for 2017. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.espn.com/nfl/superbowl/history/winners",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-2007",
+      "revision": 1,
+      "factFamily": "nba-seasons-2007",
+      "league": "nba",
+      "season": "2007–08",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Kobe Bryant win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2007–08"
+        },
+        {
+          "id": "p1",
+          "label": "2005–06"
+        },
+        {
+          "id": "p2",
+          "label": "2009–10"
+        },
+        {
+          "id": "p3",
+          "label": "2011–12"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kobe Bryant earned the NBA regular-season MVP for the 2007–08 season.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-2016",
+      "revision": 1,
+      "factFamily": "nba-seasons-2016",
+      "league": "nba",
+      "season": "2016–17",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Russell Westbrook win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2016–17"
+        },
+        {
+          "id": "p1",
+          "label": "2013–14"
+        },
+        {
+          "id": "p2",
+          "label": "2014–15"
+        },
+        {
+          "id": "p3",
+          "label": "2018–19"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Russell Westbrook earned the NBA regular-season MVP for the 2016–17 season.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-1994",
+      "revision": 1,
+      "factFamily": "nhl-seasons-1994",
+      "league": "nhl",
+      "season": "1994–95",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Eric Lindros win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1994–95"
+        },
+        {
+          "id": "p1",
+          "label": "1991–92"
+        },
+        {
+          "id": "p2",
+          "label": "1997–98"
+        },
+        {
+          "id": "p3",
+          "label": "2000–01"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Eric Lindros earned the Hart Memorial Trophy for the 1994–95 season.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-2009",
+      "revision": 1,
+      "factFamily": "nhl-seasons-2009",
+      "league": "nhl",
+      "season": "2009–10",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Henrik Sedin win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2009–10"
+        },
+        {
+          "id": "p1",
+          "label": "2006–07"
+        },
+        {
+          "id": "p2",
+          "label": "2012–13"
+        },
+        {
+          "id": "p3",
+          "label": "2015–16"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Henrik Sedin earned the Hart Memorial Trophy for the 2009–10 season.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-2009",
+      "revision": 1,
+      "factFamily": "mlb-seasons-2009",
+      "league": "mlb",
+      "season": "2009",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Joe Mauer win the American League MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2009"
+        },
+        {
+          "id": "p1",
+          "label": "2006"
+        },
+        {
+          "id": "p2",
+          "label": "2012"
+        },
+        {
+          "id": "p3",
+          "label": "2015"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Joe Mauer earned the American League MVP for the 2009 season.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-1990",
+      "revision": 1,
+      "factFamily": "mlb-seasons-1990",
+      "league": "mlb",
+      "season": "1990",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Rickey Henderson win the American League MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1990"
+        },
+        {
+          "id": "p1",
+          "label": "1987"
+        },
+        {
+          "id": "p2",
+          "label": "1993"
+        },
+        {
+          "id": "p3",
+          "label": "1996"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Rickey Henderson earned the American League MVP for the 1990 season.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2015",
+      "revision": 1,
+      "factFamily": "nfl-seasons-2015",
+      "league": "nfl",
+      "season": "2015",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Cam Newton win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2015"
+        },
+        {
+          "id": "p1",
+          "label": "2012"
+        },
+        {
+          "id": "p2",
+          "label": "2013"
+        },
+        {
+          "id": "p3",
+          "label": "2017"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Cam Newton earned the AP NFL MVP for the 2015 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/panthers-release-cam-newton-after-nine-seasons-0ap3000001107394",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2012",
+      "revision": 1,
+      "factFamily": "nfl-seasons-2012",
+      "league": "nfl",
+      "season": "2012",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Adrian Peterson win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2012"
+        },
+        {
+          "id": "p1",
+          "label": "2009"
+        },
+        {
+          "id": "p2",
+          "label": "2010"
+        },
+        {
+          "id": "p3",
+          "label": "2014"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Adrian Peterson earned the AP NFL MVP for the 2012 season.",
+      "source": {
+        "url": "https://www.cbssports.com/nfl/news/adrian-peterson-takes-home-2012-nfl-mvp-opoy-awards/",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
       "publicationStatus": "prototype-only"
     }
   ]
