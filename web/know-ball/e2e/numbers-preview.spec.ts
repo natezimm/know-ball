@@ -12,11 +12,11 @@ test('the deployed preview opens from the footer and plays daily and selected-le
   for (let index = 0; index < 5; index++) {
     await page.locator(`input[value="${index === 1 ? 'p1' : 'p0'}"]`).check();
     await page.getByRole('button', { name:'Lock in answer' }).click();
-    await expect(page.locator('.feedback .values li')).toHaveCount(4);
+    await expect(page.locator('.feedback .source a').first()).toBeVisible();
     await page.getByRole('button', { name:index === 4 ? 'See results' : 'Next question' }).click();
   }
   await expect(page.locator('.score')).toHaveText('4 / 5');
-  await page.getByRole('button', { name:'Choose practice leagues' }).click();
+  await page.getByRole('button', { name:'Customize practice' }).click();
   for (const name of ['NBA', 'MLB']) await page.getByRole('checkbox', { name, exact:true }).uncheck();
   await page.getByRole('button', { name:'Start practice' }).click();
   const leagues: string[] = [];
@@ -31,9 +31,9 @@ test('the deployed preview opens from the footer and plays daily and selected-le
   expect(new Set(leagues).size).toBe(2);
   await expect(page.locator('.score')).toHaveText('5 / 5');
   await page.reload();
-  await expect(page.getByRole('button', { name:'Play daily preview', exact:true })).toBeVisible();
+  await expect(page.getByRole('button', { name:'View today’s result', exact:true })).toBeVisible();
   await page.getByRole('button', { name:'Practice', exact:true }).click();
-  await expect(page.locator('input:checked')).toHaveCount(2);
+  await expect(page.locator('input[name="league"]:checked')).toHaveCount(2);
   for (const name of ['NFL', 'NHL']) await expect(page.getByRole('checkbox', { name, exact:true })).toBeChecked();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   // Shipped assets must be real static resources, not the Angular HTML fallback.

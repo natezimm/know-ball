@@ -56,3 +56,5 @@ details { border-top:1px solid #b6b8bd; padding:14px 0; }
 summary { cursor:pointer; font-weight:700; }
 footer { border-top:2px solid var(--navy); padding-bottom:calc(20px + env(safe-area-inset-bottom)); flex-wrap:wrap; }
 @media(max-width:380px) { header { padding:16px; } .wordmark { font-size:34px; } .stamp { font-size:11px; } main { padding:24px 16px 36px; } .card { padding:16px; } .leagues { grid-template-columns:1fr; } }
+/* Separate the result actions on narrow screens. */
+#replay, #again, #share { display: block; margin-top: 12px; }

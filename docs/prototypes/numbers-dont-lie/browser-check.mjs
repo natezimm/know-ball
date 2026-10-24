@@ -35,19 +35,19 @@ try {
     await page.locator(`input[value="${i === 1 ? 'p1' : 'p0'}"]`).check();
     await page.getByRole('button', { name:'Lock in answer' }).click();
     assert.equal(await page.locator('input:disabled').count(), 4);
-    assert.equal(await page.locator('.feedback .values li').count(), 4);
+    assert.ok(await page.locator('.feedback .source a').count() >= 1);
     await page.getByRole('button', { name:i === 4 ? 'See results' : 'Next question' }).click();
   }
   assert.equal(await page.locator('.score').textContent(), '4 / 5');
   assert.equal(await page.locator('details').count(), 5);
-  await page.getByRole('button', { name:'Choose practice leagues' }).click();
-  for (const check of await page.getByRole('checkbox').all()) await check.uncheck();
+  await page.getByRole('button', { name:'Customize practice' }).click();
+  for (const check of await page.locator('input[name="league"]').all()) await check.uncheck();
   await page.getByRole('button', { name:'Start practice' }).click();
   assert.match(await page.locator('#error').textContent(), /Choose at least one/);
   await page.getByRole('checkbox', { name:'NHL', exact:true }).check();
   await page.reload();
   await page.getByRole('button', { name:'Practice', exact:true }).click();
-  assert.equal(await page.locator('input:checked').count(), 1);
+  assert.equal(await page.locator('input[name="league"]:checked').count(), 1);
   assert.equal(await page.getByRole('checkbox', { name:'NHL', exact:true }).isChecked(), true);
   await page.getByRole('button', { name:'Start practice' }).click();
   for (let i = 0; i < 5; i++) {
@@ -62,9 +62,21 @@ try {
     await page.getByRole('button', { name:i === 4 ? 'See results' : 'Next question' }).click();
   }
   assert.equal(await page.locator('.score').textContent(), '5 / 5');
+  await page.getByRole('button', { name:'Play another round', exact:true }).click();
+  assert.match(await page.locator('.meta').first().textContent(), /Practice · NHL/);
+  await page.getByRole('button', { name:'Practice', exact:true }).click();
+  await page.getByText('Customize topics and eras', {exact:true}).click();
+  for (const input of await page.locator('input[name="topic"]').all()) await input.uncheck();
+  await page.getByRole('button', {name:'Start practice'}).click();
+  assert.match(await page.locator('#error').textContent(), /Select at least one topic/);
   await page.getByRole('button', { name:'Daily preview', exact:true }).click();
-  await page.getByRole('button', { name:'Play daily preview', exact:true }).click();
-  assert.equal(await page.locator('h2').textContent(), firstPrompt);
+  await page.getByRole('button', { name:'View today’s result', exact:true }).click();
+  assert.equal(await page.locator('.score').textContent(), '4 / 5');
+  await page.getByRole('button', { name:'Share result' }).click();
+  await page.locator('#share-status').filter({hasText:/Copied|Numbers/}).waitFor();
+  await page.reload();
+  await page.getByRole('button', { name:'View today’s result' }).click();
+  assert.equal(await page.locator('.score').textContent(), '4 / 5');
   for (const width of [320, 390, 1280]) {
     await page.setViewportSize({ width, height:900 });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
@@ -83,7 +95,7 @@ try {
   const blockedPage = await blocked.newPage();
   await blockedPage.goto(url);
   await blockedPage.getByRole('button', { name:'Practice', exact:true }).click();
-  assert.equal(await blockedPage.locator('input:checked').count(), 4);
+  assert.equal(await blockedPage.locator('input[name="league"]:checked').count(), 4);
   assert.deepEqual(errors, []);
   console.log('PASS: daily 4/5, practice 5/5, feedback/review, empty selection, preferences, blocked storage, abandon cancel, daily independence and 320/390/1280px layouts.');
 } finally { await browser?.close(); server.close(); }

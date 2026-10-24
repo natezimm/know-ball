@@ -7,8 +7,9 @@ keep, tweak or revert it. After the hosted-preview PR is merged and deployed, op
 or use **Numbers Don't Lie preview** in the site footer.
 
 This is a labeled review sample. **Its JSON intentionally contains all answers.** Production scoring and
-answer filtering still belong to the later saved API. The preview has no daily stats or database writes.
-Reloading resets the round; league preferences persist locally. It uses the same source files as the local proof.
+answer filtering still belong to the later saved API. The preview has no database writes.
+Completed daily results, completion streaks, practice best and recent questions persist locally.
+Unfinished rounds reset on reload. See [expanded preview behavior](../../numbers-preview-expansion.md).
 
 `npm run build` packages only the five playback files and bundled fonts into `/preview/numbers-dont-lie/`.
 Tests, research notes and raw source data are excluded. JS/CSS/JSON have content-hashed names for updates;
@@ -42,14 +43,14 @@ selects an existing executable. `PROTOTYPE_SCREENSHOT` saves a mobile-width imag
 
 ## What to review
 
-- Daily preview: a fixed five-question sample, one per league plus an NBA bonus; identical regardless of practice selection.
+- Daily preview: five questions selected deterministically by Eastern date, all leagues represented; independent of practice selection.
 - Practice: all 15 nonempty league combinations, evenly allocated five-question rounds and remembered choices.
 - Native radio choices, explicit Lock in answer, one submission per question, feedback before Next, correct count and review.
-- Both comparison and exact-value prompts; source credits and all four supporting values after each answer.
+- Stats, award winners, championship teams and historical seasons; source credits after every answer.
+- Optional topic and era filters, fresh-question preference, instant replay and spoiler-free share text.
 - A cancelled abandon prompt preserves the current feedback. Leaving an answered unfinished round requires confirmation.
 
-Reload starts over; only league preferences persist. There is no backend, durable progress, real calendar rollover,
-statistics, archive, sharing, daily queue reservation or production feature gate in this prototype.
+There is no backend, cross-device progress, archive, daily queue reservation or production feature gate.
 Practice deliberately reuses the small review pool, so it can overlap the daily sample. It does not demonstrate
 the production no-spoilers reservation policy or a sustainable difficulty mix for every filter.
 
@@ -59,7 +60,7 @@ For each question in [the source review](../../numbers-dont-lie-data-sources.md)
 whether the distractors feel plausible, perceived difficulty and any wording correction.
 All difficulty labels are hypotheses; automated checks do not establish that a quiz is fun.
 
-- [ ] Human review of all 24 questions and both templates.
+- [ ] Human review of all 56 questions and their difficulty labels.
 - [ ] Play one daily and one single-league practice round; record completion time and enjoyment.
 - [ ] Try a mixed-league round, change selections and reload the setup.
 - [ ] Physical iPhone/Safari and Android/Chrome: keyboard focus, zoom, long names, safe area, scrolling and abandonment.
