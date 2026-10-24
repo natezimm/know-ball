@@ -33,7 +33,7 @@ incomplete. Current evidence and remaining gates are in [section 8](#8-whats-lef
 - **Automated verification**: the latest CI passed backend and Angular tests, integration tests on SQLite and
   Postgres, importer repeatability, Docker smoke checks, and Playwright gameplay. The historical run included
   the now-removed photo game; current tests cover the three active games. See the run linked in section 8 rather than treating older test counts as current.
-- **Hosted**: GCP VM `portfolio-vm`, behind nginx, deployed from main through GHCR and SSH.
+- **Hosted**: a GCP VM, behind nginx, deployed from main through GHCR and SSH.
 - **Still unverified**: two scheduled production imports in succession, backups and restore, and real-phone/PWA installation and update behavior. A green live-source canary is separate from
   the production nightly-import gate.
 - **Design**: one option chosen per game from the `/mockups` gallery (below).
@@ -280,7 +280,7 @@ Each has a default so work isn't blocked; say so if you'd choose differently.
 | Career Path jersey hint | Dropped for lack of data; position, draft and college hints instead |
 | Nightly source | ESPN's unofficial feed, trying its second host on failure; keep existing data if both fail. No balldontlie fallback is implemented |
 | Spordle | Play-anytime like Nerdle; daily mode is a proposed post-launch increment, not implemented |
-| Hosting | GCP VM `portfolio-vm`, nginx, GHCR image and SSH deployment from CI; see deploy/README.md |
+| Hosting | A GCP VM, nginx, GHCR image and SSH deployment from CI; see deploy/README.md |
 | Champions by season | Not entered for version 1; it comes with Who's the GOAT? and Sportle, which need it |
 | A different theme per game | No. One theme for the site; each game gets its own trim colour, like cards from one set |
 | Fourth game | Undecided; Who's That is deferred. Compare alternatives after the three-game launch. |
