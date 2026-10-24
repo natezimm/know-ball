@@ -1,6 +1,6 @@
 # Deploying Know Ball
 
-Know Ball runs on `portfolio-vm` (GCP, us-east1) at **https://knowball.nathanzimmerman.com**, next to the
+Know Ball runs on a GCP VM (us-east1) at **https://knowball.nathanzimmerman.com**, next to the
 other apps on that machine. The host's nginx owns ports 80 and 443 and forwards this domain to the site on
 `127.0.0.1:8090`. Postgres and the importer run beside it in Docker and are not reachable from outside.
 
@@ -67,7 +67,7 @@ Then in GitHub, **Settings → Secrets and variables → Actions → New reposit
 | Secret | Value |
 | --- | --- |
 | `GCP_HOST` | `203.0.113.10` |
-| `GCP_USER` | your user on the VM (`deploy-user`) |
+| `GCP_USER` | your user on the VM |
 | `GCP_SSH_KEY` | the private key printed above, all of it |
 | `GCP_KNOWN_HOSTS` | the line the `awk` command printed. It pins the VM's identity, and the deploy refuses to run without it |
 
