@@ -49,7 +49,7 @@ incomplete. Current evidence and remaining gates are in [section 8](#8-whats-lef
 
 | Game | Pick | Consequences for the build |
 | --- | --- | --- |
-| Scouting Report | B, Guess cards | Headshot on every guess, so players need NBA ids. Guess box docked at the bottom. The share grid is generated from the clue colours, since the cards themselves don't make one. |
+| Scouting Report | Guess board (2026-10-24; was B, Guess cards) | Column headers once, one row per guess oldest first, eight row slots, team logos, cells flip in and arrows nudge toward the answer. Guess box docked at the bottom. The share grid is generated from the clue colours. |
 | Who's That Sportsman? | Deferred | Removed from the active project on 2026-10-20; cutouts did not meet the quality bar. See [future games](future-games.md). |
 | Career Path | B, Journey list | Needs every player's team history with years. Team names are shown as text, so defunct teams (Sonics, Nets in New Jersey) can use a text badge where no logo exists. |
 | Numbers Don't Lie (formerly Stat Quiz) | Multiple choice, proposed | Cross-sport daily quiz; recommended five questions, four options, untimed. The [new plan](numbers-dont-lie-implementation-plan.md) supersedes the earlier timer/speed-bonus sketch. |
@@ -158,11 +158,12 @@ Scouting Report itself:
 
 | Attribute | Green | Yellow | Otherwise |
 | --- | --- | --- | --- |
-| Team, conference, division | Same | none | Grey |
+| Team | Same | A team the answer used to play for (franchise, so SuperSonics count as Thunder) | Grey |
+| Conference, division | Same | none | Grey |
 | Position | Identical | Shares a position (G and G-F) | Grey |
 | Height | Same | Within 2 inches, with arrow | Grey with arrow |
 | Age | Same | Within 2 years, with arrow | Grey with arrow |
-| Number | Same | Within 3, with arrow | Grey with arrow |
+| Number | Same | Within 2, with arrow; "0" against "00" | Grey with arrow |
 
 - Share text: `Scouting Report #142 4/8` plus one row of seven squares per guess.
 

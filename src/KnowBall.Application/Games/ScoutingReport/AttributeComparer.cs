@@ -8,7 +8,8 @@ namespace KnowBall.Application.Games.ScoutingReport;
 /// <param name="State">"ok" (same), "close" or "miss".</param>
 /// <param name="Arrow">"up" if the answer is higher, "down" if lower; null when the clue is right or cannot be compared.</param>
 /// <param name="Label">A longer form of the value for display, such as the team's name.</param>
-public sealed record Clue(string Value, string State, string? Arrow = null, string? Label = null);
+/// <param name="Image">A picture of the value, such as the team's logo.</param>
+public sealed record Clue(string Value, string State, string? Arrow = null, string? Label = null, string? Image = null);
 
 /// <summary>The rules that colour each clue. Pure functions, so every rule is unit-tested.</summary>
 public static class AttributeComparer
@@ -22,11 +23,21 @@ public static class AttributeComparer
 
     public const int HeightWindow = 2;
     public const int AgeWindow = 2;
-    public const int NumberWindow = 3;
+    public const int NumberWindow = 2;
 
-    /// <summary>Team, conference and division: right or wrong, nothing in between.</summary>
+    /// <summary>Conference and division: right or wrong, nothing in between.</summary>
     public static Clue Exact(string? guess, string? answer, string? label = null) =>
         new(guess ?? Unknown, guess is not null && string.Equals(guess, answer, StringComparison.OrdinalIgnoreCase) ? Ok : Miss, Label: label);
+
+    /// <summary>The answer's team is right; a team the answer used to play for is close.</summary>
+    public static Clue Team(string? guess, string? answer, IReadOnlyCollection<string>? formerTeams, string? label = null, string? logo = null)
+    {
+        var clue = Exact(guess, answer, label) with { Image = logo };
+        return clue.State == Miss && guess is not null && formerTeams is not null
+               && formerTeams.Contains(guess, StringComparer.OrdinalIgnoreCase)
+            ? clue with { State = Close }
+            : clue;
+    }
 
     /// <summary>
     /// Identical is right. Sharing a position is close: a G-F is close to a G and to an F, and a

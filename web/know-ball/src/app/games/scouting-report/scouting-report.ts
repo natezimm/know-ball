@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
 import { GameState, GuessRecord } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -13,6 +13,8 @@ interface Clue {
   /** "up" when the answer is higher than the guess, "down" when lower. */
   arrow?: 'up' | 'down' | null;
   label?: string | null;
+  /** The team's logo, on the team clue. */
+  image?: string | null;
 }
 
 type ClueKey = 'team' | 'conference' | 'division' | 'position' | 'height' | 'age' | 'number';
@@ -29,19 +31,21 @@ interface ScoutingAnswer {
   number: string | null;
 }
 
-/**
- * The seven clues in card order, with each one's share of a twelve-column row. The top row is
- * team, conference and division; the team gets the most room because "Timberwolves" needs it.
- */
-export const CLUES: { key: ClueKey; label: string; span: number }[] = [
-  { key: 'team', label: 'Team', span: 5 },
-  { key: 'conference', label: 'Conf', span: 3 },
-  { key: 'division', label: 'Division', span: 4 },
-  { key: 'position', label: 'Pos', span: 3 },
-  { key: 'height', label: 'Height', span: 3 },
-  { key: 'age', label: 'Age', span: 3 },
-  { key: 'number', label: 'No.', span: 3 },
+/** The seven clues in column order, with the short header shown above each column. */
+export const CLUES: { key: ClueKey; label: string; header: string }[] = [
+  { key: 'team', label: 'Team', header: 'Team' },
+  { key: 'conference', label: 'Conference', header: 'Conf' },
+  { key: 'division', label: 'Division', header: 'Div' },
+  { key: 'position', label: 'Position', header: 'Pos' },
+  { key: 'height', label: 'Height', header: 'Ht' },
+  { key: 'age', label: 'Age', header: 'Age' },
+  { key: 'number', label: 'Number', header: '#' },
 ];
+
+/** Division names are too long for a seventh of a phone screen. */
+const DIVISIONS: Record<string, string> = {
+  Atlantic: 'ATL', Central: 'CEN', Southeast: 'SE', Northwest: 'NW', Pacific: 'PAC', Southwest: 'SW',
+};
 
 const SQUARES: Record<ClueState, string> = { ok: '🟩', close: '🟨', miss: '⬜' };
 const STATE_WORDS: Record<ClueState, string> = { ok: 'right', close: 'close', miss: 'wrong' };
@@ -62,12 +66,15 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     <app-game-shell name="Scouting Report" trim="var(--teal)" practice [shareRows]="rows()">
       <div help>
         <p>Guess the current NBA player in eight tries. Start with anyone.</p>
-        <p>Every guess gets a card with seven clues, coloured by how that player compares with the answer:</p>
+        <p>Every guess adds a row of seven clues, coloured by how that player compares with the answer:</p>
         <ul class="key">
           <li><i class="ok"></i><span><b>Teal</b> is the same as the answer.</span></li>
           <li>
             <i class="close"></i>
-            <span><b>Mustard</b> is close: shares a position, or within 2 inches, 2 years or 3 jersey numbers.</span>
+            <span>
+              <b>Mustard</b> is close: a team the answer used to play for, a shared position, or within 2 inches,
+              2 years or 2 jersey numbers.
+            </span>
           </li>
           <li><i class="miss"></i><span><b>Tan</b> is wrong.</span></li>
         </ul>
@@ -79,77 +86,107 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
       }
 
       @if (state(); as s) {
-        @if (!s.guesses.length) {
-          <div class="card empty">
-            <app-avatar name="?" />
-            <div>
-              <b>Mystery player</b>
-              <ul class="chips">
-                @for (c of clues; track c.key) {
-                  <li [style.grid-column]="'span ' + c.span"><small>{{ c.label }}</small>?</li>
-                }
-              </ul>
-            </div>
+        <div class="board" role="table" aria-label="Your guesses, oldest first">
+          <div class="cols" role="row">
+            @for (c of clues; track c.key) {
+              <span role="columnheader" [attr.aria-label]="c.label">{{ c.header }}</span>
+            }
           </div>
-          <p class="tip">Guess any current player. His card shows how close each of these seven is.</p>
-        }
 
-        <ol class="cards" aria-label="Your guesses, newest first">
-          @for (g of newestFirst(); track g.playerId) {
-            <li class="card" [class.right]="g.correct">
-              <app-avatar [src]="g.headshotUrl" [name]="g.name" />
-              <div>
+          @for (g of s.guesses; track g.playerId; let i = $index) {
+            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="i >= settled()">
+              <div class="who" role="rowheader">
+                <app-avatar [src]="g.headshotUrl" [name]="g.name" />
                 <b>{{ g.name }}</b>
-                @if (g.feedback; as f) {
-                  <ul class="chips">
-                    @for (c of clues; track c.key) {
-                      @let clue = f[c.key];
-                      <li [class]="clue.state" [style.grid-column]="'span ' + c.span">
-                        <small>{{ c.label }}</small>
-                        <span>
-                          {{ c.key === 'team' ? (clue.label ?? clue.value) : clue.value }}
-                          @if (clue.arrow) {
-                            <i aria-hidden="true">{{ clue.arrow === 'up' ? '↑' : '↓' }}</i>
-                          }
-                        </span>
-                        <span class="visually-hidden">{{ describe(clue) }}</span>
-                      </li>
+              </div>
+              @if (g.feedback; as f) {
+                @for (c of clues; track c.key; let col = $index) {
+                  @let clue = f[c.key];
+                  <div role="cell" class="cell" [class]="clue.state" [style.--col]="col">
+                    @if (c.key === 'team' && showLogo(clue)) {
+                      <img [src]="clue.image" alt="" [title]="clue.label ?? clue.value" (error)="logoFailed(clue)" />
+                      <small>{{ clue.value }}</small>
+                    } @else {
+                      <span class="value" [title]="c.key === 'division' ? clue.value : null">{{ short(c.key, clue) }}</span>
                     }
-                  </ul>
+                    @if (clue.arrow) {
+                      <i class="arrow" [class]="clue.arrow" aria-hidden="true">{{ clue.arrow === 'up' ? '▲' : '▼' }}</i>
+                    }
+                    <span class="visually-hidden">{{ describe(c.label, clue) }}</span>
+                  </div>
+                }
+              }
+            </div>
+          }
+
+          @if (!over()) {
+            @for (n of blanks(); track n; let first = $first) {
+              <div class="row blank" [class.next]="first" aria-hidden="true">
+                <div class="who">
+                  <app-avatar name="?" />
+                  <span>{{ first && !s.guesses.length ? 'Mystery player' : 'Guess ' + n }}</span>
+                </div>
+                @for (c of clues; track c.key) {
+                  <div class="cell"></div>
                 }
               </div>
-            </li>
+            }
           }
-        </ol>
+        </div>
+
+        @if (!s.guesses.length) {
+          <p class="tip">Guess any current player. Each row shows how close that player is on all seven clues.</p>
+        }
       }
     </app-game-shell>
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
-    .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-    /* Each guess is a card from the set: teal trim, cream gap, navy line. */
-    .card {
-      display: flex; gap: 10px; padding: 12px; background: var(--surface); border: 4px solid var(--teal); border-radius: 8px;
-      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 3.5px var(--navy);
+    /* The board: one header, then one row per guess, oldest at the top. */
+    .board { display: grid; gap: 8px; }
+    .cols, .row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+    .cols {
+      position: sticky; top: 0; z-index: 1; padding: 4px 0; background: var(--bg);
+      font: 400 13px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; text-align: center; color: var(--navy);
     }
-    .card.right { border-color: var(--mustard); }
-    .card > div { flex: 1; min-width: 0; }
-    .card b { font: 400 18px/1.15 var(--display); }
-    app-avatar { --size: 48px; }
+    .who { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .who b { font: 400 17px/1.15 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .who span { color: var(--muted); font-size: 15px; }
+    app-avatar { --size: 28px; }
 
-    .chips { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; }
-    .chips li {
-      display: grid; align-content: start; gap: 1px; min-width: 0; padding: 4px 6px 5px;
-      border: 2px solid var(--miss-line); border-radius: 4px; background: var(--miss); color: var(--miss-ink);
-      font-size: 15px; font-weight: 700; line-height: 1.1;
+    .cell {
+      position: relative; display: grid; place-items: center; align-content: center; gap: 1px; min-width: 0; height: 54px;
+      padding: 2px; border: 2px solid var(--miss-line); border-radius: 4px; background: var(--miss); color: var(--miss-ink);
+      font-size: 15px; font-weight: 700; line-height: 1.1; text-align: center;
     }
-    .chips small { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
-    .chips i { font-style: normal; }
-    .chips .ok { background: var(--ok); color: var(--ok-ink); border-color: var(--navy); }
-    .chips .close { background: var(--close); color: var(--close-ink); border-color: var(--navy); }
+    .cell.ok { background: var(--ok); color: var(--ok-ink); border-color: var(--navy); }
+    .cell.close { background: var(--close); color: var(--close-ink); border-color: var(--navy); }
+    .row.right .cell { box-shadow: 0 0 0 2px var(--mustard); }
+    .value { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cell img { width: 26px; height: 26px; object-fit: contain; }
+    .cell small { font-size: 10px; letter-spacing: .04em; }
 
-    .empty { border-style: dashed; box-shadow: none; }
-    .empty .chips li { border-style: dashed; background: none; }
+    /* The arrow keeps nudging toward the answer: up for higher, down for lower. */
+    .arrow { font-style: normal; font-size: 11px; line-height: 1; animation: nudge-up 1.1s ease-in-out infinite; }
+    .arrow.down { animation-name: nudge-down; }
+    @keyframes nudge-up { 0%, 100% { translate: 0 1px; } 50% { translate: 0 -3px; } }
+    @keyframes nudge-down { 0%, 100% { translate: 0 -1px; } 50% { translate: 0 3px; } }
+
+    /* A new guess turns its cells over one at a time, left to right. */
+    .row.fresh .cell { animation: flip .45s ease-out both; animation-delay: calc(var(--col) * 120ms); }
+    .row.fresh .arrow { animation-delay: calc(var(--col) * 120ms + .45s); }
+    @keyframes flip { from { transform: rotateX(90deg); } to { transform: none; } }
+
+    .blank .cell { border-style: dashed; background: none; opacity: .45; }
+    .blank.next .cell { opacity: 1; border-color: var(--navy); }
+    /* Rows still to come are thin strips, so the board stays short on a phone. */
+    .blank:not(.next) .who { display: none; }
+    .blank:not(.next) .cell { height: 14px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .arrow, .row.fresh .cell { animation: none; }
+    }
+
     .tip { margin: 0; color: var(--muted); font-size: 17px; }
     .facts { color: var(--muted); font-size: 16px; }
 
@@ -161,9 +198,8 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     .key .miss { background: var(--miss); }
 
     @media (max-width: 400px) {
-      .card { padding: 10px; gap: 8px; }
-      app-avatar { --size: 40px; }
-      .chips li { padding: 4px 4px 5px; font-size: 14px; }
+      .cell { height: 50px; font-size: 14px; }
+      .cols { font-size: 12px; }
     }
   `,
 })
@@ -175,7 +211,13 @@ export class ScoutingReport {
   protected readonly clues = CLUES;
 
   protected readonly state = computed(() => this.store.state() as GameState<unknown, null, ScoutingFeedback, ScoutingAnswer> | null);
-  protected readonly newestFirst = computed(() => [...(this.state()?.guesses ?? [])].reverse());
+  protected readonly over = computed(() => this.store.over());
+  /** Numbers of the guesses still to come, so the board always shows all eight rows. */
+  protected readonly blanks = computed(() => {
+    const s = this.state();
+    if (!s) return [];
+    return Array.from({ length: Math.max(0, s.maxGuesses - s.guesses.length) }, (_, i) => s.guesses.length + i + 1);
+  });
   protected readonly rows = computed(() => shareRows(this.state()?.guesses ?? []));
   protected readonly answerLine = computed(() => {
     const a = this.state()?.answer;
@@ -185,13 +227,35 @@ export class ScoutingReport {
       .join(' · ');
   });
 
+  /** Rows already on the board when a puzzle loads stay still; only guesses made since turn over. */
+  private readonly loaded = signal<{ puzzleId: number; guesses: number } | null>(null);
+  protected readonly settled = computed(() => this.loaded()?.guesses ?? Infinity);
+  private readonly brokenLogos = signal<ReadonlySet<string>>(new Set());
+
   constructor() {
     loadFromRoute(this.store, 'scouting-report', this.puzzleId);
+    effect(() => {
+      const s = this.state();
+      if (s && untracked(this.loaded)?.puzzleId !== s.puzzleId) this.loaded.set({ puzzleId: s.puzzleId, guesses: s.guesses.length });
+    });
   }
 
-  /** The colour and arrow in words, for screen readers. */
-  protected describe(clue: Clue): string {
+  protected showLogo(clue: Clue): boolean {
+    return !!clue.image && !this.brokenLogos().has(clue.image);
+  }
+
+  protected logoFailed(clue: Clue) {
+    if (clue.image) this.brokenLogos.update((set) => new Set(set).add(clue.image!));
+  }
+
+  /** What fits in the cell. */
+  protected short(key: ClueKey, clue: Clue): string {
+    return key === 'division' ? (DIVISIONS[clue.value] ?? clue.value) : clue.value;
+  }
+
+  /** The clue, its colour and its arrow in words, for screen readers. */
+  protected describe(label: string, clue: Clue): string {
     const direction = clue.arrow === 'up' ? ', the answer is higher' : clue.arrow === 'down' ? ', the answer is lower' : '';
-    return `, ${STATE_WORDS[clue.state]}${direction}`;
+    return `${label}: ${clue.label ?? clue.value}, ${STATE_WORDS[clue.state]}${direction}`;
   }
 }

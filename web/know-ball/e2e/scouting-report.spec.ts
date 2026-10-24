@@ -13,14 +13,19 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('.meta')).toContainText('No. 1 ·');
 });
 
-test('a wrong guess gets a scouting card, and the answer wins', async ({ page }) => {
+test('a wrong guess adds a row of clues, and the answer wins', async ({ page }) => {
   await expect(page.getByText('Mystery player')).toBeVisible();
 
+  const board = page.getByRole('table', { name: 'Your guesses, oldest first' });
+  await expect(board.getByRole('columnheader')).toHaveText(['Team', 'Conf', 'Div', 'Pos', 'Ht', 'Age', '#']);
+  await expect(board.locator('.row.blank')).toHaveCount(8);
+
   await guessPlayer(page, wrong[0].fullName);
-  const cards = page.getByRole('list', { name: 'Your guesses, newest first' }).locator('li.card');
-  const first = page.locator('li.card').filter({ hasText: wrong[0].fullName });
+  const rows = board.locator('.row:not(.blank)');
+  const first = rows.filter({ hasText: wrong[0].fullName });
   await expect(first).toBeVisible();
-  await expect(first.locator('.chips small')).toHaveText(['Team', 'Conf', 'Division', 'Pos', 'Height', 'Age', 'No.']);
+  await expect(first.getByRole('cell')).toHaveCount(7);
+  await expect(board.locator('.row.blank')).toHaveCount(7);
   await expect(page.getByRole('img', { name: '1 of 8 guesses used' })).toBeVisible();
 
   await page.getByRole('combobox', { name: 'Guess a player' }).fill(wrong[0].fullName);
@@ -35,7 +40,8 @@ test('a wrong guess gets a scouting card, and the answer wins', async ({ page })
   await expect(result).toContainText('Solved in 2 guesses');
   await expect(result.getByText(answer.fullName, { exact: true })).toBeVisible();
   await expect(page.getByRole('combobox', { name: 'Guess a player' })).toHaveCount(0);
-  await expect(cards).toHaveCount(2);
+  await expect(rows).toHaveCount(2);
+  await expect(rows.last()).toHaveClass(/right/);
 
   // The server keeps the result, so a reload shows the finished game.
   await page.reload();

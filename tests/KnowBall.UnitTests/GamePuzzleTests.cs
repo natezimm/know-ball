@@ -83,6 +83,35 @@ public class PuzzleSchedulerTests : IDisposable
     public void Dispose() => _world.Dispose();
 }
 
+public class ScoutingReportGameTests : IDisposable
+{
+    private readonly GameWorld _world = new();
+
+    /// <summary>The frozen secret of a puzzle made with the given player as the answer.</summary>
+    private async Task<JsonElement> SecretFor(string answer)
+    {
+        using var engine = _world.NewEngine();
+        var game = engine.Games.Find(ScoutingReportGame.GameSlug)!;
+        var others = _world.Players.Values.Where(p => p.FullName != answer).Select(p => p.Id).ToHashSet();
+        var puzzle = await game.GenerateAsync(new GenerationContext(_world.League, GameWorld.Today, others, new Random(1)), default);
+        Assert.Equal(_world.Id(answer), puzzle!.AnswerPlayerId);
+        return JsonDocument.Parse(puzzle.SecretJson).RootElement;
+    }
+
+    private static string[] FormerTeams(JsonElement secret) =>
+        secret.GetProperty("formerTeams").EnumerateArray().Select(t => t.GetString()!).ToArray();
+
+    [Fact]
+    public async Task The_answer_remembers_former_teams_as_todays_franchises()
+    {
+        // Seattle counts as Oklahoma City; Miami is the current team, so it is not a former one.
+        Assert.Equal(["GSW", "OKC"], FormerTeams(await SecretFor("Kevin Durant")));
+        Assert.Empty(FormerTeams(await SecretFor("Jaylen Brown")));
+    }
+
+    public void Dispose() => _world.Dispose();
+}
+
 public class CareerPathGameTests : IDisposable
 {
     private const string Me = "player-one-1234";

@@ -8,6 +8,7 @@ namespace KnowBall.Application.Games.ScoutingReport;
 public sealed record ScoutingProfile(
     string? Team,
     string? TeamName,
+    string? TeamLogo,
     string? Conference,
     string? Division,
     string? Position,
@@ -15,7 +16,12 @@ public sealed record ScoutingProfile(
     DateOnly? BirthDate,
     string? Number);
 
-public sealed record ScoutingSecret(int PlayerId, string Name, string? HeadshotUrl, ScoutingProfile Profile, DateOnly AsOf);
+/// <param name="FormerTeams">
+/// Abbreviations of the teams the answer used to play for, as those franchises are known today (a SuperSonics spell
+/// counts as the Thunder). Null in puzzles made before former teams were scored, which keeps their results unchanged.
+/// </param>
+public sealed record ScoutingSecret(
+    int PlayerId, string Name, string? HeadshotUrl, ScoutingProfile Profile, DateOnly AsOf, IReadOnlyList<string>? FormerTeams = null);
 
 public sealed record ScoutingFeedback(Clue Team, Clue Conference, Clue Division, Clue Position, Clue Height, Clue Age, Clue Number);
 
@@ -54,9 +60,12 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
 
         // Better-known players come up a little more often.
         var answerId = WeightedPick.From(fresh, p => p.Popularity + 10, context.Random).Id;
-        var answer = await db.Players.AsNoTracking().Include(p => p.CurrentTeam).FirstAsync(p => p.Id == answerId, cancellationToken);
+        var answer = await db.Players.AsNoTracking()
+            .Include(p => p.CurrentTeam)
+            .Include(p => p.Stints).ThenInclude(s => s.Team!).ThenInclude(t => t.Franchise)
+            .FirstAsync(p => p.Id == answerId, cancellationToken);
 
-        var secret = new ScoutingSecret(answer.Id, answer.FullName, answer.HeadshotUrl, ProfileOf(answer), context.AsOf);
+        var secret = new ScoutingSecret(answer.Id, answer.FullName, answer.HeadshotUrl, ProfileOf(answer), context.AsOf, FormerTeamsOf(answer));
         return new GeneratedPuzzle(answer.Id, "{}", GameJson.Write(secret));
     }
 
@@ -67,7 +76,7 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
             ? await db.Teams.AsNoTracking().FirstOrDefaultAsync(t => t.Id == teamId, cancellationToken)
             : null;
 
-        var feedback = Compare(ProfileOf(guess, team), secret.Profile, secret.AsOf);
+        var feedback = Compare(ProfileOf(guess, team), secret.Profile, secret.AsOf, secret.FormerTeams);
         return new GuessEvaluation(guess.Id == secret.PlayerId, GameJson.Node(feedback));
     }
 
@@ -91,8 +100,8 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
         };
     }
 
-    public static ScoutingFeedback Compare(ScoutingProfile guess, ScoutingProfile answer, DateOnly asOf) => new(
-        Team: AttributeComparer.Exact(guess.Team, answer.Team, guess.TeamName),
+    public static ScoutingFeedback Compare(ScoutingProfile guess, ScoutingProfile answer, DateOnly asOf, IReadOnlyList<string>? formerTeams = null) => new(
+        Team: AttributeComparer.Team(guess.Team, answer.Team, formerTeams, guess.TeamName, guess.TeamLogo),
         Conference: AttributeComparer.Exact(guess.Conference, answer.Conference),
         Division: AttributeComparer.Exact(guess.Division, answer.Division),
         Position: AttributeComparer.Position(guess.Position, answer.Position),
@@ -103,6 +112,14 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
     private static ScoutingProfile ProfileOf(Player player) => ProfileOf(player, player.CurrentTeam);
 
     private static ScoutingProfile ProfileOf(Player player, Team? team) => new(
-        team?.Abbreviation, team?.Name, team?.Conference, team?.Division,
+        team?.Abbreviation, team?.Name, team?.LogoUrl, team?.Conference, team?.Division,
         player.Position, player.HeightInches, player.BirthDate, player.JerseyNumber);
+
+    /// <summary>Every franchise the player has played for apart from the current one.</summary>
+    private static List<string> FormerTeamsOf(Player player) => player.Stints
+        .Select(s => (s.Team!.Franchise ?? s.Team).Abbreviation)
+        .Where(a => !string.Equals(a, player.CurrentTeam?.Abbreviation, StringComparison.OrdinalIgnoreCase))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .Order(StringComparer.Ordinal)
+        .ToList();
 }
