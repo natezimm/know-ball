@@ -28,7 +28,7 @@ jobs:
       GCP_HOST: ${{ secrets.GCP_HOST }}
       GCP_USER: ${{ secrets.GCP_USER }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Set up SSH using existing deploy secrets
         env:
           GCP_SSH_KEY: ${{ secrets.GCP_SSH_KEY }}
@@ -85,7 +85,7 @@ jobs:
             'python3 ~/know-ball/operations.py audit' > reports/production-audit-after.json
       - name: Save reports only (never database dumps, photos, or credentials)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: production-operations-reports
           path: reports/*.json
