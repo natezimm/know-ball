@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, inject, signal } from '@angular/core';
+import { Component, ViewEncapsulation, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MOCK_GAMES } from './mock-data';
 import { MockupPicks } from './picks';
@@ -45,6 +45,7 @@ import { MockupPicks } from './picks';
       </footer>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .mk-page {
       width: min(1480px, 100vw - 48px); margin-left: 50%; transform: translateX(-50%);

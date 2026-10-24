@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MockOption } from '../option';
 
 @Component({
@@ -100,6 +100,7 @@ import { MockOption } from '../option';
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .pic {
       width: 84px; height: 84px; border-radius: 14px; background: #fff;

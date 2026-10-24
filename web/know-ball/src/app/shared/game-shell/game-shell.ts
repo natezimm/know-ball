@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, DestroyRef, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ArchiveEntry, GameApi, GameState, GameStats } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
@@ -71,7 +71,7 @@ const NOTICE_MS = 3500;
 
           @if (store.over()) {
             <div class="result" [class.won]="s.status === 'won'" role="status">
-              <app-avatar [src]="s.answer?.headshotUrl" [name]="s.answer?.name ?? ''" />
+              <app-avatar [src]="$safeNavigationMigration(s.answer?.headshotUrl)" [name]="s.answer?.name ?? ''" />
               <div class="who">
                 <span class="kb-label">{{ verdict(s) }}</span>
                 <strong>{{ s.answer?.name }}</strong>
@@ -173,6 +173,7 @@ const NOTICE_MS = 3500;
       }
     </dialog>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; margin: 0 0 -44px; }
     .game { max-width: 520px; min-height: calc(100dvh - 120px); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }

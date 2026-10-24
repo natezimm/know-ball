@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { ThemeScreen } from '../theme-screen';
 
 /** A coach's chalkboard: hand-drawn boxes, chalk lettering, circles and strike-throughs like a play diagram. */
@@ -8,6 +8,7 @@ import { ThemeScreen } from '../theme-screen';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'th-host th-chalk' },
   template: `<app-theme-screen />`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-chalk .ts {
       --chalk: #f4f1e8; --yellow: #ffe066; --board: #23402f;

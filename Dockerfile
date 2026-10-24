@@ -1,7 +1,7 @@
 # One image for the whole site: the API serves the built Angular app from wwwroot, and the same
 # image runs the nightly importer when started with a different command (see docker-compose.yml).
 
-FROM node:22-alpine AS web
+FROM node:24-alpine AS web
 WORKDIR /web
 COPY web/know-ball/package.json web/know-ball/package-lock.json ./
 RUN npm ci --no-audit --no-fund

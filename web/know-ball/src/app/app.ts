@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -26,6 +26,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       </nav>
     </footer>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     /* A navy banner with the card's red, cream and navy border running along its bottom edge. */
     .bar {

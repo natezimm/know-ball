@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameApi, GameSlug, TodayEntry } from '../../core/game-api';
 
@@ -66,6 +66,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three'];
 
     <p class="later"><span>On deck</span> {{ later.join(' · ') }}</p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .hero { padding: 12px 0 34px; max-width: 720px; }
     .kicker { margin: 0 0 10px; color: var(--accent); font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; }

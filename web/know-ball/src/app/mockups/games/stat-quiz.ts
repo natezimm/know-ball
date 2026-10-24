@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { headshot } from '../mock-data';
 import { MockOption } from '../option';
 
@@ -88,6 +88,7 @@ import { MockOption } from '../option';
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .clock { font-family: var(--display); color: var(--accent); font-size: 16px; }
     .segs { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; }

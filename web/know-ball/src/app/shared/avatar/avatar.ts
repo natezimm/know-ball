@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, input, signal, ChangeDetectionStrategy } from '@angular/core';
 
 /** A player's headshot in a ring, or their initials when there is no photo or it fails to load. */
 @Component({
@@ -10,6 +10,7 @@ import { Component, computed, input, signal } from '@angular/core';
       <span aria-hidden="true">{{ initials() }}</span>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       flex: none; display: grid; place-items: center; overflow: hidden;

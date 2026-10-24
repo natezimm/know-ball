@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { Attempt, LetterHint, MAX_ATTEMPTS } from './spordle-game';
 
 interface Tile {
@@ -26,6 +26,7 @@ interface Row {
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; }
     .grid { --gap: 6px; display: grid; gap: var(--gap); justify-content: center; }

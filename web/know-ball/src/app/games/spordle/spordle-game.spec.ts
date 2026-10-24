@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { useMemoryStorage } from './memory-storage';
@@ -16,7 +16,7 @@ describe('SpordleGame', () => {
   beforeEach(() => {
     useMemoryStorage();
     vi.useFakeTimers();
-    TestBed.configureTestingModule({ providers: [SpordleGame, provideHttpClient(), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({ providers: [SpordleGame, provideHttpClient(withXhr()), provideHttpClientTesting()] });
     game = TestBed.inject(SpordleGame);
     http = TestBed.inject(HttpTestingController);
   });

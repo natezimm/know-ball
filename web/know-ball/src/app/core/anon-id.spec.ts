@@ -1,4 +1,4 @@
-import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { useMemoryStorage } from '../games/spordle/memory-storage';
@@ -36,7 +36,7 @@ describe('anonymous player id', () => {
 
   it('goes out with calls to our API and nowhere else', () => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(withInterceptors([anonIdInterceptor])), provideHttpClientTesting()],
+      providers: [provideHttpClient(withXhr(), withInterceptors([anonIdInterceptor])), provideHttpClientTesting()],
     });
     const http = TestBed.inject(HttpClient);
     const backend = TestBed.inject(HttpTestingController);

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MockOption } from '../option';
 import { ArcadeTheme } from './skins/arcade';
 import { BackPageTheme } from './skins/back-page';
@@ -48,6 +48,7 @@ const FONTS = [
     BroadcastTheme,
     TradingCardTheme,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="mk-game">
       <h2>Themes <span class="mk-chip">Whole site</span></h2>

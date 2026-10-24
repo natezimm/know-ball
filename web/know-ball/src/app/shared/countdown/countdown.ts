@@ -1,9 +1,10 @@
-import { Component, DestroyRef, effect, inject, input, output, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 /** Time left until a moment, as 05:12:33, ticking once a second. Fires `done` when it gets there. */
 @Component({
   selector: 'app-countdown',
   template: `<time role="timer">{{ text() }}</time>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `time { font-variant-numeric: tabular-nums; font-weight: 700; }`,
 })
 export class Countdown {

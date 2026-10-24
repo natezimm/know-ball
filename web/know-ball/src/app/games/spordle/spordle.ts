@@ -1,4 +1,4 @@
-import { Component, ElementRef, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, computed, effect, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { SpordleKeyboard } from './keyboard';
 import { HintType } from './spordle-api';
 import { MAX_ATTEMPTS, SpordleGame } from './spordle-game';
@@ -181,6 +181,7 @@ const MESSAGE_MS = 3000;
       </div>
     </dialog>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
 
     :host { display: block; margin: 0 0 -44px; }
