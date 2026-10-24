@@ -14,7 +14,7 @@ Run these on the VM (`SSH` from the GCP console) unless a step says otherwise.
 
 ### 1. DNS
 
-Add an A record `knowball` pointing to `104.196.14.53` at the DNS host for `nathanzimmerman.com`. Check that
+Add an A record `knowball` pointing to your VM's external IP at the DNS host for `nathanzimmerman.com`. Check that
 the VM's external IP is **static** (GCP console, VPC network, IP addresses); an ephemeral one changes when
 the VM is stopped, for example to resize it.
 
@@ -58,7 +58,8 @@ renews the certificate with the others.
 ssh-keygen -t ed25519 -f ~/.ssh/knowball_deploy -N "" -C knowball-deploy
 cat ~/.ssh/knowball_deploy.pub >> ~/.ssh/authorized_keys
 cat ~/.ssh/knowball_deploy                                          # → secret GCP_SSH_KEY
-awk '{print "104.196.14.53", $1, $2}' /etc/ssh/ssh_host_ed25519_key.pub   # → secret GCP_KNOWN_HOSTS
+read -r -p 'VM external IP (the same value as GCP_HOST): ' DEPLOY_HOST
+awk -v host="$DEPLOY_HOST" '{print host, $1, $2}' /etc/ssh/ssh_host_ed25519_key.pub   # → secret GCP_KNOWN_HOSTS
 rm ~/.ssh/knowball_deploy                                           # once the secret is saved
 ```
 
@@ -66,7 +67,7 @@ Then in GitHub, **Settings → Secrets and variables → Actions → New reposit
 
 | Secret | Value |
 | --- | --- |
-| `GCP_HOST` | `104.196.14.53` |
+| `GCP_HOST` | your VM's static external IP |
 | `GCP_USER` | your user on the VM |
 | `GCP_SSH_KEY` | the private key printed above, all of it |
 | `GCP_KNOWN_HOSTS` | the line the `awk` command printed. It pins the VM's identity, and the deploy refuses to run without it |

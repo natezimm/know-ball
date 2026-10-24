@@ -32,7 +32,7 @@ class OperationsTests(unittest.TestCase):
 
     def test_cron_install_is_idempotent_and_preserves_other_jobs(self):
         other = "0 2 * * * /usr/local/bin/other-backup\n"
-        root = Path("/home/nathan/know-ball")
+        root = Path("/home/deploy/know-ball")
         first = ops.managed_cron(other, root, root / "operations.py")
         self.assertEqual(first, ops.managed_cron(first, root, root / "operations.py"))
         self.assertIn(other.strip(), first)
