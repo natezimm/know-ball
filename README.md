@@ -182,3 +182,8 @@ Player data comes from the Basketball-Reference mirror, Wikidata and ESPN's publ
 the NBA's, linked from its CDN. This is fine for a personal project and would need revisiting for anything
 commercial. Details in [docs/research.md](docs/research.md).
 
+
+## License
+
+The code is MIT-licensed; see [LICENSE](LICENSE). It does not cover the player data, headshots or
+logos the site loads from the sources above, which belong to their owners.
