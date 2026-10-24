@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
@@ -18,7 +18,7 @@ const entry = (overrides: Partial<TodayEntry>): TodayEntry => ({
 
 describe('Home', () => {
   async function render(today: TodayEntry[] | 'down') {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     const fixture = TestBed.createComponent(Home);
     const request = TestBed.inject(HttpTestingController).expectOne('/api/me/today');
     if (today === 'down') request.flush('boom', { status: 500, statusText: 'Server Error' });
@@ -56,7 +56,7 @@ describe('Home', () => {
   });
 
   it('waits for availability before offering daily games', async () => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     const fixture = TestBed.createComponent(Home);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;

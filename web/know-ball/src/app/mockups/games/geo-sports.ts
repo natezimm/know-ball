@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { headshot, logo } from '../mock-data';
 import { MockOption } from '../option';
 
@@ -41,6 +41,7 @@ const HEIGHT = 26;
       <span class="pin" [style.left.%]="x(g)" [style.top.%]="y(g)"></span>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; position: relative; aspect-ratio: 1.79; }
     svg { display: block; width: 100%; height: 100%; }
@@ -167,6 +168,7 @@ const STATE_GRID = [
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .prompt { display: flex; align-items: center; gap: 10px; }
     .prompt div { display: grid; }

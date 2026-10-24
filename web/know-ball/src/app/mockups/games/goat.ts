@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MockOption } from '../option';
 
 @Component({
@@ -104,6 +104,7 @@ import { MockOption } from '../option';
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .slider { display: grid; grid-template-columns: 74px 1fr 26px; align-items: center; gap: 10px; font-size: 13px; }
     .slider span { color: var(--muted); }

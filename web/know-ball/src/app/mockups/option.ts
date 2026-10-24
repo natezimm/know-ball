@@ -1,9 +1,10 @@
-import { Component, booleanAttribute, computed, inject, input } from '@angular/core';
+import { Component, booleanAttribute, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { MockupPicks } from './picks';
 
 /** One design option: a labelled phone frame plus its trade-offs. The screen content is projected in. */
 @Component({
   selector: 'app-mock-option',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <header class="mk-opt">
       <span class="mk-letter">{{ letter() }}</span>

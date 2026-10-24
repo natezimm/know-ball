@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
@@ -22,7 +22,7 @@ describe('Scouting Report', () => {
   let el: HTMLElement;
 
   async function open(state = gameState(), puzzleId?: string) {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     fixture = TestBed.createComponent(ScoutingReport);
     if (puzzleId) fixture.componentRef.setInput('puzzleId', puzzleId);
     http = TestBed.inject(HttpTestingController);

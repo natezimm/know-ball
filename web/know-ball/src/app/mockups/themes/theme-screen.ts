@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 type Mark = 'correct' | 'present' | 'absent' | 'typed' | '';
 
@@ -61,6 +61,7 @@ const KEY_MARKS: Record<string, Mark> = {
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-host { flex: 1; min-height: 0; display: block; }
     .ts { height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden; box-sizing: border-box; }

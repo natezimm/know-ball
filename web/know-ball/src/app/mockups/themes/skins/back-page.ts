@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { ThemeScreen } from '../theme-screen';
 
 /**
@@ -11,6 +11,7 @@ import { ThemeScreen } from '../theme-screen';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'th-host th-news' },
   template: `<app-theme-screen />`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-news .ts {
       --ink: #1a1a1a; --cell: #fffdf6; --pen: #c0392b; --marker: #fff06a;

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { ThemeScreen } from '../theme-screen';
 
 /** Teal, rounded and outlined with hard little shadows, after boringcashcow.com. */
@@ -8,6 +8,7 @@ import { ThemeScreen } from '../theme-screen';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'th-host th-pop' },
   template: `<app-theme-screen />`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-pop .ts { --ink: #221e26; background: #43c1b3; color: var(--ink); font-family: "DM Sans", system-ui, sans-serif; }
     .th-pop .ts::before, .th-pop .ts::after { content: ""; position: absolute; border: 2px solid var(--ink); }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MockOption } from '../option';
 
 // Kevin Durant's points per game by season, used for the chart sketch.
@@ -123,6 +123,7 @@ const chartY = (ppg: number): number => 132 - (ppg - 18) * 7.5;
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .hints { display: flex; flex-wrap: wrap; gap: 6px; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }

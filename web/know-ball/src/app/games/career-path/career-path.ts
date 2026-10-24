@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { GameState } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -112,6 +112,7 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
       }
     </app-game-shell>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .ask { margin: 0; font: 400 20px/1.2 var(--display); }
 

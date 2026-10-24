@@ -45,7 +45,7 @@ docs/                           implementation plan and data source research
 
 ## Run it locally
 
-Prerequisites: .NET 10 SDK, Node 22, Docker (optional).
+Prerequisites: .NET 10 SDK, Node 24, Docker (optional).
 
 ```bash
 docker compose up -d db                                    # Postgres on :5432 (KNOWBALL_DB_PORT to change)

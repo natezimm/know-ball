@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { ThemeScreen } from '../theme-screen';
 
 /** A 16-bit arcade cabinet: pixel type, neon on purple, bevelled blocks and scanlines. */
@@ -8,6 +8,7 @@ import { ThemeScreen } from '../theme-screen';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'th-host th-arcade' },
   template: `<app-theme-screen />`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-arcade .ts {
       --pink: #ff2bd6; --cyan: #00e5ff; --gold: #ffe600; --night: #14012e;

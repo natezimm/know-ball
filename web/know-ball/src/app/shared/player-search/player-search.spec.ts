@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { PlayerSearch } from './player-search';
 import { PlayerSearchResult } from '../../core/player-search.service';
@@ -17,7 +17,7 @@ describe('PlayerSearch', () => {
   let input: HTMLInputElement;
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting()] });
     fixture = TestBed.createComponent(PlayerSearch);
     fixture.componentRef.setInput('debounceMs', 0);
     http = TestBed.inject(HttpTestingController);

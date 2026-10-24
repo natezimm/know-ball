@@ -1,6 +1,6 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { GameStore } from '../../core/game-store';
@@ -10,6 +10,7 @@ import { GameShell } from './game-shell';
 @Component({
   imports: [GameShell],
   providers: [GameStore],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <app-game-shell name="Scouting Report" practice [shareRows]="['🟩⬜']">
       <p help>How it works.</p>
@@ -27,7 +28,7 @@ describe('GameShell', () => {
   let el: HTMLElement;
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     fixture = TestBed.createComponent(Host);
     http = TestBed.inject(HttpTestingController);
     store = fixture.debugElement.children[0].injector.get(GameStore);

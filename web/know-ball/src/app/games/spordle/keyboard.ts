@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { LetterStatus } from './scoring';
 
 const ROWS = [[...'qwertyuiop'], [...'asdfghjkl'], ['Enter', ...'zxcvbnm', 'Backspace']];
@@ -28,6 +28,7 @@ const ROWS = [[...'qwertyuiop'], [...'asdfghjkl'], ['Enter', ...'zxcvbnm', 'Back
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; }
     .keyboard { display: grid; gap: 6px; }

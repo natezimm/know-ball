@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, afterRenderEffect, booleanAttribute, inject, input, output, signal, viewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, afterRenderEffect, booleanAttribute, inject, input, output, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, catchError, debounce, distinctUntilChanged, map, of, switchMap, tap, timer } from 'rxjs';
 import { MIN_QUERY_LENGTH, PlayerSearchResult, PlayerSearchService } from '../../core/player-search.service';
@@ -71,6 +71,7 @@ let nextId = 0;
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .combo { position: relative; }
     input {

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { ThemeScreen } from '../theme-screen';
 
 /** Live TV graphics: slanted panels, condensed italic type, a red chyron and a white scorebug. */
@@ -8,6 +8,7 @@ import { ThemeScreen } from '../theme-screen';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'th-host th-tv' },
   template: `<app-theme-screen />`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-tv .ts {
       --navy: #0a1230; --red: #e4002b; --gold: #ffd400;

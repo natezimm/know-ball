@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { ThemeScreen } from '../theme-screen';
 
 /** A 1950s trading card: cream stock, red and navy borders, slab type and a jersey-script wordmark. */
@@ -8,6 +8,7 @@ import { ThemeScreen } from '../theme-screen';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'th-host th-card' },
   template: `<app-theme-screen />`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .th-card .ts {
       --navy: #1d2b53; --red: #b92d22; --cream: #f6ecd2; --stock: #fbf5e2; --mustard: #e0a526;

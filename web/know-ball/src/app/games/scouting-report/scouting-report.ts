@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { GameState, GuessRecord } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -124,6 +124,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
       }
     </app-game-shell>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
     /* Each guess is a card from the set: teal trim, cream gap, navy line. */
