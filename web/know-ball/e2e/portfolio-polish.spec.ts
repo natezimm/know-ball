@@ -32,7 +32,7 @@ test('the first archive entry opens its explicit puzzle even from the daily URL'
   await expect(page.getByRole('combobox', { name: 'Guess a player' })).toBeVisible();
 });
 
-test('a small visual viewport keeps the search and results below the sticky banner', async ({ page }) => {
+test('a small visual viewport keeps the search results above the keyboard', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => {
     const viewport = Object.assign(new EventTarget(), { height: innerHeight, offsetTop: 0, scale: 1 });
@@ -52,7 +52,7 @@ test('a small visual viewport keeps the search and results below the sticky bann
     const banner = (await page.locator('#site-header').boundingBox())!;
     const list = (await page.getByRole('listbox').boundingBox())!;
     const input = (await box.boundingBox())!;
-    return list.y >= banner.y + banner.height && input.y + input.height <= 340;
+    return input.y >= banner.y + banner.height && list.y >= input.y + input.height && list.y + list.height <= 340;
   }).toBe(true);
   await expect(page.getByRole('option').first()).toBeVisible();
 });
