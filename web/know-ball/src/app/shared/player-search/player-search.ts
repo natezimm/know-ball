@@ -14,7 +14,7 @@ let nextId = 0;
   selector: 'app-player-search',
   imports: [Avatar],
   template: `
-    <div class="combo" [class.open]="open()" [class.up]="dropUp()">
+    <div class="combo" [class.open]="open()">
       <label class="visually-hidden" [for]="inputId">{{ label() }}</label>
       <input
         #box
@@ -82,9 +82,6 @@ let nextId = 0;
     input::placeholder { color: var(--muted); }
     input:focus { outline: none; border-color: var(--accent); }
     .open input { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-    /* Docked at the foot of a game, the list opens upward so the keyboard does not cover it. */
-    .up.open input { border-radius: 0 0 var(--radius) var(--radius); }
-    .up .list { bottom: 100%; border-top: 2px solid var(--accent); border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0; max-height: var(--results-height, min(320px, 45dvh)); }
     .spinner {
       position: absolute; right: 16px; top: 50%; width: 16px; height: 16px; margin-top: -8px;
       border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%;
@@ -94,7 +91,7 @@ let nextId = 0;
     .list {
       position: absolute; left: 0; right: 0; z-index: 5; margin: 0; padding: 4px; list-style: none;
       background: var(--surface); border: 2px solid var(--accent); border-top: 0;
-      border-radius: 0 0 var(--radius) var(--radius); max-height: 320px; overflow-y: auto;
+      border-radius: 0 0 var(--radius) var(--radius); max-height: var(--results-height, min(320px, 45dvh)); overflow-y: auto;
     }
     li {
       display: flex; align-items: center; gap: 10px;
@@ -120,8 +117,6 @@ export class PlayerSearch {
   readonly disabled = input(false);
   /** Offer retired players too. */
   readonly includeInactive = input(false, { transform: booleanAttribute });
-  /** Open the list above the box instead of below it. */
-  readonly dropUp = input(false, { transform: booleanAttribute });
   /** Debounce in ms; tests set 0. */
   readonly debounceMs = input(200);
 
@@ -143,14 +138,17 @@ export class PlayerSearch {
   private readonly typed$ = new Subject<string>();
 
   constructor() {
+    // The list opens below the box; keep it above the keyboard, which on iOS covers the
+    // bottom of the layout viewport while only the visual viewport shrinks.
     const measure = () => {
-      if (!this.open() || !this.dropUp()) return;
-      const top = Math.max(window.visualViewport?.offsetTop ?? 0, document.getElementById('site-header')?.getBoundingClientRect().bottom ?? 0);
-      const room = this.box().nativeElement.getBoundingClientRect().top - top - 8;
+      if (!this.open()) return;
+      const viewport = window.visualViewport;
+      const bottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+      const room = bottom - this.box().nativeElement.getBoundingClientRect().bottom - 8;
       this.resultsHeight.set(Math.max(0, Math.min(320, room)));
     };
     afterRenderEffect(measure);
-    // Follow the dock after a viewport or scroll change has been painted.
+    // Follow the box after a viewport or scroll change has been painted.
     let frame = 0;
     const onResize = () => {
       cancelAnimationFrame(frame);
