@@ -138,6 +138,60 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.ToTable("Leagues");
                 });
 
+            modelBuilder.Entity("KnowBall.Domain.NumbersCatalogue", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("ContentJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("ImportedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NumbersCatalogues");
+                });
+
+            modelBuilder.Entity("KnowBall.Domain.NumbersQuiz", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AlgorithmVersion")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("CatalogueId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("QuestionsJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogueId");
+
+                    b.HasIndex("Date")
+                        .IsUnique();
+
+                    b.ToTable("NumbersQuizzes");
+                });
+
             modelBuilder.Entity("KnowBall.Domain.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -605,6 +659,15 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("KnowBall.Domain.NumbersQuiz", b =>
+                {
+                    b.HasOne("KnowBall.Domain.NumbersCatalogue", null)
+                        .WithMany()
+                        .HasForeignKey("CatalogueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("KnowBall.Domain.Player", b =>

@@ -6,6 +6,8 @@ namespace KnowBall.Infrastructure.Persistence;
 
 public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbContext(options), ITriviaDb
 {
+    public DbSet<NumbersCatalogue> NumbersCatalogues => Set<NumbersCatalogue>();
+    public DbSet<NumbersQuiz> NumbersQuizzes => Set<NumbersQuiz>();
     public DbSet<League> Leagues => Set<League>();
     public DbSet<Team> Teams => Set<Team>();
     public DbSet<Player> Players => Set<Player>();
@@ -22,6 +24,17 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
 
     protected override void OnModelCreating(ModelBuilder b)
     {
+        b.Entity<NumbersCatalogue>(e =>
+        {
+            e.Property(x => x.Id).HasMaxLength(64);
+        });
+        b.Entity<NumbersQuiz>(e =>
+        {
+            e.Property(x => x.CatalogueId).HasMaxLength(64);
+            e.Property(x => x.AlgorithmVersion).HasMaxLength(32);
+            e.HasIndex(x => x.Date).IsUnique();
+            e.HasOne<NumbersCatalogue>().WithMany().HasForeignKey(x => x.CatalogueId).OnDelete(DeleteBehavior.Restrict);
+        });
         b.Entity<SpordleSession>(e =>
         {
             e.Property(x => x.Answer).HasMaxLength(6);
@@ -144,5 +157,31 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
             foreach (var prop in entity.GetProperties().Where(p => p.ClrType == typeof(DateTimeOffset) || p.ClrType == typeof(DateTimeOffset?)))
                 prop.SetValueConverter(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.DateTimeOffsetToBinaryConverter());
         }
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        CheckNumbersContent();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        CheckNumbersContent();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        CheckNumbersContent();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    private void CheckNumbersContent()
+    {
+        if (ChangeTracker.Entries().Any(e =>
+            (e.Entity is NumbersCatalogue || e.Entity is NumbersQuiz) &&
+            e.State == EntityState.Modified))
+            throw new InvalidOperationException("Numbers content is immutable. Import a new catalogue revision.");
     }
 }

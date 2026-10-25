@@ -26,7 +26,10 @@ if (args.Contains("--validate-numbers"))
 //   dotnet run --project src/KnowBall.Importer -- --once             → one run, then exit (0 = the roster import succeeded)
 //   dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history
 //   dotnet run --project src/KnowBall.Importer -- --once --history   → reload the full player history first, due or not
-var once = args.Contains("--once");
+var importNumbers = GetArg(args, "--import-numbers");
+if (args.Contains("--import-numbers") && (string.IsNullOrWhiteSpace(importNumbers) || importNumbers.StartsWith("--")))
+{ Console.Error.WriteLine("--import-numbers requires an approved JSON file."); return 2; }
+var once = args.Contains("--once") || importNumbers is not null;
 var forceHistory = args.Contains("--history");
 var sourceArg = GetArg(args, "--source");
 var hostArgs = StripOwnArgs(args);
@@ -45,6 +48,20 @@ if (!once) builder.Services.AddHostedService<NightlyImportWorker>();
 
 var host = builder.Build();
 await DatabaseInitializer.InitializeAsync(host.Services);
+
+if (importNumbers is not null)
+{
+    try
+    {
+        await using var scope = host.Services.CreateAsyncScope();
+        var store = new NumbersContentStore(scope.ServiceProvider.GetRequiredService<TriviaDbContext>(), TimeProvider.System);
+        var catalogue = await store.ImportAsync(await File.ReadAllTextAsync(importNumbers));
+        Console.WriteLine($"Imported approved Numbers catalogue {catalogue.Id}.");
+        return 0;
+    }
+    catch (Exception e) when (e is IOException or InvalidDataException or System.Text.Json.JsonException or UnauthorizedAccessException)
+    { Console.Error.WriteLine(e.Message); return 1; }
+}
 
 if (once)
 {
@@ -72,6 +89,8 @@ static string[] StripOwnArgs(string[] args)
     var rest = new List<string>();
     for (var i = 0; i < args.Length; i++)
     {
+        if (args[i].StartsWith("--import-numbers=", StringComparison.Ordinal)) continue;
+        if (args[i] == "--import-numbers") { i++; continue; }
         if (args[i] is "--once" or "--history" or "--no-history" || args[i].StartsWith("--source=", StringComparison.Ordinal)) continue;
         if (args[i] == "--source") { i++; continue; }
         rest.Add(args[i]);
