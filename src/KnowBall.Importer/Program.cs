@@ -4,6 +4,23 @@ using KnowBall.Importer;
 using KnowBall.Infrastructure;
 using KnowBall.Infrastructure.Persistence;
 
+// Offline preflight must run before host/database initialization.
+if (args.Contains("--validate-numbers"))
+{
+    var path = GetArg(args, "--validate-numbers");
+    if (path is null) { Console.Error.WriteLine("--validate-numbers requires a JSON file."); return 2; }
+    try
+    {
+        using var catalogue = KnowBall.Application.Numbers.QuizCatalogue.Read(await File.ReadAllTextAsync(path));
+        var errors = KnowBall.Application.Numbers.QuizCatalogue.Validate(catalogue.RootElement, args.Contains("--require-approved"));
+        if (errors.Count != 0) { foreach (var error in errors) Console.Error.WriteLine(error); return 1; }
+        Console.WriteLine($"Valid catalogue: {catalogue.RootElement.GetProperty("questions").GetArrayLength()} questions. No database writes.");
+        return 0;
+    }
+    catch (Exception e) when (e is IOException or InvalidDataException or System.Text.Json.JsonException or UnauthorizedAccessException)
+    { Console.Error.WriteLine(e.Message); return 1; }
+}
+
 // Usage:
 //   dotnet run --project src/KnowBall.Importer                       → worker: runs nightly at Import:DailyAt
 //   dotnet run --project src/KnowBall.Importer -- --once             → one run, then exit (0 = the roster import succeeded)
