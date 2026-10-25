@@ -426,6 +426,15 @@ Who's That Sportsman remains a separate deferred idea and is not a dependency of
 
 ## 10. Starting point
 
+October 24 update: the user accepted the expanded 56-question preview. Awards,
+championship teams and season identification, plus topic/era practice filters, are
+now part of the intended product scope. The older two-template-only guidance above
+applies to the initial source proof, not the accepted full-game scope.
+Backend milestone 2 begins with [catalogue preflight](numbers-catalogue-preflight.md):
+offline validation and a deterministic selection primitive. Durable imports,
+immutable database snapshots, scheduling rules and supply simulation remain the
+next slice of that milestone; the saved gameplay API follows.
+
 October 23 update: the user requested a hosted, reversible preview to test the design on the site before
 committing to the full implementation. The existing sample is now packaged at
 `/preview/numbers-dont-lie/index.html?ngsw-bypass=true`, linked from the footer and marked as a preview.
