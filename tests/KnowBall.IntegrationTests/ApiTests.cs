@@ -67,7 +67,11 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         throw new DirectoryNotFoundException("tests/fixtures/bref");
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder) => builder.UseEnvironment("Testing");
+    // Every test request comes from the same (empty) address, so the site-wide limit would trip
+    // partway through the run; RateLimitTests turns it back down where it is the subject.
+    protected override void ConfigureWebHost(IWebHostBuilder builder) => builder
+        .UseEnvironment("Testing")
+        .UseSetting("RateLimits:RequestsPerMinute", "0");
 
     protected override void Dispose(bool disposing)
     {

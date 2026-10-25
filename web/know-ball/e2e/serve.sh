@@ -43,4 +43,5 @@ export ASPNETCORE_WEBROOT="$SITE"
 export Games__GuessesPerMinute=10000
 export Spordle__GuessesPerMinute=10000
 export Spordle__GamesPerMinute=10000
+export RateLimits__RequestsPerMinute=0
 exec dotnet "$ROOT/src/KnowBall.Api/bin/Release/$TFM/KnowBall.Api.dll"
