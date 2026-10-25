@@ -1,47 +1,34 @@
 import { expect, test } from './support';
 
-test('the deployed preview opens from the footer and plays daily and selected-league practice', async ({ page, request }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+test('fourth game opens and saves daily feedback across reloads', async ({ page }) => {
+  await page.setViewportSize({width:390,height:844});
   await page.goto('/');
-  await page.getByRole('contentinfo').getByRole('link', { name: "Numbers Don't Lie preview" }).click();
-  await expect(page).toHaveURL(/\/preview\/numbers-dont-lie\/index\.html\?ngsw-bypass=true$/);
-  await expect(page.getByText('Design preview', { exact:true })).toBeVisible();
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
-  await expect(page.getByRole('link', { name:'Back to Know Ball games' })).toHaveAttribute('href', '/');
-  await page.getByRole('button', { name:'Play daily preview', exact:true }).click();
-  for (let index = 0; index < 5; index++) {
-    await page.locator(`input[value="${index === 1 ? 'p1' : 'p0'}"]`).check();
-    await page.getByRole('button', { name:'Lock in answer' }).click();
-    await expect(page.locator('.feedback .source a').first()).toBeVisible();
-    await page.getByRole('button', { name:index === 4 ? 'See results' : 'Next question' }).click();
+  await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(4);
+  await page.getByRole('link',{name:"Numbers Don't Lie: Play beta"}).click();
+  await expect(page.getByRole('heading',{name:"Numbers Don't Lie",exact:true})).toBeVisible();
+  for(let i=0;i<5;i++) {
+    await page.getByRole('radio').first().check();
+    await page.getByRole('button',{name:'Lock in answer'}).click();
+    await expect(page.locator('.feedback')).toBeVisible();
+    await page.reload();
+    await expect(page.locator('.feedback')).toBeVisible();
+    await page.getByRole('button',{name:i===4?'See results':'Next question'}).click();
   }
-  await expect(page.locator('.score')).toHaveText('4 / 5');
-  await page.getByRole('button', { name:'Customize practice' }).click();
-  for (const name of ['NBA', 'MLB']) await page.getByRole('checkbox', { name, exact:true }).uncheck();
-  await page.getByRole('button', { name:'Start practice' }).click();
-  const leagues: string[] = [];
-  for (let index = 0; index < 5; index++) {
-    const label = await page.locator('.meta').first().textContent();
-    expect(label).toMatch(/^Practice · (NFL|NHL)/);
-    leagues.push(label!.includes('NFL') ? 'NFL' : 'NHL');
-    await page.locator('input[value="p0"]').check();
-    await page.getByRole('button', { name:'Lock in answer' }).click();
-    await page.getByRole('button', { name:index === 4 ? 'See results' : 'Next question' }).click();
-  }
-  expect(new Set(leagues).size).toBe(2);
-  await expect(page.locator('.score')).toHaveText('5 / 5');
+  await expect(page.locator('.score')).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('button', { name:'View today’s result', exact:true })).toBeVisible();
-  await page.getByRole('button', { name:'Practice', exact:true }).click();
-  await expect(page.locator('input[name="league"]:checked')).toHaveCount(2);
-  for (const name of ['NFL', 'NHL']) await expect(page.getByRole('checkbox', { name, exact:true })).toBeChecked();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  // Shipped assets must be real static resources, not the Angular HTML fallback.
-  for (const path of ['fonts/rokkitt-latin-500-normal.woff2', 'fonts/alfa-slab-one-latin-400-normal.woff2']) {
-    const response = await request.get(`/preview/numbers-dont-lie/${path}`);
-    expect(response.ok()).toBe(true);
-    expect(response.headers()['content-type']).toContain('font/woff2');
-  }
-  const manifest = await (await request.get('/ngsw.json')).json();
-  expect(Object.keys(manifest.hashTable).some(path => path.startsWith('/preview/'))).toBe(false);
+  await expect(page.locator('.score')).toBeVisible();
+  await page.getByRole('button',{name:'Customize practice'}).click();
+  for(const name of ['NFL','MLB','NHL']) await page.getByRole('checkbox',{name,exact:true}).uncheck();
+  await page.getByRole('button',{name:'Start practice'}).click();
+  await expect(page.getByText(/NBA · .*Question 1 of 5/)).toBeVisible();
+  await page.reload();
+  await expect(page.getByText(/NBA · .*Question 1 of 5/)).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('old preview URL redirects to the server-backed game', async ({page,request})=>{
+  await page.goto('/preview/numbers-dont-lie/index.html?ngsw-bypass=true');
+  await expect(page).toHaveURL(/numbers-dont-lie\?round=/);
+  const response=await request.get('/preview/numbers-dont-lie/questions.json');
+  expect(response.status()).toBe(404);
 });

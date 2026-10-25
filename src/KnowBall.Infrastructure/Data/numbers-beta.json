@@ -1,0 +1,2394 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Hosted prototype; answers are public. Not a production catalogue.",
+  "questions": [
+    {
+      "id": "nba-points-2024",
+      "revision": 1,
+      "factFamily": "nba-2024-regular-points",
+      "league": "nba",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "points",
+      "unit": "points",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most points in the 2023–24 NBA regular season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Luka Dončić",
+          "value": 2370
+        },
+        {
+          "id": "p1",
+          "label": "Shai Gilgeous-Alexander",
+          "value": 2254
+        },
+        {
+          "id": "p2",
+          "label": "Giannis Antetokounmpo",
+          "value": 2222
+        },
+        {
+          "id": "p3",
+          "label": "Jalen Brunson",
+          "value": 2212
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Luka Dončić recorded 2,370 points. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
+        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-rebounds-2024",
+      "revision": 1,
+      "factFamily": "nba-2024-regular-rebounds",
+      "league": "nba",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "rebounds",
+      "unit": "rebounds",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 1,120 rebounds in the 2023–24 NBA regular season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "Nikola Jokić",
+          "value": 976
+        },
+        {
+          "id": "p0",
+          "label": "Domantas Sabonis",
+          "value": 1120
+        },
+        {
+          "id": "p1",
+          "label": "Rudy Gobert",
+          "value": 982
+        },
+        {
+          "id": "p2",
+          "label": "Anthony Davis",
+          "value": 961
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 1120,
+      "explanation": "Domantas Sabonis recorded 1,120 rebounds. That total matches the clue.",
+      "source": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
+        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-assists-2024",
+      "revision": 1,
+      "factFamily": "nba-2024-regular-assists",
+      "league": "nba",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "assists",
+      "unit": "assists",
+      "template": "compare-four",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most assists in the 2023–24 NBA regular season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Nikola Jokić",
+          "value": 708
+        },
+        {
+          "id": "p3",
+          "label": "Domantas Sabonis",
+          "value": 673
+        },
+        {
+          "id": "p0",
+          "label": "Tyrese Haliburton",
+          "value": 752
+        },
+        {
+          "id": "p1",
+          "label": "Luka Dončić",
+          "value": 686
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Tyrese Haliburton recorded 752 assists. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
+        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-blocks-2024",
+      "revision": 1,
+      "factFamily": "nba-2024-regular-blocks",
+      "league": "nba",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "blocks",
+      "unit": "blocks",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most blocks in the 2023–24 NBA regular season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Walker Kessler",
+          "value": 154
+        },
+        {
+          "id": "p2",
+          "label": "Brook Lopez",
+          "value": 189
+        },
+        {
+          "id": "p3",
+          "label": "Chet Holmgren",
+          "value": 190
+        },
+        {
+          "id": "p0",
+          "label": "Victor Wembanyama",
+          "value": 254
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Victor Wembanyama recorded 254 blocks. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
+        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-steals-2024",
+      "revision": 1,
+      "factFamily": "nba-2024-regular-steals",
+      "league": "nba",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "steals",
+      "unit": "steals",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 150 steals in the 2023–24 NBA regular season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "De’Aaron Fox",
+          "value": 150
+        },
+        {
+          "id": "p1",
+          "label": "Alex Caruso",
+          "value": 120
+        },
+        {
+          "id": "p2",
+          "label": "Matisse Thybulle",
+          "value": 113
+        },
+        {
+          "id": "p3",
+          "label": "Kawhi Leonard",
+          "value": 111
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 150,
+      "explanation": "De’Aaron Fox recorded 150 steals. That total matches the clue.",
+      "source": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
+        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-threes-2024",
+      "revision": 1,
+      "factFamily": "nba-2024-regular-threes",
+      "league": "nba",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "threes",
+      "unit": "three-pointers made",
+      "template": "compare-four",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most three-pointers made in the 2023–24 NBA regular season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "Mike Conley",
+          "value": 179
+        },
+        {
+          "id": "p0",
+          "label": "CJ McCollum",
+          "value": 239
+        },
+        {
+          "id": "p1",
+          "label": "Grayson Allen",
+          "value": 205
+        },
+        {
+          "id": "p2",
+          "label": "Luke Kennard",
+          "value": 107
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "CJ McCollum recorded 239 three-pointers made. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
+        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nfl-passing-2023",
+      "revision": 1,
+      "factFamily": "nfl-2023-regular-passing",
+      "league": "nfl",
+      "season": "2023",
+      "scope": "regular-season",
+      "metric": "passing",
+      "unit": "passing yards",
+      "template": "compare-four",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most passing yards in the 2023 NFL regular season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Dak Prescott",
+          "value": 4516
+        },
+        {
+          "id": "p3",
+          "label": "Josh Allen",
+          "value": 4306
+        },
+        {
+          "id": "p0",
+          "label": "Tua Tagovailoa",
+          "value": 4624
+        },
+        {
+          "id": "p1",
+          "label": "Jared Goff",
+          "value": 4575
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Tua Tagovailoa recorded 4,624 passing yards. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
+        "credit": "nflverse contributors · player statistics",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "transformation": "REG weekly rows summed by player_id; integer yard totals."
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nfl-rushing-2023",
+      "revision": 1,
+      "factFamily": "nfl-2023-regular-rushing",
+      "league": "nfl",
+      "season": "2023",
+      "scope": "regular-season",
+      "metric": "rushing",
+      "unit": "rushing yards",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 1,459 rushing yards in the 2023 NFL regular season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Derrick Henry",
+          "value": 1167
+        },
+        {
+          "id": "p2",
+          "label": "Kyren Williams",
+          "value": 1144
+        },
+        {
+          "id": "p3",
+          "label": "James Cook",
+          "value": 1122
+        },
+        {
+          "id": "p0",
+          "label": "Christian McCaffrey",
+          "value": 1459
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 1459,
+      "explanation": "Christian McCaffrey recorded 1,459 rushing yards. That total matches the clue.",
+      "source": {
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
+        "credit": "nflverse contributors · player statistics",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "transformation": "REG weekly rows summed by player_id; integer yard totals."
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nfl-receiving-2023",
+      "revision": 1,
+      "factFamily": "nfl-2023-regular-receiving",
+      "league": "nfl",
+      "season": "2023",
+      "scope": "regular-season",
+      "metric": "receiving",
+      "unit": "receiving yards",
+      "template": "compare-four",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most receiving yards in the 2023 NFL regular season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tyreek Hill",
+          "value": 1799
+        },
+        {
+          "id": "p1",
+          "label": "CeeDee Lamb",
+          "value": 1749
+        },
+        {
+          "id": "p2",
+          "label": "Amon-Ra St. Brown",
+          "value": 1515
+        },
+        {
+          "id": "p3",
+          "label": "Puka Nacua",
+          "value": 1486
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Tyreek Hill recorded 1,799 receiving yards. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
+        "credit": "nflverse contributors · player statistics",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "transformation": "REG weekly rows summed by player_id; integer yard totals."
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nfl-passing-2022",
+      "revision": 1,
+      "factFamily": "nfl-2022-regular-passing",
+      "league": "nfl",
+      "season": "2022",
+      "scope": "regular-season",
+      "metric": "passing",
+      "unit": "passing yards",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most passing yards in the 2022 NFL regular season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "Kirk Cousins",
+          "value": 4547
+        },
+        {
+          "id": "p0",
+          "label": "Patrick Mahomes",
+          "value": 5250
+        },
+        {
+          "id": "p1",
+          "label": "Justin Herbert",
+          "value": 4739
+        },
+        {
+          "id": "p2",
+          "label": "Tom Brady",
+          "value": 4694
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Patrick Mahomes recorded 5,250 passing yards. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
+        "credit": "nflverse contributors · player statistics",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "transformation": "REG weekly rows summed by player_id; integer yard totals."
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nfl-rushing-2022",
+      "revision": 1,
+      "factFamily": "nfl-2022-regular-rushing",
+      "league": "nfl",
+      "season": "2022",
+      "scope": "regular-season",
+      "metric": "rushing",
+      "unit": "rushing yards",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 1,653 rushing yards in the 2022 NFL regular season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Nick Chubb",
+          "value": 1525
+        },
+        {
+          "id": "p3",
+          "label": "Saquon Barkley",
+          "value": 1312
+        },
+        {
+          "id": "p0",
+          "label": "Josh Jacobs",
+          "value": 1653
+        },
+        {
+          "id": "p1",
+          "label": "Derrick Henry",
+          "value": 1538
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 1653,
+      "explanation": "Josh Jacobs recorded 1,653 rushing yards. That total matches the clue.",
+      "source": {
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
+        "credit": "nflverse contributors · player statistics",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "transformation": "REG weekly rows summed by player_id; integer yard totals."
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nfl-receiving-2022",
+      "revision": 1,
+      "factFamily": "nfl-2022-regular-receiving",
+      "league": "nfl",
+      "season": "2022",
+      "scope": "regular-season",
+      "metric": "receiving",
+      "unit": "receiving yards",
+      "template": "compare-four",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most receiving yards in the 2022 NFL regular season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Tyreek Hill",
+          "value": 1710
+        },
+        {
+          "id": "p2",
+          "label": "Davante Adams",
+          "value": 1516
+        },
+        {
+          "id": "p3",
+          "label": "A.J. Brown",
+          "value": 1496
+        },
+        {
+          "id": "p0",
+          "label": "Justin Jefferson",
+          "value": 1809
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Justin Jefferson recorded 1,809 receiving yards. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
+        "credit": "nflverse contributors · player statistics",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "transformation": "REG weekly rows summed by player_id; integer yard totals."
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "mlb-homeRuns-2023",
+      "revision": 1,
+      "factFamily": "mlb-2023-regular-homeRuns",
+      "league": "mlb",
+      "season": "2023",
+      "scope": "regular-season",
+      "metric": "homeRuns",
+      "unit": "home runs",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most home runs in the 2023 MLB regular season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Matt Olson",
+          "value": 54
+        },
+        {
+          "id": "p1",
+          "label": "Kyle Schwarber",
+          "value": 47
+        },
+        {
+          "id": "p2",
+          "label": "Pete Alonso",
+          "value": 46
+        },
+        {
+          "id": "p3",
+          "label": "Shohei Ohtani",
+          "value": 44
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Matt Olson recorded 54 home runs. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
+        "credit": "MLB.com · season hitting statistics"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "mlb-hits-2023",
+      "revision": 1,
+      "factFamily": "mlb-2023-regular-hits",
+      "league": "mlb",
+      "season": "2023",
+      "scope": "regular-season",
+      "metric": "hits",
+      "unit": "hits",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 217 hits in the 2023 MLB regular season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "Marcus Semien",
+          "value": 185
+        },
+        {
+          "id": "p0",
+          "label": "Ronald Acuña Jr.",
+          "value": 217
+        },
+        {
+          "id": "p1",
+          "label": "Freddie Freeman",
+          "value": 211
+        },
+        {
+          "id": "p2",
+          "label": "Luis Arraez",
+          "value": 203
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 217,
+      "explanation": "Ronald Acuña Jr. recorded 217 hits. That total matches the clue.",
+      "source": {
+        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
+        "credit": "MLB.com · season hitting statistics"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "mlb-rbi-2023",
+      "revision": 1,
+      "factFamily": "mlb-2023-regular-rbi",
+      "league": "mlb",
+      "season": "2023",
+      "scope": "regular-season",
+      "metric": "rbi",
+      "unit": "runs batted in",
+      "template": "compare-four",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most runs batted in in the 2023 MLB regular season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Ozzie Albies",
+          "value": 109
+        },
+        {
+          "id": "p3",
+          "label": "Juan Soto",
+          "value": 109
+        },
+        {
+          "id": "p0",
+          "label": "Pete Alonso",
+          "value": 118
+        },
+        {
+          "id": "p1",
+          "label": "Kyle Tucker",
+          "value": 112
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Pete Alonso recorded 118 runs batted in. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
+        "credit": "MLB.com · season hitting statistics"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "mlb-homeRuns-2022",
+      "revision": 1,
+      "factFamily": "mlb-2022-regular-homeRuns",
+      "league": "mlb",
+      "season": "2022",
+      "scope": "regular-season",
+      "metric": "homeRuns",
+      "unit": "home runs",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most home runs in the 2022 MLB regular season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Kyle Schwarber",
+          "value": 46
+        },
+        {
+          "id": "p2",
+          "label": "Pete Alonso",
+          "value": 40
+        },
+        {
+          "id": "p3",
+          "label": "Austin Riley",
+          "value": 38
+        },
+        {
+          "id": "p0",
+          "label": "Aaron Judge",
+          "value": 62
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Aaron Judge recorded 62 home runs. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
+        "credit": "MLB.com · season hitting statistics"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "mlb-hits-2022",
+      "revision": 1,
+      "factFamily": "mlb-2022-regular-hits",
+      "league": "mlb",
+      "season": "2022",
+      "scope": "regular-season",
+      "metric": "hits",
+      "unit": "hits",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 199 hits in the 2022 MLB regular season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Freddie Freeman",
+          "value": 199
+        },
+        {
+          "id": "p1",
+          "label": "Trea Turner",
+          "value": 194
+        },
+        {
+          "id": "p2",
+          "label": "Bo Bichette",
+          "value": 189
+        },
+        {
+          "id": "p3",
+          "label": "José Abreu",
+          "value": 183
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 199,
+      "explanation": "Freddie Freeman recorded 199 hits. That total matches the clue.",
+      "source": {
+        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
+        "credit": "MLB.com · season hitting statistics"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "mlb-rbi-2022",
+      "revision": 1,
+      "factFamily": "mlb-2022-regular-rbi",
+      "league": "mlb",
+      "season": "2022",
+      "scope": "regular-season",
+      "metric": "rbi",
+      "unit": "runs batted in",
+      "template": "compare-four",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most runs batted in in the 2022 MLB regular season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "Francisco Lindor",
+          "value": 107
+        },
+        {
+          "id": "p0",
+          "label": "Pete Alonso",
+          "value": 131
+        },
+        {
+          "id": "p1",
+          "label": "José Ramírez",
+          "value": 126
+        },
+        {
+          "id": "p2",
+          "label": "Paul Goldschmidt",
+          "value": 115
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Pete Alonso recorded 131 runs batted in. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
+        "credit": "MLB.com · season hitting statistics"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nhl-points-2024",
+      "revision": 1,
+      "factFamily": "nhl-2024-regular-points",
+      "league": "nhl",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "points",
+      "unit": "points",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most points in the 2023–24 NHL regular season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Connor McDavid",
+          "value": 132
+        },
+        {
+          "id": "p3",
+          "label": "Artemi Panarin",
+          "value": 120
+        },
+        {
+          "id": "p0",
+          "label": "Nikita Kucherov",
+          "value": 144
+        },
+        {
+          "id": "p1",
+          "label": "Nathan MacKinnon",
+          "value": 140
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Nikita Kucherov recorded 144 points. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
+        "credit": "NHL · 2023–24 regular-season recap"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nhl-goals-2024",
+      "revision": 1,
+      "factFamily": "nhl-2024-regular-goals",
+      "league": "nhl",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "goals",
+      "unit": "goals",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 69 goals in the 2023–24 NHL regular season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Sam Reinhart",
+          "value": 57
+        },
+        {
+          "id": "p2",
+          "label": "Zach Hyman",
+          "value": 54
+        },
+        {
+          "id": "p3",
+          "label": "Nathan MacKinnon",
+          "value": 51
+        },
+        {
+          "id": "p0",
+          "label": "Auston Matthews",
+          "value": 69
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 69,
+      "explanation": "Auston Matthews recorded 69 goals. That total matches the clue.",
+      "source": {
+        "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
+        "credit": "NHL · 2023–24 regular-season recap"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nhl-assists-2024",
+      "revision": 1,
+      "factFamily": "nhl-2024-regular-assists",
+      "league": "nhl",
+      "season": "2023–24",
+      "scope": "regular-season",
+      "metric": "assists",
+      "unit": "assists",
+      "template": "compare-four",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most assists in the 2023–24 NHL regular season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Nathan MacKinnon",
+          "value": 89
+        },
+        {
+          "id": "p1",
+          "label": "Quinn Hughes",
+          "value": 75
+        },
+        {
+          "id": "p2",
+          "label": "Cale Makar",
+          "value": 69
+        },
+        {
+          "id": "p3",
+          "label": "Artemi Panarin",
+          "value": 71
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Nathan MacKinnon recorded 89 assists. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
+        "credit": "NHL · 2023–24 regular-season recap"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nhl-points-2023",
+      "revision": 1,
+      "factFamily": "nhl-2023-regular-points",
+      "league": "nhl",
+      "season": "2022–23",
+      "scope": "regular-season",
+      "metric": "points",
+      "unit": "points",
+      "template": "compare-four",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most points in the 2022–23 NHL regular season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "Nathan MacKinnon",
+          "value": 111
+        },
+        {
+          "id": "p0",
+          "label": "Connor McDavid",
+          "value": 153
+        },
+        {
+          "id": "p1",
+          "label": "Leon Draisaitl",
+          "value": 128
+        },
+        {
+          "id": "p2",
+          "label": "David Pastrnak",
+          "value": 113
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Connor McDavid recorded 153 points. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
+        "credit": "NHL · 2022–23 final statistics release"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nhl-goals-2023",
+      "revision": 1,
+      "factFamily": "nhl-2023-regular-goals",
+      "league": "nhl",
+      "season": "2022–23",
+      "scope": "regular-season",
+      "metric": "goals",
+      "unit": "goals",
+      "template": "match-value",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded 64 goals in the 2022–23 NHL regular season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Mikko Rantanen",
+          "value": 55
+        },
+        {
+          "id": "p3",
+          "label": "Leon Draisaitl",
+          "value": 52
+        },
+        {
+          "id": "p0",
+          "label": "Connor McDavid",
+          "value": 64
+        },
+        {
+          "id": "p1",
+          "label": "David Pastrnak",
+          "value": 61
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": 64,
+      "explanation": "Connor McDavid recorded 64 goals. That total matches the clue.",
+      "source": {
+        "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
+        "credit": "NHL · 2022–23 final statistics release"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nhl-assists-2023",
+      "revision": 1,
+      "factFamily": "nhl-2023-regular-assists",
+      "league": "nhl",
+      "season": "2022–23",
+      "scope": "regular-season",
+      "metric": "assists",
+      "unit": "assists",
+      "template": "compare-four",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Among these four, who recorded the most assists in the 2022–23 NHL regular season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Leon Draisaitl",
+          "value": 76
+        },
+        {
+          "id": "p2",
+          "label": "Erik Karlsson",
+          "value": 76
+        },
+        {
+          "id": "p3",
+          "label": "Nathan MacKinnon",
+          "value": 69
+        },
+        {
+          "id": "p0",
+          "label": "Nikita Kucherov",
+          "value": 83
+        }
+      ],
+      "correctOptionId": "p0",
+      "targetValue": null,
+      "explanation": "Nikita Kucherov recorded 83 assists. That is the highest total among these four choices.",
+      "source": {
+        "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
+        "credit": "NHL · 2022–23 final statistics release"
+      },
+      "checkedAt": "2026-10-22",
+      "verification": "source-values-checked; human editorial review pending",
+      "publicationStatus": "prototype-only",
+      "topic": "stats"
+    },
+    {
+      "id": "nba-awards-2010",
+      "revision": 1,
+      "factFamily": "nba-awards-2010",
+      "league": "nba",
+      "season": "2010–11",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2010–11 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Derrick Rose"
+        },
+        {
+          "id": "p1",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p2",
+          "label": "Kobe Bryant"
+        },
+        {
+          "id": "p3",
+          "label": "Kevin Durant"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Derrick Rose received the NBA regular-season MVP for 2010–11. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-awards-2006",
+      "revision": 1,
+      "factFamily": "nba-awards-2006",
+      "league": "nba",
+      "season": "2006–07",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2006–07 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dirk Nowitzki"
+        },
+        {
+          "id": "p1",
+          "label": "Steve Nash"
+        },
+        {
+          "id": "p2",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p3",
+          "label": "Kobe Bryant"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dirk Nowitzki received the NBA regular-season MVP for 2006–07. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-awards-2013",
+      "revision": 1,
+      "factFamily": "nba-awards-2013",
+      "league": "nba",
+      "season": "2013–14",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2013–14 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kevin Durant"
+        },
+        {
+          "id": "p1",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p2",
+          "label": "Stephen Curry"
+        },
+        {
+          "id": "p3",
+          "label": "James Harden"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kevin Durant received the NBA regular-season MVP for 2013–14. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-1997",
+      "revision": 1,
+      "factFamily": "nhl-awards-1997",
+      "league": "nhl",
+      "season": "1997–98",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 1997–98 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dominik Hasek"
+        },
+        {
+          "id": "p1",
+          "label": "Jaromir Jagr"
+        },
+        {
+          "id": "p2",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Sakic"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dominik Hasek received the Hart Memorial Trophy for 1997–98. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-2002",
+      "revision": 1,
+      "factFamily": "nhl-awards-2002",
+      "league": "nhl",
+      "season": "2002–03",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 2002–03 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Peter Forsberg"
+        },
+        {
+          "id": "p1",
+          "label": "Joe Sakic"
+        },
+        {
+          "id": "p2",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p3",
+          "label": "Jaromir Jagr"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Peter Forsberg received the Hart Memorial Trophy for 2002–03. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-2014",
+      "revision": 1,
+      "factFamily": "nhl-awards-2014",
+      "league": "nhl",
+      "season": "2014–15",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 2014–15 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carey Price"
+        },
+        {
+          "id": "p1",
+          "label": "Sidney Crosby"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Ovechkin"
+        },
+        {
+          "id": "p3",
+          "label": "Patrick Kane"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Carey Price received the Hart Memorial Trophy for 2014–15. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-1997",
+      "revision": 1,
+      "factFamily": "mlb-awards-1997",
+      "league": "mlb",
+      "season": "1997",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the American League MVP for the 1997 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ken Griffey Jr."
+        },
+        {
+          "id": "p1",
+          "label": "Frank Thomas"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Rodriguez"
+        },
+        {
+          "id": "p3",
+          "label": "Juan Gonzalez"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ken Griffey Jr. received the American League MVP for 1997. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-2001",
+      "revision": 1,
+      "factFamily": "mlb-awards-2001",
+      "league": "mlb",
+      "season": "2001",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the American League MVP for the 2001 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ichiro Suzuki"
+        },
+        {
+          "id": "p1",
+          "label": "Jason Giambi"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Rodriguez"
+        },
+        {
+          "id": "p3",
+          "label": "Manny Ramirez"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ichiro Suzuki received the American League MVP for 2001. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-2018",
+      "revision": 1,
+      "factFamily": "mlb-awards-2018",
+      "league": "mlb",
+      "season": "2018",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the American League MVP for the 2018 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Mookie Betts"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Trout"
+        },
+        {
+          "id": "p2",
+          "label": "Jose Altuve"
+        },
+        {
+          "id": "p3",
+          "label": "Aaron Judge"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Mookie Betts received the American League MVP for 2018. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2007",
+      "revision": 1,
+      "factFamily": "nfl-awards-2007",
+      "league": "nfl",
+      "season": "2007",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2007 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Peyton Manning"
+        },
+        {
+          "id": "p2",
+          "label": "Brett Favre"
+        },
+        {
+          "id": "p3",
+          "label": "Randy Moss"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tom Brady received the AP NFL MVP for 2007. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.patriots.com/news/tom-brady-bio",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2010",
+      "revision": 1,
+      "factFamily": "nfl-awards-2010",
+      "league": "nfl",
+      "season": "2010",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2010 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Michael Vick"
+        },
+        {
+          "id": "p2",
+          "label": "Aaron Rodgers"
+        },
+        {
+          "id": "p3",
+          "label": "Philip Rivers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tom Brady received the AP NFL MVP for 2010. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.patriots.com/news/tom-brady-bio",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2017",
+      "revision": 1,
+      "factFamily": "nfl-awards-2017",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2017 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Carson Wentz"
+        },
+        {
+          "id": "p2",
+          "label": "Todd Gurley"
+        },
+        {
+          "id": "p3",
+          "label": "Antonio Brown"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tom Brady received the AP NFL MVP for 2017. This is the season award, not a championship-game MVP.",
+      "source": {
+        "url": "https://www.patriots.com/news/tom-brady-bio",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2010",
+      "revision": 1,
+      "factFamily": "nba-teams-2010",
+      "league": "nba",
+      "season": "2010–11",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2010–11 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dallas Mavericks"
+        },
+        {
+          "id": "p1",
+          "label": "Miami Heat"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Lakers"
+        },
+        {
+          "id": "p3",
+          "label": "Boston Celtics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dallas Mavericks won the NBA championship for 2010–11. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2003",
+      "revision": 1,
+      "factFamily": "nba-teams-2003",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2003–04 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Detroit Pistons"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Lakers"
+        },
+        {
+          "id": "p2",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p3",
+          "label": "Indiana Pacers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Detroit Pistons won the NBA championship for 2003–04. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2018",
+      "revision": 1,
+      "factFamily": "nba-teams-2018",
+      "league": "nba",
+      "season": "2018–19",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2018–19 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Toronto Raptors"
+        },
+        {
+          "id": "p1",
+          "label": "Golden State Warriors"
+        },
+        {
+          "id": "p2",
+          "label": "Milwaukee Bucks"
+        },
+        {
+          "id": "p3",
+          "label": "Philadelphia 76ers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Toronto Raptors won the NBA championship for 2018–19. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-1998",
+      "revision": 1,
+      "factFamily": "nhl-teams-1998",
+      "league": "nhl",
+      "season": "1998–99",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 1998–99 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dallas Stars"
+        },
+        {
+          "id": "p1",
+          "label": "Buffalo Sabres"
+        },
+        {
+          "id": "p2",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p3",
+          "label": "Colorado Avalanche"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dallas Stars won the Stanley Cup for 1998–99. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-2002",
+      "revision": 1,
+      "factFamily": "nhl-teams-2002",
+      "league": "nhl",
+      "season": "2002–03",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 2002–03 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New Jersey Devils"
+        },
+        {
+          "id": "p1",
+          "label": "Mighty Ducks of Anaheim"
+        },
+        {
+          "id": "p2",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p3",
+          "label": "Ottawa Senators"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "New Jersey Devils won the Stanley Cup for 2002–03. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-2018",
+      "revision": 1,
+      "factFamily": "nhl-teams-2018",
+      "league": "nhl",
+      "season": "2018–19",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 2018–19 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "St. Louis Blues"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Bruins"
+        },
+        {
+          "id": "p2",
+          "label": "Washington Capitals"
+        },
+        {
+          "id": "p3",
+          "label": "Tampa Bay Lightning"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "St. Louis Blues won the Stanley Cup for 2018–19. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2016",
+      "revision": 1,
+      "factFamily": "mlb-teams-2016",
+      "league": "mlb",
+      "season": "2016",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2016 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Chicago Cubs"
+        },
+        {
+          "id": "p1",
+          "label": "Cleveland Indians"
+        },
+        {
+          "id": "p2",
+          "label": "Boston Red Sox"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Dodgers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chicago Cubs won the World Series for 2016. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/world-series",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2015",
+      "revision": 1,
+      "factFamily": "mlb-teams-2015",
+      "league": "mlb",
+      "season": "2015",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2015 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kansas City Royals"
+        },
+        {
+          "id": "p1",
+          "label": "New York Mets"
+        },
+        {
+          "id": "p2",
+          "label": "Toronto Blue Jays"
+        },
+        {
+          "id": "p3",
+          "label": "St. Louis Cardinals"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kansas City Royals won the World Series for 2015. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/world-series",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2019",
+      "revision": 1,
+      "factFamily": "mlb-teams-2019",
+      "league": "mlb",
+      "season": "2019",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2019 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Washington Nationals"
+        },
+        {
+          "id": "p1",
+          "label": "Houston Astros"
+        },
+        {
+          "id": "p2",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Braves"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Washington Nationals won the World Series for 2019. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/world-series",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-1985",
+      "revision": 1,
+      "factFamily": "nfl-teams-1985",
+      "league": "nfl",
+      "season": "1985",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 1985 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Chicago Bears"
+        },
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Miami Dolphins"
+        },
+        {
+          "id": "p3",
+          "label": "Dallas Cowboys"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chicago Bears won the Super Bowl for 1985. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.espn.com/nfl/superbowl/history/winners",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-1999",
+      "revision": 1,
+      "factFamily": "nfl-teams-1999",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 1999 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "St. Louis Rams"
+        },
+        {
+          "id": "p1",
+          "label": "Tennessee Titans"
+        },
+        {
+          "id": "p2",
+          "label": "Denver Broncos"
+        },
+        {
+          "id": "p3",
+          "label": "Minnesota Vikings"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "St. Louis Rams won the Super Bowl for 1999. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.espn.com/nfl/superbowl/history/winners",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-2017",
+      "revision": 1,
+      "factFamily": "nfl-teams-2017",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 2017 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Philadelphia Eagles"
+        },
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Pittsburgh Steelers"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Falcons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Philadelphia Eagles won the Super Bowl for 2017. The season year can differ from the calendar year of the final.",
+      "source": {
+        "url": "https://www.espn.com/nfl/superbowl/history/winners",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-2007",
+      "revision": 1,
+      "factFamily": "nba-seasons-2007",
+      "league": "nba",
+      "season": "2007–08",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Kobe Bryant win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2007–08"
+        },
+        {
+          "id": "p1",
+          "label": "2005–06"
+        },
+        {
+          "id": "p2",
+          "label": "2009–10"
+        },
+        {
+          "id": "p3",
+          "label": "2011–12"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kobe Bryant earned the NBA regular-season MVP for the 2007–08 season.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-2016",
+      "revision": 1,
+      "factFamily": "nba-seasons-2016",
+      "league": "nba",
+      "season": "2016–17",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Russell Westbrook win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2016–17"
+        },
+        {
+          "id": "p1",
+          "label": "2013–14"
+        },
+        {
+          "id": "p2",
+          "label": "2014–15"
+        },
+        {
+          "id": "p3",
+          "label": "2018–19"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Russell Westbrook earned the NBA regular-season MVP for the 2016–17 season.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-recaps-index",
+        "credit": "NBA historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-1994",
+      "revision": 1,
+      "factFamily": "nhl-seasons-1994",
+      "league": "nhl",
+      "season": "1994–95",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Eric Lindros win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1994–95"
+        },
+        {
+          "id": "p1",
+          "label": "1991–92"
+        },
+        {
+          "id": "p2",
+          "label": "1997–98"
+        },
+        {
+          "id": "p3",
+          "label": "2000–01"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Eric Lindros earned the Hart Memorial Trophy for the 1994–95 season.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-2009",
+      "revision": 1,
+      "factFamily": "nhl-seasons-2009",
+      "league": "nhl",
+      "season": "2009–10",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Henrik Sedin win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2009–10"
+        },
+        {
+          "id": "p1",
+          "label": "2006–07"
+        },
+        {
+          "id": "p2",
+          "label": "2012–13"
+        },
+        {
+          "id": "p3",
+          "label": "2015–16"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Henrik Sedin earned the Hart Memorial Trophy for the 2009–10 season.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
+        "credit": "NHL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-2009",
+      "revision": 1,
+      "factFamily": "mlb-seasons-2009",
+      "league": "mlb",
+      "season": "2009",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Joe Mauer win the American League MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2009"
+        },
+        {
+          "id": "p1",
+          "label": "2006"
+        },
+        {
+          "id": "p2",
+          "label": "2012"
+        },
+        {
+          "id": "p3",
+          "label": "2015"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Joe Mauer earned the American League MVP for the 2009 season.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-1990",
+      "revision": 1,
+      "factFamily": "mlb-seasons-1990",
+      "league": "mlb",
+      "season": "1990",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Rickey Henderson win the American League MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1990"
+        },
+        {
+          "id": "p1",
+          "label": "1987"
+        },
+        {
+          "id": "p2",
+          "label": "1993"
+        },
+        {
+          "id": "p3",
+          "label": "1996"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Rickey Henderson earned the American League MVP for the 1990 season.",
+      "source": {
+        "url": "https://www.mlb.com/awards/most-valuable-player",
+        "credit": "MLB historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2015",
+      "revision": 1,
+      "factFamily": "nfl-seasons-2015",
+      "league": "nfl",
+      "season": "2015",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Cam Newton win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2015"
+        },
+        {
+          "id": "p1",
+          "label": "2012"
+        },
+        {
+          "id": "p2",
+          "label": "2013"
+        },
+        {
+          "id": "p3",
+          "label": "2017"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Cam Newton earned the AP NFL MVP for the 2015 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/panthers-release-cam-newton-after-nine-seasons-0ap3000001107394",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2012",
+      "revision": 1,
+      "factFamily": "nfl-seasons-2012",
+      "league": "nfl",
+      "season": "2012",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Adrian Peterson win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2012"
+        },
+        {
+          "id": "p1",
+          "label": "2009"
+        },
+        {
+          "id": "p2",
+          "label": "2010"
+        },
+        {
+          "id": "p3",
+          "label": "2014"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Adrian Peterson earned the AP NFL MVP for the 2012 season.",
+      "source": {
+        "url": "https://www.cbssports.com/nfl/news/adrian-peterson-takes-home-2012-nfl-mvp-opoy-awards/",
+        "credit": "NFL historical results"
+      },
+      "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    }
+  ]
+}

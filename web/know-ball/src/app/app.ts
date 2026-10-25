@@ -22,7 +22,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <nav aria-label="Project">
         <a href="https://github.com/natezimm/know-ball">GitHub</a>
         <a routerLink="/mockups">Design Lab</a>
-        <a href="/preview/numbers-dont-lie/index.html?ngsw-bypass=true">Numbers Don't Lie preview</a>
+        <a routerLink="/numbers-dont-lie">Numbers Don't Lie beta</a>
       </nav>
     </footer>
   `,

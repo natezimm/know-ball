@@ -17,7 +17,7 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -154,6 +154,57 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NumbersCatalogues");
+                });
+
+            modelBuilder.Entity("KnowBall.Domain.NumbersPlay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AnswersJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly?>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<DateTimeOffset?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Filters")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SecretJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StartKey")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("Owner", "StartKey")
+                        .IsUnique();
+
+                    b.ToTable("NumbersPlays");
                 });
 
             modelBuilder.Entity("KnowBall.Domain.NumbersQuiz", b =>
