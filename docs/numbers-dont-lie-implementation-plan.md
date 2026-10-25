@@ -426,6 +426,11 @@ Who's That Sportsman remains a separate deferred idea and is not a dependency of
 
 ## 10. Starting point
 
+October 25 storage update: [approved catalogue imports and staged immutable daily
+snapshots](numbers-content-storage.md) are implemented as the next milestone-2
+slice. Full queue policy/supply simulation, publication and saved gameplay remain
+separate follow-ups. The hosted preview is unchanged.
+
 October 24 update: the user accepted the expanded 56-question preview. Awards,
 championship teams and season identification, plus topic/era practice filters, are
 now part of the intended product scope. The older two-template-only guidance above

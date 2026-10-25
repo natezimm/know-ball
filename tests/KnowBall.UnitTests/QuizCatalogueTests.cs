@@ -6,7 +6,7 @@ namespace KnowBall.UnitTests;
 
 public class QuizCatalogueTests
 {
-    private static JsonObject Catalogue()
+    internal static JsonObject Catalogue()
     {
         var questions = new JsonArray();
         foreach (var league in QuizCatalogue.Leagues)
