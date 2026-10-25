@@ -4,6 +4,23 @@ using KnowBall.Importer;
 using KnowBall.Infrastructure;
 using KnowBall.Infrastructure.Persistence;
 
+if (args.Contains("--simulate-numbers"))
+{
+    var path = GetArg(args, "--simulate-numbers");
+    var start = GetArg(args, "--start");
+    if (path is null || !DateOnly.TryParseExact(start, "yyyy-MM-dd", out var launch))
+    { Console.Error.WriteLine("Usage: --simulate-numbers <approved.json> --start yyyy-MM-dd"); return 2; }
+    try
+    {
+        using var doc = KnowBall.Application.Numbers.QuizCatalogue.Read(await File.ReadAllTextAsync(path));
+        var report = KnowBall.Application.Numbers.QuizSchedule.Simulate(doc.RootElement, launch);
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(report));
+        return report.Shortage is null ? 0 : 1;
+    }
+    catch (Exception e) when (e is IOException or InvalidDataException or System.Text.Json.JsonException)
+    { Console.Error.WriteLine(e.Message); return 1; }
+}
+
 // Offline preflight must run before host/database initialization.
 if (args.Contains("--validate-numbers"))
 {
@@ -43,6 +60,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.Configure<ImportOptions>(builder.Configuration.GetSection("Import"));
 builder.Services.AddSingleton<ImportJob>();
+builder.Services.AddSingleton<NumbersQueueJob>();
 
 if (!once) builder.Services.AddHostedService<NightlyImportWorker>();
 

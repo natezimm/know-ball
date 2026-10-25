@@ -5,6 +5,7 @@ namespace KnowBall.Importer;
 /// <summary>Runs <see cref="ImportJob"/> once a day at <see cref="ImportOptions.DailyAt"/> local time.</summary>
 public sealed class NightlyImportWorker(
     ImportJob job,
+    NumbersQueueJob numbers,
     IOptions<ImportOptions> options,
     TimeProvider clock,
     ILogger<NightlyImportWorker> logger) : BackgroundService
@@ -46,6 +47,7 @@ public sealed class NightlyImportWorker(
             // Never let one bad night kill the worker.
             logger.LogError(ex, "Import job crashed");
         }
+        await numbers.RunAsync(ct);
     }
 
     /// <summary>Next occurrence of <paramref name="at"/> in <paramref name="zone"/> strictly after <paramref name="now"/>. DST-safe.</summary>
