@@ -60,6 +60,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.Configure<ImportOptions>(builder.Configuration.GetSection("Import"));
 builder.Services.AddSingleton<ImportJob>();
+builder.Services.AddSingleton<NumbersQueueJob>();
 
 if (!once) builder.Services.AddHostedService<NightlyImportWorker>();
 

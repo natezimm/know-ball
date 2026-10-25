@@ -5,7 +5,7 @@ namespace KnowBall.UnitTests;
 
 public class QuizScheduleTests
 {
-    private static JsonDocument Pool()
+    internal static JsonDocument Pool()
     {
         var root = QuizCatalogueTests.Catalogue();
         var list = root["questions"]!.AsArray();

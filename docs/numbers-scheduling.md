@@ -18,9 +18,24 @@ focusKey metadata prevents the same athlete focus within a round; editorial cont
 must provide that metadata to enforce athlete identity across different facts.
 Selection and question ordering are deterministic. A bounded search reports failure
 instead of hanging or relaxing constraints. Existing dated snapshots are returned
-unchanged. This offline policy does not yet replace database staging or run nightly.
+unchanged.
+
+## Persistent queue
+
+The existing nightly importer now also runs an independent Numbers queue job.
+Configure NumbersDontLie:QueueEnabled=true, NumbersDontLie:CatalogueId to an imported
+approved content hash, and NumbersDontLie:LaunchDate to a stable ISO date. It is
+disabled by default. The job fills 30 dates starting today in Eastern time (or the
+launch date if later). Roster failures do not skip the Numbers job.
+
+The queue loads neighboring snapshots, preserves all existing dates, and generates
+missing dates in order. One serializable transaction commits the entire requested
+range; content shortages or concurrent serialization failures commit no partial
+range. The next invocation retries against current saved rows. Database uniqueness
+still protects each date. Failures are logged separately and never replace existing
+questions. No migration or public gameplay endpoint is added by this integration.
 
 Remaining release checks: 240 approved families / 60 per league, populated focus
 metadata, practice difficulty mix and topic/era combinations, answer-position
-balancing, transactional queue integration and nightly top-up. The current preview
+balancing and saved gameplay APIs. The current preview
 remains prototype-only and is deliberately rejected by the approved-content check.
