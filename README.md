@@ -127,8 +127,12 @@ returns under half the active players fails the run instead of retiring the leag
 | `POST /api/spordle/games`, `.../{id}/guesses`, `.../{id}/hint` | Spordle (database-backed rounds; six-hour idle expiry) |
 | `GET /api/import-runs/latest`, `GET /api/stats/summary`, `GET /health` | monitoring |
 
-The game endpoints need an `X-Anon-Id` header. Guesses are limited per address: `Games:GuessesPerMinute` (60),
-`Spordle:GuessesPerMinute` (20) and `Spordle:GamesPerMinute` (30).
+The game endpoints need an `X-Anon-Id` header. Every request to the site, pages and files included, is limited
+per address by `RateLimits:RequestsPerMinute` (300; 0 turns it off; `/health` is exempt). A cold page load makes
+about a dozen requests. Guesses have stricter limits on top: `Games:GuessesPerMinute` (60),
+`Spordle:GuessesPerMinute` (20) and `Spordle:GamesPerMinute` (30). IPv6 addresses count by their /64. A visitor
+over a limit gets `429` with `Retry-After` in seconds. Behind nginx the address comes from `X-Forwarded-For`,
+trusted only from loopback and `ForwardedHeaders:KnownNetworks`.
 
 Spordle stores rounds in the existing database, retaining attempts and hints across API restarts.
 Guess bodies accept an optional UUID `requestId`: retry the same word with the same ID to receive its
