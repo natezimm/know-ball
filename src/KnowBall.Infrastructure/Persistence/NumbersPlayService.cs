@@ -121,7 +121,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
     private static string Select(QuizFilters filters, string seed)
     {
         using var catalogue = QuizCatalogue.Read(Content.Value);
-        var set = QuizSelection.Select(catalogue.RootElement, filters, seed, requireApproved: false);
+        var set = QuizSelection.Select(catalogue.RootElement, filters, seed, requireApproved: false, preferVariety: true);
         var nodes = set.Select(q => JsonNode.Parse(q.GetRawText())!).ToArray();
         for (var i = 0; i < nodes.Length; i++)
         {

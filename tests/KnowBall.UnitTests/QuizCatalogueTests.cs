@@ -48,6 +48,38 @@ public class QuizCatalogueTests
         Assert.NotEmpty(QuizCatalogue.Validate(doc.RootElement));
     }
 
+    [Theory]
+    [InlineData(100, "b", true)] // 102 is closer than 97; the target need not be an option.
+    [InlineData(102, "b", true)] // An exact hit also wins.
+    [InlineData(100, "a", false)] // Reject an incorrect answer key.
+    [InlineData(105, "b", false)] // 102 and 108 tie.
+    [InlineData(-1, "a", false)]
+    public void Closest_value_requires_a_unique_nearest_answer(int target, string answer, bool valid)
+    {
+        var root = Catalogue();
+        var question = root["questions"]![0]!;
+        question["template"] = "closest-value";
+        question["targetValue"] = target;
+        question["correctOptionId"] = answer;
+        var values = new[] { 97, 102, 108, 130 };
+        for (var i = 0; i < values.Length; i++) question["options"]![i]!["value"] = values[i];
+        using var doc = JsonDocument.Parse(root.ToJsonString());
+        Assert.Equal(valid, QuizCatalogue.Validate(doc.RootElement).Count == 0);
+    }
+
+    [Fact]
+    public void Closest_value_requires_a_target_and_supporting_values()
+    {
+        var root = Catalogue();
+        var question = root["questions"]![0]!;
+        question["template"] = "closest-value";
+        foreach (var option in question["options"]!.AsArray()) option!["value"] = 10;
+        Assert.Throws<InvalidDataException>(() => QuizCatalogue.Read(root.ToJsonString()));
+        question["targetValue"] = 10;
+        question["options"]![0]!.AsObject().Remove("value");
+        Assert.Throws<InvalidDataException>(() => QuizCatalogue.Read(root.ToJsonString()));
+    }
+
     [Fact]
     public void Preview_content_cannot_be_selected_for_publication()
     {

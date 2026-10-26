@@ -41,6 +41,53 @@ public class NumbersGameplayTests(ApiFactory factory)
     }
 
     private HttpClient Client() { var client = factory.CreateClient(); client.DefaultRequestHeaders.Add("X-Anon-Id",Guid.NewGuid().ToString()); return client; }
+
+    [Fact]
+    public async Task Stats_practice_scores_closest_answers_after_shuffling_and_hides_supporting_values()
+    {
+        using var client = Client();
+        var response = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice",
+            new { leagues = new[] { "nba" }, topics = new[] { "stats" }, requestId = Guid.NewGuid() });
+        response.EnsureSuccessStatusCode();
+        var state = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var id = state.GetProperty("id").GetGuid();
+        JsonElement[] snapshots;
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<TriviaDbContext>();
+            var row = await db.NumbersPlays.AsNoTracking().SingleAsync(x => x.Id == id);
+            snapshots = JsonSerializer.Deserialize<JsonElement[]>(row.SecretJson)!;
+        }
+        Assert.Contains(snapshots, q => q.GetProperty("template").GetString() == "closest-value");
+        foreach (var snapshot in snapshots)
+        {
+            var question = state.GetProperty("current");
+            Assert.DoesNotContain("\"value\"", question.GetRawText());
+            Assert.DoesNotContain("targetValue", question.GetRawText());
+            Assert.DoesNotContain("correctOptionId", question.GetRawText());
+            var answer = snapshot.GetProperty("correctOptionId").GetString();
+            if (snapshot.GetProperty("template").GetString() == "closest-value")
+            {
+                var target = snapshot.GetProperty("targetValue").GetDecimal();
+                answer = snapshot.GetProperty("options").EnumerateArray()
+                    .OrderBy(o => Math.Abs(o.GetProperty("value").GetDecimal() - target))
+                    .First().GetProperty("id").GetString();
+            }
+            var questionId = question.GetProperty("id").GetString();
+            response = await client.PostAsJsonAsync($"/api/numbers-dont-lie/quizzes/{id}/answers",
+                new { questionId, optionId = answer, requestId = Guid.NewGuid(), expectedRevision = state.GetProperty("revision").GetInt32() });
+            response.EnsureSuccessStatusCode();
+            state = await response.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.True(state.GetProperty("review").EnumerateArray().Last().GetProperty("correct").GetBoolean());
+            response = await client.PostAsJsonAsync($"/api/numbers-dont-lie/quizzes/{id}/continue",
+                new { questionId, requestId = Guid.NewGuid(), expectedRevision = state.GetProperty("revision").GetInt32() });
+            response.EnsureSuccessStatusCode();
+            state = await response.Content.ReadFromJsonAsync<JsonElement>();
+        }
+        Assert.True(state.GetProperty("complete").GetBoolean());
+        Assert.Equal(5, state.GetProperty("correctCount").GetInt32());
+    }
+
     [Fact]
     public async Task Daily_is_shared_private_and_recovers_feedback_and_idempotent_final_answer()
     {

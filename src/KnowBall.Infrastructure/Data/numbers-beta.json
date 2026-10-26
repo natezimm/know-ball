@@ -4,17 +4,17 @@
   "questions": [
     {
       "id": "nba-points-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-2024-regular-points",
       "league": "nba",
       "season": "2023–24",
       "scope": "regular-season",
       "metric": "points",
       "unit": "points",
-      "template": "compare-four",
+      "template": "closest-value",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most points in the 2023–24 NBA regular season?",
+      "prompt": "Which of these players finished closest to 2,250 points in the 2023–24 NBA regular season?",
       "options": [
         {
           "id": "p0",
@@ -37,9 +37,9 @@
           "value": 2212
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Luka Dončić recorded 2,370 points. That is the highest total among these four choices.",
+      "correctOptionId": "p1",
+      "targetValue": 2250,
+      "explanation": "Shai Gilgeous-Alexander finished with 2,254 points, just 4 from 2,250. Giannis Antetokounmpo was the next closest of these four at 2,222, 28 away.",
       "source": {
         "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
         "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
@@ -51,7 +51,7 @@
     },
     {
       "id": "nba-rebounds-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-2024-regular-rebounds",
       "league": "nba",
       "season": "2023–24",
@@ -61,7 +61,7 @@
       "template": "match-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 1,120 rebounds in the 2023–24 NBA regular season?",
+      "prompt": "Who put up 1,120 rebounds in the 2023–24 NBA regular season?",
       "options": [
         {
           "id": "p3",
@@ -86,7 +86,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": 1120,
-      "explanation": "Domantas Sabonis recorded 1,120 rebounds. That total matches the clue.",
+      "explanation": "Domantas Sabonis recorded 1,120 rebounds. That was 138 more than Rudy Gobert (982), the nearest total among the other choices.",
       "source": {
         "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
         "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
@@ -98,17 +98,17 @@
     },
     {
       "id": "nba-assists-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-2024-regular-assists",
       "league": "nba",
       "season": "2023–24",
       "scope": "regular-season",
       "metric": "assists",
       "unit": "assists",
-      "template": "compare-four",
+      "template": "closest-value",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most assists in the 2023–24 NBA regular season?",
+      "prompt": "Which of these players finished closest to 700 assists in the 2023–24 NBA regular season?",
       "options": [
         {
           "id": "p2",
@@ -131,9 +131,9 @@
           "value": 686
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Tyrese Haliburton recorded 752 assists. That is the highest total among these four choices.",
+      "correctOptionId": "p2",
+      "targetValue": 700,
+      "explanation": "Nikola Jokić finished with 708 assists, just 8 from 700. Luka Dončić was the next closest of these four at 686, 14 away.",
       "source": {
         "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
         "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
@@ -145,7 +145,7 @@
     },
     {
       "id": "nba-blocks-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-2024-regular-blocks",
       "league": "nba",
       "season": "2023–24",
@@ -155,7 +155,7 @@
       "template": "compare-four",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most blocks in the 2023–24 NBA regular season?",
+      "prompt": "Who had the most blocks among these four in the 2023–24 NBA regular season?",
       "options": [
         {
           "id": "p1",
@@ -180,7 +180,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Victor Wembanyama recorded 254 blocks. That is the highest total among these four choices.",
+      "explanation": "Victor Wembanyama recorded 254 blocks. That was 64 more than Chet Holmgren (190), the nearest total among the other choices.",
       "source": {
         "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
         "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
@@ -192,7 +192,7 @@
     },
     {
       "id": "nba-steals-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-2024-regular-steals",
       "league": "nba",
       "season": "2023–24",
@@ -202,7 +202,7 @@
       "template": "match-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 150 steals in the 2023–24 NBA regular season?",
+      "prompt": "Who put up 150 steals in the 2023–24 NBA regular season?",
       "options": [
         {
           "id": "p0",
@@ -227,7 +227,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": 150,
-      "explanation": "De’Aaron Fox recorded 150 steals. That total matches the clue.",
+      "explanation": "De’Aaron Fox recorded 150 steals. That was 30 more than Alex Caruso (120), the nearest total among the other choices.",
       "source": {
         "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
         "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
@@ -239,7 +239,7 @@
     },
     {
       "id": "nba-threes-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-2024-regular-threes",
       "league": "nba",
       "season": "2023–24",
@@ -249,7 +249,7 @@
       "template": "compare-four",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most three-pointers made in the 2023–24 NBA regular season?",
+      "prompt": "Who had the most made threes among these four in the 2023–24 NBA regular season?",
       "options": [
         {
           "id": "p3",
@@ -274,7 +274,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "CJ McCollum recorded 239 three-pointers made. That is the highest total among these four choices.",
+      "explanation": "CJ McCollum recorded 239 made threes. That was 34 more than Grayson Allen (205), the nearest total among the other choices.",
       "source": {
         "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
         "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
@@ -286,17 +286,17 @@
     },
     {
       "id": "nfl-passing-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2023-regular-passing",
       "league": "nfl",
       "season": "2023",
       "scope": "regular-season",
       "metric": "passing",
       "unit": "passing yards",
-      "template": "compare-four",
+      "template": "closest-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most passing yards in the 2023 NFL regular season?",
+      "prompt": "Which of these players finished closest to 4,500 passing yards in the 2023 NFL regular season?",
       "options": [
         {
           "id": "p2",
@@ -319,9 +319,9 @@
           "value": 4575
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Tua Tagovailoa recorded 4,624 passing yards. That is the highest total among these four choices.",
+      "correctOptionId": "p2",
+      "targetValue": 4500,
+      "explanation": "Dak Prescott finished with 4,516 passing yards, just 16 from 4,500. Jared Goff was the next closest of these four at 4,575, 75 away.",
       "source": {
         "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
         "credit": "nflverse contributors · player statistics",
@@ -335,7 +335,7 @@
     },
     {
       "id": "nfl-rushing-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2023-regular-rushing",
       "league": "nfl",
       "season": "2023",
@@ -345,7 +345,7 @@
       "template": "match-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 1,459 rushing yards in the 2023 NFL regular season?",
+      "prompt": "Who put up 1,459 rushing yards in the 2023 NFL regular season?",
       "options": [
         {
           "id": "p1",
@@ -370,7 +370,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": 1459,
-      "explanation": "Christian McCaffrey recorded 1,459 rushing yards. That total matches the clue.",
+      "explanation": "Christian McCaffrey recorded 1,459 rushing yards. That was 292 more than Derrick Henry (1,167), the nearest total among the other choices.",
       "source": {
         "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
         "credit": "nflverse contributors · player statistics",
@@ -384,7 +384,7 @@
     },
     {
       "id": "nfl-receiving-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2023-regular-receiving",
       "league": "nfl",
       "season": "2023",
@@ -394,7 +394,7 @@
       "template": "compare-four",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most receiving yards in the 2023 NFL regular season?",
+      "prompt": "Who had the most receiving yards among these four in the 2023 NFL regular season?",
       "options": [
         {
           "id": "p0",
@@ -419,7 +419,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Tyreek Hill recorded 1,799 receiving yards. That is the highest total among these four choices.",
+      "explanation": "Tyreek Hill recorded 1,799 receiving yards. That was 50 more than CeeDee Lamb (1,749), the nearest total among the other choices.",
       "source": {
         "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
         "credit": "nflverse contributors · player statistics",
@@ -433,17 +433,17 @@
     },
     {
       "id": "nfl-passing-2022",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2022-regular-passing",
       "league": "nfl",
       "season": "2022",
       "scope": "regular-season",
       "metric": "passing",
       "unit": "passing yards",
-      "template": "compare-four",
+      "template": "closest-value",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most passing yards in the 2022 NFL regular season?",
+      "prompt": "Which of these players finished closest to 4,700 passing yards in the 2022 NFL regular season?",
       "options": [
         {
           "id": "p3",
@@ -466,9 +466,9 @@
           "value": 4694
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Patrick Mahomes recorded 5,250 passing yards. That is the highest total among these four choices.",
+      "correctOptionId": "p2",
+      "targetValue": 4700,
+      "explanation": "Tom Brady finished with 4,694 passing yards, just 6 from 4,700. Justin Herbert was the next closest of these four at 4,739, 39 away.",
       "source": {
         "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
         "credit": "nflverse contributors · player statistics",
@@ -482,7 +482,7 @@
     },
     {
       "id": "nfl-rushing-2022",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2022-regular-rushing",
       "league": "nfl",
       "season": "2022",
@@ -492,7 +492,7 @@
       "template": "match-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 1,653 rushing yards in the 2022 NFL regular season?",
+      "prompt": "Who put up 1,653 rushing yards in the 2022 NFL regular season?",
       "options": [
         {
           "id": "p2",
@@ -517,7 +517,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": 1653,
-      "explanation": "Josh Jacobs recorded 1,653 rushing yards. That total matches the clue.",
+      "explanation": "Josh Jacobs recorded 1,653 rushing yards. That was 115 more than Derrick Henry (1,538), the nearest total among the other choices.",
       "source": {
         "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
         "credit": "nflverse contributors · player statistics",
@@ -531,7 +531,7 @@
     },
     {
       "id": "nfl-receiving-2022",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2022-regular-receiving",
       "league": "nfl",
       "season": "2022",
@@ -541,7 +541,7 @@
       "template": "compare-four",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most receiving yards in the 2022 NFL regular season?",
+      "prompt": "Who had the most receiving yards among these four in the 2022 NFL regular season?",
       "options": [
         {
           "id": "p1",
@@ -566,7 +566,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Justin Jefferson recorded 1,809 receiving yards. That is the highest total among these four choices.",
+      "explanation": "Justin Jefferson recorded 1,809 receiving yards. That was 99 more than Tyreek Hill (1,710), the nearest total among the other choices.",
       "source": {
         "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
         "credit": "nflverse contributors · player statistics",
@@ -580,7 +580,7 @@
     },
     {
       "id": "mlb-homeRuns-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-2023-regular-homeRuns",
       "league": "mlb",
       "season": "2023",
@@ -590,7 +590,7 @@
       "template": "compare-four",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most home runs in the 2023 MLB regular season?",
+      "prompt": "Who had the most home runs among these four in the 2023 MLB regular season?",
       "options": [
         {
           "id": "p0",
@@ -615,7 +615,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Matt Olson recorded 54 home runs. That is the highest total among these four choices.",
+      "explanation": "Matt Olson recorded 54 home runs. That was 7 more than Kyle Schwarber (47), the nearest total among the other choices.",
       "source": {
         "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
         "credit": "MLB.com · season hitting statistics"
@@ -627,17 +627,17 @@
     },
     {
       "id": "mlb-hits-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-2023-regular-hits",
       "league": "mlb",
       "season": "2023",
       "scope": "regular-season",
       "metric": "hits",
       "unit": "hits",
-      "template": "match-value",
+      "template": "closest-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 217 hits in the 2023 MLB regular season?",
+      "prompt": "Which of these players finished closest to 200 hits in the 2023 MLB regular season?",
       "options": [
         {
           "id": "p3",
@@ -660,9 +660,9 @@
           "value": 203
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": 217,
-      "explanation": "Ronald Acuña Jr. recorded 217 hits. That total matches the clue.",
+      "correctOptionId": "p2",
+      "targetValue": 200,
+      "explanation": "Luis Arraez finished with 203 hits, just 3 from 200. Freddie Freeman was the next closest of these four at 211, 11 away.",
       "source": {
         "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
         "credit": "MLB.com · season hitting statistics"
@@ -674,7 +674,7 @@
     },
     {
       "id": "mlb-rbi-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-2023-regular-rbi",
       "league": "mlb",
       "season": "2023",
@@ -684,7 +684,7 @@
       "template": "compare-four",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most runs batted in in the 2023 MLB regular season?",
+      "prompt": "Who had the most RBIs among these four in the 2023 MLB regular season?",
       "options": [
         {
           "id": "p2",
@@ -709,7 +709,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Pete Alonso recorded 118 runs batted in. That is the highest total among these four choices.",
+      "explanation": "Pete Alonso recorded 118 RBIs. That was 6 more than Kyle Tucker (112), the nearest total among the other choices.",
       "source": {
         "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
         "credit": "MLB.com · season hitting statistics"
@@ -721,7 +721,7 @@
     },
     {
       "id": "mlb-homeRuns-2022",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-2022-regular-homeRuns",
       "league": "mlb",
       "season": "2022",
@@ -731,7 +731,7 @@
       "template": "compare-four",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most home runs in the 2022 MLB regular season?",
+      "prompt": "Who had the most home runs among these four in the 2022 MLB regular season?",
       "options": [
         {
           "id": "p1",
@@ -756,7 +756,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Aaron Judge recorded 62 home runs. That is the highest total among these four choices.",
+      "explanation": "Aaron Judge recorded 62 home runs. That was 16 more than Kyle Schwarber (46), the nearest total among the other choices.",
       "source": {
         "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
         "credit": "MLB.com · season hitting statistics"
@@ -768,7 +768,7 @@
     },
     {
       "id": "mlb-hits-2022",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-2022-regular-hits",
       "league": "mlb",
       "season": "2022",
@@ -778,7 +778,7 @@
       "template": "match-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 199 hits in the 2022 MLB regular season?",
+      "prompt": "Who put up 199 hits in the 2022 MLB regular season?",
       "options": [
         {
           "id": "p0",
@@ -803,7 +803,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": 199,
-      "explanation": "Freddie Freeman recorded 199 hits. That total matches the clue.",
+      "explanation": "Freddie Freeman recorded 199 hits. That was 5 more than Trea Turner (194), the nearest total among the other choices.",
       "source": {
         "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
         "credit": "MLB.com · season hitting statistics"
@@ -815,17 +815,17 @@
     },
     {
       "id": "mlb-rbi-2022",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-2022-regular-rbi",
       "league": "mlb",
       "season": "2022",
       "scope": "regular-season",
       "metric": "rbi",
       "unit": "runs batted in",
-      "template": "compare-four",
+      "template": "closest-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most runs batted in in the 2022 MLB regular season?",
+      "prompt": "Which of these players finished closest to 125 RBIs in the 2022 MLB regular season?",
       "options": [
         {
           "id": "p3",
@@ -848,9 +848,9 @@
           "value": 115
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Pete Alonso recorded 131 runs batted in. That is the highest total among these four choices.",
+      "correctOptionId": "p1",
+      "targetValue": 125,
+      "explanation": "José Ramírez finished with 126 RBIs, just 1 from 125. Pete Alonso was the next closest of these four at 131, 6 away.",
       "source": {
         "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
         "credit": "MLB.com · season hitting statistics"
@@ -862,17 +862,17 @@
     },
     {
       "id": "nhl-points-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-2024-regular-points",
       "league": "nhl",
       "season": "2023–24",
       "scope": "regular-season",
       "metric": "points",
       "unit": "points",
-      "template": "compare-four",
+      "template": "closest-value",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most points in the 2023–24 NHL regular season?",
+      "prompt": "Which of these players finished closest to 130 points in the 2023–24 NHL regular season?",
       "options": [
         {
           "id": "p2",
@@ -895,9 +895,9 @@
           "value": 140
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Nikita Kucherov recorded 144 points. That is the highest total among these four choices.",
+      "correctOptionId": "p2",
+      "targetValue": 130,
+      "explanation": "Connor McDavid finished with 132 points, just 2 from 130. Artemi Panarin was the next closest of these four at 120, 10 away.",
       "source": {
         "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
         "credit": "NHL · 2023–24 regular-season recap"
@@ -909,7 +909,7 @@
     },
     {
       "id": "nhl-goals-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-2024-regular-goals",
       "league": "nhl",
       "season": "2023–24",
@@ -919,7 +919,7 @@
       "template": "match-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 69 goals in the 2023–24 NHL regular season?",
+      "prompt": "Who put up 69 goals in the 2023–24 NHL regular season?",
       "options": [
         {
           "id": "p1",
@@ -944,7 +944,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": 69,
-      "explanation": "Auston Matthews recorded 69 goals. That total matches the clue.",
+      "explanation": "Auston Matthews recorded 69 goals. That was 12 more than Sam Reinhart (57), the nearest total among the other choices.",
       "source": {
         "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
         "credit": "NHL · 2023–24 regular-season recap"
@@ -956,7 +956,7 @@
     },
     {
       "id": "nhl-assists-2024",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-2024-regular-assists",
       "league": "nhl",
       "season": "2023–24",
@@ -966,7 +966,7 @@
       "template": "compare-four",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most assists in the 2023–24 NHL regular season?",
+      "prompt": "Who had the most assists among these four in the 2023–24 NHL regular season?",
       "options": [
         {
           "id": "p0",
@@ -991,7 +991,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Nathan MacKinnon recorded 89 assists. That is the highest total among these four choices.",
+      "explanation": "Nathan MacKinnon recorded 89 assists. That was 14 more than Quinn Hughes (75), the nearest total among the other choices.",
       "source": {
         "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
         "credit": "NHL · 2023–24 regular-season recap"
@@ -1003,7 +1003,7 @@
     },
     {
       "id": "nhl-points-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-2023-regular-points",
       "league": "nhl",
       "season": "2022–23",
@@ -1013,7 +1013,7 @@
       "template": "compare-four",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most points in the 2022–23 NHL regular season?",
+      "prompt": "Who had the most points among these four in the 2022–23 NHL regular season?",
       "options": [
         {
           "id": "p3",
@@ -1038,7 +1038,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Connor McDavid recorded 153 points. That is the highest total among these four choices.",
+      "explanation": "Connor McDavid recorded 153 points. That was 25 more than Leon Draisaitl (128), the nearest total among the other choices.",
       "source": {
         "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
         "credit": "NHL · 2022–23 final statistics release"
@@ -1050,17 +1050,17 @@
     },
     {
       "id": "nhl-goals-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-2023-regular-goals",
       "league": "nhl",
       "season": "2022–23",
       "scope": "regular-season",
       "metric": "goals",
       "unit": "goals",
-      "template": "match-value",
+      "template": "closest-value",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded 64 goals in the 2022–23 NHL regular season?",
+      "prompt": "Which of these players finished closest to 60 goals in the 2022–23 NHL regular season?",
       "options": [
         {
           "id": "p2",
@@ -1083,9 +1083,9 @@
           "value": 61
         }
       ],
-      "correctOptionId": "p0",
-      "targetValue": 64,
-      "explanation": "Connor McDavid recorded 64 goals. That total matches the clue.",
+      "correctOptionId": "p1",
+      "targetValue": 60,
+      "explanation": "David Pastrnak finished with 61 goals, just 1 from 60. Connor McDavid was the next closest of these four at 64, 4 away.",
       "source": {
         "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
         "credit": "NHL · 2022–23 final statistics release"
@@ -1097,7 +1097,7 @@
     },
     {
       "id": "nhl-assists-2023",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-2023-regular-assists",
       "league": "nhl",
       "season": "2022–23",
@@ -1107,7 +1107,7 @@
       "template": "compare-four",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Among these four, who recorded the most assists in the 2022–23 NHL regular season?",
+      "prompt": "Who had the most assists among these four in the 2022–23 NHL regular season?",
       "options": [
         {
           "id": "p1",
@@ -1132,7 +1132,7 @@
       ],
       "correctOptionId": "p0",
       "targetValue": null,
-      "explanation": "Nikita Kucherov recorded 83 assists. That is the highest total among these four choices.",
+      "explanation": "Nikita Kucherov recorded 83 assists. That was 7 more than Leon Draisaitl (76), the nearest total among the other choices.",
       "source": {
         "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
         "credit": "NHL · 2022–23 final statistics release"
@@ -1144,7 +1144,7 @@
     },
     {
       "id": "nba-awards-2010",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-awards-2010",
       "league": "nba",
       "season": "2010–11",
@@ -1173,7 +1173,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Derrick Rose received the NBA regular-season MVP for 2010–11. This is the season award, not a championship-game MVP.",
+      "explanation": "Derrick Rose received the NBA regular-season MVP for 2010–11.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -1183,7 +1183,7 @@
     },
     {
       "id": "nba-awards-2006",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-awards-2006",
       "league": "nba",
       "season": "2006–07",
@@ -1212,7 +1212,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Dirk Nowitzki received the NBA regular-season MVP for 2006–07. This is the season award, not a championship-game MVP.",
+      "explanation": "Dirk Nowitzki received the NBA regular-season MVP for 2006–07.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -1222,7 +1222,7 @@
     },
     {
       "id": "nba-awards-2013",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-awards-2013",
       "league": "nba",
       "season": "2013–14",
@@ -1251,7 +1251,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Kevin Durant received the NBA regular-season MVP for 2013–14. This is the season award, not a championship-game MVP.",
+      "explanation": "Kevin Durant received the NBA regular-season MVP for 2013–14.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -1261,7 +1261,7 @@
     },
     {
       "id": "nhl-awards-1997",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-awards-1997",
       "league": "nhl",
       "season": "1997–98",
@@ -1290,7 +1290,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Dominik Hasek received the Hart Memorial Trophy for 1997–98. This is the season award, not a championship-game MVP.",
+      "explanation": "Dominik Hasek received the Hart Memorial Trophy for 1997–98.",
       "source": {
         "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
         "credit": "NHL historical results"
@@ -1300,7 +1300,7 @@
     },
     {
       "id": "nhl-awards-2002",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-awards-2002",
       "league": "nhl",
       "season": "2002–03",
@@ -1329,7 +1329,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Peter Forsberg received the Hart Memorial Trophy for 2002–03. This is the season award, not a championship-game MVP.",
+      "explanation": "Peter Forsberg received the Hart Memorial Trophy for 2002–03.",
       "source": {
         "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
         "credit": "NHL historical results"
@@ -1339,7 +1339,7 @@
     },
     {
       "id": "nhl-awards-2014",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-awards-2014",
       "league": "nhl",
       "season": "2014–15",
@@ -1368,7 +1368,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Carey Price received the Hart Memorial Trophy for 2014–15. This is the season award, not a championship-game MVP.",
+      "explanation": "Carey Price received the Hart Memorial Trophy for 2014–15.",
       "source": {
         "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
         "credit": "NHL historical results"
@@ -1378,7 +1378,7 @@
     },
     {
       "id": "mlb-awards-1997",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-awards-1997",
       "league": "mlb",
       "season": "1997",
@@ -1407,7 +1407,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Ken Griffey Jr. received the American League MVP for 1997. This is the season award, not a championship-game MVP.",
+      "explanation": "Ken Griffey Jr. received the American League MVP for 1997.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -1417,7 +1417,7 @@
     },
     {
       "id": "mlb-awards-2001",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-awards-2001",
       "league": "mlb",
       "season": "2001",
@@ -1446,7 +1446,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Ichiro Suzuki received the American League MVP for 2001. This is the season award, not a championship-game MVP.",
+      "explanation": "Ichiro Suzuki received the American League MVP for 2001.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -1456,7 +1456,7 @@
     },
     {
       "id": "mlb-awards-2018",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-awards-2018",
       "league": "mlb",
       "season": "2018",
@@ -1485,7 +1485,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Mookie Betts received the American League MVP for 2018. This is the season award, not a championship-game MVP.",
+      "explanation": "Mookie Betts received the American League MVP for 2018.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -1495,7 +1495,7 @@
     },
     {
       "id": "nfl-awards-2007",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-awards-2007",
       "league": "nfl",
       "season": "2007",
@@ -1524,7 +1524,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Tom Brady received the AP NFL MVP for 2007. This is the season award, not a championship-game MVP.",
+      "explanation": "Tom Brady received the AP NFL MVP for 2007.",
       "source": {
         "url": "https://www.patriots.com/news/tom-brady-bio",
         "credit": "NFL historical results"
@@ -1533,9 +1533,9 @@
       "publicationStatus": "prototype-only"
     },
     {
-      "id": "nfl-awards-2010",
+      "id": "nfl-dpoy-2010",
       "revision": 1,
-      "factFamily": "nfl-awards-2010",
+      "factFamily": "nfl-2010-ap-defensive-player-of-year",
       "league": "nfl",
       "season": "2010",
       "scope": "regular-season",
@@ -1543,38 +1543,38 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2010 season?",
+      "prompt": "Who won AP NFL Defensive Player of the Year for the 2010 season?",
       "options": [
         {
           "id": "p0",
-          "label": "Tom Brady"
+          "label": "Troy Polamalu"
         },
         {
           "id": "p1",
-          "label": "Michael Vick"
+          "label": "Ed Reed"
         },
         {
           "id": "p2",
-          "label": "Aaron Rodgers"
+          "label": "Clay Matthews"
         },
         {
           "id": "p3",
-          "label": "Philip Rivers"
+          "label": "James Harrison"
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Tom Brady received the AP NFL MVP for 2010. This is the season award, not a championship-game MVP.",
+      "explanation": "Troy Polamalu won the 2010 AP Defensive Player of the Year award as a Steelers safety. His career also included four first-team All-Pro selections.",
       "source": {
-        "url": "https://www.patriots.com/news/tom-brady-bio",
-        "credit": "NFL historical results"
+        "url": "https://www.steelers.com/history/bios/polamalu_troy",
+        "credit": "Pittsburgh Steelers · Troy Polamalu career biography"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
-      "id": "nfl-awards-2017",
+      "id": "nfl-dpoy-2017",
       "revision": 1,
-      "factFamily": "nfl-awards-2017",
+      "factFamily": "nfl-2017-ap-defensive-player-of-year",
       "league": "nfl",
       "season": "2017",
       "scope": "regular-season",
@@ -1582,37 +1582,37 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2017 season?",
+      "prompt": "Who won AP NFL Defensive Player of the Year for the 2017 season?",
       "options": [
         {
           "id": "p0",
-          "label": "Tom Brady"
+          "label": "Aaron Donald"
         },
         {
           "id": "p1",
-          "label": "Carson Wentz"
+          "label": "Calais Campbell"
         },
         {
           "id": "p2",
-          "label": "Todd Gurley"
+          "label": "Von Miller"
         },
         {
           "id": "p3",
-          "label": "Antonio Brown"
+          "label": "Khalil Mack"
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Tom Brady received the AP NFL MVP for 2017. This is the season award, not a championship-game MVP.",
+      "explanation": "Aaron Donald became the Rams’ first AP Defensive Player of the Year winner for the 2017 season. The defensive tackle recorded 11 sacks in 14 games.",
       "source": {
-        "url": "https://www.patriots.com/news/tom-brady-bio",
-        "credit": "NFL historical results"
+        "url": "https://www.therams.com/news/aaron-donald-named-ap-defensive-player-of-the-year-20334321",
+        "credit": "Los Angeles Rams · Aaron Donald named AP Defensive Player of the Year, February 3, 2018"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nba-teams-2010",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-teams-2010",
       "league": "nba",
       "season": "2010–11",
@@ -1621,7 +1621,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the NBA championship for the 2010–11 season?",
+      "prompt": "Which team defeated the Miami Heat in the 2011 NBA Finals?",
       "options": [
         {
           "id": "p0",
@@ -1629,7 +1629,7 @@
         },
         {
           "id": "p1",
-          "label": "Miami Heat"
+          "label": "Oklahoma City Thunder"
         },
         {
           "id": "p2",
@@ -1641,17 +1641,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Dallas Mavericks won the NBA championship for 2010–11. The season year can differ from the calendar year of the final.",
+      "explanation": "The Dallas Mavericks defeated the Miami Heat 4–2 to win the 2011 NBA Finals. The series lasted 6 games.",
       "source": {
-        "url": "https://www.nba.com/news/history-season-recaps-index",
-        "credit": "NBA historical results"
+        "url": "https://www.nba.com/news/history-nba-champions",
+        "credit": "NBA.com · NBA champions and Finals results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nba-teams-2003",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-teams-2003",
       "league": "nba",
       "season": "2003–04",
@@ -1660,7 +1660,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the NBA championship for the 2003–04 season?",
+      "prompt": "Which team defeated the Los Angeles Lakers in the 2004 NBA Finals?",
       "options": [
         {
           "id": "p0",
@@ -1668,7 +1668,7 @@
         },
         {
           "id": "p1",
-          "label": "Los Angeles Lakers"
+          "label": "Sacramento Kings"
         },
         {
           "id": "p2",
@@ -1680,17 +1680,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Detroit Pistons won the NBA championship for 2003–04. The season year can differ from the calendar year of the final.",
+      "explanation": "The Detroit Pistons defeated the Los Angeles Lakers 4–1 to win the 2004 NBA Finals. The series lasted 5 games.",
       "source": {
-        "url": "https://www.nba.com/news/history-season-recaps-index",
-        "credit": "NBA historical results"
+        "url": "https://www.nba.com/news/history-nba-champions",
+        "credit": "NBA.com · NBA champions and Finals results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nba-teams-2018",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-teams-2018",
       "league": "nba",
       "season": "2018–19",
@@ -1699,7 +1699,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the NBA championship for the 2018–19 season?",
+      "prompt": "Which team defeated the Golden State Warriors in the 2019 NBA Finals?",
       "options": [
         {
           "id": "p0",
@@ -1707,7 +1707,7 @@
         },
         {
           "id": "p1",
-          "label": "Golden State Warriors"
+          "label": "Boston Celtics"
         },
         {
           "id": "p2",
@@ -1719,17 +1719,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Toronto Raptors won the NBA championship for 2018–19. The season year can differ from the calendar year of the final.",
+      "explanation": "The Toronto Raptors defeated the Golden State Warriors 4–2 to win the 2019 NBA Finals. The series lasted 6 games.",
       "source": {
-        "url": "https://www.nba.com/news/history-season-recaps-index",
-        "credit": "NBA historical results"
+        "url": "https://www.nba.com/news/history-nba-champions",
+        "credit": "NBA.com · NBA champions and Finals results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nhl-teams-1998",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-teams-1998",
       "league": "nhl",
       "season": "1998–99",
@@ -1738,7 +1738,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the Stanley Cup for the 1998–99 season?",
+      "prompt": "Which team defeated the Buffalo Sabres in the 1999 Stanley Cup Final?",
       "options": [
         {
           "id": "p0",
@@ -1746,7 +1746,7 @@
         },
         {
           "id": "p1",
-          "label": "Buffalo Sabres"
+          "label": "New Jersey Devils"
         },
         {
           "id": "p2",
@@ -1758,17 +1758,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Dallas Stars won the Stanley Cup for 1998–99. The season year can differ from the calendar year of the final.",
+      "explanation": "The Dallas Stars defeated the Buffalo Sabres to win the 1999 Stanley Cup Final.",
       "source": {
-        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-        "credit": "NHL historical results"
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Stanley Cup results, printed page 71"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nhl-teams-2002",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-teams-2002",
       "league": "nhl",
       "season": "2002–03",
@@ -1777,7 +1777,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the Stanley Cup for the 2002–03 season?",
+      "prompt": "Which team defeated the Mighty Ducks of Anaheim in the 2003 Stanley Cup Final?",
       "options": [
         {
           "id": "p0",
@@ -1785,7 +1785,7 @@
         },
         {
           "id": "p1",
-          "label": "Mighty Ducks of Anaheim"
+          "label": "Dallas Stars"
         },
         {
           "id": "p2",
@@ -1797,17 +1797,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "New Jersey Devils won the Stanley Cup for 2002–03. The season year can differ from the calendar year of the final.",
+      "explanation": "The New Jersey Devils defeated the Mighty Ducks of Anaheim to win the 2003 Stanley Cup Final.",
       "source": {
-        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-        "credit": "NHL historical results"
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Stanley Cup results, printed page 71"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nhl-teams-2018",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-teams-2018",
       "league": "nhl",
       "season": "2018–19",
@@ -1816,7 +1816,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the Stanley Cup for the 2018–19 season?",
+      "prompt": "Which team defeated the Boston Bruins in the 2019 Stanley Cup Final?",
       "options": [
         {
           "id": "p0",
@@ -1824,7 +1824,7 @@
         },
         {
           "id": "p1",
-          "label": "Boston Bruins"
+          "label": "San Jose Sharks"
         },
         {
           "id": "p2",
@@ -1836,17 +1836,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "St. Louis Blues won the Stanley Cup for 2018–19. The season year can differ from the calendar year of the final.",
+      "explanation": "The St. Louis Blues defeated the Boston Bruins to win the 2019 Stanley Cup Final.",
       "source": {
-        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-        "credit": "NHL historical results"
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Stanley Cup results, printed page 71"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "mlb-teams-2016",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-teams-2016",
       "league": "mlb",
       "season": "2016",
@@ -1855,7 +1855,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the World Series for the 2016 season?",
+      "prompt": "Which team defeated the Cleveland Indians in the 2016 World Series?",
       "options": [
         {
           "id": "p0",
@@ -1863,7 +1863,7 @@
         },
         {
           "id": "p1",
-          "label": "Cleveland Indians"
+          "label": "Texas Rangers"
         },
         {
           "id": "p2",
@@ -1875,17 +1875,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Chicago Cubs won the World Series for 2016. The season year can differ from the calendar year of the final.",
+      "explanation": "The Chicago Cubs defeated the Cleveland Indians 4–3 to win the 2016 World Series. The series lasted 7 games.",
       "source": {
-        "url": "https://www.mlb.com/postseason/history/world-series",
-        "credit": "MLB historical results"
+        "url": "https://www.baseball-reference.com/postseason/2016_WS.shtml",
+        "credit": "Baseball-Reference · 2016 World Series results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "mlb-teams-2015",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-teams-2015",
       "league": "mlb",
       "season": "2015",
@@ -1894,7 +1894,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the World Series for the 2015 season?",
+      "prompt": "Which team defeated the New York Mets in the 2015 World Series?",
       "options": [
         {
           "id": "p0",
@@ -1902,7 +1902,7 @@
         },
         {
           "id": "p1",
-          "label": "New York Mets"
+          "label": "Los Angeles Dodgers"
         },
         {
           "id": "p2",
@@ -1914,17 +1914,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Kansas City Royals won the World Series for 2015. The season year can differ from the calendar year of the final.",
+      "explanation": "The Kansas City Royals defeated the New York Mets 4–1 to win the 2015 World Series. The series lasted 5 games.",
       "source": {
-        "url": "https://www.mlb.com/postseason/history/world-series",
-        "credit": "MLB historical results"
+        "url": "https://www.baseball-reference.com/postseason/2015_WS.shtml",
+        "credit": "Baseball-Reference · 2015 World Series results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "mlb-teams-2019",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-teams-2019",
       "league": "mlb",
       "season": "2019",
@@ -1933,7 +1933,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the World Series for the 2019 season?",
+      "prompt": "Which team defeated the Houston Astros in the 2019 World Series?",
       "options": [
         {
           "id": "p0",
@@ -1941,7 +1941,7 @@
         },
         {
           "id": "p1",
-          "label": "Houston Astros"
+          "label": "Los Angeles Dodgers"
         },
         {
           "id": "p2",
@@ -1953,17 +1953,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Washington Nationals won the World Series for 2019. The season year can differ from the calendar year of the final.",
+      "explanation": "The Washington Nationals defeated the Houston Astros 4–3 to win the 2019 World Series. The series lasted 7 games.",
       "source": {
-        "url": "https://www.mlb.com/postseason/history/world-series",
-        "credit": "MLB historical results"
+        "url": "https://www.baseball-reference.com/postseason/2019_WS.shtml",
+        "credit": "Baseball-Reference · 2019 World Series results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nfl-teams-1985",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-teams-1985",
       "league": "nfl",
       "season": "1985",
@@ -1972,7 +1972,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the Super Bowl for the 1985 season?",
+      "prompt": "Which team beat the New England Patriots 46–10 in the Super Bowl following the 1985 season?",
       "options": [
         {
           "id": "p0",
@@ -1980,7 +1980,7 @@
         },
         {
           "id": "p1",
-          "label": "New England Patriots"
+          "label": "New York Giants"
         },
         {
           "id": "p2",
@@ -1992,17 +1992,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Chicago Bears won the Super Bowl for 1985. The season year can differ from the calendar year of the final.",
+      "explanation": "The Chicago Bears beat the New England Patriots 46–10. The game was played in 1986, crowning the champion of the 1985 NFL season.",
       "source": {
-        "url": "https://www.espn.com/nfl/superbowl/history/winners",
-        "credit": "NFL historical results"
+        "url": "https://www.profootballhof.com/football-history/hall-of-famers-in-the-super-bowl",
+        "credit": "Pro Football Hall of Fame · Super Bowl results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nfl-teams-1999",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-teams-1999",
       "league": "nfl",
       "season": "1999",
@@ -2011,7 +2011,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the Super Bowl for the 1999 season?",
+      "prompt": "Which team beat the Tennessee Titans 23–16 in the Super Bowl following the 1999 season?",
       "options": [
         {
           "id": "p0",
@@ -2019,7 +2019,7 @@
         },
         {
           "id": "p1",
-          "label": "Tennessee Titans"
+          "label": "Tampa Bay Buccaneers"
         },
         {
           "id": "p2",
@@ -2031,17 +2031,17 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "St. Louis Rams won the Super Bowl for 1999. The season year can differ from the calendar year of the final.",
+      "explanation": "The St. Louis Rams beat the Tennessee Titans 23–16. The game was played in 2000, crowning the champion of the 1999 NFL season.",
       "source": {
-        "url": "https://www.espn.com/nfl/superbowl/history/winners",
-        "credit": "NFL historical results"
+        "url": "https://www.profootballhof.com/football-history/hall-of-famers-in-the-super-bowl",
+        "credit": "Pro Football Hall of Fame · Super Bowl results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "nfl-teams-2017",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-teams-2017",
       "league": "nfl",
       "season": "2017",
@@ -2050,7 +2050,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team won the Super Bowl for the 2017 season?",
+      "prompt": "Which team beat the New England Patriots 41–33 in the Super Bowl following the 2017 season?",
       "options": [
         {
           "id": "p0",
@@ -2058,7 +2058,7 @@
         },
         {
           "id": "p1",
-          "label": "New England Patriots"
+          "label": "Minnesota Vikings"
         },
         {
           "id": "p2",
@@ -2070,12 +2070,12 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Philadelphia Eagles won the Super Bowl for 2017. The season year can differ from the calendar year of the final.",
+      "explanation": "The Philadelphia Eagles beat the New England Patriots 41–33. The game was played in 2018, crowning the champion of the 2017 NFL season.",
       "source": {
-        "url": "https://www.espn.com/nfl/superbowl/history/winners",
-        "credit": "NFL historical results"
+        "url": "https://www.profootballhof.com/football-history/hall-of-famers-in-the-super-bowl",
+        "credit": "Pro Football Hall of Fame · Super Bowl results"
       },
-      "checkedAt": "2026-10-24",
+      "checkedAt": "2026-10-26",
       "publicationStatus": "prototype-only"
     },
     {

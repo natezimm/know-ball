@@ -40,7 +40,7 @@ public static class QuizCatalogue
             if (!Topics.Contains(Text(q, "topic"))) Error("Unsupported topic.");
             if (!Difficulties.Contains(Text(q, "difficulty"))) Error("Unsupported difficulty.");
             if (Text(q, "scope") is not ("regular-season" or "postseason")) Error("Unsupported scope.");
-            if (Text(q, "template") is not ("compare-four" or "match-value" or "trivia")) Error("Unsupported template.");
+            if (Text(q, "template") is not ("compare-four" or "match-value" or "closest-value" or "trivia")) Error("Unsupported template.");
             if (!q.TryGetProperty("revision", out var revision) || revision.ValueKind != JsonValueKind.Number || !revision.TryGetInt32(out var rev) || rev < 1) Error("Positive revision required.");
             if (!DateOnly.TryParseExact(Text(q, "checkedAt"), "yyyy-MM-dd", out _)) Error("checkedAt must be an ISO date.");
             if (!q.TryGetProperty("source", out var source) ||
@@ -61,8 +61,11 @@ public static class QuizCatalogue
                 if (values.Any(n => n is null or < 0)) { Error("Nonnegative numeric supporting values required."); continue; }
                 decimal? target = Text(q, "template") == "compare-four" ? values.Max() :
                     q.TryGetProperty("targetValue", out var t) && t.ValueKind == JsonValueKind.Number && t.TryGetDecimal(out var targetValue) ? targetValue : null;
-                if (target is null || values.Count(n => n == target) != 1 ||
-                    Text(choices[Array.FindIndex(values, n => n == target)], "id") != Text(q, "correctOptionId"))
+                if (target is null or < 0) { Error("Nonnegative numeric target required."); continue; }
+                var distances = values.Select(n => Math.Abs(n!.Value - target.Value)).ToArray();
+                var winningDistance = Text(q, "template") == "closest-value" ? distances.Min() : 0;
+                if (distances.Count(n => n == winningDistance) != 1 ||
+                    Text(choices[Array.FindIndex(distances, n => n == winningDistance)], "id") != Text(q, "correctOptionId"))
                     Error("Supporting values must identify the unique correct answer.");
             }
         }
