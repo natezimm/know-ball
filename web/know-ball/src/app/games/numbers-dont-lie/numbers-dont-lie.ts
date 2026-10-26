@@ -14,7 +14,7 @@ interface State { id: string; mode: string; date: string | null; position: numbe
     <a routerLink="/">← All games</a>
     <header><p>Daily & practice · Beta</p><h1>Numbers Don't Lie</h1>
     <p>Five questions. Awards, teams, stats and seasons across four leagues.</p></header>
-    <p class="note">56-question beta. Progress saves on the server for this browser’s player ID. Practice expires after 30 days.</p>
+    <p class="note">88-question beta. Progress saves on the server for this browser’s player ID. Practice expires after 30 days.</p>
     <nav aria-label="Quiz mode"><button (click)="daily()" [disabled]="busy()">Daily challenge</button>
       <button (click)="customize()" [disabled]="busy()">Practice</button></nav>
     @if (error()) { <p role="alert">{{error()}}</p><button (click)="retry()" [disabled]="busy()">Retry</button> }

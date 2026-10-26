@@ -1,12 +1,20 @@
 import { expect, test } from './support';
 
 test('fourth game opens and saves daily feedback across reloads', async ({ page }) => {
+  // Keep the answered radio visible briefly after Next, reproducing the CI race.
+  await page.route('**/api/numbers-dont-lie/quizzes/*/continue', async route => {
+    const response = await route.fetch();
+    await new Promise(resolve => setTimeout(resolve, 150));
+    await route.fulfill({ response });
+  });
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
   await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(4);
   await page.getByRole('link',{name:"Numbers Don't Lie: Play beta"}).click();
   await expect(page.getByRole('heading',{name:"Numbers Don't Lie",exact:true})).toBeVisible();
   for(let i=0;i<5;i++) {
+    await expect(page.getByText(new RegExp(`Question ${i + 1} of 5$`))).toBeVisible();
+    await expect(page.getByRole('radio').first()).toBeEnabled();
     await page.getByRole('radio').first().check();
     await page.getByRole('button',{name:'Lock in answer'}).click();
     await expect(page.locator('.feedback')).toBeVisible();

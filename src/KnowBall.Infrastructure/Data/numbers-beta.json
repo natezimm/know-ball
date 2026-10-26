@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "purpose": "Hosted prototype; answers are public. Not a production catalogue.",
+  "purpose": "Server-backed beta catalogue; human editorial approval pending. Never expose unanswered solutions through the public API.",
   "questions": [
     {
       "id": "nba-points-2024",
@@ -2388,6 +2388,1286 @@
         "credit": "NFL historical results"
       },
       "checkedAt": "2026-10-24",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-awards-1993",
+      "revision": 1,
+      "factFamily": "nba-nba-regular-season-mvp-1993",
+      "league": "nba",
+      "season": "1993–94",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 1993–94 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Hakeem Olajuwon"
+        },
+        {
+          "id": "p1",
+          "label": "David Robinson"
+        },
+        {
+          "id": "p2",
+          "label": "Shaquille O’Neal"
+        },
+        {
+          "id": "p3",
+          "label": "Scottie Pippen"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Hakeem Olajuwon earned the 1993–94 NBA regular-season MVP.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
+        "credit": "NBA · MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-awards-2003",
+      "revision": 1,
+      "factFamily": "nba-nba-regular-season-mvp-2003",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA regular-season MVP for the 2003–04 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p2",
+          "label": "Kobe Bryant"
+        },
+        {
+          "id": "p3",
+          "label": "Shaquille O’Neal"
+        },
+        {
+          "id": "p0",
+          "label": "Kevin Garnett"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kevin Garnett earned the 2003–04 NBA regular-season MVP.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
+        "credit": "NBA · MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-1992",
+      "revision": 1,
+      "factFamily": "nba-nba-regular-season-mvp-1992",
+      "league": "nba",
+      "season": "1992–93",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Charles Barkley win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "1994–95"
+        },
+        {
+          "id": "p3",
+          "label": "1996–97"
+        },
+        {
+          "id": "p0",
+          "label": "1992–93"
+        },
+        {
+          "id": "p1",
+          "label": "1990–91"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Charles Barkley earned the 1992–93 NBA regular-season MVP.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
+        "credit": "NBA · MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-1999",
+      "revision": 1,
+      "factFamily": "nba-nba-regular-season-mvp-1999",
+      "league": "nba",
+      "season": "1999–00",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Shaquille O’Neal win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "2003–04"
+        },
+        {
+          "id": "p0",
+          "label": "1999–00"
+        },
+        {
+          "id": "p1",
+          "label": "1997–98"
+        },
+        {
+          "id": "p2",
+          "label": "2001–02"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Shaquille O’Neal earned the 1999–00 NBA regular-season MVP.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
+        "credit": "NBA · MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-seasons-2000",
+      "revision": 1,
+      "factFamily": "nba-nba-regular-season-mvp-2000",
+      "league": "nba",
+      "season": "2000–01",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Allen Iverson win the NBA regular-season MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2000–01"
+        },
+        {
+          "id": "p1",
+          "label": "1998–99"
+        },
+        {
+          "id": "p2",
+          "label": "2002–03"
+        },
+        {
+          "id": "p3",
+          "label": "2004–05"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Allen Iverson earned the 2000–01 NBA regular-season MVP.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
+        "credit": "NBA · MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-1995",
+      "revision": 1,
+      "factFamily": "nba-champion-1995",
+      "league": "nba",
+      "season": "1995–96",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 1995–96 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Seattle SuperSonics"
+        },
+        {
+          "id": "p2",
+          "label": "Orlando Magic"
+        },
+        {
+          "id": "p3",
+          "label": "Houston Rockets"
+        },
+        {
+          "id": "p0",
+          "label": "Chicago Bulls"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chicago Bulls won the 1995–96 NBA championship.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-nba-champions",
+        "credit": "NBA · championship history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2007",
+      "revision": 1,
+      "factFamily": "nba-champion-2007",
+      "league": "nba",
+      "season": "2007–08",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2007–08 season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Detroit Pistons"
+        },
+        {
+          "id": "p3",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p0",
+          "label": "Boston Celtics"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Lakers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Boston Celtics won the 2007–08 NBA championship.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-nba-champions",
+        "credit": "NBA · championship history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-teams-2015",
+      "revision": 1,
+      "factFamily": "nba-champion-2015",
+      "league": "nba",
+      "season": "2015–16",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the NBA championship for the 2015–16 season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p0",
+          "label": "Cleveland Cavaliers"
+        },
+        {
+          "id": "p1",
+          "label": "Golden State Warriors"
+        },
+        {
+          "id": "p2",
+          "label": "Oklahoma City Thunder"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Cleveland Cavaliers won the 2015–16 NBA championship.",
+      "source": {
+        "url": "https://cdn-uat.nba.com/news/history-nba-champions",
+        "credit": "NBA · championship history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-1999",
+      "revision": 1,
+      "factFamily": "nfl-ap-nfl-mvp-1999",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 1999 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kurt Warner"
+        },
+        {
+          "id": "p1",
+          "label": "Peyton Manning"
+        },
+        {
+          "id": "p2",
+          "label": "Brett Favre"
+        },
+        {
+          "id": "p3",
+          "label": "Marshall Faulk"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kurt Warner earned the 1999 AP NFL MVP.",
+      "source": {
+        "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
+        "credit": "EDSFootball · AP NFL MVP winners"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-awards-2000",
+      "revision": 1,
+      "factFamily": "nfl-ap-nfl-mvp-2000",
+      "league": "nfl",
+      "season": "2000",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP NFL MVP for the 2000 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Kurt Warner"
+        },
+        {
+          "id": "p2",
+          "label": "Rich Gannon"
+        },
+        {
+          "id": "p3",
+          "label": "Eddie George"
+        },
+        {
+          "id": "p0",
+          "label": "Marshall Faulk"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Marshall Faulk earned the 2000 AP NFL MVP.",
+      "source": {
+        "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
+        "credit": "EDSFootball · AP NFL MVP winners"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2002",
+      "revision": 1,
+      "factFamily": "nfl-ap-nfl-mvp-2002",
+      "league": "nfl",
+      "season": "2002",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Rich Gannon win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "2004"
+        },
+        {
+          "id": "p3",
+          "label": "2006"
+        },
+        {
+          "id": "p0",
+          "label": "2002"
+        },
+        {
+          "id": "p1",
+          "label": "2000"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Rich Gannon earned the 2002 AP NFL MVP.",
+      "source": {
+        "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
+        "credit": "EDSFootball · AP NFL MVP winners"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2005",
+      "revision": 1,
+      "factFamily": "nfl-ap-nfl-mvp-2005",
+      "league": "nfl",
+      "season": "2005",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Shaun Alexander win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "2009"
+        },
+        {
+          "id": "p0",
+          "label": "2005"
+        },
+        {
+          "id": "p1",
+          "label": "2003"
+        },
+        {
+          "id": "p2",
+          "label": "2007"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Shaun Alexander earned the 2005 AP NFL MVP.",
+      "source": {
+        "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
+        "credit": "EDSFootball · AP NFL MVP winners"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-seasons-2006",
+      "revision": 1,
+      "factFamily": "nfl-ap-nfl-mvp-2006",
+      "league": "nfl",
+      "season": "2006",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did LaDainian Tomlinson win the AP NFL MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2006"
+        },
+        {
+          "id": "p1",
+          "label": "2004"
+        },
+        {
+          "id": "p2",
+          "label": "2008"
+        },
+        {
+          "id": "p3",
+          "label": "2010"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "LaDainian Tomlinson earned the 2006 AP NFL MVP.",
+      "source": {
+        "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
+        "credit": "EDSFootball · AP NFL MVP winners"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-1996",
+      "revision": 1,
+      "factFamily": "nfl-champion-1996",
+      "league": "nfl",
+      "season": "1996",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 1996 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Dallas Cowboys"
+        },
+        {
+          "id": "p3",
+          "label": "Denver Broncos"
+        },
+        {
+          "id": "p0",
+          "label": "Green Bay Packers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Green Bay Packers won the 1996 Super Bowl. Super Bowl XXXI was played in January 1997.",
+      "source": {
+        "url": "https://www.packers.com/history/championship-seasons",
+        "credit": "Green Bay Packers · championship seasons"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-2002",
+      "revision": 1,
+      "factFamily": "nfl-champion-2002",
+      "league": "nfl",
+      "season": "2002",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 2002 season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Philadelphia Eagles"
+        },
+        {
+          "id": "p3",
+          "label": "Tennessee Titans"
+        },
+        {
+          "id": "p0",
+          "label": "Tampa Bay Buccaneers"
+        },
+        {
+          "id": "p1",
+          "label": "Oakland Raiders"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tampa Bay Buccaneers won the 2002 Super Bowl. Super Bowl XXXVII was played in January 2003.",
+      "source": {
+        "url": "https://www.buccaneers.com/team/history/2002",
+        "credit": "Tampa Bay Buccaneers · 2002 season history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-teams-2009",
+      "revision": 1,
+      "factFamily": "nfl-champion-2009",
+      "league": "nfl",
+      "season": "2009",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Super Bowl for the 2009 season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "New York Jets"
+        },
+        {
+          "id": "p0",
+          "label": "New Orleans Saints"
+        },
+        {
+          "id": "p1",
+          "label": "Indianapolis Colts"
+        },
+        {
+          "id": "p2",
+          "label": "Minnesota Vikings"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "New Orleans Saints won the 2009 Super Bowl. Super Bowl XLIV was played in February 2010.",
+      "source": {
+        "url": "https://www.neworleanssaints.com/team/history/super-bowl-xliv",
+        "credit": "New Orleans Saints · Super Bowl XLIV history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-2000",
+      "revision": 1,
+      "factFamily": "nhl-hart-memorial-trophy-2000",
+      "league": "nhl",
+      "season": "2000–01",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 2000–01 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Joe Sakic"
+        },
+        {
+          "id": "p1",
+          "label": "Mario Lemieux"
+        },
+        {
+          "id": "p2",
+          "label": "Jaromir Jagr"
+        },
+        {
+          "id": "p3",
+          "label": "Martin Brodeur"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Joe Sakic earned the 2000–01 Hart Memorial Trophy.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-awards-2005",
+      "revision": 1,
+      "factFamily": "nhl-hart-memorial-trophy-2005",
+      "league": "nhl",
+      "season": "2005–06",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Hart Memorial Trophy for the 2005–06 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Jaromir Jagr"
+        },
+        {
+          "id": "p2",
+          "label": "Miikka Kiprusoff"
+        },
+        {
+          "id": "p3",
+          "label": "Eric Staal"
+        },
+        {
+          "id": "p0",
+          "label": "Joe Thornton"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Joe Thornton earned the 2005–06 Hart Memorial Trophy.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-1999",
+      "revision": 1,
+      "factFamily": "nhl-hart-memorial-trophy-1999",
+      "league": "nhl",
+      "season": "1999–00",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Chris Pronger win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "2001–02"
+        },
+        {
+          "id": "p3",
+          "label": "2003–04"
+        },
+        {
+          "id": "p0",
+          "label": "1999–00"
+        },
+        {
+          "id": "p1",
+          "label": "1997–98"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chris Pronger earned the 1999–00 Hart Memorial Trophy.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-2003",
+      "revision": 1,
+      "factFamily": "nhl-hart-memorial-trophy-2003",
+      "league": "nhl",
+      "season": "2003–04",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Martin St. Louis win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "2007–08"
+        },
+        {
+          "id": "p0",
+          "label": "2003–04"
+        },
+        {
+          "id": "p1",
+          "label": "2001–02"
+        },
+        {
+          "id": "p2",
+          "label": "2005–06"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Martin St. Louis earned the 2003–04 Hart Memorial Trophy.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-seasons-2010",
+      "revision": 1,
+      "factFamily": "nhl-hart-memorial-trophy-2010",
+      "league": "nhl",
+      "season": "2010–11",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Corey Perry win the Hart Memorial Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2010–11"
+        },
+        {
+          "id": "p1",
+          "label": "2008–09"
+        },
+        {
+          "id": "p2",
+          "label": "2012–13"
+        },
+        {
+          "id": "p3",
+          "label": "2014–15"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Corey Perry earned the 2010–11 Hart Memorial Trophy.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-1993",
+      "revision": 1,
+      "factFamily": "nhl-champion-1993",
+      "league": "nhl",
+      "season": "1993–94",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 1993–94 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Vancouver Canucks"
+        },
+        {
+          "id": "p2",
+          "label": "New Jersey Devils"
+        },
+        {
+          "id": "p3",
+          "label": "Toronto Maple Leafs"
+        },
+        {
+          "id": "p0",
+          "label": "New York Rangers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "New York Rangers won the 1993–94 Stanley Cup.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-2000",
+      "revision": 1,
+      "factFamily": "nhl-champion-2000",
+      "league": "nhl",
+      "season": "2000–01",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 2000–01 season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p3",
+          "label": "Dallas Stars"
+        },
+        {
+          "id": "p0",
+          "label": "Colorado Avalanche"
+        },
+        {
+          "id": "p1",
+          "label": "New Jersey Devils"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Colorado Avalanche won the 2000–01 Stanley Cup.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-teams-2010",
+      "revision": 1,
+      "factFamily": "nhl-champion-2010",
+      "league": "nhl",
+      "season": "2010–11",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the Stanley Cup for the 2010–11 season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "San Jose Sharks"
+        },
+        {
+          "id": "p0",
+          "label": "Boston Bruins"
+        },
+        {
+          "id": "p1",
+          "label": "Vancouver Canucks"
+        },
+        {
+          "id": "p2",
+          "label": "Tampa Bay Lightning"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Boston Bruins won the 2010–11 Stanley Cup.",
+      "source": {
+        "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
+        "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-2006",
+      "revision": 1,
+      "factFamily": "mlb-national-league-mvp-2006",
+      "league": "mlb",
+      "season": "2006",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the National League MVP for the 2006 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ryan Howard"
+        },
+        {
+          "id": "p1",
+          "label": "Albert Pujols"
+        },
+        {
+          "id": "p2",
+          "label": "Carlos Beltrán"
+        },
+        {
+          "id": "p3",
+          "label": "Lance Berkman"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ryan Howard earned the 2006 National League MVP.",
+      "source": {
+        "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
+        "credit": "Baseball Almanac · MLB MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-awards-2007",
+      "revision": 1,
+      "factFamily": "mlb-national-league-mvp-2007",
+      "league": "mlb",
+      "season": "2007",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the National League MVP for the 2007 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "Matt Holliday"
+        },
+        {
+          "id": "p2",
+          "label": "Prince Fielder"
+        },
+        {
+          "id": "p3",
+          "label": "David Wright"
+        },
+        {
+          "id": "p0",
+          "label": "Jimmy Rollins"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Jimmy Rollins earned the 2007 National League MVP.",
+      "source": {
+        "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
+        "credit": "Baseball Almanac · MLB MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-2010",
+      "revision": 1,
+      "factFamily": "mlb-national-league-mvp-2010",
+      "league": "mlb",
+      "season": "2010",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Joey Votto win the National League MVP?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "2012"
+        },
+        {
+          "id": "p3",
+          "label": "2014"
+        },
+        {
+          "id": "p0",
+          "label": "2010"
+        },
+        {
+          "id": "p1",
+          "label": "2008"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Joey Votto earned the 2010 National League MVP.",
+      "source": {
+        "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
+        "credit": "Baseball Almanac · MLB MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-2012",
+      "revision": 1,
+      "factFamily": "mlb-national-league-mvp-2012",
+      "league": "mlb",
+      "season": "2012",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Buster Posey win the National League MVP?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "2016"
+        },
+        {
+          "id": "p0",
+          "label": "2012"
+        },
+        {
+          "id": "p1",
+          "label": "2010"
+        },
+        {
+          "id": "p2",
+          "label": "2014"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Buster Posey earned the 2012 National League MVP.",
+      "source": {
+        "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
+        "credit": "Baseball Almanac · MLB MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-seasons-2013",
+      "revision": 1,
+      "factFamily": "mlb-national-league-mvp-2013",
+      "league": "mlb",
+      "season": "2013",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "harder",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Andrew McCutchen win the National League MVP?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2013"
+        },
+        {
+          "id": "p1",
+          "label": "2011"
+        },
+        {
+          "id": "p2",
+          "label": "2015"
+        },
+        {
+          "id": "p3",
+          "label": "2017"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Andrew McCutchen earned the 2013 National League MVP.",
+      "source": {
+        "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
+        "credit": "Baseball Almanac · MLB MVP award history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2001",
+      "revision": 1,
+      "factFamily": "mlb-champion-2001",
+      "league": "mlb",
+      "season": "2001",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2001 season?",
+      "options": [
+        {
+          "id": "p1",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p2",
+          "label": "Seattle Mariners"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Braves"
+        },
+        {
+          "id": "p0",
+          "label": "Arizona Diamondbacks"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Arizona Diamondbacks won the 2001 World Series.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2001",
+        "credit": "MLB · 2001 postseason history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2004",
+      "revision": 1,
+      "factFamily": "mlb-champion-2004",
+      "league": "mlb",
+      "season": "2004",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2004 season?",
+      "options": [
+        {
+          "id": "p2",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p3",
+          "label": "Houston Astros"
+        },
+        {
+          "id": "p0",
+          "label": "Boston Red Sox"
+        },
+        {
+          "id": "p1",
+          "label": "St. Louis Cardinals"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Boston Red Sox won the 2004 World Series.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2004",
+        "credit": "MLB · 2004 postseason history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-teams-2005",
+      "revision": 1,
+      "factFamily": "mlb-champion-2005",
+      "league": "mlb",
+      "season": "2005",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the World Series for the 2005 season?",
+      "options": [
+        {
+          "id": "p3",
+          "label": "St. Louis Cardinals"
+        },
+        {
+          "id": "p0",
+          "label": "Chicago White Sox"
+        },
+        {
+          "id": "p1",
+          "label": "Houston Astros"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Angels"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Chicago White Sox won the 2005 World Series.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2005",
+        "credit": "MLB · 2005 postseason history"
+      },
+      "checkedAt": "2026-10-25",
+      "verification": "source-fact-checked; human editorial review pending",
       "publicationStatus": "prototype-only"
     }
   ]

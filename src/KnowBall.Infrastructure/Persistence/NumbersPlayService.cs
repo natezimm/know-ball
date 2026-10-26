@@ -125,6 +125,9 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         var nodes = set.Select(q => JsonNode.Parse(q.GetRawText())!).ToArray();
         for (var i = 0; i < nodes.Length; i++)
         {
+            // Catalogue IDs include the answer year for season questions. Persist only opaque
+            // gameplay IDs so neither the current question nor subsequent moves disclose it.
+            nodes[i]["id"] = Guid.NewGuid().ToString("N");
             var options = nodes[i]["options"]!.AsArray().Select(o => o!.DeepClone()).ToArray();
             // Opaque option IDs prevent the beta catalogue's original p0 convention leaking answers.
             var correct = nodes[i]["correctOptionId"]!.GetValue<string>();
