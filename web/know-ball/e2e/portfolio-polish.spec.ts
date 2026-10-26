@@ -1,6 +1,6 @@
 import { expect, test } from './support';
 
-test('portfolio navigation, metadata and social preview describe the three-game site', async ({ page, request }) => {
+test('portfolio navigation, metadata and social preview describe the game site', async ({ page, request }) => {
   await page.goto('/');
   await expect(page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link')).toHaveText(['Games']);
   const footer = page.getByRole('contentinfo');

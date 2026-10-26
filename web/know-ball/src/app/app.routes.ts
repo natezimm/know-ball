@@ -5,6 +5,7 @@ const careerPath = () => import('./games/career-path/career-path').then((m) => m
 
 // A game's bare address is today's puzzle; "/puzzle/:puzzleId" is one from the archive or a practice round.
 export const routes: Routes = [
+  { path: 'numbers-dont-lie', title: "Numbers Don't Lie — Know Ball", loadComponent: () => import('./games/numbers-dont-lie/numbers-dont-lie').then(m => m.NumbersDontLie) },
   {
     path: '',
     title: 'Know Ball — Daily Sports Trivia',

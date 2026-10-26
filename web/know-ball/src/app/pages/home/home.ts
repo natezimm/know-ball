@@ -11,10 +11,12 @@ interface GameCard {
   link: string;
   /** Set for the daily games; Spordle is played whenever you like. */
   daily?: GameSlug;
+  beta?: boolean;
 }
 
 /** What a card says under its blurb, and whether it can be opened. */
-export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
+export function cardStatus(card: Pick<GameCard, 'daily' | 'beta'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
+  if (card.beta) return { label: 'Play beta', open: true };
   if (!card.daily) return { label: 'Play anytime', open: true };
   if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
@@ -32,7 +34,7 @@ export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | un
   }
 }
 
-const COUNT_WORDS = ['No', 'One', 'Two', 'Three'];
+const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
 
 @Component({
   selector: 'app-home',
@@ -116,7 +118,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three'];
   `,
 })
 export class Home {
-  /** Version 1: these three. A fourth game is undecided. */
+  /** Three established games and the server-backed Numbers beta. */
   private readonly games: GameCard[] = [
     { name: 'Spordle', link: '/spordle', glyph: '▦', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
@@ -127,10 +129,12 @@ export class Home {
       name: 'Career Path', link: '/career-path', daily: 'career-path', glyph: '→', trim: 'var(--mustard)',
       blurb: 'Every team they played for, in order. Who is it?',
     },
+    { name: "Numbers Don't Lie", link: '/numbers-dont-lie', beta: true, glyph: '#', trim: 'var(--teal)',
+      blurb: 'Five questions about stats, awards, teams and past seasons. Choose your leagues in practice.' },
   ];
 
   /** Designed but not scheduled; replay numbers after version 1 decide which comes first. */
-  protected readonly later = ['Stat Quiz', 'Geo Sports', 'Sportle', 'Sound It Out', "Who's the GOAT?"];
+  protected readonly later = ['Geo Sports', 'Sportle', 'Sound It Out', "Who's the GOAT?"];
 
   // Undefined while checking availability; null after a failed request.
   private readonly today = signal<TodayEntry[] | null | undefined>(undefined);
@@ -139,7 +143,7 @@ export class Home {
     const today = this.today();
     return this.games.map((card) => ({ ...card, status: cardStatus(card, today?.find((t) => t.game === card.daily), today === undefined ? null : today !== null) }));
   });
-  protected readonly countWord = computed(() => this.today() === undefined ? 'Three' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Three');
+  protected readonly countWord = computed(() => this.today() === undefined ? 'Four' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Four');
 
   constructor() {
     // If the API is down the cards still link to the games, which report the problem themselves.

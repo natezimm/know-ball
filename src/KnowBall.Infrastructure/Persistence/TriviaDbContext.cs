@@ -6,6 +6,7 @@ namespace KnowBall.Infrastructure.Persistence;
 
 public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbContext(options), ITriviaDb
 {
+    public DbSet<NumbersPlay> NumbersPlays => Set<NumbersPlay>();
     public DbSet<NumbersCatalogue> NumbersCatalogues => Set<NumbersCatalogue>();
     public DbSet<NumbersQuiz> NumbersQuizzes => Set<NumbersQuiz>();
     public DbSet<League> Leagues => Set<League>();
@@ -24,6 +25,14 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
 
     protected override void OnModelCreating(ModelBuilder b)
     {
+        b.Entity<NumbersPlay>(e =>
+        {
+            e.Property(x => x.Owner).HasMaxLength(64);
+            e.Property(x => x.StartKey).HasMaxLength(64);
+            e.Property(x => x.Revision).IsConcurrencyToken();
+            e.HasIndex(x => new { x.Owner, x.StartKey }).IsUnique();
+            e.HasIndex(x => x.ExpiresAt);
+        });
         b.Entity<NumbersCatalogue>(e =>
         {
             e.Property(x => x.Id).HasMaxLength(64);

@@ -58,11 +58,11 @@ for (const width of [390, 1280]) {
   });
 }
 
-test('old photo-game and admin bookmarks return to the three-game home page', async ({ page }) => {
+test('old photo-game and admin bookmarks return to the four-game home page', async ({ page }) => {
   await page.route('**/api/me/today', (route) => route.fulfill({ json: today }));
   for (const path of ['/whos-that', '/whos-that/puzzle/1', '/admin']) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole('list', { name: 'Games' }).getByRole('heading', { level: 2 })).toHaveText(['Spordle', 'Scouting Report', 'Career Path']);
+    await expect(page.getByRole('list', { name: 'Games' }).getByRole('heading', { level: 2 })).toHaveText(['Spordle', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
   }
 });
