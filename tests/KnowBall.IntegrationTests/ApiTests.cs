@@ -67,11 +67,12 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         throw new DirectoryNotFoundException("tests/fixtures/bref");
     }
 
-    // Every test request comes from the same (empty) address, so the site-wide limit would trip
-    // partway through the run; RateLimitTests turns it back down where it is the subject.
+    // Every test request comes from the same (empty) address. Keep the shared suite from
+    // exhausting request/gameplay budgets; rate-limit tests set their own small limits.
     protected override void ConfigureWebHost(IWebHostBuilder builder) => builder
         .UseEnvironment("Testing")
-        .UseSetting("RateLimits:RequestsPerMinute", "0");
+        .UseSetting("RateLimits:RequestsPerMinute", "0")
+        .UseSetting("Games:GuessesPerMinute", "10000");
 
     protected override void Dispose(bool disposing)
     {
