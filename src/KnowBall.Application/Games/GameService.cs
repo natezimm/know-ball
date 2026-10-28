@@ -152,6 +152,8 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
             foreach (var win in mine.Where(r => r.Solved && r.Score >= 1 && r.Score <= game.MaxGuesses)) distribution[win.Score - 1]++;
 
             var (current, best) = Streaks(mine.Where(r => r.Solved).Select(r => r.Date), today);
+            // Yesterday's run survives an unplayed today, but not a completed loss today.
+            if (mine.Any(r => r.Date == today && !r.Solved)) current = 0;
             stats.Add(new GameStats(game.Slug, game.Name, game.MaxGuesses, mine.Count, mine.Count(r => r.Solved), current, best, distribution));
         }
         return stats;

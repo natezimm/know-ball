@@ -32,6 +32,45 @@ public class SpordleGameServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Resume_restores_scored_guesses_and_hint_without_revealing_an_unfinished_answer()
+    {
+        var game = await NewService().CreateGameAsync(5);
+        var requestId = Guid.NewGuid();
+        var guess = (await NewService().SubmitGuessAsync(game.GameId, "glitz", requestId)).Result!;
+        var hint = (await NewService().GetHintAsync(game.GameId, SpordleHintType.Letter)).Result!;
+        var state = (await NewService().GetGameAsync(game.GameId)).Result!;
+        Assert.Equal(game.GameId, state.GameId);
+        Assert.Equal(5, state.WordLength);
+        Assert.Equal(6, state.MaxAttempts);
+        var saved = Assert.Single(state.Guesses);
+        Assert.Equal(requestId, saved.RequestId);
+        Assert.Equal("glitz", saved.Word);
+        Assert.Equal(guess.Score, saved.Score);
+        Assert.Equal(hint, state.LetterHint);
+        Assert.Null(state.Answer);
+        Assert.False(state.Complete);
+        Assert.False(state.Won);
+        await NewService().SubmitGuessAsync(game.GameId, "blitz");
+        var finished = (await NewService().GetGameAsync(game.GameId)).Result!;
+        Assert.True(finished.Won);
+        Assert.True(finished.Complete);
+        Assert.Equal("blitz", finished.Answer);
+        Assert.Equal(2, finished.Guesses.Count);
+    }
+
+    [Fact]
+    public async Task Resume_rejects_unknown_and_expired_rounds_without_extending_expiry()
+    {
+        var game = await NewService().CreateGameAsync(5);
+        Assert.Equal(SpordleFailure.NotFound, (await NewService().GetGameAsync("nope")).Failure);
+        Assert.Equal(SpordleFailure.NotFound, (await NewService().GetGameAsync(Guid.NewGuid().ToString())).Failure);
+        _clock.Advance(SpordleGameService.IdleLifetime - TimeSpan.FromSeconds(1));
+        Assert.True((await NewService().GetGameAsync(game.GameId)).Ok);
+        _clock.Advance(TimeSpan.FromSeconds(1));
+        Assert.Equal(SpordleFailure.NotFound, (await NewService().GetGameAsync(game.GameId)).Failure);
+    }
+
+    [Fact]
     public async Task Starting_a_game_returns_an_id_and_limits_but_no_answer()
     {
         var game = (await NewService().CreateGameAsync(4));

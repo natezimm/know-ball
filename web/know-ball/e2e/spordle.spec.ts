@@ -40,6 +40,8 @@ test('the hints and the scores lead to the word, and a win is recorded', async (
     expect(guesses).toBeLessThan(6);
   }
   await expect(page.getByRole('status').filter({ hasText: 'Solved' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('status').filter({ hasText: 'Solved' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Stats' }).click();
   const stats = page.getByRole('dialog', { name: /Statistics/ });
@@ -93,6 +95,32 @@ test('retrying a lost response scores the row only once on the real API', async 
   expect((await retry.json()).attemptsRemaining).toBe(5);
   await expect(page.getByRole('status').filter({ hasText: 'Guess 2 of 6' })).toBeVisible();
   await submit(page, 'other');
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 3 of 6' })).toBeVisible();
+});
+
+test('reload restores a committed guess after its response was lost, plus hints and typed input', async ({ page }) => {
+  const category = await revealHint(page, 'Category', 'Reveal category');
+  const letter = await revealHint(page, 'Letter', 'Reveal letter');
+  await page.route('**/api/spordle/games/*/guesses', async route => {
+    const committed = await route.fetch();
+    expect(committed.ok()).toBe(true);
+    await route.abort('failed');
+  }, { times: 1 });
+  await page.keyboard.type('about');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Error checking the word. Please try again.')).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 2 of 6' })).toBeVisible();
+  await expect(page.getByRole('group', { name: /^Guess 1: a / })).toBeVisible();
+  await expect(page.locator('.hints')).toContainText(category);
+  await expect(page.locator('.hints')).toContainText(letter);
+  await page.keyboard.type('ot');
+  await page.reload();
+  await expect(page.getByRole('group', { name: 'Guess 2: ot', exact: true })).toBeVisible();
+  await page.keyboard.type('her');
+  const response = page.waitForResponse(r => /\/guesses$/.test(r.url()));
+  await page.keyboard.press('Enter');
+  expect((await (await response).json()).attemptsRemaining).toBe(4);
   await expect(page.getByRole('status').filter({ hasText: 'Guess 3 of 6' })).toBeVisible();
 });
 

@@ -11,6 +11,16 @@ export const FLIP_STAGGER_MS = 300;
 export const FLIP_DURATION_MS = 500;
 
 const LENGTH_KEY = 'knowball.spordle.wordLength';
+const ROUND_KEY = 'knowball.spordle.round';
+
+interface SavedRound {
+  gameId: string;
+  startedAt: number;
+  finishedAt?: number;
+  currentGuess: string;
+  categoryHint: string | null;
+  pendingGuess?: { word: string; id: string };
+}
 
 export type GameStatus = 'loading' | 'playing' | 'validating' | 'revealing' | 'complete' | 'expired' | 'error';
 
@@ -43,6 +53,7 @@ export class SpordleGame {
   private request?: Subscription;
   private hintRequest?: Subscription;
   private startedAt = 0;
+  private finishedAt?: number;
   private pendingGuess?: { word: string; id: string };
 
   readonly wordLength = signal<WordLength>(readStoredLength());
@@ -61,17 +72,78 @@ export class SpordleGame {
 
   /** A request or the tile reveal is in flight, so input is ignored. */
   readonly busy = computed(() => ['loading', 'validating', 'revealing'].includes(this.status()));
-  /** At least one scored guess and not over yet: walking away now counts as a loss. */
+  /** Starting a new round with scored guesses still on this board counts as a loss. */
   readonly inProgress = computed(() => this.status() === 'playing' && this.attempts().length > 0);
 
   constructor() {
     inject(DestroyRef).onDestroy(() => this.cancel());
   }
 
+  /** Rebuild the board from the server; a temporary failure keeps the saved round. */
+  resume(): void {
+    let saved: SavedRound | null = null;
+    try {
+      const value = JSON.parse(localStorage.getItem(ROUND_KEY) ?? 'null');
+      if (typeof value?.gameId === 'string' && Number.isFinite(value.startedAt)) saved = value;
+    } catch { /* Missing or damaged storage starts a fresh round. */ }
+    if (!saved) { this.start(); return; }
+    const round = saved;
+    this.cancel();
+    this.gameId.set(round.gameId);
+    this.startedAt = round.startedAt;
+    this.finishedAt = round.finishedAt;
+    this.status.set('loading');
+    this.request = this.api.getGame(round.gameId).subscribe({
+      next: (state) => {
+        if (!isWordLength(state.wordLength)) { this.expire(); return; }
+        this.wordLength.set(state.wordLength);
+        this.attempts.set(state.guesses.map(g => ({ word: g.word, score: g.score })));
+        this.letterStatuses.set(state.guesses.reduce((keys, g) =>
+          mergeKeyboardStatuses(keys, g.word, g.score), {} as Record<string, LetterStatus>));
+        this.categoryHint.set(typeof round.categoryHint === 'string' ? round.categoryHint : null);
+        this.letterHint.set(state.letterHint);
+        const acknowledged = state.guesses.some(g => g.requestId === round.pendingGuess?.id);
+        this.pendingGuess = acknowledged ? undefined : round.pendingGuess;
+        this.currentGuess.set(state.complete || acknowledged ? '' :
+          typeof round.currentGuess === 'string' ? round.currentGuess.slice(0, state.wordLength) : '');
+        this.message.set('');
+        this.result.set(null);
+        if (state.complete) {
+          this.finishedAt ??= Date.now();
+          const timeMs = state.won ? Math.max(0, this.finishedAt - this.startedAt) : null;
+          const result = { won: state.won, answer: state.answer!, guesses: state.guesses.length, timeMs };
+          recordGame(state.wordLength, result, state.gameId);
+          this.result.set(result);
+          this.status.set('complete');
+        } else {
+          this.status.set('playing');
+        }
+        this.persist();
+      },
+      error: (error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) { this.expire(); return; }
+        this.message.set('Could not resume your game. Reload to retry; your saved round is still available.');
+        this.status.set('error');
+      },
+    });
+  }
+
+  private persist(): void {
+    if (!this.gameId()) return;
+    try {
+      localStorage.setItem(ROUND_KEY, JSON.stringify({
+        gameId: this.gameId(), startedAt: this.startedAt, finishedAt: this.finishedAt,
+        currentGuess: this.currentGuess(), categoryHint: this.categoryHint(), pendingGuess: this.pendingGuess,
+      }));
+    } catch { /* Blocked storage: the round lasts for this visit only. */ }
+  }
+
   /** Begins a fresh game, dropping whatever was on the board. */
   start(length: WordLength = this.wordLength()): void {
     this.cancel();
     this.pendingGuess = undefined;
+    this.finishedAt = undefined;
+    try { localStorage.removeItem(ROUND_KEY); } catch { /* Storage may be blocked. */ }
     this.wordLength.set(length);
     try {
       localStorage.setItem(LENGTH_KEY, String(length));
@@ -96,6 +168,7 @@ export class SpordleGame {
         this.gameId.set(game.gameId);
         this.startedAt = Date.now();
         this.status.set('playing');
+        this.persist();
       },
       error: () => {
         this.message.set('Failed to start a game. Please try again later.');
@@ -108,7 +181,7 @@ export class SpordleGame {
   newGame(length: WordLength = this.wordLength()): void {
     if (this.status() === 'validating' || this.status() === 'revealing') return;
     if (this.inProgress()) {
-      recordGame(this.wordLength(), { won: false, guesses: this.attempts().length, timeMs: null });
+      recordGame(this.wordLength(), { won: false, guesses: this.attempts().length, timeMs: null }, this.gameId());
     }
     this.start(length);
   }
@@ -116,6 +189,8 @@ export class SpordleGame {
   /** A key from the on-screen or physical keyboard: a letter, "Enter" or "Backspace". */
   press(key: string): void {
     if (this.status() !== 'playing' && this.status() !== 'loading') return;
+    // Resume must finish before typing or submitting against the existing server round.
+    if (this.status() === 'loading' && this.gameId()) return;
 
     if (key === 'Enter') {
       this.submit();
@@ -124,6 +199,7 @@ export class SpordleGame {
     } else if (/^[a-zA-Z]$/.test(key) && this.currentGuess().length < this.wordLength()) {
       this.currentGuess.update((guess) => guess + key.toLowerCase());
     }
+    this.persist();
   }
 
   /** Asks the server for a hint. Each kind is fetched once per game and then kept. */
@@ -138,6 +214,7 @@ export class SpordleGame {
         if (hint.category) this.categoryHint.set(hint.category);
         if (hint.position && hint.letter) this.letterHint.set({ position: hint.position, letter: hint.letter });
         this.hintLoading.set(false);
+        this.persist();
       },
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) {
@@ -167,10 +244,12 @@ export class SpordleGame {
     this.status.set('validating');
     // A failed response may still have committed on the server. Retry with the same ID.
     if (this.pendingGuess?.word !== guess) this.pendingGuess = { word: guess, id: crypto.randomUUID() };
+    this.persist();
     this.request = this.api.submitGuess(this.gameId(), guess, this.pendingGuess.id).subscribe({
       next: (result) => {
         this.pendingGuess = undefined;
         this.applyResult(guess, result);
+        this.persist();
       },
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) {
@@ -191,6 +270,7 @@ export class SpordleGame {
     // A missing server session is not a player's loss. Keep their board visible until
     // they choose a fresh game, and do not write a result to local statistics.
     this.status.set('expired');
+    try { localStorage.removeItem(ROUND_KEY); } catch { /* Storage may be blocked. */ }
   }
 
   private applyResult(guess: string, result: GuessResult): void {
@@ -204,6 +284,7 @@ export class SpordleGame {
     this.attempts.update((attempts) => [...attempts, { word: guess, score }]);
     this.currentGuess.set('');
     this.status.set('revealing');
+    if (result.complete) this.finishedAt = Date.now();
 
     const length = this.wordLength();
     const guesses = this.attempts().length;
@@ -221,8 +302,8 @@ export class SpordleGame {
 
       const won = result.won === true;
       const answer = result.answer ?? guess;
-      const timeMs = won ? Date.now() - this.startedAt : null;
-      recordGame(length, { won, guesses, timeMs });
+      const timeMs = won ? (this.finishedAt ?? Date.now()) - this.startedAt : null;
+      recordGame(length, { won, guesses, timeMs }, this.gameId());
       this.result.set({ won, answer, guesses, timeMs });
       this.message.set(won ? "Congratulations! You've guessed the word." : `Game over! The word was ${answer.toUpperCase()}.`);
       this.status.set('complete');

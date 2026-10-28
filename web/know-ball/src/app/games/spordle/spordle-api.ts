@@ -9,6 +9,14 @@ export interface StartedGame {
   maxAttempts: number;
 }
 
+export interface SavedGame extends StartedGame {
+  guesses: { requestId: string; word: string; score: LetterStatus[] }[];
+  complete: boolean;
+  won: boolean;
+  answer: string | null;
+  letterHint: { position: number; letter: string } | null;
+}
+
 /** A word outside the dictionary comes back as just `{ valid: false }`. `answer` is only sent once the game is over. */
 export interface GuessResult {
   valid: boolean;
@@ -34,6 +42,10 @@ export class SpordleApi {
 
   startGame(wordLength: number): Observable<StartedGame> {
     return this.http.post<StartedGame>('/api/spordle/games', { wordLength });
+  }
+
+  getGame(gameId: string): Observable<SavedGame> {
+    return this.http.get<SavedGame>(`/api/spordle/games/${encodeURIComponent(gameId)}`);
   }
 
   submitGuess(gameId: string, word: string, requestId: string): Observable<GuessResult> {

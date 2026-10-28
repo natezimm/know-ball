@@ -6,6 +6,10 @@ namespace KnowBall.Application.Games.Spordle;
 
 public sealed record SpordleGameStarted(string GameId, int WordLength, int MaxAttempts);
 
+public sealed record SpordleSavedGuess(Guid RequestId, string Word, IReadOnlyList<LetterStatus> Score);
+public sealed record SpordleState(string GameId, int WordLength, int MaxAttempts,
+    IReadOnlyList<SpordleSavedGuess> Guesses, bool Complete, bool Won, string? Answer, SpordleHint? LetterHint);
+
 /// <summary>A guess that is not a real word is reported as <c>Valid = false</c> and costs nothing.</summary>
 public sealed record SpordleGuessResult(
     bool Valid,
@@ -78,6 +82,22 @@ public sealed class SpordleGameService
         _db.SpordleSessions.Add(session);
         await _db.SaveChangesAsync(ct);
         return new(session.Id.ToString(), length, MaxAttempts);
+    }
+
+    public async Task<SpordleOutcome<SpordleState>> GetGameAsync(string gameId, CancellationToken ct = default)
+    {
+        if (!Guid.TryParse(gameId, out var id))
+            return SpordleOutcome<SpordleState>.Fail(SpordleFailure.NotFound, "Game not found or expired");
+        var session = await _db.SpordleSessions.AsNoTracking().SingleOrDefaultAsync(s => s.Id == id, ct);
+        if (session is null || session.ExpiresAtUtc <= _clock.GetUtcNow().UtcDateTime)
+            return SpordleOutcome<SpordleState>.Fail(SpordleFailure.NotFound, "Game not found or expired");
+        var receipts = JsonSerializer.Deserialize<List<GuessReceipt>>(session.GuessesJson)!;
+        var guesses = receipts.Select(r => new SpordleSavedGuess(r.RequestId, r.Word, r.Result.Score!)).ToList();
+        var hint = session.LetterHintPosition is { } position
+            ? new SpordleHint(Position: position, Letter: session.Answer[position - 1]) : null;
+        return new(new SpordleState(session.Id.ToString(), session.Answer.Length, MaxAttempts,
+            guesses, session.Complete, receipts.LastOrDefault()?.Result.Won == true,
+            session.Complete ? session.Answer : null, hint));
     }
 
     public Task<int> PurgeExpiredAsync(CancellationToken ct = default)

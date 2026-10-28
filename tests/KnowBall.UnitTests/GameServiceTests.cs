@@ -210,6 +210,33 @@ public class GameServiceTests : IDisposable
     }
 
     [Theory]
+    [InlineData("scouting-report")]
+    [InlineData("career-path")]
+    public async Task Todays_loss_ends_the_current_streak_but_keeps_the_best(string game)
+    {
+        var yesterday = await Daily(game: game);
+        await Guess(yesterday.PuzzleId, await AnswerOf(yesterday.PuzzleId), game: game);
+        _world.Clock.Advance(TimeSpan.FromDays(1));
+        var today = await Daily(game: game);
+        using var engine = _world.NewEngine();
+        var before = (await engine.Service.GetStatsAsync(Me, default)).Single(s => s.Game == game);
+        Assert.Equal((1, 1), (before.CurrentStreak, before.BestStreak));
+        engine.Db.UserResults.Add(new UserResult
+        {
+            PuzzleId = today.PuzzleId, UserKey = Me, Solved = false,
+            StartedAt = _world.Clock.GetUtcNow(), CompletedAt = _world.Clock.GetUtcNow(),
+        });
+        await engine.Db.SaveChangesAsync();
+        var lost = (await engine.Service.GetStatsAsync(Me, default)).Single(s => s.Game == game);
+        Assert.Equal((2, 1, 0, 1), (lost.Played, lost.Wins, lost.CurrentStreak, lost.BestStreak));
+        _world.Clock.Advance(TimeSpan.FromDays(1));
+        var next = await Daily(game: game);
+        await Guess(next.PuzzleId, await AnswerOf(next.PuzzleId), game: game);
+        var restarted = (await engine.Service.GetStatsAsync(Me, default)).Single(s => s.Game == game);
+        Assert.Equal((1, 1), (restarted.CurrentStreak, restarted.BestStreak));
+    }
+
+    [Theory]
     [InlineData("2026-10-11,2026-10-12,2026-10-13", 3, 3)] // through today
     [InlineData("2026-10-10,2026-10-11,2026-10-12", 3, 3)] // through yesterday: still alive
     [InlineData("2026-10-08,2026-10-09,2026-10-11", 0, 2)] // broken two days ago

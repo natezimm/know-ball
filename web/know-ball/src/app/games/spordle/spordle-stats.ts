@@ -13,6 +13,7 @@ export interface LengthStats {
 
 interface StoredStats {
   version: 1;
+  recordedGames?: string[];
   byLength: Record<string, LengthStats>;
 }
 
@@ -38,6 +39,8 @@ function loadAll(): StoredStats {
   const all = emptyAll();
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
+    all.recordedGames = Array.isArray(parsed?.recordedGames)
+      ? parsed.recordedGames.filter((id: unknown) => typeof id === 'string') : [];
     for (const length of WORD_LENGTHS) {
       const saved = parsed?.byLength?.[String(length)];
       if (saved && typeof saved === 'object') all.byLength[String(length)] = { ...emptyStats(), ...saved };
@@ -64,10 +67,13 @@ export function getStats(wordLength: WordLength): LengthStats {
 export function recordGame(
   wordLength: WordLength,
   game: { won: boolean; guesses: number; timeMs: number | null },
+  gameId?: string,
 ): LengthStats {
   const all = loadAll();
   const stats = all.byLength[String(wordLength)];
 
+  if (gameId && all.recordedGames?.includes(gameId)) return stats;
+  if (gameId) all.recordedGames = [...(all.recordedGames ?? []), gameId];
   stats.totalGames += 1;
   if (game.won) {
     stats.wins += 1;
@@ -86,7 +92,8 @@ export function recordGame(
 }
 
 export function resetStats(scope: WordLength | 'all'): void {
-  const all = scope === 'all' ? emptyAll() : loadAll();
+  const saved = loadAll();
+  const all = scope === 'all' ? { ...emptyAll(), recordedGames: saved.recordedGames } : saved;
   if (scope !== 'all') all.byLength[String(scope)] = emptyStats();
   saveAll(all);
 }

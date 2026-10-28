@@ -52,6 +52,104 @@ describe('SpordleGame', () => {
     attemptsRemaining: 5,
   };
 
+  function reopen(): void {
+    game = TestBed.runInInjectionContext(() => new SpordleGame());
+    game.resume();
+  }
+
+  const saved = {
+    gameId: 'g1', wordLength: 5, maxAttempts: 6,
+    guesses: [{ requestId: 'first', word: 'punts', score: miss.score }],
+    complete: false, won: false, answer: null, letterHint: { position: 3, letter: 'i' },
+  };
+
+  it('restores the server board, keyboard, hints and typed row after reopening', () => {
+    startGame();
+    guess('punts', miss);
+    game.revealHint('category');
+    http.expectOne(HINT).flush({ category: 'Football' });
+    type('bl');
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush(saved);
+    http.expectNone('/api/spordle/games');
+    expect(game.status()).toBe('playing');
+    expect(game.attempts()).toEqual([{ word: 'punts', score: miss.score }]);
+    expect(game.letterStatuses()['s']).toBe('correct');
+    expect(game.categoryHint()).toBe('Football');
+    expect(game.letterHint()).toEqual({ position: 3, letter: 'i' });
+    expect(game.currentGuess()).toBe('bl');
+    expect(getStats(5).totalGames).toBe(0);
+  });
+
+  it('reconciles a committed guess whose response was lost before reload', () => {
+    startGame();
+    type('punts');
+    game.press('Enter');
+    const request = http.expectOne(GUESSES);
+    const requestId = request.request.body.requestId;
+    request.error(new ProgressEvent('error'));
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush({ ...saved,
+      guesses: [{ ...saved.guesses[0], requestId }],
+    });
+    expect(game.attempts()).toHaveLength(1);
+    expect(game.currentGuess()).toBe('');
+    expect(game.status()).toBe('playing');
+  });
+
+  it('retains a pending request ID across reload when the server did not commit it', () => {
+    startGame();
+    type('punts');
+    game.press('Enter');
+    const request = http.expectOne(GUESSES);
+    const requestId = request.request.body.requestId;
+    request.error(new ProgressEvent('error'));
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush({ ...saved, guesses: [], letterHint: null });
+    game.press('Enter');
+    const retry = http.expectOne(GUESSES);
+    expect(retry.request.body.requestId).toBe(requestId);
+    retry.flush(miss);
+    vi.runAllTimers();
+    expect(game.attempts()).toHaveLength(1);
+  });
+
+  it('restores a completed round once even when reload interrupts the tile reveal', () => {
+    startGame();
+    type('blitz');
+    game.press('Enter');
+    http.expectOne(GUESSES).flush({ valid: true, score: Array(5).fill('correct'),
+      complete: true, won: true, answer: 'blitz', attemptsRemaining: 5 });
+    expect(game.status()).toBe('revealing');
+    const completed = { ...saved, complete: true, won: true, answer: 'blitz',
+      guesses: [{ requestId: 'win', word: 'blitz', score: Array(5).fill('correct') }] };
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush(completed);
+    expect(game.status()).toBe('complete');
+    expect(game.result()).toMatchObject({ won: true, answer: 'blitz', guesses: 1 });
+    const time = game.result()!.timeMs;
+    vi.advanceTimersByTime(10_000);
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush(completed);
+    expect(game.result()!.timeMs).toBe(time);
+    expect(getStats(5)).toMatchObject({ totalGames: 1, wins: 1, currentStreak: 1 });
+  });
+
+  it('keeps a saved round on temporary resume failure and expires it without a loss on 404', () => {
+    startGame();
+    guess('punts', miss);
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush(null, { status: 500, statusText: 'Server Error' });
+    expect(game.status()).toBe('error');
+    expect(localStorage.getItem('knowball.spordle.round')).not.toBeNull();
+    http.expectNone('/api/spordle/games');
+    reopen();
+    http.expectOne('/api/spordle/games/g1').flush(null, { status: 404, statusText: 'Not Found' });
+    expect(game.status()).toBe('expired');
+    expect(localStorage.getItem('knowball.spordle.round')).toBeNull();
+    expect(getStats(5).totalGames).toBe(0);
+  });
+
   it('asks the server for a five-letter game by default', () => {
     game.start();
     expect(game.status()).toBe('loading');
