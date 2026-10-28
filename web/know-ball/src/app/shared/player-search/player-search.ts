@@ -114,6 +114,7 @@ export class PlayerSearch {
   readonly label = input('Search for a player');
   readonly placeholder = input('Type a player name…');
   readonly league = input('nba');
+  readonly puzzleId = input<number>();
   readonly disabled = input(false);
   /** Offer retired players too. */
   readonly includeInactive = input(false, { transform: booleanAttribute });
@@ -174,7 +175,7 @@ export class PlayerSearch {
           this.loading.set(q.length >= MIN_QUERY_LENGTH);
           if (q.length < MIN_QUERY_LENGTH) return of({ q, rows: [] as PlayerSearchResult[] });
           return timer(this.debounceMs()).pipe(
-            switchMap(() => this.api.search(q, this.league(), 8, this.includeInactive())),
+            switchMap(() => this.api.search(q, this.league(), 8, this.includeInactive(), this.puzzleId())),
             map((rows) => ({ q, rows })),
             catchError(() => {
               this.error.set(true);

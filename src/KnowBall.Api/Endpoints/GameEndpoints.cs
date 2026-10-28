@@ -31,7 +31,7 @@ public static partial class GameEndpoints
 
         api.MapPost($"/{Game}/{{puzzleId:int}}/guess", (string game, int puzzleId, GuessRequest? request, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => request?.PlayerId is { } playerId
-                    ? Respond(await service.GuessAsync(game, puzzleId, playerId, user, ct))
+                    ? Respond(await service.GuessAsync(game, puzzleId, playerId, user, ct, request.RequestId))
                     : Error(GameFailure.Invalid, "Pick a player from the list.")))
             .RequireRateLimiting(RateLimits.GamePlay)
             .WithName("SubmitGuess")
@@ -83,5 +83,5 @@ public static partial class GameEndpoints
     [GeneratedRegex("^[A-Za-z0-9-]{8,64}$")]
     private static partial Regex AnonId();
 
-    private sealed record GuessRequest(int? PlayerId);
+    private sealed record GuessRequest(int? PlayerId, Guid? RequestId = null);
 }

@@ -43,7 +43,7 @@ public sealed record GeneratedPuzzle(int AnswerPlayerId, string PayloadJson, str
 public sealed record GuessEvaluation(bool Correct, JsonNode? Feedback = null);
 
 /// <summary>A guess as it is saved and as it is sent back to the player.</summary>
-public sealed record GuessRecord(int PlayerId, string Name, string? HeadshotUrl, bool Correct, JsonNode? Feedback);
+public sealed record GuessRecord(int PlayerId, string Name, string? HeadshotUrl, bool Correct, JsonNode? Feedback, Guid? RequestId = null);
 
 public static class GameStatus
 {

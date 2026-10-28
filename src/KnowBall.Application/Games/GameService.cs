@@ -42,7 +42,7 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
             : GameOutcome<GameState>.Success(BuildState(game, puzzle, null));
     }
 
-    public async Task<GameOutcome<GameState>> GuessAsync(string slug, int puzzleId, int playerId, string userKey, CancellationToken ct)
+    public async Task<GameOutcome<GameState>> GuessAsync(string slug, int puzzleId, int playerId, string userKey, CancellationToken ct, Guid? requestId = null)
     {
         if (games.Find(slug) is not { } game) return UnknownGame<GameState>();
         if (await FindPlayableAsync(game, puzzleId, ct) is not { } puzzle) return GameOutcome<GameState>.NotFound("Puzzle not found.");
@@ -50,37 +50,59 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
         var player = await db.Players.AsNoTracking().FirstOrDefaultAsync(p => p.Id == playerId && p.LeagueId == puzzle.LeagueId, ct);
         if (player is null) return GameOutcome<GameState>.Invalid("Pick a player from the list.");
 
-        var result = await db.UserResults.FirstOrDefaultAsync(r => r.PuzzleId == puzzle.Id && r.UserKey == userKey, ct);
-        var guesses = result is null ? [] : ReadGuesses(result);
-
-        if (result?.CompletedAt is not null) return GameOutcome<GameState>.Conflict("This puzzle is finished.");
-        if (guesses.Any(g => g.PlayerId == playerId)) return GameOutcome<GameState>.Invalid($"You already guessed {player.FullName}.");
-
-        var evaluation = await game.EvaluateAsync(puzzle, player, ct);
-        guesses.Add(new GuessRecord(player.Id, player.FullName, player.HeadshotUrl, evaluation.Correct, evaluation.Feedback));
-
-        var now = clock.GetUtcNow();
-        if (result is null)
+        if (requestId == Guid.Empty) return GameOutcome<GameState>.Invalid("Invalid request ID.");
+        // Compare-and-swap the existing JSON instead of replacing a newer guess list.
+        // No schema change is required, and separate API instances share the same guard.
+        for (var attempt = 0; attempt < 8; attempt++)
         {
-            result = new UserResult { UserKey = userKey, PuzzleId = puzzle.Id, StartedAt = now };
-            db.UserResults.Add(result);
-        }
+            db.ClearTracked();
+            var result = await db.UserResults.AsNoTracking().FirstOrDefaultAsync(r => r.PuzzleId == puzzle.Id && r.UserKey == userKey, ct);
+            var guesses = result is null ? [] : ReadGuesses(result);
+            if (requestId is { } receipt && guesses.FirstOrDefault(g => g.RequestId == receipt) is { } previous)
+                return previous.PlayerId == playerId
+                    ? GameOutcome<GameState>.Success(BuildState(game, puzzle, result))
+                    : GameOutcome<GameState>.Conflict("Request ID already used for another player.");
+            if (result?.CompletedAt is not null) return GameOutcome<GameState>.Conflict("This puzzle is finished.");
+            if (guesses.Any(g => g.PlayerId == playerId)) return GameOutcome<GameState>.Invalid($"You already guessed {player.FullName}.");
+            if (game is ScoutingReport.ScoutingReportGame &&
+                GameJson.Read<ScoutingReport.ScoutingSecret>(puzzle.SecretJson).Roster is { } roster && !roster.ContainsKey(playerId))
+                return GameOutcome<GameState>.Invalid("Choose a player from this puzzle's saved roster.");
 
-        result.GuessesJson = GameJson.Write(guesses);
-        result.HintsUsed = guesses.Count(g => !g.Correct);
-        if (evaluation.Correct)
-        {
-            result.Solved = true;
-            result.Score = guesses.Count;
-            result.CompletedAt = now;
+            var evaluation = await game.EvaluateAsync(puzzle, player, ct);
+            guesses.Add(new GuessRecord(player.Id, player.FullName, player.HeadshotUrl, evaluation.Correct, evaluation.Feedback, requestId));
+            var original = result?.GuessesJson;
+            var isNew = result is null;
+            result ??= new UserResult { UserKey = userKey, PuzzleId = puzzle.Id, StartedAt = clock.GetUtcNow() };
+            result.GuessesJson = GameJson.Write(guesses);
+            result.HintsUsed = guesses.Count(g => !g.Correct);
+            result.Solved = evaluation.Correct;
+            result.Score = evaluation.Correct ? guesses.Count : 0;
+            result.CompletedAt = evaluation.Correct || guesses.Count >= game.MaxGuesses ? clock.GetUtcNow() : null;
+            if (isNew)
+            {
+                db.UserResults.Add(result);
+                try { await db.SaveChangesAsync(ct); }
+                catch (DbUpdateException)
+                {
+                    db.ClearTracked();
+                    if (!await db.UserResults.AnyAsync(r => r.PuzzleId == puzzle.Id && r.UserKey == userKey, ct)) throw;
+                    continue;
+                }
+            }
+            else
+            {
+                var changed = await db.UserResults.Where(r => r.Id == result.Id && r.GuessesJson == original && r.CompletedAt == null)
+                    .ExecuteUpdateAsync(set => set
+                        .SetProperty(r => r.GuessesJson, result.GuessesJson)
+                        .SetProperty(r => r.HintsUsed, result.HintsUsed)
+                        .SetProperty(r => r.Solved, result.Solved)
+                        .SetProperty(r => r.Score, result.Score)
+                        .SetProperty(r => r.CompletedAt, result.CompletedAt), ct);
+                if (changed == 0) continue;
+            }
+            return GameOutcome<GameState>.Success(BuildState(game, puzzle, result));
         }
-        else if (guesses.Count >= game.MaxGuesses)
-        {
-            result.CompletedAt = now;
-        }
-
-        await db.SaveChangesAsync(ct);
-        return GameOutcome<GameState>.Success(BuildState(game, puzzle, result));
+        return GameOutcome<GameState>.Conflict("Progress changed. Reload your saved puzzle and retry.");
     }
 
     /// <summary>Past dailies, newest first, with how this player did on each.</summary>
