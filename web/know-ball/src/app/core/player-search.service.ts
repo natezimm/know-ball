@@ -21,9 +21,10 @@ export class PlayerSearchService {
   private readonly http = inject(HttpClient);
 
   /** `includeInactive` adds retired players, for the games whose answers are not all current. */
-  search(query: string, league = 'nba', limit = 8, includeInactive = false): Observable<PlayerSearchResult[]> {
+  search(query: string, league = 'nba', limit = 8, includeInactive = false, puzzleId?: number): Observable<PlayerSearchResult[]> {
     let params = new HttpParams().set('q', query).set('league', league).set('limit', limit);
     if (includeInactive) params = params.set('includeInactive', true);
+    if (puzzleId !== undefined) params = params.set('puzzleId', puzzleId);
     return this.http.get<PlayerSearchResult[]>('/api/players/search', { params });
   }
 }

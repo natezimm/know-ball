@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using KnowBall.Application.Text;
+using KnowBall.Application.Games;
+using KnowBall.Application.Games.ScoutingReport;
+using KnowBall.Domain;
 
 namespace KnowBall.Application.Players;
 
@@ -15,7 +18,7 @@ public sealed record PlayerSearchResult(
     string? Years = null);
 
 /// <summary>Autocomplete for every guess box on the site.</summary>
-public sealed class PlayerSearchService(ITriviaDb db)
+public sealed class PlayerSearchService(ITriviaDb db, TimeProvider? clock = null)
 {
     public const int MinQueryLength = 2;
     public const int MaxLimit = 25;
@@ -25,7 +28,7 @@ public sealed class PlayerSearchService(ITriviaDb db)
         string leagueCode = "nba",
         int limit = 10,
         bool includeInactive = false,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default, int? puzzleId = null)
     {
         var term = NameNormalizer.Normalize(query);
         if (term.Length < MinQueryLength) return [];
@@ -33,6 +36,19 @@ public sealed class PlayerSearchService(ITriviaDb db)
         limit = Math.Clamp(limit, 1, MaxLimit);
         leagueCode = leagueCode.ToLowerInvariant();
 
+        ScoutingSecret? snapshot = null;
+        if (puzzleId is { } id)
+        {
+            var today = new PuzzleCalendar(clock ?? TimeProvider.System).Today;
+            var puzzle = await db.Puzzles.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            if (puzzle is null || (puzzle.Status != PuzzleStatus.Practice &&
+                (puzzle.Status != PuzzleStatus.Scheduled || puzzle.Date == null || puzzle.Date > today))) return [];
+            if (puzzle.GameType == GameType.ScoutingReport)
+            {
+                snapshot = GameJson.Read<ScoutingSecret>(puzzle.SecretJson);
+                includeInactive = true; // Include saved-roster players even after retirement.
+            }
+        }
         // NormalizedName is already lower-case and accent-free, so a plain Contains/StartsWith
         // translates to LIKE on both Postgres and SQLite and uses the same rules everywhere.
         var wordStart = " " + term;
@@ -42,6 +58,11 @@ public sealed class PlayerSearchService(ITriviaDb db)
             .Where(p => includeInactive || p.IsActive)
             .Where(p => p.NormalizedName.StartsWith(term) || p.NormalizedName.Contains(wordStart));
 
+        if (snapshot?.Roster is { } roster)
+        {
+            var ids = roster.Keys.ToArray();
+            candidates = candidates.Where(p => ids.Contains(p.Id));
+        }
         var rows = await candidates
             .OrderByDescending(p => p.NormalizedName.StartsWith(term))
             .ThenByDescending(p => p.Popularity)
@@ -65,6 +86,9 @@ public sealed class PlayerSearchService(ITriviaDb db)
             .Select(p => new PlayerSearchResult(
                 p.Id, p.FullName, p.Position, p.TeamAbbreviation, p.TeamName, p.HeadshotUrl, p.IsActive,
                 CareerYears(p.FromYear, p.ToYear, p.IsActive)))
+            .Select(p => snapshot?.Roster is { } saved && saved.TryGetValue(p.Id, out var profile)
+                ? p with { Position = profile.Position, TeamAbbreviation = profile.Team, TeamName = profile.TeamName }
+                : p)
             .ToList();
     }
 

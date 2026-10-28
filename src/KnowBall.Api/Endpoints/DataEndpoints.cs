@@ -15,10 +15,11 @@ public static class DataEndpoints
                 string? league,
                 int? limit,
                 bool? includeInactive,
+                int? puzzleId,
                 PlayerSearchService search,
                 CancellationToken ct) =>
             {
-                var results = await search.SearchAsync(q, league ?? "nba", limit ?? 10, includeInactive ?? false, ct);
+                var results = await search.SearchAsync(q, league ?? "nba", limit ?? 10, includeInactive ?? false, ct, puzzleId);
                 return Results.Ok(results);
             })
             .WithName("SearchPlayers")

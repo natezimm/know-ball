@@ -74,7 +74,7 @@ const NOTICE_MS = 3500;
               <app-player-search
                 label="Guess a player"
                 [placeholder]="'Guess ' + (s.guesses.length + 1) + ' of ' + s.maxGuesses + ': type a name'"
-                [includeInactive]="includeInactive()"
+                [includeInactive]="includeInactive()" [puzzleId]="s.puzzleId"
                 [disabled]="store.busy()"
                 (selected)="store.guess($event.id)"
               />

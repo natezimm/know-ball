@@ -14,6 +14,7 @@ export class GameStore {
   private readonly api = inject(GameApi);
   private request?: Subscription;
   private requestedId?: number;
+  private pendingGuess?: { puzzleId: number; playerId: number; requestId: string };
 
   readonly game = signal<GameSlug>('scouting-report');
   readonly state = signal<GameState | null>(null);
@@ -80,14 +81,24 @@ export class GameStore {
     this.busy.set(true);
     this.notice.set('');
     this.request?.unsubscribe();
-    this.request = this.api.guess(state.game, state.puzzleId, playerId).subscribe({
+    if (this.pendingGuess?.puzzleId !== state.puzzleId || this.pendingGuess?.playerId !== playerId)
+      this.pendingGuess = { puzzleId: state.puzzleId, playerId, requestId: crypto.randomUUID() };
+    this.request = this.api.guess(state.game, state.puzzleId, playerId, this.pendingGuess.requestId).subscribe({
       next: (next) => {
+        this.pendingGuess = undefined;
         this.busy.set(false);
         this.state.set(next);
       },
       error: (error) => {
         this.busy.set(false);
-        this.notice.set(serverMessage(error) ?? 'That guess did not go through. Please try again.');
+        this.notice.set(serverMessage(error) ?? 'Checking your saved progress…');
+        if (!(error instanceof HttpErrorResponse) || error.status === 0 || error.status >= 500 || error.status === 409) {
+          this.busy.set(true);
+          this.request = this.api.puzzle(state.game, state.puzzleId).subscribe({
+            next: saved => { this.state.set(saved); this.busy.set(false); this.notice.set('Progress restored.'); },
+            error: () => { this.busy.set(false); this.notice.set('Could not restore progress. Retry your guess or reload.'); },
+          });
+        }
       },
     });
   }

@@ -60,7 +60,7 @@ describe('GameStore', () => {
     store.guess(31); // ignored while the first is in flight
 
     const request = http.expectOne('/api/scouting-report/7/guess');
-    expect(request.request.body).toEqual({ playerId: 30 });
+    expect(request.request.body).toEqual({ playerId: 30, requestId: expect.any(String) });
     request.flush(gameState({ guesses: [guess('Jalen Brunson'), guess('Jayson Tatum', true)], status: 'won', answer: { playerId: 1, name: 'Jayson Tatum' } }));
 
     expect(store.busy()).toBe(false);
@@ -97,4 +97,29 @@ describe('GameStore', () => {
     store.load('career-path', 90);
     http.expectNone('/api/career-path/puzzles/90');
   });
+  it('restores a committed winning guess after a lost response', () => {
+    store.load('scouting-report');
+    http.expectOne('/api/scouting-report/daily').flush(gameState());
+    store.guess(30);
+    http.expectOne('/api/scouting-report/7/guess').error(new ProgressEvent('error'));
+    expect(store.busy()).toBe(true);
+    http.expectOne('/api/scouting-report/puzzles/7').flush(gameState({ status: 'won', guesses: [guess('Jalen Brunson', true)] }));
+    expect(store.over()).toBe(true);
+    expect(store.busy()).toBe(false);
+  });
+
+  it('reuses a receipt when both submission and recovery fail', () => {
+    store.load('scouting-report');
+    http.expectOne('/api/scouting-report/daily').flush(gameState());
+    store.guess(30);
+    const first = http.expectOne('/api/scouting-report/7/guess');
+    const receipt = first.request.body.requestId;
+    first.error(new ProgressEvent('error'));
+    http.expectOne('/api/scouting-report/puzzles/7').error(new ProgressEvent('error'));
+    store.guess(30);
+    const retry = http.expectOne('/api/scouting-report/7/guess');
+    expect(retry.request.body.requestId).toBe(receipt);
+    retry.flush(gameState());
+  });
+
 });

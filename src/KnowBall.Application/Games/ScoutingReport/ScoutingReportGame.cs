@@ -21,7 +21,8 @@ public sealed record ScoutingProfile(
 /// counts as the Thunder). Null in puzzles made before former teams were scored, which keeps their results unchanged.
 /// </param>
 public sealed record ScoutingSecret(
-    int PlayerId, string Name, string? HeadshotUrl, ScoutingProfile Profile, DateOnly AsOf, IReadOnlyList<string>? FormerTeams = null);
+    int PlayerId, string Name, string? HeadshotUrl, ScoutingProfile Profile, DateOnly AsOf, IReadOnlyList<string>? FormerTeams = null,
+    IReadOnlyDictionary<int, ScoutingProfile>? Roster = null);
 
 public sealed record ScoutingFeedback(Clue Team, Clue Conference, Clue Division, Clue Position, Clue Height, Clue Age, Clue Number);
 
@@ -65,7 +66,10 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
             .Include(p => p.Stints).ThenInclude(s => s.Team!).ThenInclude(t => t.Franchise)
             .FirstAsync(p => p.Id == answerId, cancellationToken);
 
-        var secret = new ScoutingSecret(answer.Id, answer.FullName, answer.HeadshotUrl, ProfileOf(answer), context.AsOf, FormerTeamsOf(answer));
+        var rosterPlayers = await db.Players.AsNoTracking().Include(p => p.CurrentTeam)
+            .Where(p => p.LeagueId == context.League.Id && p.IsActive).ToListAsync(cancellationToken);
+        var roster = rosterPlayers.ToDictionary(p => p.Id, p => ProfileOf(p));
+        var secret = new ScoutingSecret(answer.Id, answer.FullName, answer.HeadshotUrl, ProfileOf(answer), context.AsOf, FormerTeamsOf(answer), roster);
         return new GeneratedPuzzle(answer.Id, "{}", GameJson.Write(secret));
     }
 
@@ -76,11 +80,13 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
             ? await db.Teams.AsNoTracking().FirstOrDefaultAsync(t => t.Id == teamId, cancellationToken)
             : null;
 
-        var feedback = Compare(ProfileOf(guess, team), secret.Profile, secret.AsOf, secret.FormerTeams);
+        var profile = guess.Id == secret.PlayerId ? secret.Profile
+            : secret.Roster is { } roster && roster.TryGetValue(guess.Id, out var saved) ? saved : ProfileOf(guess, team);
+        var feedback = Compare(profile, secret.Profile, secret.AsOf, secret.FormerTeams);
         return new GuessEvaluation(guess.Id == secret.PlayerId, GameJson.Node(feedback));
     }
 
-    public JsonNode? Clues(Puzzle puzzle, int misses, bool complete) => null;
+    public JsonNode? Clues(Puzzle puzzle, int misses, bool complete) => new JsonObject { ["rosterSnapshot"] = GameJson.Read<ScoutingSecret>(puzzle.SecretJson).Roster is not null };
 
     public JsonNode Reveal(Puzzle puzzle)
     {

@@ -81,8 +81,8 @@ export class GameApi {
     return this.http.get<GameState>(`/api/${game}/puzzles/${puzzleId}`);
   }
 
-  guess(game: GameSlug, puzzleId: number, playerId: number): Observable<GameState> {
-    return this.http.post<GameState>(`/api/${game}/${puzzleId}/guess`, { playerId });
+  guess(game: GameSlug, puzzleId: number, playerId: number, requestId?: string): Observable<GameState> {
+    return this.http.post<GameState>(`/api/${game}/${puzzleId}/guess`, { playerId, requestId });
   }
 
   practice(game: GameSlug): Observable<GameState> {

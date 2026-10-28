@@ -86,6 +86,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
       }
 
       @if (state(); as s) {
+        <p class="tip">{{ s.clues?.rosterSnapshot ? 'Clues and search use the roster saved when this puzzle was created.' : 'Older puzzle: the answer is frozen; other players use current roster data.' }}</p>
         <div class="board" role="table" aria-label="Your guesses, oldest first">
           <div class="cols" role="row">
             @for (c of clues; track c.key) {
@@ -210,7 +211,7 @@ export class ScoutingReport {
   private readonly store = inject(GameStore);
   protected readonly clues = CLUES;
 
-  protected readonly state = computed(() => this.store.state() as GameState<unknown, null, ScoutingFeedback, ScoutingAnswer> | null);
+  protected readonly state = computed(() => this.store.state() as GameState<unknown, { rosterSnapshot: boolean }, ScoutingFeedback, ScoutingAnswer> | null);
   protected readonly over = computed(() => this.store.over());
   /** Numbers of the guesses still to come, so the board always shows all eight rows. */
   protected readonly blanks = computed(() => {
