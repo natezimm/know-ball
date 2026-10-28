@@ -1,6 +1,6 @@
 import { Component, DestroyRef, ElementRef, afterRenderEffect, booleanAttribute, inject, input, output, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, catchError, debounce, distinctUntilChanged, map, of, switchMap, tap, timer } from 'rxjs';
+import { Subject, catchError, map, of, switchMap, timer } from 'rxjs';
 import { MIN_QUERY_LENGTH, PlayerSearchResult, PlayerSearchService } from '../../core/player-search.service';
 import { Avatar } from '../avatar/avatar';
 
@@ -168,15 +168,13 @@ export class PlayerSearch {
     this.typed$
       .pipe(
         map((q) => q.trim()),
-        // Clearing must cancel the previous query immediately and reset distinctUntilChanged;
-        // otherwise retyping the same player just after a guess can be silently ignored.
-        debounce((q) => q.length < MIN_QUERY_LENGTH ? of(0) : timer(this.debounceMs())),
-        distinctUntilChanged(),
-        tap(() => this.error.set(false)),
+        // Cancel the previous request immediately, before waiting for the new query.
         switchMap((q) => {
+          this.error.set(false);
+          this.loading.set(q.length >= MIN_QUERY_LENGTH);
           if (q.length < MIN_QUERY_LENGTH) return of({ q, rows: [] as PlayerSearchResult[] });
-          this.loading.set(true);
-          return this.api.search(q, this.league(), 8, this.includeInactive()).pipe(
+          return timer(this.debounceMs()).pipe(
+            switchMap(() => this.api.search(q, this.league(), 8, this.includeInactive())),
             map((rows) => ({ q, rows })),
             catchError(() => {
               this.error.set(true);
@@ -197,6 +195,10 @@ export class PlayerSearch {
 
   protected onInput(value: string): void {
     this.query.set(value);
+    this.results.set([]);
+    this.activeIndex.set(-1);
+    this.open.set(false);
+    this.noMatches.set(false);
     this.typed$.next(value);
   }
 
@@ -234,6 +236,7 @@ export class PlayerSearch {
   }
 
   protected choose(player: PlayerSearchResult): void {
+    if (this.disabled() || !this.open() || !this.results().includes(player)) return;
     this.selected.emit(player);
     this.clear();
   }

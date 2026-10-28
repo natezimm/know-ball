@@ -105,4 +105,31 @@ describe('PlayerSearch', () => {
     expect([...option.querySelectorAll('.meta span')].map((span: Element) => span.textContent)).toEqual(['1998–2020', 'G-F']);
     expect(option.querySelector('app-avatar').textContent.trim()).toBe('VC');
   });
+  it('invalidates the previous selection immediately when text changes', async () => {
+    const picked: PlayerSearchResult[] = [];
+    fixture.componentInstance.selected.subscribe(p => picked.push(p));
+    await type('jam');
+    http.expectOne(r => r.url === '/api/players/search').flush(rows);
+    await fixture.whenStable();
+    input.value = 'curry';
+    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+    expect(picked).toEqual([]);
+    await tick();
+    http.expectOne(r => r.url === '/api/players/search' && r.params.get('q') === 'curry').flush([]);
+  });
+
+  it('cancels an in-flight query before the replacement debounce elapses', async () => {
+    await type('jam');
+    const previous = http.expectOne(r => r.url === '/api/players/search');
+    fixture.componentRef.setInput('debounceMs', 20);
+    input.value = 'curry';
+    input.dispatchEvent(new Event('input'));
+    expect(previous.cancelled).toBe(true);
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    await new Promise(r => setTimeout(r, 30));
+    http.expectNone(r => r.url === '/api/players/search');
+  });
+
 });
