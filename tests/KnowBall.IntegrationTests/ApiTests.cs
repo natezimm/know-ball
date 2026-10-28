@@ -72,6 +72,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder) => builder
         .UseEnvironment("Testing")
         .UseSetting("RateLimits:RequestsPerMinute", "0")
+        .UseSetting("Spordle:GamesPerMinute", "10000")
+        .UseSetting("Spordle:GuessesPerMinute", "10000")
         .UseSetting("Games:GuessesPerMinute", "10000");
 
     protected override void Dispose(bool disposing)

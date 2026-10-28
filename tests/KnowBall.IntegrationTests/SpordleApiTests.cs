@@ -33,7 +33,7 @@ public sealed class SpordleApiTests(ApiFactory factory)
     public async Task Resume_endpoint_returns_the_board_and_only_reveals_a_finished_answer()
     {
         var gameId = await StartGameAsync();
-        await GuessAsync(gameId, "about");
+        (await GuessAsync(gameId, "about")).EnsureSuccessStatusCode();
         var hint = await (await HintAsync(gameId, "letter")).Content.ReadFromJsonAsync<JsonElement>();
         var response = await _client.GetAsync($"/api/spordle/games/{gameId}");
         response.EnsureSuccessStatusCode();
@@ -46,7 +46,7 @@ public sealed class SpordleApiTests(ApiFactory factory)
         Assert.Equal("about", guess.GetProperty("word").GetString());
         Assert.All(guess.GetProperty("score").EnumerateArray(), s => Assert.Contains(s.GetString(), new[] { "correct", "present", "absent" }));
         Assert.Equal(hint.GetRawText(), state.GetProperty("letterHint").GetRawText());
-        foreach (var word in WrongGuesses.Skip(1)) await GuessAsync(gameId, word);
+        foreach (var word in WrongGuesses.Skip(1)) (await GuessAsync(gameId, word)).EnsureSuccessStatusCode();
         var finished = await _client.GetFromJsonAsync<JsonElement>($"/api/spordle/games/{gameId}");
         Assert.True(finished.GetProperty("complete").GetBoolean());
         Assert.False(finished.GetProperty("won").GetBoolean());
