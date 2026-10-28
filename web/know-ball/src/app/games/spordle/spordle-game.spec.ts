@@ -74,7 +74,7 @@ describe('SpordleGame', () => {
     http.expectNone('/api/spordle/games');
     expect(game.status()).toBe('playing');
     expect(game.attempts()).toEqual([{ word: 'punts', score: miss.score }]);
-    expect(game.letterStatuses().s).toBe('correct');
+    expect(game.letterStatuses()['s']).toBe('correct');
     expect(game.categoryHint()).toBe('Football');
     expect(game.letterHint()).toEqual({ position: 3, letter: 'i' });
     expect(game.currentGuess()).toBe('bl');
