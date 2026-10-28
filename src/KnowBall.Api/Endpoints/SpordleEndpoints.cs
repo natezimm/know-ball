@@ -19,6 +19,22 @@ public static class SpordleEndpoints
             .WithName("StartSpordleGame")
             .WithSummary("Start a game with a random 4, 5 or 6 letter sports word. The answer is not returned.");
 
+        games.MapGet("/{gameId}", async (string gameId, SpordleGameService service, CancellationToken ct) =>
+            {
+                var outcome = await service.GetGameAsync(gameId, ct);
+                if (!outcome.Ok) return Failure(outcome.Failure, outcome.Error);
+                var state = outcome.Result!;
+                return Results.Ok(new
+                {
+                    state.GameId, state.WordLength, state.MaxAttempts,
+                    Guesses = state.Guesses.Select(g => new { g.RequestId, g.Word,
+                        Score = g.Score.Select(s => s.ToString().ToLowerInvariant()).ToArray() }),
+                    state.Complete, state.Won, state.Answer,
+                    LetterHint = state.LetterHint is null ? null : HintResponse.From(state.LetterHint),
+                });
+            })
+            .WithName("ResumeSpordleGame");
+
         games.MapPost("/{gameId}/guesses", async (string gameId, GuessRequest? request, SpordleGameService service, CancellationToken ct) =>
             {
                 var outcome = await service.SubmitGuessAsync(gameId, request?.Word, request?.RequestId, ct);

@@ -70,4 +70,18 @@ describe('spordle stats', () => {
     expect(formatTime(7_400)).toBe('0:07');
     expect(formatTime(83_000)).toBe('1:23');
   });
+
+  it('records each resumed round only once, including after a stats reset', () => {
+    const win = { won: true, guesses: 2, timeMs: 10_000 };
+    recordGame(5, win, 'round-one');
+    recordGame(5, win, 'round-one');
+    expect(getStats(5)).toMatchObject({ totalGames: 1, wins: 1, currentStreak: 1 });
+    resetStats('all');
+    recordGame(5, win, 'round-one');
+    expect(getStats(5).totalGames).toBe(0);
+    recordGame(5, win, 'round-two');
+    recordGame(5, { won: false, guesses: 6, timeMs: null }, 'round-three');
+    recordGame(5, { won: false, guesses: 6, timeMs: null }, 'round-three');
+    expect(getStats(5)).toMatchObject({ totalGames: 2, wins: 1, currentStreak: 0, longestStreak: 1 });
+  });
 });

@@ -322,7 +322,7 @@ export class Spordle {
   private readonly statsDialog = viewChild.required<ElementRef<HTMLDialogElement>>('statsDialog');
 
   constructor() {
-    this.game.start();
+    this.game.resume();
 
     effect(() => {
       if (this.game.status() !== 'expired') return;

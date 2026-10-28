@@ -30,6 +30,32 @@ public sealed class SpordleApiTests(ApiFactory factory)
         _client.PostAsJsonAsync($"/api/spordle/games/{gameId}/hint", new { type });
 
     [Fact]
+    public async Task Resume_endpoint_returns_the_board_and_only_reveals_a_finished_answer()
+    {
+        var gameId = await StartGameAsync();
+        await GuessAsync(gameId, "about");
+        var hint = await (await HintAsync(gameId, "letter")).Content.ReadFromJsonAsync<JsonElement>();
+        var response = await _client.GetAsync($"/api/spordle/games/{gameId}");
+        response.EnsureSuccessStatusCode();
+        var state = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal(gameId, state.GetProperty("gameId").GetString());
+        Assert.Equal(5, state.GetProperty("wordLength").GetInt32());
+        Assert.False(state.GetProperty("complete").GetBoolean());
+        Assert.True(!state.TryGetProperty("answer", out var answer) || answer.ValueKind == JsonValueKind.Null);
+        var guess = Assert.Single(state.GetProperty("guesses").EnumerateArray());
+        Assert.Equal("about", guess.GetProperty("word").GetString());
+        Assert.All(guess.GetProperty("score").EnumerateArray(), s => Assert.Contains(s.GetString(), new[] { "correct", "present", "absent" }));
+        Assert.Equal(hint.GetRawText(), state.GetProperty("letterHint").GetRawText());
+        foreach (var word in WrongGuesses.Skip(1)) await GuessAsync(gameId, word);
+        var finished = await _client.GetFromJsonAsync<JsonElement>($"/api/spordle/games/{gameId}");
+        Assert.True(finished.GetProperty("complete").GetBoolean());
+        Assert.False(finished.GetProperty("won").GetBoolean());
+        Assert.Equal(6, finished.GetProperty("guesses").GetArrayLength());
+        Assert.Equal(5, finished.GetProperty("answer").GetString()!.Length);
+        Assert.Equal(HttpStatusCode.NotFound, (await _client.GetAsync("/api/spordle/games/nope")).StatusCode);
+    }
+
+    [Fact]
     public async Task Starting_a_game_returns_only_an_id_length_and_attempt_limit()
     {
         var response = await _client.PostAsJsonAsync("/api/spordle/games", new { wordLength = 4 });
