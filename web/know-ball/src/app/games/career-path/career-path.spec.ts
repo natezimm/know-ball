@@ -90,5 +90,6 @@ describe('Career Path', () => {
     expect(stopYears({ from: 2008, to: 2009 })).toBe('2008–09');
     expect(stopYears({ from: 1998, to: 2004 })).toBe('1998–2004');
     expect(stopYears({ from: 2025, to: null })).toBe('2025–');
+    expect(stopYears({ from: 2025 })).toBe('2025–');
   });
 });
