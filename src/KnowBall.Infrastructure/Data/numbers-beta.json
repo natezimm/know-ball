@@ -3669,6 +3669,326 @@
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
       "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-wilt-century",
+      "revision": 1,
+      "factFamily": "nba-wilt-century",
+      "league": "nba",
+      "season": "1961–62",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did Wilt Chamberlain score 100 points in one NBA game?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1959–60"
+        },
+        {
+          "id": "p1",
+          "label": "1960–61"
+        },
+        {
+          "id": "p2",
+          "label": "1961–62"
+        },
+        {
+          "id": "p3",
+          "label": "1962–63"
+        }
+      ],
+      "correctOptionId": "p2",
+      "explanation": "Chamberlain’s 100-point game was on March 2, 1962, for the Philadelphia Warriors against New York.",
+      "source": {
+        "url": "https://api-hub.nba.com/news/most-points-scored-by-a-player-in-an-nba-game",
+        "credit": "NBA.com · single-game scoring history"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-mchale-sixth-man",
+      "revision": 1,
+      "factFamily": "nba-mchale-sixth-man",
+      "league": "nba",
+      "season": "1983–84",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won Sixth Man of the Year in 1983–84?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bobby Jones"
+        },
+        {
+          "id": "p1",
+          "label": "Kevin McHale"
+        },
+        {
+          "id": "p2",
+          "label": "Bill Walton"
+        },
+        {
+          "id": "p3",
+          "label": "Ricky Pierce"
+        }
+      ],
+      "correctOptionId": "p1",
+      "explanation": "Kevin McHale won it for Boston.",
+      "source": {
+        "url": "https://www.nba.com/news/history-sixth-man-of-the-year-winners",
+        "credit": "NBA.com · Sixth Man winners"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-dolphins-perfect",
+      "revision": 1,
+      "factFamily": "nfl-dolphins-perfect",
+      "league": "nfl",
+      "season": "1972",
+      "scope": "postseason",
+      "topic": "teams",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team finished the 1972 season 17–0, including the playoffs?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pittsburgh Steelers"
+        },
+        {
+          "id": "p1",
+          "label": "Dallas Cowboys"
+        },
+        {
+          "id": "p2",
+          "label": "Miami Dolphins"
+        },
+        {
+          "id": "p3",
+          "label": "Oakland Raiders"
+        }
+      ],
+      "correctOptionId": "p2",
+      "explanation": "Miami followed 14 regular-season wins with three postseason wins. The final one was Super Bowl VII.",
+      "source": {
+        "url": "https://www.miamidolphins.com/news/dolphins-to-honor-1972-team-as-greatest-team-in-nfl-history-against-bengals",
+        "credit": "Miami Dolphins · 1972 perfect season"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-moss-rookie",
+      "revision": 1,
+      "factFamily": "nfl-moss-rookie",
+      "league": "nfl",
+      "season": "1998",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did rookie Randy Moss catch 17 touchdown passes?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1996"
+        },
+        {
+          "id": "p1",
+          "label": "1997"
+        },
+        {
+          "id": "p2",
+          "label": "1998"
+        },
+        {
+          "id": "p3",
+          "label": "1999"
+        }
+      ],
+      "correctOptionId": "p2",
+      "explanation": "Minnesota drafted Moss in 1998. His first season produced a rookie-record 17 receiving touchdowns.",
+      "source": {
+        "url": "https://www.vikings.com/team/front-office-roster/randy-moss",
+        "credit": "Minnesota Vikings · Randy Moss biography"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-robinson-rookie",
+      "revision": 1,
+      "factFamily": "mlb-robinson-rookie",
+      "league": "mlb",
+      "season": "1947",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won MLB’s inaugural Rookie of the Year award in 1947?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jackie Robinson"
+        },
+        {
+          "id": "p1",
+          "label": "Larry Doby"
+        },
+        {
+          "id": "p2",
+          "label": "Yogi Berra"
+        },
+        {
+          "id": "p3",
+          "label": "Bobby Thomson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Robinson won the first award after his debut season with Brooklyn. It was later renamed in his honor.",
+      "source": {
+        "url": "https://www.jackierobinsonmuseum.org/about/jackie-robinson/",
+        "credit": "Jackie Robinson Museum · career and awards"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-maris-61",
+      "revision": 1,
+      "factFamily": "mlb-maris-61",
+      "league": "mlb",
+      "season": "1961",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which season produced Roger Maris’s 61 home runs?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1959"
+        },
+        {
+          "id": "p1",
+          "label": "1960"
+        },
+        {
+          "id": "p2",
+          "label": "1961"
+        },
+        {
+          "id": "p3",
+          "label": "1962"
+        }
+      ],
+      "correctOptionId": "p2",
+      "explanation": "Maris hit 61 in 1961, surpassing Ruth’s 60.",
+      "source": {
+        "url": "https://www.mlb.com/amp/news/roger-maris-stats-and-facts.html",
+        "credit": "MLB.com · Roger Maris history"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-expansion-six",
+      "revision": 1,
+      "factFamily": "nhl-expansion-six",
+      "league": "nhl",
+      "season": "1967–68",
+      "scope": "regular-season",
+      "topic": "seasons",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "In which season did six expansion teams double the NHL to 12 clubs?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1965–66"
+        },
+        {
+          "id": "p1",
+          "label": "1966–67"
+        },
+        {
+          "id": "p2",
+          "label": "1967–68"
+        },
+        {
+          "id": "p3",
+          "label": "1968–69"
+        }
+      ],
+      "correctOptionId": "p2",
+      "explanation": "The 1967–68 expansion ended the six-team era. The newcomers played together in the West Division.",
+      "source": {
+        "url": "https://media.nhl.com/site/vasset/public/attachments/2023/04/16925/NHLStatsPack_Clinched_SEA.pdf",
+        "credit": "NHL Stats · expansion history, page 4"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-brodeur-calder",
+      "revision": 1,
+      "factFamily": "nhl-brodeur-calder",
+      "league": "nhl",
+      "season": "1993–94",
+      "scope": "regular-season",
+      "topic": "awards",
+      "template": "trivia",
+      "difficulty": "approachable",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie won the 1994 Calder Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Felix Potvin"
+        },
+        {
+          "id": "p1",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p2",
+          "label": "Chris Osgood"
+        },
+        {
+          "id": "p3",
+          "label": "Jocelyn Thibault"
+        }
+      ],
+      "correctOptionId": "p1",
+      "explanation": "Martin Brodeur was the NHL’s top rookie in 1993–94.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-calder-memorial-trophy-winners-complete-list-287749198",
+        "credit": "NHL.com · Calder winners"
+      },
+      "checkedAt": "2026-10-28",
+      "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only"
     }
   ]
 }

@@ -13,6 +13,8 @@ public static class NumbersEndpoints
             Handle(http, user => service.Get(user, id, ct)));
         group.MapPost("/practice", (NumbersStart request, HttpContext http, NumbersPlayService service, CancellationToken ct) =>
             Handle(http, user => service.Start(user, request, ct)));
+        group.MapPost("/practice/coverage", (NumbersStart request, HttpContext http, NumbersPlayService service, CancellationToken ct) =>
+            Handle(http, user => service.Coverage(user, request, ct)));
         group.MapPost("/quizzes/{id:guid}/answers", (Guid id, NumbersMove request, HttpContext http, NumbersPlayService service, CancellationToken ct) =>
             Handle(http, user => service.Move(user, id, request, false, ct)));
         group.MapPost("/quizzes/{id:guid}/continue", (Guid id, NumbersMove request, HttpContext http, NumbersPlayService service, CancellationToken ct) =>

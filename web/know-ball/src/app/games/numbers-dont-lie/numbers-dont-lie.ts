@@ -6,7 +6,9 @@ import { firstValueFrom } from 'rxjs';
 
 interface Choice { id: string; label: string; value?: number; }
 interface Question { id: string; prompt: string; league: string; topic: string; season: string | null; options: Choice[]; correctOptionId?: string; explanation?: string; source?: {url:string;credit:string;licenseUrl?:string}; }
-interface State { id: string; mode: string; date: string | null; position: number; revision: number; answeredCount: number; correctCount: number; complete: boolean; current: Question | null; review: {question:Question;optionId:string;correct:boolean}[]; }
+interface Filters { leagues: string[]; topics: string[]; fromYear: number | null; throughYear: number | null; }
+interface Coverage { eligibleFacts: number; freshFacts: number; canStartFresh: boolean; canStartWithRepeats: boolean; leagues: { league: string; eligible: number; fresh: number }[]; }
+interface State { filters?: Filters | null; id: string; mode: string; date: string | null; position: number; revision: number; answeredCount: number; correctCount: number; complete: boolean; current: Question | null; review: {question:Question;optionId:string;correct:boolean}[]; }
 
 @Component({
   selector: 'app-numbers-dont-lie', imports: [FormsModule, RouterLink],
@@ -14,7 +16,7 @@ interface State { id: string; mode: string; date: string | null; position: numbe
     <a routerLink="/">← All games</a>
     <header><p>Daily & practice · Beta</p><h1>Numbers Don't Lie</h1>
     <p>Five questions. Awards, teams, stats and seasons across four leagues.</p></header>
-    <p class="note">88-question beta. Progress saves on the server for this browser’s player ID. Practice expires after 30 days.</p>
+    <p class="note">96-question beta. Progress saves on the server for this browser’s player ID. Practice expires after 30 days.</p>
     <nav aria-label="Quiz mode"><button (click)="daily()" [disabled]="busy()">Daily challenge</button>
       <button (click)="customize()" [disabled]="busy()">Practice</button></nav>
     @if (error()) { <p role="alert">{{error()}}</p><button (click)="retry()" [disabled]="busy()">Retry</button> }
@@ -26,14 +28,28 @@ interface State { id: string; mode: string; date: string | null; position: numbe
         </fieldset>
         <details><summary>Customize topics and years</summary>
           <fieldset><legend>Topics</legend>@for (topic of topics; track topic) { <label><input type="checkbox" [checked]="chosen.includes(topic)" (change)="toggle(topic, 'topic')">{{topic}}</label> }</fieldset>
-          <label>From season year <input type="number" [(ngModel)]="fromYear" min="1900" max="2100"></label>
-          <label>Through season year <input type="number" [(ngModel)]="throughYear" min="1900" max="2100"></label>
+          <label>From season year <input type="number" [(ngModel)]="fromYear" (ngModelChange)="filtersChanged()" min="1900" max="2100"></label>
+          <label>Through season year <input type="number" [(ngModel)]="throughYear" (ngModelChange)="filtersChanged()" min="1900" max="2100"></label>
         </details>
-        <button (click)="practice()" [disabled]="busy() || !selected.length || !chosen.length">Start practice</button>
+        <p class="filter-summary">{{filterSummary()}}</p>
+        @if (coverageBusy()) { <p role="status">Checking available questions…</p> }
+        @if (coverageError()) { <p role="alert">{{coverageError()}}</p><button (click)="checkCoverage()">Check availability</button> }
+        @if (coverage(); as c) {
+          <p role="status">{{c.freshFacts}} fresh facts / {{c.eligibleFacts}} matching facts.</p>
+          <p class="note">Fresh facts were not included in your rounds in the last 30 days. Five questions are balanced across your selected leagues.</p>
+          @for (entry of c.leagues; track entry.league) { <p class="note">{{entry.league.toUpperCase()}}: {{entry.fresh}} fresh / {{entry.eligible}} matching</p> }
+          @if (!c.canStartFresh) {
+            <p role="status">Not enough fresh facts for a full round. Add leagues or topics, or widen the years.</p>
+            @if (c.canStartWithRepeats) { <label><input type="checkbox" [(ngModel)]="allowRepeats">Allow previously included facts for this round</label> }
+            @else { <p>These filters cannot fill a five-question round, even with repeats.</p> }
+          }
+        }
+        <button (click)="practice()" [disabled]="busy() || coverageBusy() || !canStart()">Start practice</button>
       </section>
     } @else if (state(); as s) {
       <section>
         <p>{{s.mode === 'daily' ? 'Daily · ' + s.date : 'Practice'}} · Score {{s.correctCount}} / {{s.answeredCount}}</p>
+        @if (s.mode === 'practice') { <p class="filter-summary">{{filterSummary(s.filters)}}</p> }
         @if (s.complete) {
           <h2 tabindex="-1">That’s the final score.</h2><p class="score">{{s.correctCount}} / 5</p>
           <button (click)="practice()" [disabled]="busy()">Play another round</button><button (click)="customize()">Customize practice</button>
@@ -85,11 +101,21 @@ export class NumbersDontLie {
   readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['stats','awards','teams','seasons'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
+  readonly coverage = signal<Coverage | null>(null); readonly coverageBusy = signal(false); readonly coverageError = signal('');
+  allowRepeats = false;
+  private coverageVersion = 0;
+  private practiceRequestId = crypto.randomUUID();
   private lastAction: (() => Promise<State>) | null = null;
+  private recoverConflict = false;
   constructor() {
-    try { const saved: unknown = JSON.parse(localStorage.getItem('knowball.numbers.leagues') || 'null');
-      if (Array.isArray(saved)) { const valid = this.leagues.filter(l => saved.includes(l)); if(valid.length) this.selected = valid; }
-    } catch {}
+    try {
+      const saved = JSON.parse(localStorage.getItem('knowball.numbers.filters') || 'null');
+      if (saved) this.restoreFilters(saved);
+      else {
+        const leagues: unknown = JSON.parse(localStorage.getItem('knowball.numbers.leagues') || 'null');
+        if (Array.isArray(leagues)) { const valid = this.leagues.filter(l => leagues.includes(l)); if (valid.length) this.selected = valid; }
+      }
+    } catch { /* Invalid or blocked storage uses defaults. */ }
     const id = new URLSearchParams(location.search).get('round');
     if (id) this.run(() => firstValueFrom(this.http.get<State>('/api/numbers-dont-lie/quizzes/' + encodeURIComponent(id))));
     else this.daily();
@@ -97,33 +123,87 @@ export class NumbersDontLie {
   toggle(value:string, kind:string) {
     const current = kind === 'league' ? this.selected : this.chosen;
     const next = current.includes(value) ? current.filter(v => v !== value) : [...current,value];
-    if(kind === 'league') { this.selected = next; try {localStorage.setItem('knowball.numbers.leagues',JSON.stringify(next));} catch {} }
+    if(kind === 'league') this.selected = next;
     else this.chosen = next;
+    this.filtersChanged();
   }
-  customize() { this.setup.set(true); this.error.set(''); }
+  private filters(): Filters { return { leagues: [...this.selected], topics: [...this.chosen], fromYear: this.fromYear, throughYear: this.throughYear }; }
+  private restoreFilters(value: Partial<Filters>) {
+    if (Array.isArray(value.leagues)) { const valid = this.leagues.filter(l => value.leagues!.includes(l)); if (valid.length) this.selected = valid; }
+    if (Array.isArray(value.topics)) { const valid = this.topics.filter(t => value.topics!.includes(t)); if (valid.length) this.chosen = valid; }
+    const year = (n: unknown): number | null => typeof n === 'number' && Number.isInteger(n) && n >= 1900 && n <= 2100 ? n : null;
+    this.fromYear = year(value.fromYear); this.throughYear = year(value.throughYear);
+    if (this.fromYear !== null && this.throughYear !== null && this.fromYear > this.throughYear) { this.fromYear = null; this.throughYear = null; }
+  }
+  private saveFilters() { try { localStorage.setItem('knowball.numbers.filters', JSON.stringify(this.filters())); } catch {} }
+  filterSummary(filters: Filters | null | undefined = this.filters()): string {
+    const f = filters || this.filters();
+    return f.leagues.map(l => l.toUpperCase()).join(', ') + ' · ' + f.topics.join(', ') + ' · ' +
+      (f.fromYear === null && f.throughYear === null ? 'All years' : (f.fromYear ?? 'Earliest') + '–' + (f.throughYear ?? 'Latest'));
+  }
+  filtersChanged() {
+    this.saveFilters(); this.allowRepeats = false; this.error.set(''); this.lastAction = null;
+    this.practiceRequestId = crypto.randomUUID(); void this.checkCoverage();
+  }
+  async checkCoverage() {
+    const version = ++this.coverageVersion;
+    this.coverage.set(null); this.coverageError.set(''); this.coverageBusy.set(false);
+    const f = this.filters();
+    if (!f.leagues.length || !f.topics.length || [f.fromYear, f.throughYear].some(n => n !== null && (!Number.isInteger(n) || n < 1900 || n > 2100)) ||
+      (f.fromYear !== null && f.throughYear !== null && f.fromYear > f.throughYear)) {
+      this.coverageError.set('Select at least one league and topic, and an ordered year range (1900–2100).'); return;
+    }
+    this.coverageBusy.set(true);
+    try {
+      const c = await firstValueFrom(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', {...f, requestId: this.practiceRequestId}));
+      if (version === this.coverageVersion) this.coverage.set(c);
+    } catch { if (version === this.coverageVersion) this.coverageError.set('Could not check available questions. Please retry.'); }
+    finally { if (version === this.coverageVersion) this.coverageBusy.set(false); }
+  }
+  canStart() { const c = this.coverage(); return !!c && (c.canStartFresh || (this.allowRepeats && c.canStartWithRepeats)); }
+  customize() {
+    this.setup.set(true); this.error.set(''); this.lastAction = null; this.allowRepeats = false;
+    this.practiceRequestId = crypto.randomUUID(); void this.checkCoverage();
+  }
   daily() { this.run(() => firstValueFrom(this.http.get<State>('/api/numbers-dont-lie/daily'))); }
   practice() {
-    const body = {leagues:this.selected,topics:this.chosen,fromYear:this.fromYear,throughYear:this.throughYear,requestId:crypto.randomUUID()};
-    this.run(() => firstValueFrom(this.http.post<State>('/api/numbers-dont-lie/practice',body)));
+    const body = {...this.filters(), requestId: this.setup() ? this.practiceRequestId : crypto.randomUUID(), allowRepeats: this.setup() && this.allowRepeats};
+    this.saveFilters();
+    let checked = false;
+    this.run(async () => {
+      if (checked) return firstValueFrom(this.http.post<State>('/api/numbers-dont-lie/practice', body));
+      // Recheck before creation, including Play another round after a completed quiz.
+      const c = await firstValueFrom(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', body));
+      this.coverage.set(c);
+      if (!c.canStartFresh && !(body.allowRepeats && c.canStartWithRepeats)) {
+        this.practiceRequestId = body.requestId; this.allowRepeats = false; this.setup.set(true);
+        throw new HttpErrorResponse({status: 422, error: {error: 'Choose broader filters or explicitly allow repeats to continue.'}});
+      }
+      checked = true; // A lost start response must retry its receipt, not fail coverage against its own round.
+      return firstValueFrom(this.http.post<State>('/api/numbers-dont-lie/practice', body));
+    });
   }
   answer() { this.move('answers',this.choice); }
   advance() { this.move('continue',null); }
   private move(action:string, optionId:string|null) {
     const s = this.state(); if(!s?.current) return;
     const body = {questionId:s.current.id,optionId,requestId:crypto.randomUUID(),expectedRevision:s.revision};
-    this.run(() => firstValueFrom(this.http.post<State>(`/api/numbers-dont-lie/quizzes/${s.id}/${action}`,body)));
+    this.run(() => firstValueFrom(this.http.post<State>(`/api/numbers-dont-lie/quizzes/${s.id}/${action}`,body)), true);
   }
-  retry() { if(this.lastAction) this.run(this.lastAction); }
-  private async run(action:() => Promise<State>) {
-    if(this.busy()) return; this.lastAction = action; this.busy.set(true); this.error.set('');
+  retry() { if(this.lastAction) this.run(this.lastAction, this.recoverConflict); }
+  private async run(action:() => Promise<State>, recoverConflict = false) {
+    if(this.busy()) return; this.lastAction = action; this.recoverConflict = recoverConflict; this.busy.set(true); this.error.set('');
     try {
-      const s = await action(); this.state.set(s); this.setup.set(false); this.choice = s.review[s.position]?.optionId || '';
+      const s = await action();
+      if (s.mode === 'practice' && s.filters) { this.restoreFilters(s.filters); this.saveFilters(); }
+      this.state.set(s); this.setup.set(false); this.choice = s.review[s.position]?.optionId || '';
       await this.router.navigate([], {queryParams:{round:s.id},replaceUrl:true});
       setTimeout(() => document.querySelector<HTMLElement>('app-numbers-dont-lie h2')?.focus());
     } catch(e) {
       const err = e as HttpErrorResponse;
       this.error.set(err.error?.error || 'Could not reach the server. Retry to safely restore progress.');
-      if(err.status === 409 && this.state()) {
+      if (err.status === 422) { this.error.set(''); this.lastAction = null; }
+      if(recoverConflict && err.status === 409 && this.state()) {
         const id = this.state()!.id;
         this.lastAction = () => firstValueFrom(this.http.get<State>('/api/numbers-dont-lie/quizzes/' + id));
       }

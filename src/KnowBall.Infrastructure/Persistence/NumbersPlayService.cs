@@ -8,7 +8,7 @@ namespace KnowBall.Infrastructure.Persistence;
 
 public sealed record NumbersAnswer(string QuestionId, string OptionId, Guid RequestId);
 public sealed record NumbersMove(string QuestionId, string? OptionId, Guid RequestId, int ExpectedRevision);
-public sealed record NumbersStart(string[] Leagues, string[] Topics, int? FromYear, int? ThroughYear, Guid RequestId);
+public sealed record NumbersStart(string[] Leagues, string[] Topics, int? FromYear, int? ThroughYear, Guid RequestId, bool AllowRepeats = false);
 public sealed class NumbersFailure(int status, string message) : Exception(message) { public int Status => status; }
 
 public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
@@ -37,11 +37,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
 
     public async Task<object> Start(string owner, NumbersStart request, CancellationToken ct)
     {
-        if (request.RequestId == Guid.Empty || request.Leagues is null || request.Topics is null ||
-            request.Leagues.Length > 4 || request.Topics.Length > 4 || request.Leagues.Length == 0 || request.Topics.Length == 0 ||
-            request.Leagues.Any(l => !QuizCatalogue.Leagues.Contains(l)) || request.Topics.Any(t => !QuizCatalogue.Topics.Contains(t)) ||
-            request.FromYear > request.ThroughYear) throw new NumbersFailure(400, "Select supported leagues, topics and an ordered year range.");
-        var filters = new QuizFilters(request.Leagues.Distinct().Order().ToArray(), request.Topics.Distinct().Order().ToArray(), request.FromYear, request.ThroughYear);
+        var filters = Filters(request);
         var signature = JsonSerializer.Serialize(filters);
         var key = request.RequestId.ToString();
         var existing = await db.NumbersPlays.AsNoTracking().SingleOrDefaultAsync(x => x.Owner == owner && x.StartKey == key, ct);
@@ -51,12 +47,62 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
             return View(existing);
         }
         string secret;
-        try { secret = Select(filters, key); }
-        catch (InvalidOperationException) { throw new NumbersFailure(503, "Not enough beta questions for those filters. Add topics or widen the years."); }
+        var recent = await RecentFamilies(owner, ct);
+        try { secret = Select(filters, key, request.AllowRepeats ? null : recent, request.AllowRepeats ? recent : null); }
+        catch (InvalidOperationException) { throw new NumbersFailure(409,
+            request.AllowRepeats ? "Not enough questions for these filters. Add leagues/topics or widen the years."
+                : "Not enough fresh facts for these filters. Customize practice to widen them or explicitly allow repeats."); }
         var play = await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = owner, StartKey = key, Filters = signature,
             ExpiresAt = clock.GetUtcNow().AddDays(30), SecretJson = secret }, ct);
         if (play.Filters != signature) throw new NumbersFailure(409, "This start request was already used with other filters.");
         return View(play);
+    }
+
+    private static QuizFilters Filters(NumbersStart request)
+    {
+        if (request.RequestId == Guid.Empty || request.Leagues is null || request.Topics is null ||
+            request.Leagues.Length > 4 || request.Topics.Length > 4 || request.Leagues.Length == 0 || request.Topics.Length == 0 ||
+            request.Leagues.Any(l => !QuizCatalogue.Leagues.Contains(l)) || request.Topics.Any(t => !QuizCatalogue.Topics.Contains(t)) ||
+            request.FromYear is < 1900 or > 2100 || request.ThroughYear is < 1900 or > 2100 ||
+            request.FromYear > request.ThroughYear) throw new NumbersFailure(400, "Select supported leagues, topics and an ordered year range (1900–2100).");
+        return new(request.Leagues.Distinct().Order().ToArray(), request.Topics.Distinct().Order().ToArray(), request.FromYear, request.ThroughYear);
+    }
+
+    // Reserve whole rounds, including unfinished ones, so restarting cannot offer the same facts.
+    // Read timestamps in memory: SQLite cannot order/compare DateTimeOffset columns reliably.
+    private async Task<HashSet<string>> RecentFamilies(string owner, CancellationToken ct)
+    {
+        var cutoff = Today.AddDays(-29);
+        var now = clock.GetUtcNow();
+        var plays = await db.NumbersPlays.AsNoTracking().Where(p => p.Owner == owner)
+            .Select(p => new { p.Date, p.ExpiresAt, p.SecretJson }).ToListAsync(ct);
+        return plays.Where(p => p.Date is { } date ? date >= cutoff && date <= Today : p.ExpiresAt > now)
+            .SelectMany(p => JsonSerializer.Deserialize<JsonElement[]>(p.SecretJson)!)
+            .Select(q => Text(q, "factFamily")).Where(f => f.Length > 0).ToHashSet();
+    }
+
+    public async Task<object> Coverage(string owner, NumbersStart request, CancellationToken ct)
+    {
+        var filters = Filters(request);
+        var recent = await RecentFamilies(owner, ct);
+        using var catalogue = QuizCatalogue.Read(Content.Value);
+        var eligible = catalogue.RootElement.GetProperty("questions").EnumerateArray().Where(q =>
+            filters.Leagues.Contains(Text(q, "league")) && filters.Topics.Contains(Text(q, "topic")) &&
+            int.TryParse(Text(q, "season").AsSpan(0, 4), out var year) &&
+            (!filters.FromYear.HasValue || year >= filters.FromYear) && (!filters.ThroughYear.HasValue || year <= filters.ThroughYear)).ToArray();
+        bool CanSelect(IReadOnlySet<string>? reserved)
+        {
+            try { QuizSelection.Select(catalogue.RootElement, filters, request.RequestId.ToString(), reserved, requireApproved: false, preferVariety: true); return true; }
+            catch (InvalidOperationException) { return false; }
+        }
+        return new {
+            eligibleFacts = eligible.Select(q => Text(q, "factFamily")).Distinct().Count(),
+            freshFacts = eligible.Select(q => Text(q, "factFamily")).Distinct().Count(f => !recent.Contains(f)),
+            canStartFresh = CanSelect(recent), canStartWithRepeats = CanSelect(null),
+            leagues = filters.Leagues.Select(league => new { league,
+                eligible = eligible.Where(q => Text(q, "league") == league).Select(q => Text(q, "factFamily")).Distinct().Count(),
+                fresh = eligible.Where(q => Text(q, "league") == league).Select(q => Text(q, "factFamily")).Distinct().Count(f => !recent.Contains(f)) }).ToArray()
+        };
     }
 
     public async Task<object> Get(string owner, Guid id, CancellationToken ct) => View(await Find(owner, id, ct));
@@ -118,10 +164,10 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
                 ?? throw new NumbersFailure(409, "Round creation conflicted. Retry.");
         }
     }
-    private static string Select(QuizFilters filters, string seed)
+    private static string Select(QuizFilters filters, string seed, IReadOnlySet<string>? reserved = null, IReadOnlySet<string>? recent = null)
     {
         using var catalogue = QuizCatalogue.Read(Content.Value);
-        var set = QuizSelection.Select(catalogue.RootElement, filters, seed, requireApproved: false, preferVariety: true);
+        var set = QuizSelection.Select(catalogue.RootElement, filters, seed, reserved, requireApproved: false, preferVariety: true, deprioritizedFamilies: recent);
         var nodes = set.Select(q => JsonNode.Parse(q.GetRawText())!).ToArray();
         for (var i = 0; i < nodes.Length; i++)
         {
@@ -156,6 +202,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
                 options = q.GetProperty("options").EnumerateArray().Select(o => new { id = Text(o,"id"), label = Text(o,"label") }).ToArray() };
         }
         return new { play.Id, play.Date, mode = play.Date.HasValue ? "daily" : "practice", play.Position, play.Revision,
+            filters = string.IsNullOrEmpty(play.Filters) ? null : JsonSerializer.Deserialize<QuizFilters>(play.Filters),
             answeredCount = answers.Count, correctCount = review.Count(a => a.correct), current, review, complete = play.Position == 5 };
     }
     private static string Text(JsonElement e, string p) => e.TryGetProperty(p, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString()! : "";

@@ -50,6 +50,9 @@ const NOTICE_MS = 3500;
           <div class="state">
             <p>{{ store.reason() }}</p>
             <a class="kb-btn" routerLink="/">All games</a>
+            @if (practice()) {
+              <button type="button" class="kb-btn" [disabled]="store.busy()" (click)="startPractice()">Practice round</button>
+            }
           </div>
         }
         @case ('ready') {
@@ -79,6 +82,17 @@ const NOTICE_MS = 3500;
                 (selected)="store.guess($event.id)"
               />
             </div>
+          }
+
+          @if (practice() && !store.over()) {
+            <nav class="modes" aria-label="Game mode">
+              @if (s.practice) {
+                <a class="kb-btn" [routerLink]="['/', s.game]" [attr.aria-disabled]="store.busy()" (click)="store.busy() && $event.preventDefault()">Today's puzzle</a>
+              } @else {
+                <button type="button" class="kb-btn" [disabled]="store.busy()" (click)="startPractice()">Practice round</button>
+              }
+              <p class="fine">Practice does not affect daily stats. Your daily progress stays saved.</p>
+            </nav>
           }
 
           @if (store.over()) {
