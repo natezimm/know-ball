@@ -67,6 +67,20 @@ describe('GameShell', () => {
     expect(el.querySelector('input')?.getAttribute('placeholder')).toBe('Guess 3 of 8: type a name');
   });
 
+  it('offers practice before a daily guess and keeps mode changes disabled during a save', async () => {
+    await flushDaily();
+    const practice = el.querySelector<HTMLButtonElement>('.modes button')!;
+    expect(practice.textContent?.trim()).toBe('Practice round');
+    expect(practice.disabled).toBe(false);
+    store.busy.set(true); await fixture.whenStable();
+    expect(practice.disabled).toBe(true);
+    store.busy.set(false);
+    store.state.set(gameState({ practice: true, puzzleId: 99, number: null, date: null }));
+    await fixture.whenStable();
+    expect(el.querySelector('.modes a')?.getAttribute('href')).toBe('/scouting-report');
+    expect(el.querySelector('.modes')?.textContent).toContain('daily progress stays saved');
+  });
+
   it('swaps the guess box for the answer when the game is won', async () => {
     await flushDaily(
       gameState({

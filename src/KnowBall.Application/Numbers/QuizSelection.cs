@@ -10,7 +10,8 @@ public static class QuizSelection
 {
     /// <summary>Deterministic offline selection; returns cloned private snapshots or fails atomically.</summary>
     public static JsonElement[] Select(JsonElement catalogue, QuizFilters filters, string seed,
-        IReadOnlySet<string>? reservedFamilies = null, bool requireApproved = true, bool preferVariety = false)
+        IReadOnlySet<string>? reservedFamilies = null, bool requireApproved = true, bool preferVariety = false,
+        IReadOnlySet<string>? deprioritizedFamilies = null)
     {
         var errors = QuizCatalogue.Validate(catalogue, requireApproved);
         if (errors.Count != 0) throw new InvalidDataException(string.Join(Environment.NewLine, errors));
@@ -35,11 +36,10 @@ public static class QuizSelection
             if (candidates.Length == 0) throw new InvalidOperationException($"Insufficient eligible {league} facts for a balanced five-question round.");
             // Stable ordering retains the seeded rank as the final tie-breaker. Variety is
             // a preference within eligible facts, never a reason to relax a player's filters.
-            var choice = preferVariety
-                ? candidates.OrderBy(q => selected.Count(s => QuizCatalogue.Text(s, "topic") == QuizCatalogue.Text(q, "topic")))
-                    .ThenBy(q => selected.Count(s => QuizCatalogue.Text(s, "template") == QuizCatalogue.Text(q, "template")))
-                    .First()
-                : candidates[0];
+            var choice = candidates.OrderBy(q => deprioritizedFamilies?.Contains(QuizCatalogue.Text(q, "factFamily")) == true ? 1 : 0)
+                .ThenBy(q => preferVariety ? selected.Count(s => QuizCatalogue.Text(s, "topic") == QuizCatalogue.Text(q, "topic")) : 0)
+                .ThenBy(q => preferVariety ? selected.Count(s => QuizCatalogue.Text(s, "template") == QuizCatalogue.Text(q, "template")) : 0)
+                .First();
             families.Add(QuizCatalogue.Text(choice, "factFamily"));
             selected.Add(choice.Clone());
         }

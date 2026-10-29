@@ -12,10 +12,10 @@ public class NumbersBetaCatalogueTests
         using var reader = new StreamReader(stream);
         using var catalogue = QuizCatalogue.Read(reader.ReadToEnd());
         var questions = catalogue.RootElement.GetProperty("questions").EnumerateArray().ToArray();
-        Assert.Equal(88, questions.Length);
-        Assert.Equal(88, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
+        Assert.Equal(96, questions.Length);
+        Assert.Equal(96, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
         foreach (var league in QuizCatalogue.Leagues)
-            Assert.Equal(22, questions.Count(q => q.GetProperty("league").GetString() == league));
+            Assert.Equal(24, questions.Count(q => q.GetProperty("league").GetString() == league));
 
         // All 225 nonempty filter combinations must produce a full round with no year bounds.
         for (var leaguesMask = 1; leaguesMask < 16; leaguesMask++)
