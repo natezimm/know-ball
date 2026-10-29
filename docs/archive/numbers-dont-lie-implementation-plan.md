@@ -427,7 +427,7 @@ Who's That Sportsman remains a separate deferred idea and is not a dependency of
 ## 10. Starting point
 
 October 25 storage update: [approved catalogue imports and staged immutable daily
-snapshots](numbers-content-storage.md) are implemented as the next milestone-2
+snapshots](../numbers-dont-lie/content-storage.md) are implemented as the next milestone-2
 slice. Full queue policy/supply simulation, publication and saved gameplay remain
 separate follow-ups. The hosted preview is unchanged.
 
@@ -435,7 +435,7 @@ October 24 update: the user accepted the expanded 56-question preview. Awards,
 championship teams and season identification, plus topic/era practice filters, are
 now part of the intended product scope. The older two-template-only guidance above
 applies to the initial source proof, not the accepted full-game scope.
-Backend milestone 2 begins with [catalogue preflight](numbers-catalogue-preflight.md):
+Backend milestone 2 begins with [catalogue preflight](../numbers-dont-lie/catalogue-preflight.md):
 offline validation and a deterministic selection primitive. Durable imports,
 immutable database snapshots, scheduling rules and supply simulation remain the
 next slice of that milestone; the saved gameplay API follows.
@@ -447,7 +447,7 @@ This explicitly supersedes the local-only packaging restriction for these 24 rev
 The sample contains answers in browser assets, resets on reload and makes no database changes.
 Full-game content approval and backend/release gates below remain future work; preview hosting does not complete them.
 
-Delivery PR 1 now has a [private static prototype](prototypes/numbers-dont-lie/README.md) and
+Delivery PR 1 now has a [private static prototype](../prototypes/numbers-dont-lie/README.md) and
 [24-question source proof](numbers-dont-lie-data-sources.md). Source values have been checked; human review,
 physical-phone testing, repeatable NHL retrieval and production source approval remain open.
 The preview does not implement the saved gameplay API.

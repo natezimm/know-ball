@@ -147,7 +147,7 @@ own resources. It never restores into production or starts an importer. The clon
 game history and puzzle answers: handle the bundle as private data.
 
 **Record gate evidence:** attach the workflow run URL and timestamps to
-[the launch checklist](../docs/implementation-plan.md#8-whats-left). `ImportRuns` has no trigger field, so
+[the launch checklist](../docs/archive/implementation-plan.md#8-whats-left). `ImportRuns` has no trigger field, so
 timestamps near 04:00 Eastern are candidates, not proof of a scheduled run. Correlate them with the worker's
 scheduler messages, VM/container restarts and any manual imports. Check two consecutive nights; on October 17,
 the planned October 18 run has not happened yet. Neither a green canary nor a restore drill closes that gate.
