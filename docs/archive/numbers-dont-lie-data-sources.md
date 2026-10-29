@@ -7,7 +7,7 @@ publishes these 24 questions and credits at `/preview/numbers-dont-lie/index.htm
 sample and contains its answers in client assets. This is a packaging decision for the experiment,
 not a new finding about source permissions or approval of the future production catalogue.
 
-The [playable prototype](prototypes/numbers-dont-lie/README.md) tests five untimed questions, four choices,
+The [playable prototype](../prototypes/numbers-dont-lie/README.md) tests five untimed questions, four choices,
 feedback after submission and daily versus league-selectable practice. The source values are checked;
 human editorial review, difficulty calibration, physical-phone review and the four-league production
 source gate remain open. This is not a claim of 24 human-approved questions or launch readiness.
@@ -67,7 +67,7 @@ not guessed from search snippets. That manual verification does not establish an
 Every question explicitly says **“Among these four”** and specifies league, completed season and regular-season
 scope. Each has four distinct names and one valid answer. Ties between distractors are allowed;
 ties involving the correct maximum or target value are rejected. Source links, dates, values, revision,
-fact-family ID, template and provisional difficulty are in [questions.json](prototypes/numbers-dont-lie/questions.json).
+fact-family ID, template and provisional difficulty are in [questions.json](../prototypes/numbers-dont-lie/questions.json).
 No question has production-approved status.
 
 | Question | Template | Correct choice | Checked supporting values |\n| --- | --- | --- | --- |\n| `nba-points-2024` | compare-four | Luka Dončić | Luka Dončić: 2,370; Shai Gilgeous-Alexander: 2,254; Giannis Antetokounmpo: 2,222; Jalen Brunson: 2,212 |

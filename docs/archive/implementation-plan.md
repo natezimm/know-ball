@@ -13,7 +13,7 @@ The earlier implementation history below is retained where relevant.
 Historical review, 2026-10-17: reconciled launch status with main at `2cf5164`, merged PRs and GitHub Actions.
 Deployment, Docker/Postgres checks and Playwright gameplay are implemented and passing; production operations,
 real-device validation still need evidence. Section 8 is the single launch checklist.
-Data-source research retains its dated findings in [research.md](research.md).
+Data-source research retains its dated findings in [research.md](../research.md).
 
 **Names changed on 2026-10-13.** "Spordle" is now the Wordle-style word game. The player-guessing game that the
 build plan calls Spordle is now **Scouting Report**. The site itself is now called **Know Ball**, and on 2026-10-14 the code
@@ -65,7 +65,7 @@ The big shift from the original plan: three of the eight picks need **historical
 ## 3. Data plan
 
 No single free source covers everything, so the importer combines three. All were tested on 2026-10-12 or 10-13;
-the details, the rejected providers and the NFL sources are in [research.md](research.md).
+the details, the rejected providers and the NFL sources are in [research.md](../research.md).
 
 | Source | What it gives | How it is used | Checked |
 | --- | --- | --- | --- |
@@ -301,20 +301,20 @@ production scheduling or real-device behavior. Photo content is no longer a laun
 
 | Work | Evidence |
 | --- | --- |
-| Historical Docker smoke covered the original four-game implementation; current smoke covers migrations, importer, answer hiding, Eastern calendar and retired-endpoint removal | [PR #2](https://github.com/natezimm/know-ball/pull/2), [smoke script](../scripts/docker-smoke.sh), latest CI below |
-| SQLite and Postgres integration, importer repeatability, Angular tests and production build | [CI workflow](../.github/workflows/ci.yml); [successful main run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39035184904) |
+| Historical Docker smoke covered the original four-game implementation; current smoke covers migrations, importer, answer hiding, Eastern calendar and retired-endpoint removal | [PR #2](https://github.com/natezimm/know-ball/pull/2), [smoke script](../../scripts/docker-smoke.sh), latest CI below |
+| SQLite and Postgres integration, importer repeatability, Angular tests and production build | [CI workflow](../../.github/workflows/ci.yml); [successful main run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39035184904) |
 | Hosting, proxy-aware rate limits, image publication and deployment | [PR #3](https://github.com/natezimm/know-ball/pull/3), [PR #4](https://github.com/natezimm/know-ball/pull/4), successful publish/deploy jobs in the main run above; site recorded live since 2026-10-16 |
 | First production history and roster import | [PR #5](https://github.com/natezimm/know-ball/pull/5): 5,416 history players, 99 teams, 5,397 Wikidata links, 630 ESPN players; 30 Scouting Report and 29 Career Path puzzles initially queued |
-| Historical four-game Playwright coverage (photo-game tests now removed) | [Merged PR #6](https://github.com/natezimm/know-ball/pull/6), [browser tests](../web/know-ball/e2e), successful e2e job in the main run above |
-| Live-source import canary | [Successful run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39029555678); [workflow](../.github/workflows/nightly-import-check.yml) loads fresh disposable SQLite, not production Postgres |
-| Version 1 verification script updated | [scripts/verify.sh](../scripts/verify.sh): live ESPN import, API checks and Docker smoke checks when Docker is available |
+| Historical four-game Playwright coverage (photo-game tests now removed) | [Merged PR #6](https://github.com/natezimm/know-ball/pull/6), [browser tests](../../web/know-ball/e2e), successful e2e job in the main run above |
+| Live-source import canary | [Successful run, 2026-10-17](https://github.com/natezimm/know-ball/actions/runs/39029555678); [workflow](../../.github/workflows/nightly-import-check.yml) loads fresh disposable SQLite, not production Postgres |
+| Version 1 verification script updated | [scripts/verify.sh](../../scripts/verify.sh): live ESPN import, API checks and Docker smoke checks when Docker is available |
 
 ### Operations tooling (implementation, not production evidence)
 
 Production audit, paired database/photo backups, a daily-backup cron installer and a disposable restore drill
-are available through [deploy/operations.py](../deploy/operations.py) and the manual
-[Production operations workflow](../.github/workflows/production-operations.yml). See
-[deployment instructions](../deploy/README.md#7-production-evidence-backups-and-recovery) for the action choices.
+are available through [deploy/operations.py](../../deploy/operations.py) and the manual
+[Production operations workflow](../../.github/workflows/production-operations.yml). See
+[deployment instructions](../../deploy/README.md#7-production-evidence-backups-and-recovery) for the action choices.
 The CI Docker job exercises a fixture backup/restore, with the three-game launch scope; legacy photo files are retained and verified as archived bytes when present, separately from the
 production workflow. Until a production run and GCP snapshot review are recorded, the gates below remain open.
 Import runs do not currently store their trigger; scheduled-run evidence requires log/timestamp correlation.
@@ -329,8 +329,8 @@ no production data or saved packs are deleted. See [future games](future-games.m
 
 | Done | Gate | Acceptance evidence to record |
 | --- | --- | --- |
-| [ ] | **Production nightly imports — Milestone 0** | Production `ImportRuns` rows and worker logs show two successive scheduled 04:00 America/New_York runs succeeding, with full history present and current-player headshots. Check October 17 and 18 first; if either fails, use the next successful consecutive pair. Distinguish scheduled runs from startup/manual imports and confirm puzzle queues were replenished. Use the query in [deploy/README.md, step 6](../deploy/README.md#6-first-deploy). |
-| [ ] | **Backups configured** | Dated confirmation of the VM backup cron, a successful nonempty database dump, retention, and a GCP disk snapshot schedule covering database and photos. Setup is in [deploy/README.md, step 7](../deploy/README.md#7-nightly-backups). |
+| [ ] | **Production nightly imports — Milestone 0** | Production `ImportRuns` rows and worker logs show two successive scheduled 04:00 America/New_York runs succeeding, with full history present and current-player headshots. Check October 17 and 18 first; if either fails, use the next successful consecutive pair. Distinguish scheduled runs from startup/manual imports and confirm puzzle queues were replenished. Use the query in [deploy/README.md, step 6](../../deploy/README.md#6-first-deploy). |
+| [ ] | **Backups configured** | Dated confirmation of the VM backup cron, a successful nonempty database dump, retention, and a GCP disk snapshot schedule covering database and photos. Setup is in [deploy/README.md, step 7](../../deploy/README.md#7-nightly-backups). |
 | [ ] | **Recovery verified** | Restore a database backup and matching photos into an isolated environment; record backup/snapshot timestamps, restored puzzle counts, verification of any archived legacy media and a game playthrough. Keep production untouched during the drill. |
 | [ ] | **Real-phone gameplay — Milestones 1 and 4** | Record device/browser and date for iOS Safari and Android Chrome: play each available game, use player search/on-screen keyboard, reload/resume, finish and share; check scrolling and dialogs. |
 | [ ] | **Installed PWA — Milestone 4** | On iOS and Android, install from the browser, launch from the home screen and verify an updated deployment reaches the installed copy. Record versions/commit and results. Shell caching does not provide offline gameplay; APIs remain network-only. |

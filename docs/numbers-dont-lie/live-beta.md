@@ -10,7 +10,7 @@ Deployment applies the `PersistNumbersBetaPlay` Postgres migration through the e
 
 ## Content scope
 
-This is explicitly an 88-question beta: 22 questions per league, comprising six stats, five awards, six championship teams and five season clues. The embedded `Data/numbers-beta.json` extends the original 56-question prototype bank with 32 source-checked historical questions. Each league/topic combination now has enough distinct facts for a five-question practice round without year bounds. Narrow year ranges can still exhaust the bank.
+The beta launched with 88 questions, 22 per league, comprising six stats, five awards, six championship teams and five season clues. The embedded `Data/numbers-beta.json` extends the original 56-question prototype bank with 32 source-checked historical questions. Each league/topic combination now has enough distinct facts for a five-question practice round without year bounds. Narrow year ranges can still exhaust the bank.
 
 The original prototype catalogue remains a design fixture. The server bank retains source attribution and prototype review status, using the established selection algorithm with `requireApproved: false`. Daily snapshots freeze selected questions, opaque question IDs and shuffled opaque option IDs on first access. Existing saved rounds do not change when the bank expands. The new historical facts were checked on October 25, 2026 against the linked NBA/NHL histories, team championship histories, MLB postseason histories, Baseball Almanac MVP records and EDSFootball AP MVP records. NFL championship clues use the season year and explain the following calendar year's Super Bowl date.
 
@@ -18,7 +18,7 @@ The approved-content queue from the previous PR remains separate and disabled by
 
 ## Question quality and variety
 
-The October 26 content pass revises 48 of the 88 slots without increasing the bank size:
+The October 26 content pass revised 48 of the 88 slots without increasing the bank size:
 
 - All 24 stat questions get clearer wording and explanations comparing actual totals. Eight now ask which player finished closest to a round-number target (two per league). The validator calculates absolute distances and rejects tied winners or incorrect answer keys.
 - Twelve championship questions now include the Finals, World Series or Super Bowl opponent. Their explanations add the series result or clarify the NFL season/calendar-year distinction. The named opponent is removed from the choices so it cannot serve as an obviously impossible distractor.

@@ -12,8 +12,8 @@ export interface CareerStop {
   logoUrl: string | null;
   /** Calendar year the spell began. */
   from: number;
-  /** Calendar year the last season ended; null while the player is still there. */
-  to: number | null;
+  /** Calendar year the last season ended; null or left out (the API drops nulls) while the player is still there. */
+  to?: number | null;
   seasons: number;
 }
 
@@ -37,7 +37,7 @@ interface CareerAnswer {
 
 /** "2011–17", "1998–2004" across a century, "2025–" when it has not ended. */
 export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
-  if (stop.to === null) return `${stop.from}–`;
+  if (stop.to == null) return `${stop.from}–`;
   const sameCentury = Math.floor(stop.to / 100) === Math.floor(stop.from / 100);
   return `${stop.from}–${sameCentury ? String(stop.to % 100).padStart(2, '0') : stop.to}`;
 }

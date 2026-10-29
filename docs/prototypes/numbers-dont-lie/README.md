@@ -1,6 +1,6 @@
 # Numbers Don't Lie: design preview
 
-This is delivery PR 1 from the [implementation plan](../../numbers-dont-lie-implementation-plan.md).
+This is delivery PR 1 from the [implementation plan](../../archive/numbers-dont-lie-implementation-plan.md).
 On October 23, the user requested hosting this sample to review it on the actual site and decide whether to
 keep, tweak or revert it. After the hosted-preview PR is merged and deployed, open
 <https://knowball.nathanzimmerman.com/preview/numbers-dont-lie/index.html?ngsw-bypass=true>
@@ -9,7 +9,7 @@ or use **Numbers Don't Lie preview** in the site footer.
 This is a labeled review sample. **Its JSON intentionally contains all answers.** Production scoring and
 answer filtering still belong to the later saved API. The preview has no database writes.
 Completed daily results, completion streaks, practice best and recent questions persist locally.
-Unfinished rounds reset on reload. See [expanded preview behavior](../../numbers-preview-expansion.md).
+Unfinished rounds reset on reload. See [expanded preview behavior](../../archive/numbers-preview-expansion.md).
 
 `npm run build` packages only the five playback files and bundled fonts into `/preview/numbers-dont-lie/`.
 Tests, research notes and raw source data are excluded. JS/CSS/JSON have content-hashed names for updates;
@@ -56,7 +56,7 @@ the production no-spoilers reservation policy or a sustainable difficulty mix fo
 
 ## Review worksheet
 
-For each question in [the source review](../../numbers-dont-lie-data-sources.md), record accuracy, clarity,
+For each question in [the source review](../../archive/numbers-dont-lie-data-sources.md), record accuracy, clarity,
 whether the distractors feel plausible, perceived difficulty and any wording correction.
 All difficulty labels are hypotheses; automated checks do not establish that a quiz is fun.
 
@@ -68,4 +68,4 @@ All difficulty labels are hypotheses; automated checks do not establish that a q
 - [ ] Resolve production source permissions and repeatable NHL ingestion before advancing the content approval gate.
 
 Browser automation covers Chromium desktop/mobile widths, not actual phones, Safari, screen readers or installed PWAs.
-See [data-source evidence and open gates](../../numbers-dont-lie-data-sources.md).
+See [data-source evidence and open gates](../../archive/numbers-dont-lie-data-sources.md).

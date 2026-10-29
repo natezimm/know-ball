@@ -17,9 +17,9 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
     <header><p>Daily & practice · Beta</p><h1>Numbers Don't Lie</h1>
     <p>Five questions. Awards, teams, stats and seasons across four leagues.</p></header>
     <p class="note">96-question beta. Progress saves on the server for this browser’s player ID. Practice expires after 30 days.</p>
-    <nav aria-label="Quiz mode"><button (click)="daily()" [disabled]="busy()">Daily challenge</button>
-      <button (click)="customize()" [disabled]="busy()">Practice</button></nav>
-    @if (error()) { <p role="alert">{{error()}}</p><button (click)="retry()" [disabled]="busy()">Retry</button> }
+    <nav aria-label="Quiz mode"><button class="kb-btn primary" (click)="daily()" [disabled]="busy()">Daily challenge</button>
+      <button class="kb-btn" (click)="customize()" [disabled]="busy()">Practice</button></nav>
+    @if (error()) { <p role="alert">{{error()}}</p><button class="kb-btn" (click)="retry()" [disabled]="busy()">Retry</button> }
     @if (busy()) { <p role="status">Saving / loading…</p> }
     @if (setup()) {
       <section><h2>Choose your practice</h2>
@@ -33,7 +33,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
         </details>
         <p class="filter-summary">{{filterSummary()}}</p>
         @if (coverageBusy()) { <p role="status">Checking available questions…</p> }
-        @if (coverageError()) { <p role="alert">{{coverageError()}}</p><button (click)="checkCoverage()">Check availability</button> }
+        @if (coverageError()) { <p role="alert">{{coverageError()}}</p><button class="kb-btn" (click)="checkCoverage()">Check availability</button> }
         @if (coverage(); as c) {
           <p role="status">{{c.freshFacts}} fresh facts / {{c.eligibleFacts}} matching facts.</p>
           <p class="note">Fresh facts were not included in your rounds in the last 30 days. Five questions are balanced across your selected leagues.</p>
@@ -44,7 +44,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
             @else { <p>These filters cannot fill a five-question round, even with repeats.</p> }
           }
         }
-        <button (click)="practice()" [disabled]="busy() || coverageBusy() || !canStart()">Start practice</button>
+        <button class="kb-btn primary" (click)="practice()" [disabled]="busy() || coverageBusy() || !canStart()">Start practice</button>
       </section>
     } @else if (state(); as s) {
       <section>
@@ -52,8 +52,8 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
         @if (s.mode === 'practice') { <p class="filter-summary">{{filterSummary(s.filters)}}</p> }
         @if (s.complete) {
           <h2 tabindex="-1">That’s the final score.</h2><p class="score">{{s.correctCount}} / 5</p>
-          <button (click)="practice()" [disabled]="busy()">Play another round</button><button (click)="customize()">Customize practice</button>
-          <button (click)="share()">Share result</button><p role="status">{{shareStatus()}}</p>
+          <button class="kb-btn" (click)="practice()" [disabled]="busy()">Play another round</button><button class="kb-btn" (click)="customize()">Customize practice</button>
+          <button class="kb-btn" (click)="share()">Share result</button><p role="status">{{shareStatus()}}</p>
           @for (answer of s.review; track answer.question.id) {
             <details><summary>{{answer.correct ? 'Correct' : 'Missed'}} · {{answer.question.prompt}}</summary>
               <p>{{answer.question.explanation}}</p>
@@ -76,8 +76,8 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
               <a [href]="source.url" target="_blank" rel="noopener">{{source.credit}}</a>
               @if (source.licenseUrl) { <p><a [href]="source.licenseUrl" target="_blank" rel="noopener">CC BY 4.0</a> · Weekly totals aggregated by Know Ball; no endorsement.</p> }
             }</div>
-            <button (click)="advance()" [disabled]="busy()">{{s.position === 4 ? 'See results' : 'Next question'}}</button>
-          } @else { <button (click)="answer()" [disabled]="!choice || busy() || !!error()">Lock in answer</button> }
+            <button class="kb-btn primary" (click)="advance()" [disabled]="busy()">{{s.position === 4 ? 'See results' : 'Next question'}}</button>
+          } @else { <button class="kb-btn primary" (click)="answer()" [disabled]="!choice || busy() || !!error()">Lock in answer</button> }
         }
       </section>
     }
