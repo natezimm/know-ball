@@ -7,8 +7,14 @@ runs it beside the API.
 dotnet run --project src/KnowBall.Importer -- --once                             # one run, then exit
 dotnet run --project src/KnowBall.Importer -- --once --history                   # reload the full history now, due or not
 dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history  # offline: ~36 bundled players
+dotnet run --project src/KnowBall.Importer -- --nightly                          # one night's work (import, then the Numbers queue), then exit
 dotnet run --project src/KnowBall.Importer                                       # the nightly worker
 ```
+
+In production (`deploy/docker-compose.yml`) the importer container runs `run-nightly.sh` instead of the worker: it
+runs `--nightly` once on start and then at `Import:DailyAt` in `Import:TimeZone`, each time as a short-lived
+process, so no .NET process sits idle on the shared VM between imports. It logs `Next import at ...` like the
+worker does.
 
 ## What a run does
 
