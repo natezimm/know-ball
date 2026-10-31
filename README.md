@@ -8,7 +8,7 @@ since 1947.
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Live site](https://img.shields.io/badge/play-knowball.nathanzimmerman.com-1e2a4f)](https://knowball.nathanzimmerman.com)
 
-![Know Ball home page with the four game cards](docs/screenshots/home.png)
+![Solving today's Career Path on the first guess, then opening Scouting Report from the home page and grading a guess](docs/screenshots/demo.gif)
 
 **Play it at [knowball.nathanzimmerman.com](https://knowball.nathanzimmerman.com).** No sign-up; your progress
 stays with your browser.
