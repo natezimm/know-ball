@@ -1,4 +1,6 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.ResponseCompression;
 using KnowBall.Api.Endpoints;
 using KnowBall.Application;
 using KnowBall.Infrastructure;
@@ -33,6 +35,18 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 #endif
 });
 
+// The site's scripts, styles and shell go out compressed: the main script is about 300 kB raw and
+// 93 kB gzipped, and nothing in front of the API compresses it. API JSON is left alone; it is small.
+builder.Services.AddResponseCompression(options =>
+{
+    // Requests arrive over HTTPS at nginx; these types carry no secrets, so compressing them is safe.
+    options.EnableForHttps = true;
+    options.Providers.Add<GzipCompressionProvider>();
+    options.MimeTypes = ["text/html", "text/css", "text/javascript", "application/javascript", "image/svg+xml", "application/manifest+json"];
+});
+// Gzip at Optimal makes the main script 93 kB in about 9 ms; brotli came out no smaller.
+builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
+
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? ["http://localhost:4200"];
 builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.WithOrigins(allowedOrigins).AllowAnyHeader().WithMethods("GET", "POST", "DELETE")));
 
@@ -50,8 +64,17 @@ app.UseRateLimiter();
 var servesSite = File.Exists(Path.Combine(app.Environment.WebRootPath ?? "", "index.html"));
 if (servesSite)
 {
+    app.UseResponseCompression();
     app.UseDefaultFiles();
-    app.UseStaticFiles();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        // The build names scripts and styles by their content, so a browser can keep them for good.
+        OnPrepareResponse = context =>
+        {
+            if (HashedBuildFile().IsMatch(context.File.Name))
+                context.Context.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
+        },
+    });
 }
 
 #if NET9_0_OR_GREATER
@@ -75,4 +98,9 @@ if (servesSite)
 
 app.Run();
 
-public partial class Program { }
+public partial class Program
+{
+    /// <summary>Angular's content-hashed output, such as main-5F6GC5JD.js or chunk-a1fQ06g-.js.</summary>
+    [GeneratedRegex(@"^(main|chunk|polyfills|styles)-[A-Za-z0-9_-]+\.(js|css)$")]
+    private static partial Regex HashedBuildFile();
+}
