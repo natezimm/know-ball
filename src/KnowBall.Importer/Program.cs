@@ -43,10 +43,13 @@ if (args.Contains("--validate-numbers"))
 //   dotnet run --project src/KnowBall.Importer -- --once             → one run, then exit (0 = the roster import succeeded)
 //   dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history
 //   dotnet run --project src/KnowBall.Importer -- --once --history   → reload the full player history first, due or not
+//   dotnet run --project src/KnowBall.Importer -- --nightly          → what the worker does each night (import, then the
+//                                                                      Numbers queue), once, then exit; run-nightly.sh calls it
 var importNumbers = GetArg(args, "--import-numbers");
 if (args.Contains("--import-numbers") && (string.IsNullOrWhiteSpace(importNumbers) || importNumbers.StartsWith("--")))
 { Console.Error.WriteLine("--import-numbers requires an approved JSON file."); return 2; }
-var once = args.Contains("--once") || importNumbers is not null;
+var nightly = args.Contains("--nightly");
+var once = args.Contains("--once") || nightly || importNumbers is not null;
 var forceHistory = args.Contains("--history");
 var sourceArg = GetArg(args, "--source");
 var hostArgs = StripOwnArgs(args);
@@ -81,6 +84,24 @@ if (importNumbers is not null)
     { Console.Error.WriteLine(e.Message); return 1; }
 }
 
+if (nightly)
+{
+    // The same steps as NightlyImportWorker: a crashed import still lets the Numbers queue top up.
+    var succeeded = false;
+    try
+    {
+        var run = await host.Services.GetRequiredService<ImportJob>().RunAsync(CancellationToken.None, forceHistory);
+        Console.WriteLine(ImportJob.Describe(run));
+        succeeded = run.Status == ImportStatus.Succeeded;
+    }
+    catch (Exception e)
+    {
+        Console.Error.WriteLine($"Import job crashed: {e}");
+    }
+    await host.Services.GetRequiredService<NumbersQueueJob>().RunAsync(CancellationToken.None);
+    return succeeded ? 0 : 1;
+}
+
 if (once)
 {
     var run = await host.Services.GetRequiredService<ImportJob>().RunAsync(CancellationToken.None, forceHistory);
@@ -101,7 +122,7 @@ static string? GetArg(string[] args, string name)
     return null;
 }
 
-// --once, --source, --history and --no-history are ours; everything else (e.g. --Import:DailyAt=03:00) goes to configuration.
+// --once, --nightly, --source, --history and --no-history are ours; everything else (e.g. --Import:DailyAt=03:00) goes to configuration.
 static string[] StripOwnArgs(string[] args)
 {
     var rest = new List<string>();
@@ -109,7 +130,7 @@ static string[] StripOwnArgs(string[] args)
     {
         if (args[i].StartsWith("--import-numbers=", StringComparison.Ordinal)) continue;
         if (args[i] == "--import-numbers") { i++; continue; }
-        if (args[i] is "--once" or "--history" or "--no-history" || args[i].StartsWith("--source=", StringComparison.Ordinal)) continue;
+        if (args[i] is "--once" or "--nightly" or "--history" or "--no-history" || args[i].StartsWith("--source=", StringComparison.Ordinal)) continue;
         if (args[i] == "--source") { i++; continue; }
         rest.Add(args[i]);
     }

@@ -10,6 +10,9 @@ name: knowball
 services:
   db:
     image: postgres:17
+    # Sized for a small shared VM: the default is 128 MB of buffers, more than this database needs; the
+    # kernel's file cache still holds what the buffers don't.
+    command: ["postgres", "-c", "shared_buffers=32MB"]
     environment:
       POSTGRES_DB: know_ball
       POSTGRES_USER: knowball
@@ -32,6 +35,9 @@ services:
       ForwardedHeaders__KnownNetworks__0: 172.31.250.0/24
     ports:
       - "127.0.0.1:8090:8080"
+    # .NET sizes its heap to the container's limit. Locally the site used about 100 MB uncapped and about
+    # 72 MB with a 128 MB cap; 160 MB leaves room for production's larger player data.
+    mem_limit: 160m
     volumes:
       - photos:/data
     depends_on:
@@ -40,10 +46,12 @@ services:
     restart: unless-stopped
 
   # Loads the player history on first start, then refreshes rosters and puzzle queues at 4am Eastern.
+  # run-nightly.sh starts a short-lived import each time, so no .NET process idles here all day (about
+  # 70 MB measured locally); between imports only a shell and `sleep` are left.
   importer:
     image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
     working_dir: /app/importer
-    entrypoint: ["dotnet", "KnowBall.Importer.dll"]
+    entrypoint: ["sh", "run-nightly.sh"]
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
     depends_on:
