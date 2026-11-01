@@ -88,6 +88,7 @@ describe('SpordleGame', () => {
     const request = http.expectOne(GUESSES);
     const requestId = request.request.body.requestId;
     request.error(new ProgressEvent('error'));
+    http.expectOne('/api/spordle/games/g1').error(new ProgressEvent('error')); // still offline
     reopen();
     http.expectOne('/api/spordle/games/g1').flush({ ...saved,
       guesses: [{ ...saved.guesses[0], requestId }],
@@ -104,6 +105,7 @@ describe('SpordleGame', () => {
     const request = http.expectOne(GUESSES);
     const requestId = request.request.body.requestId;
     request.error(new ProgressEvent('error'));
+    http.expectOne('/api/spordle/games/g1').error(new ProgressEvent('error')); // still offline
     reopen();
     http.expectOne('/api/spordle/games/g1').flush({ ...saved, guesses: [], letterHint: null });
     game.press('Enter');
@@ -285,10 +287,11 @@ describe('SpordleGame', () => {
 
   it('shows the answer after the last miss and records a loss', () => {
     startGame();
+    for (let left = 5; left > 0; left--) guess('punts', { ...miss, attemptsRemaining: left });
     guess('punts', { ...miss, complete: true, attemptsRemaining: 0, answer: 'blitz' });
 
     expect(game.status()).toBe('complete');
-    expect(game.result()).toEqual({ won: false, answer: 'blitz', guesses: 1, timeMs: null });
+    expect(game.result()).toEqual({ won: false, answer: 'blitz', guesses: 6, timeMs: null });
     expect(game.message()).toBe('Game over! The word was BLITZ.');
     expect(getStats(5)).toMatchObject({ totalGames: 1, wins: 0 });
   });
@@ -311,6 +314,11 @@ describe('SpordleGame', () => {
     const id = first.request.body.requestId;
     expect(id).toMatch(/^[0-9a-f-]{36}$/);
     first.error(new ProgressEvent('error'));
+    // The guess may have been saved, so the board is reloaded; this one was not.
+    http.expectOne('/api/spordle/games/g1').flush({ ...saved, guesses: [], letterHint: null });
+    expect(game.status()).toBe('playing');
+    expect(game.currentGuess()).toBe('punts');
+    expect(game.message()).toBe('Error checking the word. Please try again.');
     game.press('Enter');
     const retry = http.expectOne(GUESSES);
     expect(retry.request.body.requestId).toBe(id);
@@ -321,9 +329,66 @@ describe('SpordleGame', () => {
     game.press('Enter');
     const next = http.expectOne(GUESSES);
     expect(next.request.body.requestId).not.toBe(id);
-    next.flush(miss);
+    next.flush({ ...miss, attemptsRemaining: 4 });
     vi.runAllTimers();
     expect(game.attempts()).toHaveLength(2);
+  });
+
+  it('shows a guess that was saved even though its response was lost, before another word is typed', () => {
+    startGame();
+    type('punts');
+    game.press('Enter');
+    const lost = http.expectOne(GUESSES);
+    const requestId = lost.request.body.requestId;
+    lost.error(new ProgressEvent('error'));
+    expect(game.busy()).toBe(true); // no new word until the board is known
+    http.expectOne('/api/spordle/games/g1').flush({ ...saved, letterHint: null,
+      guesses: [{ requestId, word: 'punts', score: miss.score }] });
+
+    expect(game.attempts()).toEqual([{ word: 'punts', score: miss.score }]);
+    expect(game.currentGuess()).toBe('');
+    expect(game.message()).toBe('');
+    expect(game.status()).toBe('playing');
+    type('blitz');
+    game.press('Enter');
+    const next = http.expectOne(GUESSES);
+    expect(next.request.body.requestId).not.toBe(requestId);
+    next.flush({ ...miss, attemptsRemaining: 4 });
+    vi.runAllTimers();
+    expect(game.attempts().map(a => a.word)).toEqual(['punts', 'blitz']);
+  });
+
+  it('reloads the board when another tab guessed in between', () => {
+    startGame();
+    guess('punts', miss);
+    type('blitz');
+    game.press('Enter');
+    // The server has three guesses: one from here, one from another tab, and this one.
+    http.expectOne(GUESSES).flush({ ...miss, attemptsRemaining: 3 });
+    const words = ['punts', 'goals', 'blitz'];
+    http.expectOne('/api/spordle/games/g1').flush({ ...saved, letterHint: null,
+      guesses: words.map((word, i) => ({ requestId: `r${i}`, word, score: miss.score })) });
+    vi.runAllTimers();
+
+    expect(game.attempts().map(a => a.word)).toEqual(words);
+    expect(game.currentGuess()).toBe('');
+    expect(game.status()).toBe('playing');
+  });
+
+  it('shows the finished round when a stale tab guesses after the game ended elsewhere', () => {
+    startGame();
+    guess('punts', miss);
+    type('goals');
+    game.press('Enter');
+    http.expectOne(GUESSES).flush({ error: 'Game is already complete' }, { status: 409, statusText: 'Conflict' });
+    const won = { requestId: 'other', word: 'blitz', score: Array(5).fill('correct') };
+    http.expectOne('/api/spordle/games/g1').flush({ ...saved, complete: true, won: true, answer: 'blitz',
+      guesses: [saved.guesses[0], won] });
+
+    expect(game.status()).toBe('complete');
+    expect(game.result()).toMatchObject({ won: true, answer: 'blitz', guesses: 2 });
+    expect(game.attempts()).toHaveLength(2);
+    expect(getStats(5)).toMatchObject({ totalGames: 1, wins: 1 });
   });
 
   it('counts an abandoned game as a loss, but not an untouched one', () => {
