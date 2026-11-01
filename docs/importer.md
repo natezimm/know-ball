@@ -21,8 +21,8 @@ worker does.
 1. Reload the player history if it is due (every `Import:HistoryRefreshDays`), then link each player to their
    NBA.com id and birthplace through Wikidata.
 2. Load today's rosters, with retries and an optional fallback source.
-3. Top up every generated game's queue of daily puzzles, then delete old practice rounds and expired Spordle
-   rounds. This happens even after a failed roster import, because yesterday's rosters still make fair puzzles.
+3. Top up every generated game's queue of daily puzzles, then delete old practice rounds, expired Spordle
+   rounds and Numbers Don't Lie practice past its 30-day expiry. This happens even after a failed roster import, because yesterday's rosters still make fair puzzles.
 
 Every run writes an `ImportRun` row; `GET /api/import-runs/latest` is the monitoring hook. Running twice with the
 same data changes nothing, a trade closes one team stint and opens the next, and a roster feed that suddenly

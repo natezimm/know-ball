@@ -69,16 +69,26 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
     }
 
     // Reserve whole rounds, including unfinished ones, so restarting cannot offer the same facts.
-    // Read timestamps in memory: SQLite cannot order/compare DateTimeOffset columns reliably.
+    // Only the last 30 days of dailies and unexpired practice are read; the nightly import deletes
+    // expired practice, so this stays small however long someone has played. On SQLite the dates are
+    // stored as UTC ticks (TriviaDbContext), which compare correctly because every value is UTC.
     private async Task<HashSet<string>> RecentFamilies(string owner, CancellationToken ct)
     {
-        var cutoff = Today.AddDays(-29);
+        var today = Today;
+        var cutoff = today.AddDays(-29);
         var now = clock.GetUtcNow();
-        var plays = await db.NumbersPlays.AsNoTracking().Where(p => p.Owner == owner)
-            .Select(p => new { p.Date, p.ExpiresAt, p.SecretJson }).ToListAsync(ct);
-        return plays.Where(p => p.Date is { } date ? date >= cutoff && date <= Today : p.ExpiresAt > now)
-            .SelectMany(p => JsonSerializer.Deserialize<JsonElement[]>(p.SecretJson)!)
+        var secrets = await db.NumbersPlays.AsNoTracking()
+            .Where(p => p.Owner == owner && (p.Date != null ? p.Date >= cutoff && p.Date <= today : p.ExpiresAt > now))
+            .Select(p => p.SecretJson).ToListAsync(ct);
+        return secrets.SelectMany(s => JsonSerializer.Deserialize<JsonElement[]>(s)!)
             .Select(q => Text(q, "factFamily")).Where(f => f.Length > 0).ToHashSet();
+    }
+
+    /// <summary>Deletes practice rounds past their expiry. They can no longer be opened, so nothing is lost.</summary>
+    public Task<int> PurgeExpiredAsync(CancellationToken ct = default)
+    {
+        var now = clock.GetUtcNow();
+        return db.NumbersPlays.Where(p => p.ExpiresAt != null && p.ExpiresAt <= now).ExecuteDeleteAsync(ct);
     }
 
     public async Task<object> Coverage(string owner, NumbersStart request, CancellationToken ct)

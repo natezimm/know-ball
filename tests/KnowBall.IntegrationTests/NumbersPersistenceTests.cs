@@ -36,4 +36,34 @@ public sealed class NumbersPersistenceTests(ApiFactory factory)
             await db.NumbersCatalogues.Where(c => c.Id == id).ExecuteDeleteAsync();
         }
     }
+
+    [Fact]
+    public async Task Purge_deletes_only_expired_practice_rounds()
+    {
+        // Runs on SQLite locally and migrated Postgres in CI, so the date comparison is checked on both.
+        _ = factory.CreateClient();
+        var owner = "purge-" + Guid.NewGuid().ToString("N")[..16];
+        var now = DateTimeOffset.UtcNow;
+        NumbersPlay Play(string key, DateOnly? date = null, DateTimeOffset? expires = null) =>
+            new() { Id = Guid.NewGuid(), Owner = owner, StartKey = key, Date = date, ExpiresAt = expires };
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<TriviaDbContext>();
+            db.NumbersPlays.AddRange(
+                Play("expired", expires: now.AddMinutes(-1)),
+                Play("long-expired", expires: now.AddDays(-400)),
+                Play("active", expires: now.AddDays(29)),
+                Play("daily", date: DateOnly.FromDateTime(now.UtcDateTime).AddDays(-400)));
+            await db.SaveChangesAsync();
+        }
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var deleted = await scope.ServiceProvider.GetRequiredService<NumbersPlayService>().PurgeExpiredAsync();
+            Assert.True(deleted >= 2); // other tests' expired rounds may go too
+            var db = scope.ServiceProvider.GetRequiredService<TriviaDbContext>();
+            var left = await db.NumbersPlays.Where(p => p.Owner == owner).Select(p => p.StartKey).ToListAsync();
+            Assert.Equal(["active", "daily"], left.Order().ToArray());
+            await db.NumbersPlays.Where(p => p.Owner == owner).ExecuteDeleteAsync();
+        }
+    }
 }

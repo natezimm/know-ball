@@ -6,6 +6,7 @@ using KnowBall.Application.Games.Spordle;
 using KnowBall.Application.Import;
 using KnowBall.Domain;
 using KnowBall.Infrastructure;
+using KnowBall.Infrastructure.Persistence;
 
 namespace KnowBall.Importer;
 
@@ -136,6 +137,8 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
             if (purged > 0) logger.LogInformation("Deleted {Count} old practice rounds", purged);
             var expired = await scope.ServiceProvider.GetRequiredService<SpordleGameService>().PurgeExpiredAsync(ct);
             if (expired > 0) logger.LogInformation("Deleted {Count} expired Spordle sessions", expired);
+            var numbers = await scope.ServiceProvider.GetRequiredService<NumbersPlayService>().PurgeExpiredAsync(ct);
+            if (numbers > 0) logger.LogInformation("Deleted {Count} expired Numbers Don't Lie practice rounds", numbers);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
