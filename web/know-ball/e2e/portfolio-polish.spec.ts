@@ -17,6 +17,22 @@ test('portfolio navigation, metadata and social preview describe the game site',
   expect(bytes.readUInt32BE(20)).toBe(630);
 });
 
+test('search engines get a robots file, a sitemap and one address per game', async ({ page, request }) => {
+  const robots = await request.get('/robots.txt');
+  expect(robots.headers()['content-type']).toContain('text/plain');
+  expect(await robots.text()).toContain('Sitemap: https://knowball.nathanzimmerman.com/sitemap.xml');
+  const sitemap = await request.get('/sitemap.xml');
+  expect(await sitemap.text()).toContain('<loc>https://knowball.nathanzimmerman.com/career-path</loc>');
+
+  await page.goto('/career-path');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://knowball.nathanzimmerman.com/career-path');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /^Career Path:/);
+
+  await page.goto('/mockups');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+});
+
 test('the first archive entry opens its explicit puzzle even from the daily URL', async ({ page }) => {
   const daily = page.waitForResponse((r) => r.url().endsWith('/api/scouting-report/daily'));
   await page.goto('/scouting-report');

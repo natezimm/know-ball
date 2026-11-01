@@ -21,9 +21,9 @@ try {
     header{height:100px;background:#1d2b53;color:#f6ecd2;border-bottom:8px solid #b92d22;padding:25px 52px;font:30px Display;letter-spacing:2px}
     header span{color:#e0a526;margin-right:14px}main{padding:38px 52px}.kicker{margin:0 0 12px;color:#b92d22;letter-spacing:5px;font-size:21px;text-transform:uppercase}
     h1{font:48px/1.18 Display;margin:0}h1 em{display:inline-block;font:86px/1.1 Script;color:#b92d22;text-shadow:2px 2px #f6ecd2,4px 4px #1d2b53;transform:rotate(-3deg);font-style:normal;margin-top:4px}
-    .games{display:flex;gap:20px;margin-top:28px}.game{flex:1;border:5px solid var(--trim);border-radius:7px;padding:15px 18px;background:#fbf5e2;box-shadow:inset 0 0 0 2px #f6ecd2,inset 0 0 0 4px #1d2b53;font:22px Display;text-align:center}
+    .games{display:flex;gap:16px;margin-top:28px}.game{flex:1;border:5px solid var(--trim);border-radius:7px;padding:15px 12px;background:#fbf5e2;box-shadow:inset 0 0 0 2px #f6ecd2,inset 0 0 0 4px #1d2b53;font:20px Display;text-align:center;white-space:nowrap}
     .url{margin:20px 0 0;font-size:19px;color:#4f587a;letter-spacing:1px}
-  </style><header><span>★</span>KNOW BALL</header><main><p class="kicker">Daily sports trivia</p><h1>Three ways to prove you<br><em>know ball.</em></h1><div class="games"><div class="game" style="--trim:#b92d22">Spordle</div><div class="game" style="--trim:#1f6f6b">Scouting Report</div><div class="game" style="--trim:#e0a526">Career Path</div></div><p class="url">knowball.nathanzimmerman.com</p></main></html>`);
+  </style><header><span>★</span>KNOW BALL</header><main><p class="kicker">Daily sports trivia</p><h1>Four ways to prove you<br><em>know ball.</em></h1><div class="games"><div class="game" style="--trim:#b92d22">Spordle</div><div class="game" style="--trim:#1f6f6b">Scouting Report</div><div class="game" style="--trim:#e0a526">Career Path</div><div class="game" style="--trim:#1f6f6b">Numbers Don't Lie</div></div><p class="url">knowball.nathanzimmerman.com</p></main></html>`);
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({ path: fileURLToPath(new URL('../public/social-card.png', import.meta.url)) });
 } finally {

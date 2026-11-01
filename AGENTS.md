@@ -65,7 +65,9 @@ so do not reformat files you are not otherwise changing.
 
 The web app (`web/know-ball/src/app/`) is standalone and zoneless: `core/` holds the API client, the anonymous id
 and shared stores, `shared/` the game shell and player search, `games/` one folder per game, and `mockups/` the
-design lab for games not built yet. Components keep templates and styles inline. Colours and fonts are CSS
+design lab for games not built yet. Every route gets the same `index.html`, so `core/page-meta.ts` sets each
+page's canonical link, description and `noindex` from route `data`; keep `public/sitemap.xml` and
+`public/robots.txt` in step with the indexed routes. Components keep templates and styles inline. Colours and fonts are CSS
 variables in `src/styles.css`, with shared `kb-` classes there (`kb-btn`, `kb-dialog`); components use those
 rather than raw values or unstyled controls.
 

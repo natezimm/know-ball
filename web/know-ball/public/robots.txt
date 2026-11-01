@@ -1,0 +1,6 @@
+# Each game's page is indexed; the design lab and the API are not.
+User-agent: *
+Disallow: /api/
+Disallow: /mockups
+
+Sitemap: https://knowball.nathanzimmerman.com/sitemap.xml
