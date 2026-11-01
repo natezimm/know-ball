@@ -29,6 +29,7 @@ public static class DependencyInjection
                 options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsAssembly(typeof(TriviaDbContext).Assembly.FullName));
         });
         services.AddScoped<ITriviaDb>(sp => sp.GetRequiredService<TriviaDbContext>());
+        services.AddScoped<NumbersPlayService>();
 
         services.Configure<NbaStatsOptions>(config.GetSection("Sources:NbaStats"));
         services.Configure<SeedFileOptions>(config.GetSection("Sources:Seed"));
