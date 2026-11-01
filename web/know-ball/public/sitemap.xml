@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Keep in step with the indexed routes in src/app/app.routes.ts. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://knowball.nathanzimmerman.com/</loc></url>
+  <url><loc>https://knowball.nathanzimmerman.com/spordle</loc></url>
+  <url><loc>https://knowball.nathanzimmerman.com/scouting-report</loc></url>
+  <url><loc>https://knowball.nathanzimmerman.com/career-path</loc></url>
+  <url><loc>https://knowball.nathanzimmerman.com/numbers-dont-lie</loc></url>
+</urlset>
