@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface Choice { id: string; label: string; value?: number; }
 interface Question { id: string; prompt: string; league: string; topic: string; season: string | null; options: Choice[]; correctOptionId?: string; explanation?: string; source?: {url:string;credit:string;licenseUrl?:string}; }
@@ -107,7 +108,11 @@ export class NumbersDontLie {
   private practiceRequestId = crypto.randomUUID();
   private lastAction: (() => Promise<State>) | null = null;
   private recoverConflict = false;
+  private readonly destroyRef = inject(DestroyRef);
+  /** Set once the player leaves the page; late responses must not navigate or move focus then. */
+  private destroyed = false;
   constructor() {
+    this.destroyRef.onDestroy(() => { this.destroyed = true; });
     try {
       const saved = JSON.parse(localStorage.getItem('knowball.numbers.filters') || 'null');
       if (saved) this.restoreFilters(saved);
@@ -117,7 +122,7 @@ export class NumbersDontLie {
       }
     } catch { /* Invalid or blocked storage uses defaults. */ }
     const id = new URLSearchParams(location.search).get('round');
-    if (id) this.run(() => firstValueFrom(this.http.get<State>('/api/numbers-dont-lie/quizzes/' + encodeURIComponent(id))));
+    if (id) this.run(() => this.fetch(this.http.get<State>('/api/numbers-dont-lie/quizzes/' + encodeURIComponent(id))));
     else this.daily();
   }
   toggle(value:string, kind:string) {
@@ -155,9 +160,9 @@ export class NumbersDontLie {
     }
     this.coverageBusy.set(true);
     try {
-      const c = await firstValueFrom(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', {...f, requestId: this.practiceRequestId}));
+      const c = await this.fetch(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', {...f, requestId: this.practiceRequestId}));
       if (version === this.coverageVersion) this.coverage.set(c);
-    } catch { if (version === this.coverageVersion) this.coverageError.set('Could not check available questions. Please retry.'); }
+    } catch { if (this.destroyed) return; if (version === this.coverageVersion) this.coverageError.set('Could not check available questions. Please retry.'); }
     finally { if (version === this.coverageVersion) this.coverageBusy.set(false); }
   }
   canStart() { const c = this.coverage(); return !!c && (c.canStartFresh || (this.allowRepeats && c.canStartWithRepeats)); }
@@ -165,22 +170,22 @@ export class NumbersDontLie {
     this.setup.set(true); this.error.set(''); this.lastAction = null; this.allowRepeats = false;
     this.practiceRequestId = crypto.randomUUID(); void this.checkCoverage();
   }
-  daily() { this.run(() => firstValueFrom(this.http.get<State>('/api/numbers-dont-lie/daily'))); }
+  daily() { this.run(() => this.fetch(this.http.get<State>('/api/numbers-dont-lie/daily'))); }
   practice() {
     const body = {...this.filters(), requestId: this.setup() ? this.practiceRequestId : crypto.randomUUID(), allowRepeats: this.setup() && this.allowRepeats};
     this.saveFilters();
     let checked = false;
     this.run(async () => {
-      if (checked) return firstValueFrom(this.http.post<State>('/api/numbers-dont-lie/practice', body));
+      if (checked) return this.fetch(this.http.post<State>('/api/numbers-dont-lie/practice', body));
       // Recheck before creation, including Play another round after a completed quiz.
-      const c = await firstValueFrom(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', body));
+      const c = await this.fetch(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', body));
       this.coverage.set(c);
       if (!c.canStartFresh && !(body.allowRepeats && c.canStartWithRepeats)) {
         this.practiceRequestId = body.requestId; this.allowRepeats = false; this.setup.set(true);
         throw new HttpErrorResponse({status: 422, error: {error: 'Choose broader filters or explicitly allow repeats to continue.'}});
       }
       checked = true; // A lost start response must retry its receipt, not fail coverage against its own round.
-      return firstValueFrom(this.http.post<State>('/api/numbers-dont-lie/practice', body));
+      return this.fetch(this.http.post<State>('/api/numbers-dont-lie/practice', body));
     });
   }
   answer() { this.move('answers',this.choice); }
@@ -188,24 +193,29 @@ export class NumbersDontLie {
   private move(action:string, optionId:string|null) {
     const s = this.state(); if(!s?.current) return;
     const body = {questionId:s.current.id,optionId,requestId:crypto.randomUUID(),expectedRevision:s.revision};
-    this.run(() => firstValueFrom(this.http.post<State>(`/api/numbers-dont-lie/quizzes/${s.id}/${action}`,body)), true);
+    this.run(() => this.fetch(this.http.post<State>(`/api/numbers-dont-lie/quizzes/${s.id}/${action}`,body)), true);
   }
   retry() { if(this.lastAction) this.run(this.lastAction, this.recoverConflict); }
+  /** One response, cancelled if the page closes first (the promise then rejects and is ignored). */
+  private fetch<T>(request: Observable<T>): Promise<T> { return firstValueFrom(request.pipe(takeUntilDestroyed(this.destroyRef))); }
   private async run(action:() => Promise<State>, recoverConflict = false) {
     if(this.busy()) return; this.lastAction = action; this.recoverConflict = recoverConflict; this.busy.set(true); this.error.set('');
     try {
       const s = await action();
+      if (this.destroyed) return;
       if (s.mode === 'practice' && s.filters) { this.restoreFilters(s.filters); this.saveFilters(); }
       this.state.set(s); this.setup.set(false); this.choice = s.review[s.position]?.optionId || '';
       await this.router.navigate([], {queryParams:{round:s.id},replaceUrl:true});
-      setTimeout(() => document.querySelector<HTMLElement>('app-numbers-dont-lie h2')?.focus());
+      if (this.destroyed) return;
+      setTimeout(() => !this.destroyed && document.querySelector<HTMLElement>('app-numbers-dont-lie h2')?.focus());
     } catch(e) {
+      if (this.destroyed) return;
       const err = e as HttpErrorResponse;
       this.error.set(err.error?.error || 'Could not reach the server. Retry to safely restore progress.');
       if (err.status === 422) { this.error.set(''); this.lastAction = null; }
       if(recoverConflict && err.status === 409 && this.state()) {
         const id = this.state()!.id;
-        this.lastAction = () => firstValueFrom(this.http.get<State>('/api/numbers-dont-lie/quizzes/' + id));
+        this.lastAction = () => this.fetch(this.http.get<State>('/api/numbers-dont-lie/quizzes/' + id));
       }
     } finally { this.busy.set(false); }
   }
