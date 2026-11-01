@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LetterStatus, mergeKeyboardStatuses } from './scoring';
-import { GuessResult, HintType, SpordleApi } from './spordle-api';
+import { GuessResult, HintType, SavedGame, SpordleApi } from './spordle-api';
 import { DEFAULT_WORD_LENGTH, WordLength, isWordLength, recordGame } from './spordle-stats';
 
 export const MAX_ATTEMPTS = 6;
@@ -94,36 +94,65 @@ export class SpordleGame {
     this.finishedAt = round.finishedAt;
     this.status.set('loading');
     this.request = this.api.getGame(round.gameId).subscribe({
-      next: (state) => {
-        if (!isWordLength(state.wordLength)) { this.expire(); return; }
-        this.wordLength.set(state.wordLength);
-        this.attempts.set(state.guesses.map(g => ({ word: g.word, score: g.score })));
-        this.letterStatuses.set(state.guesses.reduce((keys, g) =>
-          mergeKeyboardStatuses(keys, g.word, g.score), {} as Record<string, LetterStatus>));
-        this.categoryHint.set(typeof round.categoryHint === 'string' ? round.categoryHint : null);
-        this.letterHint.set(state.letterHint);
-        const acknowledged = state.guesses.some(g => g.requestId === round.pendingGuess?.id);
-        this.pendingGuess = acknowledged ? undefined : round.pendingGuess;
-        this.currentGuess.set(state.complete || acknowledged ? '' :
-          typeof round.currentGuess === 'string' ? round.currentGuess.slice(0, state.wordLength) : '');
-        this.message.set('');
-        this.result.set(null);
-        if (state.complete) {
-          this.finishedAt ??= Date.now();
-          const timeMs = state.won ? Math.max(0, this.finishedAt - this.startedAt) : null;
-          const result = { won: state.won, answer: state.answer!, guesses: state.guesses.length, timeMs };
-          recordGame(state.wordLength, result, state.gameId);
-          this.result.set(result);
-          this.status.set('complete');
-        } else {
-          this.status.set('playing');
-        }
-        this.persist();
-      },
+      next: (state) => this.applyState(state, round),
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) { this.expire(); return; }
         this.message.set('Could not resume your game. Reload to retry; your saved round is still available.');
         this.status.set('error');
+      },
+    });
+  }
+
+  /**
+   * Shows the server's copy of the round. Returns whether the pending guess was among the saved ones,
+   * so a retry is no longer needed.
+   */
+  private applyState(state: SavedGame, saved: Pick<SavedRound, 'currentGuess' | 'categoryHint' | 'pendingGuess'>): boolean {
+    if (!isWordLength(state.wordLength)) { this.expire(); return false; }
+    this.wordLength.set(state.wordLength);
+    this.attempts.set(state.guesses.map(g => ({ word: g.word, score: g.score })));
+    this.letterStatuses.set(state.guesses.reduce((keys, g) =>
+      mergeKeyboardStatuses(keys, g.word, g.score), {} as Record<string, LetterStatus>));
+    this.categoryHint.set(typeof saved.categoryHint === 'string' ? saved.categoryHint : null);
+    this.letterHint.set(state.letterHint);
+    const acknowledged = state.guesses.some(g => g.requestId === saved.pendingGuess?.id);
+    this.pendingGuess = acknowledged ? undefined : saved.pendingGuess;
+    this.currentGuess.set(state.complete || acknowledged ? '' :
+      typeof saved.currentGuess === 'string' ? saved.currentGuess.slice(0, state.wordLength) : '');
+    this.message.set('');
+    this.result.set(null);
+    if (state.complete) {
+      this.finishedAt ??= Date.now();
+      const timeMs = state.won ? Math.max(0, this.finishedAt - this.startedAt) : null;
+      const result = { won: state.won, answer: state.answer!, guesses: state.guesses.length, timeMs };
+      recordGame(state.wordLength, result, state.gameId);
+      this.result.set(result);
+      this.status.set('complete');
+    } else {
+      this.status.set('playing');
+    }
+    this.persist();
+    return acknowledged;
+  }
+
+  /**
+   * After a failed guess, or one that does not follow the board (another tab guessed too), the server's
+   * saved round is the truth. A lost response may still have used up a guess, so reload it before the
+   * player can type something else.
+   */
+  private reconcile(failure?: string): void {
+    this.status.set('validating');
+    this.request = this.api.getGame(this.gameId()).subscribe({
+      next: (state) => {
+        const acknowledged = this.applyState(state, {
+          currentGuess: this.currentGuess(), categoryHint: this.categoryHint(), pendingGuess: this.pendingGuess,
+        });
+        if (failure && !acknowledged && this.status() === 'playing') this.message.set(failure);
+      },
+      error: (error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) { this.expire(); return; }
+        if (failure) this.message.set(failure);
+        this.status.set('playing');
       },
     });
   }
@@ -256,8 +285,14 @@ export class SpordleGame {
           this.expire();
           return;
         }
-        this.message.set(serverMessage(error) ?? 'Error checking the word. Please try again.');
-        this.status.set('playing');
+        const failure = serverMessage(error) ?? 'Error checking the word. Please try again.';
+        // A rejected word (400) or a rate limit (429) saved nothing; anything else may have.
+        if (error instanceof HttpErrorResponse && (error.status === 400 || error.status === 429)) {
+          this.message.set(failure);
+          this.status.set('playing');
+          return;
+        }
+        this.reconcile(failure);
       },
     });
   }
@@ -278,6 +313,13 @@ export class SpordleGame {
     if (!result.valid || !score) {
       this.message.set('Not in the word list. Try again.');
       this.status.set('playing');
+      return;
+    }
+    // The server counts every guess on this round. If that is not one more than the board shows,
+    // another tab or a lost response got in between: show the saved round instead.
+    if (result.attemptsRemaining !== undefined && MAX_ATTEMPTS - result.attemptsRemaining !== this.attempts().length + 1) {
+      this.currentGuess.set(''); // this guess was saved too
+      this.reconcile();
       return;
     }
 
