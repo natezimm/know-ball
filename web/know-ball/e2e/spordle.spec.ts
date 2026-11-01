@@ -75,10 +75,8 @@ test('a made-up word costs nothing, six misses lose, and play again starts fresh
   await expect(stats.locator('.stats div', { hasText: 'Win %' }).locator('dd')).toHaveText('0%');
 });
 
-test('retrying a lost response scores the row only once on the real API', async ({ page }) => {
-  let requestId = '';
+test('a guess saved before its response was lost shows at once, and the next word is a new guess', async ({ page }) => {
   await page.route('**/api/spordle/games/*/guesses', async (route) => {
-    requestId = route.request().postDataJSON().requestId;
     const committed = await route.fetch();
     expect(committed.ok()).toBe(true);
     expect((await committed.json()).attemptsRemaining).toBe(5);
@@ -87,15 +85,33 @@ test('retrying a lost response scores the row only once on the real API', async 
   }, { times: 1 });
   await page.keyboard.type('about');
   await page.keyboard.press('Enter');
+  // The page reloads the round from the server, so the saved guess appears without a retry.
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 2 of 6' })).toBeVisible();
+  await expect(page.getByRole('group', { name: /^Guess 1: a / })).toBeVisible();
+  await expect(page.getByText('Error checking the word. Please try again.')).toHaveCount(0);
+  await page.keyboard.type('other');
+  const response = page.waitForResponse((r) => /\/guesses$/.test(r.url()));
+  await page.keyboard.press('Enter');
+  expect((await (await response).json()).attemptsRemaining).toBe(4);
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 3 of 6' })).toBeVisible();
+});
+
+test('retrying a guess that never reached the server reuses its request ID and scores it once', async ({ page }) => {
+  let requestId = '';
+  await page.route('**/api/spordle/games/*/guesses', async (route) => {
+    requestId = route.request().postDataJSON().requestId;
+    await route.abort('failed');
+  }, { times: 1 });
+  await page.keyboard.type('about');
+  await page.keyboard.press('Enter');
   await expect(page.getByText('Error checking the word. Please try again.')).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 1 of 6' })).toBeVisible();
   const retryResponse = page.waitForResponse((r) => /\/guesses$/.test(r.url()));
   await page.keyboard.press('Enter');
   const retry = await retryResponse;
   expect(retry.request().postDataJSON().requestId).toBe(requestId);
   expect((await retry.json()).attemptsRemaining).toBe(5);
   await expect(page.getByRole('status').filter({ hasText: 'Guess 2 of 6' })).toBeVisible();
-  await submit(page, 'other');
-  await expect(page.getByRole('status').filter({ hasText: 'Guess 3 of 6' })).toBeVisible();
 });
 
 test('reload restores a committed guess after its response was lost, plus hints and typed input', async ({ page }) => {
@@ -108,7 +124,7 @@ test('reload restores a committed guess after its response was lost, plus hints 
   }, { times: 1 });
   await page.keyboard.type('about');
   await page.keyboard.press('Enter');
-  await expect(page.getByText('Error checking the word. Please try again.')).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 2 of 6' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('status').filter({ hasText: 'Guess 2 of 6' })).toBeVisible();
   await expect(page.getByRole('group', { name: /^Guess 1: a / })).toBeVisible();
