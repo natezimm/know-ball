@@ -1,6 +1,6 @@
-# Each game's page is indexed; the design lab and the API are not.
+# Each game's page is indexed. The design lab and archive puzzles stay crawlable so crawlers
+# can read their noindex tag (core/page-meta.ts); a Disallow here would hide that tag.
 User-agent: *
 Disallow: /api/
-Disallow: /mockups
 
 Sitemap: https://knowball.nathanzimmerman.com/sitemap.xml

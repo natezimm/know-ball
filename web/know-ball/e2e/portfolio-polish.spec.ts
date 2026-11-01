@@ -21,6 +21,8 @@ test('search engines get a robots file, a sitemap and one address per game', asy
   const robots = await request.get('/robots.txt');
   expect(robots.headers()['content-type']).toContain('text/plain');
   expect(await robots.text()).toContain('Sitemap: https://knowball.nathanzimmerman.com/sitemap.xml');
+  // A noindex page has to stay crawlable, or crawlers never see the tag.
+  expect(await robots.text()).not.toContain('Disallow: /mockups');
   const sitemap = await request.get('/sitemap.xml');
   expect(await sitemap.text()).toContain('<loc>https://knowball.nathanzimmerman.com/career-path</loc>');
 
