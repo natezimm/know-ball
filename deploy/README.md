@@ -171,5 +171,10 @@ docker compose restart site
 ```
 
 To roll back, set `KNOWBALL_TAG` in `.env` to an earlier commit's full SHA and run `docker compose up -d`.
+The API applies migrations when it starts, and rolling back does not undo them, so the older app runs on the newer
+schema. That works when the migrations added since that commit only add tables or nullable columns; check with
+`git diff <old-sha> HEAD --stat -- src/KnowBall.Infrastructure/Persistence/Migrations`. If one renamed or dropped
+something the older app reads, restore the latest daily backup from before that deploy instead (section 7); each bundle's manifest names
+the image it was taken with.
 The deploy job only has a registry login while it runs, so before a manual `docker compose pull`, log in with
 a GitHub token that can read packages: `docker login ghcr.io -u natezimm`.

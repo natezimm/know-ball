@@ -7,9 +7,18 @@
 #   KNOWBALL_TAG          the image tag to run (default latest; CI sets the commit it deploys)
 name: knowball
 
+# Docker keeps container logs forever by default. Cap each service at three 10 MB files so a noisy day
+# cannot fill the shared VM's disk.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   db:
     image: postgres:17
+    logging: *logging
     # Sized for a small shared VM: the default is 128 MB of buffers, more than this database needs; the
     # kernel's file cache still holds what the buffers don't.
     command: ["postgres", "-c", "shared_buffers=32MB"]
@@ -29,6 +38,7 @@ services:
   # Only nginx on this machine can reach the site; it forwards knowball.nathanzimmerman.com here.
   site:
     image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
+    logging: *logging
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
       # nginx reaches the container from this network's gateway, so only its X-Forwarded-For counts.
@@ -50,6 +60,7 @@ services:
   # 70 MB measured locally); between imports only a shell and `sleep` are left.
   importer:
     image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
+    logging: *logging
     working_dir: /app/importer
     entrypoint: ["sh", "run-nightly.sh"]
     environment:
