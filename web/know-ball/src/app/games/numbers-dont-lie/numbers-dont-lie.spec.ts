@@ -1,5 +1,6 @@
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { NumbersDontLie } from './numbers-dont-lie';
@@ -80,5 +81,22 @@ describe('Numbers practice filters and coverage', () => {
     create(); http.expectOne(ROOT + '/daily').flush(daily); await settle();
     expect(game.selected).toEqual(['nba', 'nfl', 'mlb', 'nhl']);
     expect(game.fromYear).toBeNull();
+  });
+
+  it('cancels its requests and leaves the URL and focus alone once the page is gone', async () => {
+    vi.useFakeTimers();
+    const router = TestBed.inject(Router) as unknown as { navigate: ReturnType<typeof vi.fn> };
+    router.navigate.mockClear();
+    const page = createEnvironmentInjector([], TestBed.inject(EnvironmentInjector));
+    const focus = vi.spyOn(HTMLElement.prototype, 'focus');
+    const leaving = page.runInContext(() => new NumbersDontLie());
+    const pending = http.expectOne(ROOT + '/daily');
+    page.destroy();
+    expect(pending.cancelled).toBe(true);
+    await settle(); vi.runAllTimers();
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(focus).not.toHaveBeenCalled();
+    expect(leaving.error()).toBe('');
+    focus.mockRestore(); vi.useRealTimers();
   });
 });
