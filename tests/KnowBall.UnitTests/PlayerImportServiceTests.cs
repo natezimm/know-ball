@@ -124,6 +124,22 @@ public class PlayerImportServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Repeated_rows_do_not_count_toward_the_half_league_guard()
+    {
+        var full = Enumerable.Range(1, 40).Select(i => new SourcePlayer(i.ToString(), "P", $"Player{i}", "LAL-ID")).ToArray();
+        await Import(2025, full);
+
+        // 25 rows, but only 5 players: still under half of the 40 active.
+        var repeated = Enumerable.Repeat(full.Take(5), 5).SelectMany(p => p).ToArray();
+        var run = await Import(2025, repeated);
+
+        Assert.Equal(ImportStatus.Failed, run.Status);
+        Assert.Contains("returned 5 players", run.Error);
+        await using var ctx = _db.NewContext();
+        Assert.Equal(40, await ctx.Players.CountAsync(p => p.IsActive));
+    }
+
+    [Fact]
     public async Task Failing_source_records_a_failed_run_and_leaves_data_alone()
     {
         await Import(2025, Luka());

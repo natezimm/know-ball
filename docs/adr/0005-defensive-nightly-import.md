@@ -13,7 +13,8 @@ player and leave no puzzles.
 - Each roster import applies all of its changes in one save and writes an `ImportRun` row; a failure discards
   the pending changes and keeps only the failed run record.
 - A feed that returns under half the currently active players fails the run instead of deactivating the league
-  (`PlayerImportService.MinRetainedFraction`).
+  (`PlayerImportService.MinRetainedFraction`). The ESPN source also requires every NBA team, because a feed
+  missing only a few teams would pass that check.
 - Imports are repeatable: running twice with the same data changes nothing, which CI checks against Postgres.
 - Runs retry, can fall back to a second source, and top up the puzzle queues even when the roster step fails,
   since yesterday's rosters still make fair puzzles. Thirty days of puzzles stay queued ahead.

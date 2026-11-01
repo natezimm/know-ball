@@ -165,6 +165,33 @@ public class EspnRosterSourceTests
             { "fullName": "No Id" } ] }
         """;
 
+    private static List<(string, string)> AllTeams() =>
+        TeamReference.Nba.Keys.Select((abbreviation, i) => (i.ToString(), abbreviation)).ToList();
+
+    [Fact]
+    public void A_full_team_list_matches_every_team_once()
+    {
+        var teams = AllTeams();
+        teams.Add(("99", teams[0].Item2)); // a repeated row is ignored
+        teams[teams.FindIndex(t => t.Item2 == "GSW")] = ("9", "GS"); // ESPN's own abbreviation
+        var matched = EspnRosterSource.MatchTeams(teams, TeamReference.Nba);
+        Assert.Equal(TeamReference.Nba.Count, matched.Count);
+        Assert.Contains(matched, m => m.EspnId == "9" && m.Team.Abbreviation == "GSW");
+    }
+
+    [Fact]
+    public void A_team_list_missing_a_team_fails_instead_of_releasing_its_players()
+    {
+        var teams = AllTeams().Where(t => t.Item2 != "BOS").ToList();
+        var error = Assert.Throws<InvalidOperationException>(() => EspnRosterSource.MatchTeams(teams, TeamReference.Nba));
+        Assert.Contains("missing BOS", error.Message);
+    }
+
+    [Fact]
+    public void An_unknown_team_fails() =>
+        Assert.Throws<InvalidOperationException>(() =>
+            EspnRosterSource.MatchTeams([.. AllTeams(), ("1", "XYZ")], TeamReference.Nba));
+
     [Fact]
     public void Team_list_gives_ids_and_abbreviations()
     {

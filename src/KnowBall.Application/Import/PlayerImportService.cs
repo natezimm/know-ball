@@ -88,10 +88,12 @@ public sealed class PlayerImportService(ITriviaDb db, TimeProvider clock, ILogge
                 .ToListAsync(ct);
 
         var activeBefore = existing.Count(p => p.IsActive);
-        if (activeBefore >= 20 && snapshot.Players.Count < activeBefore * MinRetainedFraction)
+        // Count each player once, so a feed that repeats rows cannot look complete.
+        var listedCount = snapshot.Players.Select(p => p.ExternalId).Distinct().Count();
+        if (activeBefore >= 20 && listedCount < activeBefore * MinRetainedFraction)
         {
             throw new InvalidOperationException(
-                $"Source returned {snapshot.Players.Count} players but {activeBefore} are active; " +
+                $"Source returned {listedCount} players but {activeBefore} are active; " +
                 "refusing to deactivate more than half the league. Check the source.");
         }
 

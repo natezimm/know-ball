@@ -48,11 +48,8 @@ public sealed class EspnRosterSource(
         int? seasonStart = null;
         var inSeason = true;
 
-        foreach (var (espnId, abbreviation) in espnTeams)
+        foreach (var (espnId, team) in MatchTeams(espnTeams, reference))
         {
-            if (!reference.TryGetValue(Abbreviations.GetValueOrDefault(abbreviation, abbreviation), out var team))
-                throw new InvalidOperationException($"ESPN team '{abbreviation}' is not a known NBA team.");
-
             using var roster = await GetAsync($"teams/{espnId}/roster", cancellationToken);
             var parsed = ParseRoster(roster.RootElement, team.ExternalId);
             // An empty roster is a broken response, and treating it as real would release the whole team.
@@ -68,11 +65,32 @@ public sealed class EspnRosterSource(
 
         var season = seasonStart ?? SeasonCalendar.CurrentSeasonStartYear(clock.GetUtcNow());
         logger.LogInformation("espn returned {Players} players on {Teams} teams for {Season}",
-            players.Count, espnTeams.Count, SeasonCalendar.Label(season));
+            players.Count, reference.Count, SeasonCalendar.Label(season));
 
         return new SourceSnapshot(
             "nba", season, reference.Values.Select(t => t.ToSourceTeam()).ToList(), players,
             IdSource: SourceName, InSeason: inSeason, Supplement: true);
+    }
+
+    /// <summary>
+    /// Pairs ESPN's team ids with the league's teams. Every team must be there: a feed missing a few teams
+    /// can still clear the importer's half-the-league guard, and would release those teams' players.
+    /// </summary>
+    internal static List<(string EspnId, TeamReference Team)> MatchTeams(
+        IEnumerable<(string Id, string Abbreviation)> espnTeams, IReadOnlyDictionary<string, TeamReference> reference)
+    {
+        var matched = new Dictionary<string, (string, TeamReference)>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (espnId, abbreviation) in espnTeams)
+        {
+            if (!reference.TryGetValue(Abbreviations.GetValueOrDefault(abbreviation, abbreviation), out var team))
+                throw new InvalidOperationException($"ESPN team '{abbreviation}' is not a known NBA team.");
+            matched.TryAdd(team.Abbreviation, (espnId, team));
+        }
+        var missing = reference.Keys.Where(k => !matched.ContainsKey(k)).Order().ToList();
+        if (missing.Count > 0)
+            throw new InvalidOperationException(
+                $"ESPN listed {matched.Count} of {reference.Count} NBA teams; missing {string.Join(", ", missing)}.");
+        return [.. matched.Values];
     }
 
     private async Task<JsonDocument> GetAsync(string path, CancellationToken ct)

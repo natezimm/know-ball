@@ -26,8 +26,9 @@ worker does.
 
 Every run writes an `ImportRun` row; `GET /api/import-runs/latest` is the monitoring hook. Running twice with the
 same data changes nothing, a trade closes one team stint and opens the next, and a roster feed that suddenly
-returns under half the active players fails the run instead of retiring the league
-(`PlayerImportService.MinRetainedFraction`). A roster run applies its changes in one save, so a failed run leaves
+returns under half the active players (counted once each) fails the run instead of retiring the league
+(`PlayerImportService.MinRetainedFraction`). The ESPN source also fails unless its team list covers all 30 NBA
+teams and every roster has players, since a few missing teams would still clear the half-league check. A roster run applies its changes in one save, so a failed run leaves
 nothing half-applied and keeps only the failed run record.
 
 The [nightly import check](../.github/workflows/nightly-import-check.yml) runs the same import against the live
