@@ -65,14 +65,26 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
           <p>{{q.league.toUpperCase()}} · {{q.season || 'Name the season'}} · Question {{s.position + 1}} of 5</p>
           <h2 tabindex="-1">{{q.prompt}}</h2>
           <fieldset [disabled]="busy() || s.answeredCount > s.position || !!error()"><legend>Choose one answer</legend>
-            @for (option of q.options; track option.id) {
-              <label class="choice"><input type="radio" name="answer" [value]="option.id" [(ngModel)]="choice">{{option.label}}</label>
+            @for (option of (s.review[s.position]?.question ?? q).options; track option.id) {
+              @let answered = s.review[s.position];
+              @let isAnswer = !!answered && option.id === answered.question.correctOptionId;
+              @let isMiss = !!answered && !answered.correct && option.id === answered.optionId;
+              <label class="choice" [class.is-answer]="isAnswer" [class.is-miss]="isMiss"><input type="radio" name="answer" [value]="option.id" [(ngModel)]="choice">
+                <span class="choice-label">{{option.label}}</span>
+                @if (isAnswer) { <span class="tag"><span aria-hidden="true">✓ </span>Answer</span> }
+                @else if (isMiss) { <span class="tag"><span aria-hidden="true">✗ </span>Your pick</span> }
+                @if (answered && option.value !== undefined) { <span class="choice-value">{{option.value}}</span> }
+              </label>
             }
           </fieldset>
           @if (s.review[s.position]; as answer) {
-            <div class="feedback" role="status"><h3>{{answer.correct ? 'Correct!' : 'Not quite.'}} {{correctLabel(answer.question)}}</h3>
+            <div class="feedback" role="status">
+              <div class="verdict" [class.right]="answer.correct" [class.wrong]="!answer.correct" tabindex="-1">
+                <span class="verdict-icon" aria-hidden="true">{{answer.correct ? '✓' : '✗'}}</span>
+                <div><h3>{{answer.correct ? 'Correct!' : 'Not quite.'}}</h3>
+                <p>{{answer.correct ? '' : 'The answer is '}}<strong>{{correctLabel(answer.question)}}</strong></p></div>
+              </div>
             <p>{{answer.question.explanation}}</p>
-            @for (option of answer.question.options; track option.id) { @if (option.value !== undefined) { <p>{{option.label}}: {{option.value}}</p> } }
             @if (answer.question.source; as source) {
               <a [href]="source.url" target="_blank" rel="noopener">{{source.credit}}</a>
               @if (source.licenseUrl) { <p><a [href]="source.licenseUrl" target="_blank" rel="noopener">CC BY 4.0</a> · Weekly totals aggregated by Know Ball; no endorsement.</p> }
@@ -92,7 +104,24 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
     fieldset {border:0;padding:0;margin:18px 0;} label {display:block;padding:10px 0;}
     .choice {border:2px solid var(--navy);border-radius:6px;margin:10px 0;padding:12px;cursor:pointer;}
     input {margin-right:12px;max-width:100%;} button {margin:8px 8px 8px 0;padding:12px 18px;cursor:pointer;}
-    button:disabled {opacity:.6;cursor:default;} .feedback {border-top:3px solid var(--teal);margin-top:20px;}
+    button:disabled {opacity:.6;cursor:default;} .feedback {margin-top:20px;}
+    .choice {display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;} .choice input {margin:0 2px 0 0;}
+    .choice-label {flex:1 1 auto;min-width:0;overflow-wrap:anywhere;} .choice-value {font-weight:700;font-variant-numeric:tabular-nums;}
+    .tag {font:400 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:4px;}
+    .choice.is-answer {border:3px solid var(--ok);background:color-mix(in srgb, var(--ok) 14%, var(--surface));}
+    .choice.is-answer .tag {background:var(--ok);color:var(--ok-ink);}
+    .choice.is-miss {border:3px solid var(--bad);background:color-mix(in srgb, var(--bad) 10%, var(--surface));}
+    .choice.is-miss .tag {background:var(--bad);color:var(--cream);}
+    .verdict {display:flex;align-items:center;gap:14px;padding:14px 16px;border:3px solid var(--navy);border-radius:8px;
+      box-shadow:4px 4px 0 var(--navy);animation:verdict-in .35s cubic-bezier(.2,1.4,.4,1) both;outline-offset:4px;scroll-margin:96px 0 24px;}
+    .verdict.right {background:var(--ok);color:var(--ok-ink);} .verdict.wrong {background:var(--bad);color:var(--cream);}
+    .verdict h3 {font:400 clamp(26px,7vw,34px)/1.1 var(--display);margin:0;letter-spacing:.02em;}
+    .verdict p {margin:4px 0 0;font-size:19px;line-height:1.3;overflow-wrap:anywhere;}
+    .verdict-icon {flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+      background:var(--cream);color:var(--navy);font:700 28px/1 var(--font);border:3px solid var(--navy);}
+    .verdict.right .verdict-icon {color:var(--ok);} .verdict.wrong .verdict-icon {color:var(--bad);}
+    @keyframes verdict-in {from {transform:scale(.85);opacity:0;}}
+    @media (prefers-reduced-motion: reduce) {.verdict {animation:none;}}
     .score {font:700 64px var(--display);color:var(--teal);} details {padding:14px 0;} a {overflow-wrap:anywhere;}
     [role=alert] {color:var(--red);} @media(max-width:400px){section{padding:14px;} }
   `
@@ -207,7 +236,15 @@ export class NumbersDontLie {
       this.state.set(s); this.setup.set(false); this.choice = s.review[s.position]?.optionId || '';
       await this.router.navigate([], {queryParams:{round:s.id},replaceUrl:true});
       if (this.destroyed) return;
-      setTimeout(() => !this.destroyed && document.querySelector<HTMLElement>('app-numbers-dont-lie h2')?.focus());
+      setTimeout(() => {
+        if (this.destroyed) return;
+        // After an answer, bring the verdict into view so it is not missed below the choices on a phone.
+        const verdict = document.querySelector<HTMLElement>('app-numbers-dont-lie .verdict');
+        if (!verdict) { document.querySelector<HTMLElement>('app-numbers-dont-lie h2')?.focus(); return; }
+        verdict.focus({preventScroll: true});
+        const smooth = !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+        verdict.scrollIntoView?.({block: 'center', behavior: smooth ? 'smooth' : 'auto'});
+      });
     } catch(e) {
       if (this.destroyed) return;
       const err = e as HttpErrorResponse;
