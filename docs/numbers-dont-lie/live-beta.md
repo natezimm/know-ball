@@ -14,7 +14,11 @@ The beta launched with 88 questions, 22 per league, comprising six stats, five a
 
 The original prototype catalogue remains a design fixture. The server bank retains source attribution and prototype review status, using the established selection algorithm with `requireApproved: false`. Daily snapshots freeze selected questions, opaque question IDs and shuffled opaque option IDs on first access. Existing saved rounds do not change when the bank expands. The new historical facts were checked on October 25, 2026 against the linked NBA/NHL histories, team championship histories, MLB postseason histories, Baseball Almanac MVP records and EDSFootball AP MVP records. NFL championship clues use the season year and explain the following calendar year's Super Bowl date.
 
-The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats/streaks and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
+The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
+
+## Confidence scoring
+
+Before locking in, a player bets 1, 2 or 3 points on the answer (2 by default). The server scores it: a correct answer earns its bet and a wrong one earns nothing, so a round is out of 15, shown beside the correct count. Bets are stored with each answer in `AnswersJson`; answers saved before bets existed count as 2, so no migration is needed. The page shows a hot streak after three correct answers in a row, and daily rounds show a daily streak counted from this browser's finished daily rounds. The share text adds the points, each answer's bet and the daily streak, and still names no answers.
 
 ## Question quality and variety
 

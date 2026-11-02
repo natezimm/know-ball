@@ -15,12 +15,15 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
   for(let i=0;i<5;i++) {
     await expect(page.getByText(new RegExp(`Question ${i + 1} of 5$`))).toBeVisible();
     await expect(page.getByRole('radio').first()).toBeEnabled();
-    await page.getByRole('radio').first().check();
-    await page.getByRole('button',{name:'Lock in answer'}).click();
+    await page.locator('.choice input').first().check();
+    // Bet 3 on the first question and the default 2 on the rest.
+    if (i === 0) await page.getByRole('radio',{name:/^3 pts/}).check();
+    await page.getByRole('button',{name:i===0?'Lock in for 3':'Lock in for 2'}).click();
     await expect(page.locator('.feedback')).toBeVisible();
+    await expect(page.locator('.earned')).toHaveText(/^\+(0|2|3)$/);
     // The verdict is scrolled into view on a phone and marks the answer in the list.
     await expect(page.locator('.verdict')).toBeInViewport();
-    await expect(page.locator('.verdict h3')).toHaveText(/^(Correct!|Not quite\.)$/);
+    await expect(page.locator('.verdict h3')).toHaveText(/^(Correct!|Not quite\.) \+[023]$/);
     await expect(page.locator('.choice.is-answer')).toHaveCount(1);
     await expect(page.locator('.choice.is-answer')).toContainText('Answer');
     await page.reload();
@@ -28,6 +31,8 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
     await page.getByRole('button',{name:i===4?'See results':'Next question'}).click();
   }
   await expect(page.locator('.score')).toBeVisible();
+  await expect(page.locator('.score')).toContainText('/ 15 points');
+  await expect(page.getByText(/Daily streak: 1 day/)).toBeVisible();
   await page.reload();
   await expect(page.locator('.score')).toBeVisible();
   await page.getByRole('button',{name:'Customize practice'}).click();
@@ -66,8 +71,8 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
   for (let i = 0; i < 5; i++) {
     await expect(page.getByText(new RegExp(`Question ${i + 1} of 5$`))).toBeVisible();
     await expect(page.getByRole('radio').first()).toBeEnabled();
-    await page.getByRole('radio').first().check();
-    await page.getByRole('button', { name: 'Lock in answer' }).click();
+    await page.locator('.choice input').first().check();
+    await page.getByRole('button', { name: 'Lock in for 2' }).click();
     await expect(page.locator('.feedback')).toBeVisible();
     await page.getByRole('button', { name: i === 4 ? 'See results' : 'Next question' }).click();
   }

@@ -6,13 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KnowBall.Infrastructure.Persistence;
 
-public sealed record NumbersAnswer(string QuestionId, string OptionId, Guid RequestId);
-public sealed record NumbersMove(string QuestionId, string? OptionId, Guid RequestId, int ExpectedRevision);
+/// <summary>One saved answer. Confidence is the 1–3 points bet on it; answers saved before confidence existed read as 2.</summary>
+public sealed record NumbersAnswer(string QuestionId, string OptionId, Guid RequestId, int Confidence = NumbersPlayService.DefaultConfidence);
+public sealed record NumbersMove(string QuestionId, string? OptionId, Guid RequestId, int ExpectedRevision, int? Confidence = null);
 public sealed record NumbersStart(string[] Leagues, string[] Topics, int? FromYear, int? ThroughYear, Guid RequestId, bool AllowRepeats = false);
 public sealed class NumbersFailure(int status, string message) : Exception(message) { public int Status => status; }
 
 public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
 {
+    public const int DefaultConfidence = 2;
+    public const int MaxConfidence = 3;
+    private const int RoundLength = 5;
+
     private static readonly Lazy<string> Content = new(() => {
         using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
         using var reader = new StreamReader(stream);
@@ -32,7 +37,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         }
         var play = await db.NumbersPlays.AsNoTracking().SingleOrDefaultAsync(x => x.Owner == owner && x.StartKey == key, ct)
             ?? await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = owner, StartKey = key, Date = date, SecretJson = shared.SecretJson }, ct);
-        return View(play);
+        return await Present(play, ct);
     }
 
     public async Task<object> Start(string owner, NumbersStart request, CancellationToken ct)
@@ -44,7 +49,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         if (existing is not null)
         {
             if (existing.Filters != signature) throw new NumbersFailure(409, "This start request was already used with other filters.");
-            return View(existing);
+            return await Present(existing, ct);
         }
         string secret;
         var recent = await RecentFamilies(owner, ct);
@@ -55,7 +60,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         var play = await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = owner, StartKey = key, Filters = signature,
             ExpiresAt = clock.GetUtcNow().AddDays(30), SecretJson = secret }, ct);
         if (play.Filters != signature) throw new NumbersFailure(409, "This start request was already used with other filters.");
-        return View(play);
+        return await Present(play, ct);
     }
 
     private static QuizFilters Filters(NumbersStart request)
@@ -115,11 +120,13 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         };
     }
 
-    public async Task<object> Get(string owner, Guid id, CancellationToken ct) => View(await Find(owner, id, ct));
+    public async Task<object> Get(string owner, Guid id, CancellationToken ct) => await Present(await Find(owner, id, ct), ct);
 
     public async Task<object> Move(string owner, Guid id, NumbersMove move, bool advance, CancellationToken ct)
     {
         if (move.RequestId == Guid.Empty || string.IsNullOrWhiteSpace(move.QuestionId)) throw new NumbersFailure(400, "A question and request ID are required.");
+        if (!advance && move.Confidence is < 1 or > MaxConfidence) throw new NumbersFailure(400, "Confidence must be 1, 2 or 3 points.");
+        var confidence = move.Confidence ?? DefaultConfidence;
         var play = await Find(owner, id, ct);
         var questions = JsonSerializer.Deserialize<JsonElement[]>(play.SecretJson)!;
         var answers = JsonSerializer.Deserialize<List<NumbersAnswer>>(play.AnswersJson)!;
@@ -128,13 +135,14 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
             var receipt = answers.SingleOrDefault(a => a.RequestId == move.RequestId);
             if (receipt is not null)
             {
-                if (receipt.QuestionId != move.QuestionId || receipt.OptionId != move.OptionId) throw new NumbersFailure(409, "Request ID already used.");
-                return View(play);
+                if (receipt.QuestionId != move.QuestionId || receipt.OptionId != move.OptionId || receipt.Confidence != confidence)
+                    throw new NumbersFailure(409, "Request ID already used.");
+                return await Present(play, ct);
             }
         }
         // Continue is keyed by answered question, so repeated acknowledgement cannot skip a question.
         var questionIndex = Array.FindIndex(questions, q => Text(q, "id") == move.QuestionId);
-        if (advance && questionIndex >= 0 && questionIndex < play.Position) return View(play);
+        if (advance && questionIndex >= 0 && questionIndex < play.Position) return await Present(play, ct);
         if (play.Revision != move.ExpectedRevision || play.Position >= 5 || questionIndex != play.Position)
             throw new NumbersFailure(409, "Progress changed. Reload the saved round.");
         if (advance)
@@ -147,13 +155,13 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
             if (answers.Count != play.Position) throw new NumbersFailure(409, "This question was already answered.");
             if (!questions[play.Position].GetProperty("options").EnumerateArray().Any(o => Text(o, "id") == move.OptionId))
                 throw new NumbersFailure(400, "Choose one of the offered answers.");
-            answers.Add(new(move.QuestionId, move.OptionId!, move.RequestId));
+            answers.Add(new(move.QuestionId, move.OptionId!, move.RequestId, confidence));
             play.AnswersJson = JsonSerializer.Serialize(answers);
         }
         play.Revision++;
         try { await db.SaveChangesAsync(ct); }
         catch (DbUpdateConcurrencyException) { throw new NumbersFailure(409, "Progress changed. Reload the saved round."); }
-        return View(play);
+        return await Present(play, ct);
     }
 
     private async Task<NumbersPlay> Find(string owner, Guid id, CancellationToken ct)
@@ -197,12 +205,35 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         }
         return JsonSerializer.Serialize(nodes);
     }
-    private object View(NumbersPlay play)
+    private async Task<object> Present(NumbersPlay play, CancellationToken ct) =>
+        View(play, play.Date.HasValue ? await DailyStreak(play.Owner, ct) : null);
+
+    /// <summary>
+    /// Consecutive Eastern days, ending today or yesterday, on which this browser finished the daily round.
+    /// An unfinished round today does not break a streak that ran through yesterday.
+    /// </summary>
+    private async Task<int> DailyStreak(string owner, CancellationToken ct)
+    {
+        var today = Today;
+        var dates = await db.NumbersPlays.AsNoTracking()
+            .Where(p => p.Owner == owner && p.Date != null && p.Date <= today && p.Position == RoundLength)
+            .OrderByDescending(p => p.Date).Select(p => p.Date!.Value).Take(400).ToListAsync(ct);
+        var expected = dates.Count > 0 && dates[0] == today ? today : today.AddDays(-1);
+        var streak = 0;
+        foreach (var date in dates)
+        {
+            if (date != expected) break;
+            streak++; expected = expected.AddDays(-1);
+        }
+        return streak;
+    }
+
+    private object View(NumbersPlay play, int? dailyStreak)
     {
         if (play.ExpiresAt <= clock.GetUtcNow()) throw new NumbersFailure(404, "Practice expired. Start another round.");
         var qs = JsonSerializer.Deserialize<JsonElement[]>(play.SecretJson)!;
         var answers = JsonSerializer.Deserialize<List<NumbersAnswer>>(play.AnswersJson)!;
-        var review = answers.Select((a, i) => new { question = qs[i], a.OptionId,
+        var review = answers.Select((a, i) => new { question = qs[i], a.OptionId, a.Confidence,
             correct = a.OptionId == Text(qs[i], "correctOptionId") }).ToArray();
         object? current = null;
         if (play.Position < 5) {
@@ -213,7 +244,9 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         }
         return new { play.Id, play.Date, mode = play.Date.HasValue ? "daily" : "practice", play.Position, play.Revision,
             filters = string.IsNullOrEmpty(play.Filters) ? null : JsonSerializer.Deserialize<QuizFilters>(play.Filters),
-            answeredCount = answers.Count, correctCount = review.Count(a => a.correct), current, review, complete = play.Position == 5 };
+            answeredCount = answers.Count, correctCount = review.Count(a => a.correct),
+            points = review.Where(a => a.correct).Sum(a => a.Confidence), maxPoints = RoundLength * MaxConfidence, dailyStreak,
+            current, review, complete = play.Position == RoundLength };
     }
     private static string Text(JsonElement e, string p) => e.TryGetProperty(p, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString()! : "";
 }
