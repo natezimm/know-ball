@@ -29,14 +29,14 @@ describe('Home', () => {
 
   const badges = (el: HTMLElement) => [...el.querySelectorAll('.badge')].map((b) => b.textContent?.trim());
 
-  it("shows only the four games including the beta with today's state", async () => {
+  it("shows the four games with today's state", async () => {
     const el = await render([
       entry({ status: 'playing', guesses: 3 }),
       entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 2, maxGuesses: 6 }),
     ]);
 
     expect([...el.querySelectorAll('h2')].map((h) => h.textContent)).toEqual(['Spordle', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
-    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'Play beta']);
+    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'Play anytime']);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/scouting-report', '/career-path', '/numbers-dont-lie']);
     expect(el.querySelector('h1')?.textContent).toContain('Four ways');
     expect(el.querySelector('.badge.done')?.textContent?.trim()).toBe('Solved in 2');
@@ -46,7 +46,7 @@ describe('Home', () => {
     const el = await render([entry({}), entry({ game: 'career-path' })]);
 
     expect(el.querySelector('h1')?.textContent).toContain('Four ways');
-    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'Play beta']);
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'Play anytime']);
   });
 
   it('still links to every game when the API is down', async () => {
@@ -60,14 +60,14 @@ describe('Home', () => {
     const fixture = TestBed.createComponent(Home);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', 'Play beta']);
+    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', 'Play anytime']);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/numbers-dont-lie']);
 
     TestBed.inject(HttpTestingController).expectOne('/api/me/today').flush([
       entry({}), entry({ game: 'career-path', available: false, number: null }),
     ]);
     await fixture.whenStable();
-    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'No puzzle today', 'Play beta']);
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'No puzzle today', 'Play anytime']);
     expect(el.querySelector('a[href="/career-path"]')).toBeNull();
   });
 

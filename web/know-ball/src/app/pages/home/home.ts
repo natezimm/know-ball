@@ -10,14 +10,12 @@ interface GameCard {
   /** The colour of this game's card border. One theme for the site, one trim per game. */
   trim: string;
   link: string;
-  /** Set for the daily games; Spordle is played whenever you like. */
+  /** Set for the games whose daily state the home page tracks; the others open whenever you like. */
   daily?: GameSlug;
-  beta?: boolean;
 }
 
 /** What a card says under its blurb, and whether it can be opened. */
-export function cardStatus(card: Pick<GameCard, 'daily' | 'beta'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
-  if (card.beta) return { label: 'Play beta', open: true };
+export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
   if (!card.daily) return { label: 'Play anytime', open: true };
   if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
@@ -129,7 +127,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
   `,
 })
 export class Home {
-  /** Three established games and the server-backed Numbers beta. */
+  /** The four games, in the order the home page shows them. */
   private readonly games: GameCard[] = [
     { name: 'Spordle', link: '/spordle', icon: 'grid', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
@@ -140,7 +138,7 @@ export class Home {
       name: 'Career Path', link: '/career-path', daily: 'career-path', icon: 'arrow', trim: 'var(--mustard)',
       blurb: 'Every team they played for, in order. Who is it?',
     },
-    { name: "Numbers Don't Lie", link: '/numbers-dont-lie', beta: true, icon: 'hash', trim: 'var(--teal)',
+    { name: "Numbers Don't Lie", link: '/numbers-dont-lie', icon: 'hash', trim: 'var(--teal)',
       blurb: 'Five questions about stats, awards, teams and past seasons. Choose your leagues in practice.' },
   ];
 

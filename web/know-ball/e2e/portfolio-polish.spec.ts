@@ -6,7 +6,7 @@ test('portfolio navigation, metadata and social preview describe the game site',
   const footer = page.getByRole('contentinfo');
   await expect(footer.getByRole('link', { name: 'Nathan Zimmerman' })).toHaveAttribute('href', 'https://www.nathanzimmerman.com/');
   await expect(footer.getByRole('link', { name: 'GitHub' })).toHaveAttribute('href', 'https://github.com/natezimm/know-ball');
-  await expect(footer.getByRole('link', { name: 'Design Lab' })).toHaveAttribute('href', '/mockups');
+  await expect(footer.getByRole('link')).toHaveText(['Nathan Zimmerman', 'GitHub']);
   await expect(page.locator('meta[name="description"]')).not.toHaveAttribute('content', /photo/);
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://knowball.nathanzimmerman.com/social-card.png');
   const image = await request.get('/social-card.png');

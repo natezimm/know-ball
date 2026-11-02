@@ -37,7 +37,7 @@ is reported as invalid and costs nothing. Retrying the same word with the same `
 result; reusing the id for a different word returns 409. Rounds expire after six idle hours; new rounds and the
 nightly importer delete expired rows, and an expired round offers a fresh game without recording a loss.
 
-## Numbers Don't Lie (beta)
+## Numbers Don't Lie
 
 | Endpoint | Purpose |
 | --- | --- |

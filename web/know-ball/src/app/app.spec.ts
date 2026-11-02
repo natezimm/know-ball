@@ -12,6 +12,6 @@ describe('App', () => {
     expect([...el.querySelectorAll('.bar nav a')].map((a) => a.textContent)).toEqual(['Games']);
     expect(el.querySelector('.footer a[href="https://www.nathanzimmerman.com/"]')?.textContent).toBe('Nathan Zimmerman');
     expect(el.querySelector('.footer a[href="https://github.com/natezimm/know-ball"]')).not.toBeNull();
-    expect(el.querySelector('.footer a[href="/mockups"]')?.textContent).toBe('Design Lab');
+    expect([...el.querySelectorAll('.footer nav a')].map((a) => a.textContent)).toEqual(['GitHub']);
   });
 });

@@ -21,8 +21,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <span>Built by <a href="https://www.nathanzimmerman.com/">Nathan Zimmerman</a></span>
       <nav aria-label="Project">
         <a href="https://github.com/natezimm/know-ball">GitHub</a>
-        <a routerLink="/mockups">Design Lab</a>
-        <a routerLink="/numbers-dont-lie">Numbers Don't Lie beta</a>
       </nav>
     </footer>
   `,

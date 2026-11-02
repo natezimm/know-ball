@@ -26,7 +26,7 @@ stays with your browser.
 - **Scouting Report**: guess today's NBA player in eight tries; each guess is graded on team, conference,
   division, position, height, age and jersey number.
 - **Career Path**: name the player from every team they played for, in order; each miss unlocks a hint.
-- **Numbers Don't Lie** (beta): five multiple-choice questions on stats, awards, champions and seasons across the
+- **Numbers Don't Lie**: five multiple-choice questions on stats, awards, champions and seasons across the
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.
 - Scouting Report and Career Path have practice rounds, an archive of past dailies, stats and streaks, and a
   spoiler-free share card. Spordle keeps stats and streaks per word length. Numbers Don't Lie has a daily round,
@@ -159,7 +159,7 @@ docs/                         architecture, ADRs, API and importer reference, ar
 
 ## Roadmap
 
-- **Numbers Don't Lie** is a beta with 96 questions. Next: a larger reviewed question bank on the approved-content
+- **Numbers Don't Lie** has 96 questions so far. Next: a larger reviewed question bank on the approved-content
   queue that is already built, and stats, streaks and an archive like the other games
   ([current scope](docs/numbers-dont-lie/README.md)).
 - **A daily Spordle** on the shared engine, keeping today's open-ended rounds as practice.
