@@ -5,7 +5,8 @@ import { GameApi, GameSlug, TodayEntry } from '../../core/game-api';
 interface GameCard {
   name: string;
   blurb: string;
-  glyph: string;
+  /** Which icon sits in the navy circle; drawn as inline SVG so it is centred whatever the font. */
+  icon: 'grid' | 'diamond' | 'arrow' | 'hash';
   /** The colour of this game's card border. One theme for the site, one trim per game. */
   trim: string;
   link: string;
@@ -51,7 +52,16 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
         <li class="card" [style.--trim]="card.trim" [class.off]="!card.status.open">
           <div class="top">
             <span class="no">No. {{ i + 1 }}</span>
-            <span class="glyph" aria-hidden="true">{{ card.glyph }}</span>
+            <span class="glyph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                @switch (card.icon) {
+                  @case ('grid') { <rect x="4" y="4" width="16" height="16" rx="1.5" /><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16" /> }
+                  @case ('diamond') { <path d="M12 2.5 21.5 12 12 21.5 2.5 12Z" /><path d="M12 8l4 4-4 4-4-4Z" fill="currentColor" stroke="none" /> }
+                  @case ('arrow') { <path d="M4 12h15M13 6l6 6-6 6" /> }
+                  @case ('hash') { <path d="M9.5 4 8 20M16 4l-1.5 16M4.5 9h16M3.5 15h16" /> }
+                }
+              </svg>
+            </span>
           </div>
           <h2>{{ card.name }}</h2>
           <p>{{ card.blurb }}</p>
@@ -95,8 +105,9 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     .no { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
     .glyph {
       width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
-      background: var(--navy); color: var(--cream); font-size: 17px; line-height: 1;
+      background: var(--navy); color: var(--cream);
     }
+    .glyph svg { display: block; }
     h2 { margin: 8px 0 0; font: 400 21px/1.15 var(--display); }
     p { margin: 0; flex: 1; color: var(--muted); font-size: 17px; line-height: 1.3; }
     .badge {
@@ -120,16 +131,16 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
 export class Home {
   /** Three established games and the server-backed Numbers beta. */
   private readonly games: GameCard[] = [
-    { name: 'Spordle', link: '/spordle', glyph: '▦', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
+    { name: 'Spordle', link: '/spordle', icon: 'grid', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
-      name: 'Scouting Report', link: '/scouting-report', daily: 'scouting-report', glyph: '◈', trim: 'var(--teal)',
+      name: 'Scouting Report', link: '/scouting-report', daily: 'scouting-report', icon: 'diamond', trim: 'var(--teal)',
       blurb: 'Guess the player in 8 tries with team, position, height, age and number clues.',
     },
     {
-      name: 'Career Path', link: '/career-path', daily: 'career-path', glyph: '→', trim: 'var(--mustard)',
+      name: 'Career Path', link: '/career-path', daily: 'career-path', icon: 'arrow', trim: 'var(--mustard)',
       blurb: 'Every team they played for, in order. Who is it?',
     },
-    { name: "Numbers Don't Lie", link: '/numbers-dont-lie', beta: true, glyph: '#', trim: 'var(--teal)',
+    { name: "Numbers Don't Lie", link: '/numbers-dont-lie', beta: true, icon: 'hash', trim: 'var(--teal)',
       blurb: 'Five questions about stats, awards, teams and past seasons. Choose your leagues in practice.' },
   ];
 
