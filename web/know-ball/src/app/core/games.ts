@@ -28,3 +28,8 @@ export function nextEasternMidnight(now: Date = new Date()): string {
   }
   return new Date(tomorrow + 5 * 3_600_000).toISOString();
 }
+
+/** Today's date in New York as yyyy-mm-dd, the calendar the daily games run on. */
+export function easternDate(now: Date = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+}

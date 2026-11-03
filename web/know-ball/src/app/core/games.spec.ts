@@ -1,4 +1,4 @@
-import { nextEasternMidnight, nextGame } from './games';
+import { easternDate, nextEasternMidnight, nextGame } from './games';
 
 describe('games', () => {
   it('goes on to the next game and wraps round', () => {
@@ -10,5 +10,10 @@ describe('games', () => {
     expect(nextEasternMidnight(new Date('2026-11-03T13:00:00Z'))).toBe('2026-11-04T05:00:00.000Z');
     expect(nextEasternMidnight(new Date('2026-07-04T03:30:00Z'))).toBe('2026-07-04T04:00:00.000Z');
     expect(nextEasternMidnight(new Date('2026-07-04T05:00:00Z'))).toBe('2026-07-05T04:00:00.000Z');
+  });
+
+  it("reads today's date on the Eastern calendar", () => {
+    expect(easternDate(new Date('2026-11-03T03:00:00Z'))).toBe('2026-11-02');
+    expect(easternDate(new Date('2026-11-03T13:00:00Z'))).toBe('2026-11-03');
   });
 });

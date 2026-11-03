@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { nextEasternMidnight } from '../../core/games';
+import { easternDate, nextEasternMidnight } from '../../core/games';
 import { Countdown } from '../../shared/countdown/countdown';
 import { NextGame } from '../../shared/next-game/next-game';
 import { Observable, firstValueFrom } from 'rxjs';
@@ -40,7 +40,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
     } @else {
       <div class="kb-meta"><span class="kb-label">Practice</span></div>
     }
-    @if (setup() || state()?.mode === 'practice') {
+    @if (setup() || state()?.mode === 'practice' || isPastDaily()) {
       <nav class="modes" aria-label="Quiz mode"><button type="button" class="kb-btn" (click)="daily()" [disabled]="busy()">Today's quiz</button></nav>
     }
 
@@ -85,7 +85,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
                 @for (a of s.review; track a.question.id) { <span [class.right]="a.correct" aria-hidden="true">{{a.correct ? '✓' : '✗'}}</span> }
               </p>
               @if (s.mode === 'daily' && s.dailyStreak) { <p class="final-detail"><span aria-hidden="true">🔥 </span>Daily streak: {{s.dailyStreak}} {{s.dailyStreak === 1 ? 'day' : 'days'}}</p> }
-              @if (s.mode === 'daily') { <p class="kb-result-detail">Next quiz in <app-countdown [until]="nextDaily" /></p> }
+              @if (s.mode === 'daily' && !isPastDaily()) { <p class="kb-result-detail">Next quiz in <app-countdown [until]="nextDaily" (done)="nextDaily = nextEasternMidnight()" /></p> }
             </div>
             <div class="kb-result-next">
               <button class="kb-btn primary" (click)="share()">Share result</button>
@@ -243,7 +243,10 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
 export class NumbersDontLie {
   private http = inject(HttpClient); private router = inject(Router);
   /** When tomorrow's daily quiz opens. */
-  readonly nextDaily = nextEasternMidnight();
+  nextDaily = nextEasternMidnight();
+  protected readonly nextEasternMidnight = nextEasternMidnight;
+  /** A daily round from an earlier day, reopened from its address: it needs a way to today's quiz. */
+  isPastDaily() { const s = this.state(); return s?.mode === 'daily' && !!s.date && s.date !== easternDate(); }
   readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['stats','awards','teams','seasons'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
