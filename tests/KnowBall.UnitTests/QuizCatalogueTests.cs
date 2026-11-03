@@ -39,6 +39,39 @@ public class QuizCatalogueTests
     }
 
     [Theory]
+    [InlineData("recheckBy", "next summer")]
+    [InlineData("season", "the eighties")]
+    public void Invalid_optional_fields_are_rejected(string field, string value)
+    {
+        var root = Catalogue();
+        root["questions"]![0]![field] = value;
+        Assert.Throws<InvalidDataException>(() => QuizCatalogue.Read(root.ToJsonString()));
+    }
+
+    [Fact]
+    public void Daily_eligible_must_be_a_boolean()
+    {
+        var root = Catalogue();
+        root["questions"]![0]!["dailyEligible"] = "no";
+        Assert.Throws<InvalidDataException>(() => QuizCatalogue.Read(root.ToJsonString()));
+        root["questions"]![0]!["dailyEligible"] = false;
+        QuizCatalogue.Read(root.ToJsonString()).Dispose();
+    }
+
+    [Theory]
+    [InlineData("nicknames", true)]
+    [InlineData("history", true)]
+    [InlineData("awards", false)]
+    public void Only_timeless_topics_may_leave_out_the_season(string topic, bool valid)
+    {
+        var root = Catalogue();
+        var question = root["questions"]![0]!.AsObject();
+        question["topic"] = topic;
+        question.Remove("season");
+        Assert.Equal(valid, QuizCatalogue.Validate(JsonDocument.Parse(root.ToJsonString()).RootElement).Count == 0);
+    }
+
+    [Theory]
     [InlineData("{}")]
     [InlineData("[]")]
     [InlineData("{\"schemaVersion\":\"1\",\"questions\":[null,7]}")]

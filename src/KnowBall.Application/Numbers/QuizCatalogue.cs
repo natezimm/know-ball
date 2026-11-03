@@ -6,7 +6,9 @@ namespace KnowBall.Application.Numbers;
 public static class QuizCatalogue
 {
     public static readonly string[] Leagues = ["nba", "nfl", "mlb", "nhl"];
-    public static readonly string[] Topics = ["stats", "awards", "teams", "seasons"];
+    public static readonly string[] Topics = ["stats", "awards", "teams", "seasons", "history", "nicknames"];
+    /// <summary>Topics whose questions are about a whole career or era, so a season is optional and never shown.</summary>
+    public static readonly string[] TimelessTopics = ["history", "nicknames"];
     public static readonly string[] Difficulties = ["approachable", "medium", "harder"];
 
     public static JsonDocument Read(string json)
@@ -34,8 +36,13 @@ public static class QuizCatalogue
             var id = Text(q, "id");
             void Error(string message) => errors.Add($"{(id.Length == 0 ? "(missing id)" : id)}: {message}");
             if (id.Length == 0 || !ids.Add(id)) Error("ID must be nonempty and unique.");
-            foreach (var field in new[] { "factFamily", "season", "prompt", "explanation" })
+            foreach (var field in new[] { "factFamily", "prompt", "explanation" })
                 if (Text(q, field).Length == 0) Error($"{field} is required.");
+            if (Text(q, "season").Length == 0 && !TimelessTopics.Contains(Text(q, "topic"))) Error("season is required.");
+            if (Text(q, "season").Length > 0 && SeasonYear(q) is null) Error("season must start with a four-digit year.");
+            if (q.TryGetProperty("dailyEligible", out var daily) && daily.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                Error("dailyEligible must be true or false.");
+            if (q.TryGetProperty("recheckBy", out _) && RecheckBy(q) is null) Error("recheckBy must be an ISO date.");
             if (!Leagues.Contains(Text(q, "league"))) Error("Unsupported league.");
             if (!Topics.Contains(Text(q, "topic"))) Error("Unsupported topic.");
             if (!Difficulties.Contains(Text(q, "difficulty"))) Error("Unsupported difficulty.");
@@ -70,6 +77,26 @@ public static class QuizCatalogue
             }
         }
         return errors;
+    }
+
+    /// <summary>The first year of the question's season, or null for a timeless question.</summary>
+    public static int? SeasonYear(JsonElement q) =>
+        Text(q, "season") is { Length: >= 4 } season && int.TryParse(season.AsSpan(0, 4), out var year) ? year : null;
+
+    public static DateOnly? RecheckBy(JsonElement q) =>
+        DateOnly.TryParseExact(Text(q, "recheckBy"), "yyyy-MM-dd", out var date) ? date : null;
+
+    /// <summary>
+    /// Whether a question can be drawn under these filters. A timeless question has no season, so any
+    /// year bound leaves it out. A question past its recheckBy date may be out of date and is skipped.
+    /// </summary>
+    public static bool Eligible(JsonElement q, QuizFilters filters, bool dailyOnly = false, DateOnly? asOf = null)
+    {
+        if (!filters.Leagues.Contains(Text(q, "league")) || !filters.Topics.Contains(Text(q, "topic"))) return false;
+        if (dailyOnly && q.TryGetProperty("dailyEligible", out var daily) && daily.ValueKind == JsonValueKind.False) return false;
+        if (asOf.HasValue && RecheckBy(q) is { } recheck && asOf > recheck) return false;
+        if (!filters.FromYear.HasValue && !filters.ThroughYear.HasValue) return SeasonYear(q).HasValue || TimelessTopics.Contains(Text(q, "topic"));
+        return SeasonYear(q) is { } year && (!filters.FromYear.HasValue || year >= filters.FromYear) && (!filters.ThroughYear.HasValue || year <= filters.ThroughYear);
     }
 
     internal static string Text(JsonElement value, string name) =>

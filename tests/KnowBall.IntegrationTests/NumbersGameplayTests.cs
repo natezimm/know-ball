@@ -40,6 +40,24 @@ public class NumbersGameplayTests(ApiFactory factory)
         Assert.Single((await answer.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("review").EnumerateArray());
     }
 
+    [Fact]
+    public async Task Daily_round_draws_pack_questions_and_practice_accepts_every_topic()
+    {
+        using var client = Client();
+        var daily = await client.GetFromJsonAsync<JsonElement>("/api/numbers-dont-lie/daily");
+        var question = daily.GetProperty("current");
+        Assert.Contains(question.GetProperty("topic").GetString(), new[] { "history", "nicknames" });
+        Assert.Equal(JsonValueKind.Null, question.GetProperty("season").ValueKind);
+
+        var practice = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice", new {
+            leagues = new[] { "nba", "nfl", "mlb", "nhl" },
+            topics = new[] { "history", "nicknames", "awards", "teams", "seasons", "stats" }, requestId = Guid.NewGuid() });
+        practice.EnsureSuccessStatusCode();
+        var unknown = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice", new {
+            leagues = new[] { "nba" }, topics = new[] { "moments" }, requestId = Guid.NewGuid() });
+        Assert.Equal(HttpStatusCode.BadRequest, unknown.StatusCode);
+    }
+
     private HttpClient Client() { var client = factory.CreateClient(); client.DefaultRequestHeaders.Add("X-Anon-Id",Guid.NewGuid().ToString()); return client; }
 
     [Fact]

@@ -50,7 +50,8 @@ nightly importer delete expired rows, and an expired round offers a fresh game w
 
 Moves carry a `requestId` for safe retries and an `expectedRevision` so two tabs cannot advance the same round
 twice. Daily rounds also return `dailyStreak`, the Eastern days in a row, ending today or
-yesterday, on which this browser finished the daily round (`null` in practice). The server scores answers and reveals a solution only after its question is answered. See
+yesterday, on which this browser finished the daily round (`null` in practice). The server scores answers and reveals a solution only after its question is answered. Topics are `history`, `nicknames`, `awards`, `teams`, `seasons` and `stats`; the daily round
+draws only questions marked daily-eligible. See
 [numbers-dont-lie/](numbers-dont-lie/README.md) for the content scope and design notes.
 
 ## Monitoring

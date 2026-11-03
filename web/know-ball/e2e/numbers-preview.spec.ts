@@ -14,6 +14,8 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
   await expect(page.getByRole('heading',{name:"Numbers Don't Lie",exact:true})).toBeVisible();
   for(let i=0;i<5;i++) {
     await expect(page.getByText(new RegExp(`Question ${i + 1} of 5$`))).toBeVisible();
+    // Daily questions are career-long, so the header names the topic rather than asking for a season.
+    await expect(page.getByText(new RegExp(`^[A-Z]{3} · (History|Nicknames) · Question ${i + 1} of 5$`))).toBeVisible();
     await expect(page.getByRole('radio').first()).toBeEnabled();
     await page.getByRole('radio').first().check();
     await page.getByRole('button',{name:'Lock in answer'}).click();
@@ -53,7 +55,7 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
   await page.getByRole('button', { name: 'Practice', exact: true }).click();
   for (const name of ['NFL', 'MLB', 'NHL']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
   await page.getByText('Customize topics and years', { exact: true }).click();
-  for (const name of ['awards', 'teams', 'seasons']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
+  for (const name of ['history', 'nicknames', 'awards', 'teams', 'seasons']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
   await page.getByLabel('From season year').fill('2023');
   await page.getByLabel('Through season year').fill('2023');
   await expect(page.locator('.filter-summary')).toHaveText('NBA · stats · 2023–2023');

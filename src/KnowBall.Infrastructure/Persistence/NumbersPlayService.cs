@@ -30,7 +30,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         if (shared is null)
         {
             shared = await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = "_daily", StartKey = key, Date = date,
-                SecretJson = Select(new(QuizCatalogue.Leagues, QuizCatalogue.Topics), key) }, ct);
+                SecretJson = Select(new(QuizCatalogue.Leagues, QuizCatalogue.Topics), key, asOf: date, dailyOnly: true) }, ct);
         }
         var play = await db.NumbersPlays.AsNoTracking().SingleOrDefaultAsync(x => x.Owner == owner && x.StartKey == key, ct)
             ?? await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = owner, StartKey = key, Date = date, SecretJson = shared.SecretJson }, ct);
@@ -50,7 +50,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         }
         string secret;
         var recent = await RecentFamilies(owner, ct);
-        try { secret = Select(filters, key, request.AllowRepeats ? null : recent, request.AllowRepeats ? recent : null); }
+        try { secret = Select(filters, key, request.AllowRepeats ? null : recent, request.AllowRepeats ? recent : null, Today); }
         catch (InvalidOperationException) { throw new NumbersFailure(409,
             request.AllowRepeats ? "Not enough questions for these filters. Add leagues/topics or widen the years."
                 : "Not enough fresh facts for these filters. Customize practice to widen them or explicitly allow repeats."); }
@@ -63,7 +63,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
     private static QuizFilters Filters(NumbersStart request)
     {
         if (request.RequestId == Guid.Empty || request.Leagues is null || request.Topics is null ||
-            request.Leagues.Length > 4 || request.Topics.Length > 4 || request.Leagues.Length == 0 || request.Topics.Length == 0 ||
+            request.Leagues.Length > QuizCatalogue.Leagues.Length || request.Topics.Length > QuizCatalogue.Topics.Length || request.Leagues.Length == 0 || request.Topics.Length == 0 ||
             request.Leagues.Any(l => !QuizCatalogue.Leagues.Contains(l)) || request.Topics.Any(t => !QuizCatalogue.Topics.Contains(t)) ||
             request.FromYear is < 1900 or > 2100 || request.ThroughYear is < 1900 or > 2100 ||
             request.FromYear > request.ThroughYear) throw new NumbersFailure(400, "Select supported leagues, topics and an ordered year range (1900–2100).");
@@ -98,13 +98,12 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         var filters = Filters(request);
         var recent = await RecentFamilies(owner, ct);
         using var catalogue = QuizCatalogue.Read(Content.Value);
-        var eligible = catalogue.RootElement.GetProperty("questions").EnumerateArray().Where(q =>
-            filters.Leagues.Contains(Text(q, "league")) && filters.Topics.Contains(Text(q, "topic")) &&
-            int.TryParse(Text(q, "season").AsSpan(0, 4), out var year) &&
-            (!filters.FromYear.HasValue || year >= filters.FromYear) && (!filters.ThroughYear.HasValue || year <= filters.ThroughYear)).ToArray();
+        var today = Today;
+        var eligible = catalogue.RootElement.GetProperty("questions").EnumerateArray()
+            .Where(q => QuizCatalogue.Eligible(q, filters, asOf: today)).ToArray();
         bool CanSelect(IReadOnlySet<string>? reserved)
         {
-            try { QuizSelection.Select(catalogue.RootElement, filters, request.RequestId.ToString(), reserved, requireApproved: false, preferVariety: true); return true; }
+            try { QuizSelection.Select(catalogue.RootElement, filters, request.RequestId.ToString(), reserved, requireApproved: false, preferVariety: true, asOf: today); return true; }
             catch (InvalidOperationException) { return false; }
         }
         return new {
@@ -176,10 +175,12 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
                 ?? throw new NumbersFailure(409, "Round creation conflicted. Retry.");
         }
     }
-    private static string Select(QuizFilters filters, string seed, IReadOnlySet<string>? reserved = null, IReadOnlySet<string>? recent = null)
+    private static string Select(QuizFilters filters, string seed, IReadOnlySet<string>? reserved = null, IReadOnlySet<string>? recent = null,
+        DateOnly? asOf = null, bool dailyOnly = false)
     {
         using var catalogue = QuizCatalogue.Read(Content.Value);
-        var set = QuizSelection.Select(catalogue.RootElement, filters, seed, reserved, requireApproved: false, preferVariety: true, deprioritizedFamilies: recent);
+        var set = QuizSelection.Select(catalogue.RootElement, filters, seed, reserved, requireApproved: false, preferVariety: true,
+            deprioritizedFamilies: recent, dailyOnly: dailyOnly, asOf: asOf);
         var nodes = set.Select(q => JsonNode.Parse(q.GetRawText())!).ToArray();
         for (var i = 0; i < nodes.Length; i++)
         {
@@ -233,7 +234,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         if (play.Position < 5) {
             var q = qs[play.Position];
             current = new { id = Text(q,"id"), prompt = Text(q,"prompt"), league = Text(q,"league"), topic = Text(q,"topic"),
-                season = Text(q,"topic") == "seasons" ? null : Text(q,"season"),
+                season = Text(q,"topic") == "seasons" || QuizCatalogue.TimelessTopics.Contains(Text(q,"topic")) ? null : Text(q,"season"),
                 options = q.GetProperty("options").EnumerateArray().Select(o => new { id = Text(o,"id"), label = Text(o,"label") }).ToArray() };
         }
         return new { play.Id, play.Date, mode = play.Date.HasValue ? "daily" : "practice", play.Position, play.Revision,

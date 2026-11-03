@@ -26,7 +26,7 @@ stays with your browser.
 - **Scouting Report**: guess today's NBA player in eight tries; each guess is graded on team, conference,
   division, position, height, age and jersey number.
 - **Career Path**: name the player from every team they played for, in order; each miss unlocks a hint.
-- **Numbers Don't Lie**: five multiple-choice questions on stats, awards, champions and seasons across the
+- **Numbers Don't Lie**: five multiple-choice questions on records, nicknames, famous numbers and history across the
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.
 - Scouting Report and Career Path have practice rounds, an archive of past dailies, stats and streaks, and a
   spoiler-free share card. Spordle keeps stats and streaks per word length. Numbers Don't Lie has a daily round,

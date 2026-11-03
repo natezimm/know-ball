@@ -17,7 +17,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
   template: `
     <a routerLink="/">← All games</a>
     <header><p>Daily & practice</p><h1>Numbers Don't Lie</h1>
-    <p>Five questions. Awards, teams, stats and seasons across four leagues.</p></header>
+    <p>Five questions. Records, nicknames, famous numbers and history across four leagues.</p></header>
     <p class="note">Your progress saves in this browser. Practice rounds last 30 days.</p>
     <nav aria-label="Quiz mode"><button class="kb-btn primary" (click)="daily()" [disabled]="busy()">Daily challenge</button>
       <button class="kb-btn" (click)="customize()" [disabled]="busy()">Practice</button></nav>
@@ -65,7 +65,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
             </details>
           }
         } @else if (s.current; as q) {
-          <p>{{q.league.toUpperCase()}} · {{q.season || 'Name the season'}} · Question {{s.position + 1}} of 5</p>
+          <p>{{q.league.toUpperCase()}} · {{questionLabel(q)}} · Question {{s.position + 1}} of 5</p>
           <h2 tabindex="-1">{{q.prompt}}</h2>
           <fieldset [disabled]="busy() || s.answeredCount > s.position || !!error()"><legend>Choose one answer</legend>
             @for (option of (s.review[s.position]?.question ?? q).options; track option.id) {
@@ -133,7 +133,8 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
 })
 export class NumbersDontLie {
   private http = inject(HttpClient); private router = inject(Router);
-  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['stats','awards','teams','seasons'];
+  readonly questionLabel = questionLabel;
+  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','seasons','stats'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
   readonly coverage = signal<Coverage | null>(null); readonly coverageBusy = signal(false); readonly coverageError = signal('');
@@ -272,6 +273,13 @@ export class NumbersDontLie {
 }
 
 /** Spoiler-free share text: the score, a square per answer and the daily streak. */
+/** The header's middle segment: the season, a prompt to name it, or the topic for career-long questions. */
+export function questionLabel(q: Pick<Question,'season'|'topic'>): string {
+  if (q.season) return q.season;
+  if (q.topic === 'seasons') return 'Name the season';
+  return q.topic.charAt(0).toUpperCase() + q.topic.slice(1);
+}
+
 export function shareText(s: Pick<State, 'date' | 'mode' | 'correctCount' | 'review' | 'dailyStreak'>): string {
   const squares = s.review.map(a => a.correct ? '🟩' : '⬜').join('');
   const streak = s.mode === 'daily' && s.dailyStreak ? `\n🔥 ${s.dailyStreak}-day streak` : '';
