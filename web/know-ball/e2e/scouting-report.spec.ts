@@ -18,14 +18,14 @@ test('a wrong guess adds a row of clues, and the answer wins', async ({ page }) 
 
   const board = page.getByRole('table', { name: 'Your guesses, oldest first' });
   await expect(board.getByRole('columnheader')).toHaveText(['Team', 'Conf', 'Div', 'Pos', 'Ht', 'Age', '#']);
-  await expect(board.locator('.row.blank')).toHaveCount(8);
+  await expect(board.locator('.row.blank')).toHaveCount(1);
 
   await guessPlayer(page, wrong[0].fullName);
   const rows = board.locator('.row:not(.blank)');
   const first = rows.filter({ hasText: wrong[0].fullName });
   await expect(first).toBeVisible();
   await expect(first.getByRole('cell')).toHaveCount(7);
-  await expect(board.locator('.row.blank')).toHaveCount(7);
+  await expect(board.locator('.row.blank')).toHaveCount(1);
   await expect(page.getByRole('img', { name: '1 of 8 guesses used' })).toBeVisible();
 
   await page.getByRole('combobox', { name: 'Guess a player' }).fill(wrong[0].fullName);

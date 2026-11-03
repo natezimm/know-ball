@@ -18,7 +18,7 @@ interface Row {
   template: `
     <div class="grid" [style.--cols]="wordLength()">
       @for (row of rows(); track $index) {
-        <div class="row" role="group" [class.active]="row.active" [attr.aria-label]="row.label">
+        <div class="row" role="group" [class.active]="row.active" [class.shake]="row.active && shake()" [attr.aria-label]="row.label">
           @for (tile of row.tiles; track $index) {
             <span class="tile" aria-hidden="true" [class]="tile.cls" [style.--i]="$index">{{ tile.letter }}</span>
           }
@@ -41,6 +41,7 @@ interface Row {
     .row.active .tile.filled { border-color: var(--accent); animation: pop 120ms ease-out; }
     .row.active .tile.cursor { box-shadow: inset 0 -5px 0 var(--mustard); }
     .row.active .tile.ghost { color: var(--muted); border-style: dashed; }
+    .row.shake { animation: kb-shake .4s ease-in-out; }
 
     .tile.correct { --status: var(--ok); --status-ink: var(--ok-ink); }
     .tile.present { --status: var(--close); --status-ink: var(--close-ink); }
@@ -62,7 +63,7 @@ interface Row {
       100% { transform: rotateX(0); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .tile.filled, .tile.scored { animation: none; }
+      .tile.filled, .tile.scored, .row.shake { animation: none; }
     }
   `,
 })
@@ -74,6 +75,8 @@ export class SpordleGrid {
   readonly active = input(true);
   /** Shown faintly in its position on the row being typed, until a letter is typed over it. */
   readonly hint = input<LetterHint | null>(null);
+  /** Shakes the row being typed, after a word is turned away. */
+  readonly shake = input(false);
 
   protected readonly rows = computed<Row[]>(() => {
     const attempts = this.attempts();

@@ -43,7 +43,7 @@ describe('Career Path', () => {
     const rows = [...el.querySelectorAll('.rail li')];
     expect(rows.map((r) => r.querySelector('b')?.textContent)).toEqual(['Seattle SuperSonics', 'Oklahoma City Thunder', 'Golden State Warriors']);
     expect(rows.map((r) => r.querySelector('small')?.textContent)).toEqual(['2007–08 · 1 season', '2008–16 · 8 seasons', '2016– · 4 seasons']);
-    expect(rows.map((r) => r.querySelector<HTMLElement>('.bar i')?.style.width)).toEqual(['12.5%', '100%', '50%']);
+    expect(rows.map((r) => r.querySelectorAll('.pips i').length)).toEqual([1, 8, 4]);
   });
 
   it('gives a team with no logo a lettered badge, and one whose logo fails to load too', async () => {
@@ -81,8 +81,9 @@ describe('Career Path', () => {
   it('mentions other players who share the path once the game is over', async () => {
     await open({ status: 'won', guesses: [guess('Kevin Durant', true, { shared: [0, 1, 2] })], clues: hints(4), answer: { playerId: 1, name: 'Kevin Durant', alsoAccepted: 1 } });
 
-    expect(el.querySelector('.also')?.textContent).toBe('1 other player shares this exact path.');
+    expect([...el.querySelectorAll('.kb-result-detail')].map((d) => d.textContent)).toContain('1 other player shares this exact path.');
     expect(el.querySelectorAll('.misses li').length).toBe(0);
+    expect(el.querySelector('.ask')?.textContent).toBe("Kevin Durant's career");
   });
 
   it('writes a stop as a span of years', () => {

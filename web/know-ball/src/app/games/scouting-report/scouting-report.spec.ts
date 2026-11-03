@@ -34,11 +34,11 @@ describe('Scouting Report', () => {
 
   afterEach(() => http.verify());
 
-  it('starts with column headers and eight empty rows', async () => {
+  it('starts with column headers and one empty row', async () => {
     await open();
 
     expect([...el.querySelectorAll('.cols span')].map((s) => s.textContent)).toEqual(['Team', 'Conf', 'Div', 'Pos', 'Ht', 'Age', '#']);
-    expect(el.querySelectorAll('.row.blank').length).toBe(8);
+    expect(el.querySelectorAll('.row.blank').length).toBe(1);
     expect(el.querySelector('.row.blank.next')?.textContent).toContain('Mystery player');
     expect(el.querySelectorAll('.row:not(.blank)').length).toBe(0);
   });
@@ -55,7 +55,7 @@ describe('Scouting Report', () => {
 
     const rows = [...el.querySelectorAll('.row:not(.blank)')];
     expect(rows.map((r) => r.querySelector('b')?.textContent)).toEqual(['Nikola Jokić', 'Jalen Brunson']);
-    expect(el.querySelectorAll('.row.blank').length).toBe(6);
+    expect(el.querySelectorAll('.row.blank').length).toBe(1);
     expect(el.querySelector('.row.blank.next')?.textContent).toContain('Guess 3');
 
     const cells = [...rows[1].querySelectorAll('.cell')];
@@ -93,7 +93,7 @@ describe('Scouting Report', () => {
       }),
     );
 
-    expect(el.querySelector('.facts')?.textContent).toBe('Celtics · F-G · 6′8″ · 28 years old · #0');
+    expect(el.querySelector('.kb-result-detail')?.textContent).toBe('Celtics · F-G · 6′8″ · 28 years old · #0');
     expect(el.querySelector('.row.right')).not.toBeNull();
     expect(el.querySelectorAll('.row.blank').length).toBe(0);
   });

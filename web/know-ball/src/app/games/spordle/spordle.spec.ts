@@ -54,7 +54,7 @@ describe('Spordle page', () => {
   });
 
   it('lets Enter activate a focused button until a full word is typed', async () => {
-    const stats = [...el.querySelectorAll<HTMLButtonElement>('.btn')].find((b) => b.textContent?.trim() === 'Stats')!;
+    const stats = el.querySelector<HTMLButtonElement>('[aria-label="Stats"]')!;
 
     'blit'.split('').forEach((letter) => press(letter));
     expect(press('Enter', stats).defaultPrevented).toBe(false);

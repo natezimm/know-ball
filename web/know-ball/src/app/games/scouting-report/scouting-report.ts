@@ -78,15 +78,15 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
           </li>
           <li><i class="miss"></i><span><b>Tan</b> is wrong.</span></li>
         </ul>
-        <p>An arrow on height, age or number points toward the answer: ↑ means the answer is higher.</p>
+        <p>An arrow on height, age or number points toward the answer: ▲ means the answer is higher.</p>
+        <p class="fine">Clues use the rosters from the day the puzzle was made, so a trade since then won't change them.</p>
       </div>
 
       @if (answerLine(); as line) {
-        <span answer class="facts">{{ line }}</span>
+        <span answer class="kb-result-detail">{{ line }}</span>
       }
 
       @if (state(); as s) {
-        <p class="tip">{{ s.clues?.rosterSnapshot ? 'Clues and search use the roster saved when this puzzle was created.' : 'Older puzzle: the answer is frozen; other players use current roster data.' }}</p>
         <div class="board" role="table" aria-label="Your guesses, oldest first">
           <div class="cols" role="row">
             @for (c of clues; track c.key) {
@@ -95,7 +95,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
           </div>
 
           @for (g of s.guesses; track g.playerId; let i = $index) {
-            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="i >= settled()">
+            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="i >= settled()" [style.--cells]="clues.length">
               <div class="who" role="rowheader">
                 <app-avatar [src]="g.headshotUrl" [name]="g.name" />
                 <b>{{ g.name }}</b>
@@ -148,7 +148,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     .cols, .row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
     .cols {
       position: sticky; top: 0; z-index: 1; padding: 4px 0; background: var(--bg);
-      font: 400 13px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; text-align: center; color: var(--navy);
+      font: 700 12px/1 var(--font); letter-spacing: .12em; text-transform: uppercase; text-align: center; color: var(--muted);
     }
     .who { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-width: 0; }
     .who b { font: 400 17px/1.15 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -162,13 +162,17 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     }
     .cell.ok { background: var(--ok); color: var(--ok-ink); border-color: var(--navy); }
     .cell.close { background: var(--close); color: var(--close-ink); border-color: var(--navy); }
-    .row.right .cell { box-shadow: 0 0 0 2px var(--mustard); }
+    /* The winning row: every cell turns over, then the whole row jumps together, ringed in gold. */
+    .row.right .cell { border-width: 3px; box-shadow: 0 0 0 2px var(--mustard); }
+    .row.right.fresh { animation: win-jump .5s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--cells) * 120ms + .45s); }
+    .row.right .who b::after { content: " ✓"; color: var(--ok); }
+    @keyframes win-jump { 40% { transform: translateY(-8px) scale(1.02); } }
     .value { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .cell img { width: 26px; height: 26px; object-fit: contain; }
     .cell small { font-size: 10px; letter-spacing: .04em; }
 
     /* The arrow keeps nudging toward the answer: up for higher, down for lower. */
-    .arrow { font-style: normal; font-size: 11px; line-height: 1; animation: nudge-up 1.1s ease-in-out infinite; }
+    .arrow { font-style: normal; font-size: 15px; line-height: 1; animation: nudge-up 1.1s ease-in-out infinite; }
     .arrow.down { animation-name: nudge-down; }
     @keyframes nudge-up { 0%, 100% { translate: 0 1px; } 50% { translate: 0 -3px; } }
     @keyframes nudge-down { 0%, 100% { translate: 0 -1px; } 50% { translate: 0 3px; } }
@@ -178,18 +182,14 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     .row.fresh .arrow { animation-delay: calc(var(--col) * 120ms + .45s); }
     @keyframes flip { from { transform: rotateX(90deg); } to { transform: none; } }
 
-    .blank .cell { border-style: dashed; background: none; opacity: .45; }
-    .blank.next .cell { opacity: 1; border-color: var(--navy); }
-    /* Rows still to come are thin strips, so the board stays short on a phone. */
-    .blank:not(.next) .who { display: none; }
-    .blank:not(.next) .cell { height: 14px; }
+    .blank .cell { border-style: dashed; background: none; border-color: var(--navy); }
 
     @media (prefers-reduced-motion: reduce) {
-      .arrow, .row.fresh .cell { animation: none; }
+      .arrow, .row.fresh .cell, .row.right.fresh { animation: none; }
     }
 
     .tip { margin: 0; color: var(--muted); font-size: 17px; }
-    .facts { color: var(--muted); font-size: 16px; }
+    .fine { color: var(--muted); font-size: 15px; }
 
     .key { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
     .key li { display: flex; gap: 10px; align-items: baseline; }
@@ -213,11 +213,10 @@ export class ScoutingReport {
 
   protected readonly state = computed(() => this.store.state() as GameState<unknown, { rosterSnapshot: boolean }, ScoutingFeedback, ScoutingAnswer> | null);
   protected readonly over = computed(() => this.store.over());
-  /** Numbers of the guesses still to come, so the board always shows all eight rows. */
+  /** The number of the next guess, shown as one empty row; the dots already count the rest. */
   protected readonly blanks = computed(() => {
     const s = this.state();
-    if (!s) return [];
-    return Array.from({ length: Math.max(0, s.maxGuesses - s.guesses.length) }, (_, i) => s.guesses.length + i + 1);
+    return s && s.guesses.length < s.maxGuesses ? [s.guesses.length + 1] : [];
   });
   protected readonly rows = computed(() => shareRows(this.state()?.guesses ?? []));
   protected readonly answerLine = computed(() => {

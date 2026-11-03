@@ -6,6 +6,7 @@ import { GameStore } from '../../core/game-store';
 import { shareHeadline, shareText } from '../../core/share';
 import { Avatar } from '../avatar/avatar';
 import { Countdown } from '../countdown/countdown';
+import { NextGame } from '../next-game/next-game';
 import { PlayerSearch } from '../player-search/player-search';
 
 const NOTICE_MS = 3500;
@@ -18,17 +19,17 @@ const NOTICE_MS = 3500;
  */
 @Component({
   selector: 'app-game-shell',
-  imports: [Avatar, Countdown, DatePipe, PlayerSearch, RouterLink],
+  imports: [Avatar, Countdown, DatePipe, NextGame, PlayerSearch, RouterLink],
   template: `
     <section class="game" [style.--trim]="trim()" [attr.aria-label]="name()">
-      <header class="top">
+      <header class="top kb-game-top">
         <h1 class="kb-wordmark" [attr.aria-label]="name()">{{ wordmark() || name() }}</h1>
-        <div class="actions">
-          <button type="button" class="kb-btn" aria-label="How to play" title="How to play" (click)="open(helpDialog)">?</button>
-          <button type="button" class="kb-btn" aria-label="Statistics" title="Statistics" (click)="openStats()">
+        <div class="actions kb-icons">
+          <button type="button" class="kb-icon" aria-label="How to play" title="How to play" (click)="open(helpDialog)">?</button>
+          <button type="button" class="kb-icon" aria-label="Statistics" title="Statistics" (click)="openStats()">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 14V8h3v6zm4.5 0V2h3v12zM11 14V5h3v9z" /></svg>
           </button>
-          <button type="button" class="kb-btn" aria-label="Past puzzles" title="Past puzzles" (click)="openArchive()">
+          <button type="button" class="kb-icon" aria-label="Past puzzles" title="Past puzzles and practice" (click)="openArchive()">
             <svg viewBox="0 0 16 16" aria-hidden="true">
               <path d="M4 1h2v2h4V1h2v2h2v12H2V3h2zm8 6H4v6h8zM5.5 8.5h2v2h-2z" fill-rule="evenodd" />
             </svg>
@@ -57,7 +58,7 @@ const NOTICE_MS = 3500;
         }
         @case ('ready') {
           @let s = store.state()!;
-          <div class="meta">
+          <div class="meta kb-meta">
             <span class="kb-label">
               @if (s.practice) {
                 Practice round
@@ -65,7 +66,7 @@ const NOTICE_MS = 3500;
                 No. {{ s.number }} · {{ s.date | date: 'EEE, MMM d' }}
               }
             </span>
-            <span class="dots" role="img" [attr.aria-label]="s.guesses.length + ' of ' + s.maxGuesses + ' guesses used'">
+            <span class="dots kb-dots" role="img" [attr.aria-label]="s.guesses.length + ' of ' + s.maxGuesses + ' guesses used'">
               @for (g of dots(); track $index) {
                 <i [class]="g"></i>
               }
@@ -84,34 +85,31 @@ const NOTICE_MS = 3500;
             </div>
           }
 
-          @if (practice() && !store.over()) {
+          @if (s.practice && !store.over()) {
             <nav class="modes" aria-label="Game mode">
-              @if (s.practice) {
-                <a class="kb-btn" [routerLink]="['/', s.game]" [attr.aria-disabled]="store.busy()" (click)="store.busy() && $event.preventDefault()">Today's puzzle</a>
-              } @else {
-                <button type="button" class="kb-btn" [disabled]="store.busy()" (click)="startPractice()">Practice round</button>
-              }
-              <p class="fine">Practice does not affect daily stats. Your daily progress stays saved.</p>
+              <a class="kb-btn" [routerLink]="['/', s.game]" [attr.aria-disabled]="store.busy()" (click)="store.busy() && $event.preventDefault()">Today's puzzle</a>
             </nav>
           }
 
           @if (store.over()) {
-            <div class="result" [class.won]="s.status === 'won'" role="status">
+            <div class="result kb-result" [class.won]="s.status === 'won'" role="status">
               <app-avatar [src]="$safeNavigationMigration(s.answer?.headshotUrl)" [name]="s.answer?.name ?? ''" />
-              <div class="who">
+              <div class="who kb-result-who">
                 <span class="kb-label">{{ verdict(s) }}</span>
                 <strong>{{ s.answer?.name }}</strong>
                 <ng-content select="[answer]" />
               </div>
-              <div class="next">
+              <div class="next kb-result-next">
                 <button type="button" class="kb-btn primary" (click)="share(s)">{{ shareLabel() }}</button>
                 @if (practice()) {
                   <button type="button" class="kb-btn" [disabled]="store.busy()" (click)="startPractice()">Practice round</button>
                 }
-                @if (s.nextPuzzleAt) {
-                  <span class="count">Next puzzle in <app-countdown [until]="s.nextPuzzleAt" (done)="store.load(s.game)" /></span>
-                } @else {
+                @if (!s.nextPuzzleAt) {
                   <a class="kb-btn" [routerLink]="['/', s.game]">Today's puzzle</a>
+                }
+                <app-next-game [current]="s.game" />
+                @if (s.nextPuzzleAt) {
+                  <span class="count kb-result-count">Next puzzle in <app-countdown [until]="s.nextPuzzleAt" (done)="store.load(s.game)" /></span>
                 }
               </div>
             </div>
@@ -133,7 +131,10 @@ const NOTICE_MS = 3500;
         <button type="button" class="kb-close" aria-label="Close" (click)="helpDialog.close()">×</button>
       </div>
       <div class="help"><ng-content select="[help]" /></div>
-      <p class="fine">A new puzzle arrives at midnight Eastern. Your progress is saved in this browser.</p>
+      <p class="fine">
+        A new puzzle arrives at midnight Eastern. Your progress is saved in this browser.
+        @if (practice()) { Practice rounds, under Past puzzles, never count toward your stats. }
+      </p>
     </dialog>
 
     <dialog #statsDialog class="kb-dialog" aria-labelledby="shell-stats-title" (click)="closeOnBackdrop($event)">
@@ -168,6 +169,12 @@ const NOTICE_MS = 3500;
         <h2 id="shell-archive-title">Past puzzles</h2>
         <button type="button" class="kb-close" aria-label="Close" (click)="archiveDialog.close()">×</button>
       </div>
+      @if (practice() && !store.state()?.practice) {
+        <div class="practice">
+          <button type="button" class="kb-btn" [disabled]="store.busy()" (click)="archiveDialog.close(); startPractice()">Practice round</button>
+          <span>A random puzzle that never counts toward your stats. Today's game stays where you left it.</span>
+        </div>
+      }
       @if (archive(); as entries) {
         <ol class="archive">
           @for (entry of entries; track entry.puzzleId) {
@@ -192,34 +199,14 @@ const NOTICE_MS = 3500;
     :host { display: block; }
     .game { max-width: 520px; min-height: calc(100dvh - 120px); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-    .top, .meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .kb-wordmark { font-size: clamp(30px, 9.4vw, 46px); }
-    .actions { display: flex; gap: 6px; }
-    /* Round icon buttons, so the title keeps the row to itself on a phone. */
-    .actions .kb-btn { width: 36px; height: 36px; padding: 0; display: grid; place-items: center; font-size: 17px; }
-    .actions svg { width: 16px; height: 16px; fill: currentColor; }
-    .meta { padding-bottom: 8px; border-bottom: 4px solid var(--trim); }
-    .dots { display: flex; gap: 4px; }
-    .dots i { width: 11px; height: 11px; border: 2px solid var(--navy); border-radius: 50%; background: var(--surface); }
-    .dots .miss { background: var(--navy); }
-    .dots .hit { background: var(--ok); }
+    .modes { display: flex; }
+    .practice { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 10px 12px; border: 2px dashed var(--navy); border-radius: 4px; }
+    .practice span { color: var(--muted); font-size: 15px; line-height: 1.3; }
 
     .state { margin: 40px 0; text-align: center; font-size: 19px; }
     .state p { margin: 0 0 14px; }
 
-    /* The answer, framed like the front of a card in the game's own trim colour. */
-    .result {
-      display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; align-items: center; padding: 14px;
-      background: var(--surface); border: 5px solid var(--trim); border-radius: 8px;
-      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 4px var(--navy);
-    }
     .result app-avatar { --size: 64px; }
-    .who { display: grid; gap: 2px; min-width: 0; }
-    .who .kb-label { color: var(--bad); }
-    .won .who .kb-label { color: var(--ok); }
-    .who strong { font: 400 23px/1.1 var(--display); overflow-wrap: anywhere; }
-    .next { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-    .count { margin-left: auto; font-size: 16px; white-space: nowrap; }
 
     .help { display: grid; gap: 10px; }
     .fine { margin: 14px 0 0; color: var(--muted); font-size: 15px; }
@@ -248,9 +235,7 @@ const NOTICE_MS = 3500;
     .archive .new { color: var(--muted); font-weight: 500; }
 
     @media (max-width: 420px) {
-      .result .kb-btn { padding: 6px 10px; font-size: 12px; }
       .result app-avatar { --size: 52px; }
-      .count { margin-left: 0; }
     }
   `,
 })

@@ -12,6 +12,7 @@ describe('spordle stats', () => {
       longestStreak: 0,
       fastestSolveMs: null,
       fewestGuesses: null,
+      distribution: [0, 0, 0, 0, 0, 0],
     });
   });
 
@@ -26,7 +27,15 @@ describe('spordle stats', () => {
       longestStreak: 2,
       fastestSolveMs: 60_000,
       fewestGuesses: 3,
+      distribution: [0, 0, 1, 1, 0, 0],
     });
+  });
+
+  it('reads stats saved before the guess chart existed', () => {
+    localStorage.setItem('knowball.spordle.stats', JSON.stringify({ version: 1, byLength: { '5': { totalGames: 3, wins: 2 } } }));
+    expect(getStats(5).distribution).toEqual([0, 0, 0, 0, 0, 0]);
+    recordGame(5, { won: true, guesses: 2, timeMs: null });
+    expect(getStats(5)).toMatchObject({ totalGames: 4, wins: 3, distribution: [0, 1, 0, 0, 0, 0] });
   });
 
   it('a loss ends the streak but keeps the best one', () => {
