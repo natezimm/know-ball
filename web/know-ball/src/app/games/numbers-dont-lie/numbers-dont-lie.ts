@@ -9,7 +9,8 @@ interface Choice { id: string; label: string; value?: number; }
 interface Question { id: string; prompt: string; league: string; topic: string; season: string | null; options: Choice[]; correctOptionId?: string; explanation?: string; source?: {url:string;credit:string;licenseUrl?:string}; }
 interface Filters { leagues: string[]; topics: string[]; fromYear: number | null; throughYear: number | null; }
 interface Coverage { eligibleFacts: number; freshFacts: number; canStartFresh: boolean; canStartWithRepeats: boolean; leagues: { league: string; eligible: number; fresh: number }[]; }
-interface State { filters?: Filters | null; id: string; mode: string; date: string | null; position: number; revision: number; answeredCount: number; correctCount: number; complete: boolean; current: Question | null; review: {question:Question;optionId:string;correct:boolean}[]; }
+interface Answer { question: Question; optionId: string; correct: boolean; }
+interface State { filters?: Filters | null; id: string; mode: string; date: string | null; position: number; revision: number; answeredCount: number; correctCount: number; dailyStreak?: number | null; complete: boolean; current: Question | null; review: Answer[]; }
 
 @Component({
   selector: 'app-numbers-dont-lie', imports: [FormsModule, RouterLink],
@@ -49,10 +50,12 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
       </section>
     } @else if (state(); as s) {
       <section>
-        <p>{{s.mode === 'daily' ? 'Daily · ' + s.date : 'Practice'}} · Score {{s.correctCount}} / {{s.answeredCount}}</p>
+        <p class="scoreline">{{s.mode === 'daily' ? 'Daily · ' + s.date : 'Practice'}} · Score {{s.correctCount}} / {{s.answeredCount}}
+          @if (hotStreak(s) >= 3) { <span class="hot"><span aria-hidden="true">🔥 </span>Hot streak: {{hotStreak(s)}}</span> }</p>
         @if (s.mode === 'practice') { <p class="filter-summary">{{filterSummary(s.filters)}}</p> }
         @if (s.complete) {
           <h2 tabindex="-1">That’s the final score.</h2><p class="score">{{s.correctCount}} / 5</p>
+          @if (s.mode === 'daily' && s.dailyStreak) { <p class="final-detail"><span aria-hidden="true">🔥 </span>Daily streak: {{s.dailyStreak}} {{s.dailyStreak === 1 ? 'day' : 'days'}}</p> }
           <button class="kb-btn" (click)="practice()" [disabled]="busy()">Play another round</button><button class="kb-btn" (click)="customize()">Customize practice</button>
           <button class="kb-btn" (click)="share()">Share result</button><p role="status">{{shareStatus()}}</p>
           @for (answer of s.review; track answer.question.id) {
@@ -122,7 +125,9 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
     .verdict.right .verdict-icon {color:var(--ok);} .verdict.wrong .verdict-icon {color:var(--bad);}
     @keyframes verdict-in {from {transform:scale(.85);opacity:0;}}
     @media (prefers-reduced-motion: reduce) {.verdict {animation:none;}}
-    .score {font:700 64px var(--display);color:var(--teal);} details {padding:14px 0;} a {overflow-wrap:anywhere;}
+    .score {font:700 64px/1 var(--display);color:var(--teal);margin:12px 0 20px;} details {padding:14px 0;} a {overflow-wrap:anywhere;}
+    .scoreline .hot {display:inline-block;margin-left:6px;padding:2px 8px;border-radius:4px;background:var(--mustard);color:var(--navy);font-weight:700;font-size:15px;}
+    .final-detail {margin-top:-8px;font-weight:700;}
     [role=alert] {color:var(--red);} @media(max-width:400px){section{padding:14px;} }
   `
 })
@@ -256,10 +261,19 @@ export class NumbersDontLie {
       }
     } finally { this.busy.set(false); }
   }
+  /** Correct answers in a row, ending with the latest answer. */
+  hotStreak(s: State) { let n = 0; for (let i = s.review.length - 1; i >= 0 && s.review[i].correct; i--) n++; return n; }
   correctLabel(q:Question) { return q.options.find(o => o.id === q.correctOptionId)?.label || ''; }
   async share() {
     const s = this.state(); if(!s?.complete) return;
-    const text = `Numbers Don't Lie · ${s.date || 'Practice'}\n${s.correctCount}/5 ${s.review.map(a => a.correct ? '🟩' : '⬜').join('')}\nhttps://knowball.nathanzimmerman.com/numbers-dont-lie`;
+    const text = shareText(s);
     try { await navigator.clipboard.writeText(text); this.shareStatus.set('Copied!'); } catch { this.shareStatus.set(text); }
   }
+}
+
+/** Spoiler-free share text: the score, a square per answer and the daily streak. */
+export function shareText(s: Pick<State, 'date' | 'mode' | 'correctCount' | 'review' | 'dailyStreak'>): string {
+  const squares = s.review.map(a => a.correct ? '🟩' : '⬜').join('');
+  const streak = s.mode === 'daily' && s.dailyStreak ? `\n🔥 ${s.dailyStreak}-day streak` : '';
+  return `Numbers Don't Lie · ${s.date || 'Practice'}\n${s.correctCount}/5 ${squares}${streak}\nhttps://knowball.nathanzimmerman.com/numbers-dont-lie`;
 }

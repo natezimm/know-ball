@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { NumbersDontLie } from './numbers-dont-lie';
+import { NumbersDontLie, shareText } from './numbers-dont-lie';
 import { useMemoryStorage } from '../spordle/memory-storage';
 
 const ROOT = '/api/numbers-dont-lie';
@@ -98,5 +98,14 @@ describe('Numbers practice filters and coverage', () => {
     expect(focus).not.toHaveBeenCalled();
     expect(leaving.error()).toBe('');
     focus.mockRestore(); vi.useRealTimers();
+  });
+
+  it('shares the score and the daily streak without spoilers', () => {
+    const answer = (correct: boolean) => ({ question: { id: 'x', prompt: 'Secret answer?', league: 'nba', topic: 'awards', season: null, options: [] }, optionId: 'o', correct });
+    const review = [answer(true), answer(true), answer(false), answer(true), answer(true)];
+    const daily = shareText({ mode: 'daily', date: '2026-11-02', correctCount: 4, review, dailyStreak: 4 });
+    expect(daily).toBe("Numbers Don't Lie · 2026-11-02\n4/5 🟩🟩⬜🟩🟩\n🔥 4-day streak\nhttps://knowball.nathanzimmerman.com/numbers-dont-lie");
+    expect(daily).not.toContain('Secret');
+    expect(shareText({ mode: 'practice', date: null, correctCount: 4, review, dailyStreak: null })).not.toContain('streak');
   });
 });

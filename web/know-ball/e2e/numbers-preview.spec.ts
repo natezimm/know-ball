@@ -28,6 +28,7 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
     await page.getByRole('button',{name:i===4?'See results':'Next question'}).click();
   }
   await expect(page.locator('.score')).toBeVisible();
+  await expect(page.getByText(/Daily streak: 1 day/)).toBeVisible();
   await page.reload();
   await expect(page.locator('.score')).toBeVisible();
   await page.getByRole('button',{name:'Customize practice'}).click();

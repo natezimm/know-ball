@@ -14,7 +14,11 @@ The beta launched with 88 questions, 22 per league, comprising six stats, five a
 
 The original prototype catalogue remains a design fixture. The server bank retains source attribution and prototype review status, using the established selection algorithm with `requireApproved: false`. Daily snapshots freeze selected questions, opaque question IDs and shuffled opaque option IDs on first access. Existing saved rounds do not change when the bank expands. The new historical facts were checked on October 25, 2026 against the linked NBA/NHL histories, team championship histories, MLB postseason histories, Baseball Almanac MVP records and EDSFootball AP MVP records. NFL championship clues use the season year and explain the following calendar year's Super Bowl date.
 
-The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats/streaks and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
+The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
+
+## Streaks
+
+Daily rounds return `dailyStreak`: the Eastern days in a row, ending today or yesterday, on which this browser finished the daily round. An unfinished round today does not break a streak that ran through yesterday. It is counted from the saved `NumbersPlays` rows, so no migration is needed. The page shows it on the results screen and in the share text, and shows a hot streak after three correct answers in a row.
 
 ## Question quality and variety
 
