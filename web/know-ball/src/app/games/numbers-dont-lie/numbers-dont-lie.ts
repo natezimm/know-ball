@@ -17,7 +17,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
   template: `
     <a routerLink="/">← All games</a>
     <header><p>Daily & practice</p><h1>Numbers Don't Lie</h1>
-    <p>Five questions. Awards, teams, stats and seasons across four leagues.</p></header>
+    <p>Five questions. Records, nicknames, famous numbers and history across four leagues.</p></header>
     <p class="note">Your progress saves in this browser. Practice rounds last 30 days.</p>
     <nav aria-label="Quiz mode"><button class="kb-btn primary" (click)="daily()" [disabled]="busy()">Daily challenge</button>
       <button class="kb-btn" (click)="customize()" [disabled]="busy()">Practice</button></nav>
@@ -133,7 +133,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
 })
 export class NumbersDontLie {
   private http = inject(HttpClient); private router = inject(Router);
-  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['stats','awards','teams','seasons'];
+  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','seasons','stats'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
   readonly coverage = signal<Coverage | null>(null); readonly coverageBusy = signal(false); readonly coverageError = signal('');

@@ -47,7 +47,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nba-rebounds-2024",
@@ -94,7 +95,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nba-assists-2024",
@@ -141,7 +143,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nba-blocks-2024",
@@ -188,7 +191,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nba-steals-2024",
@@ -235,7 +239,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nba-threes-2024",
@@ -282,7 +287,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nfl-passing-2023",
@@ -331,7 +337,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nfl-rushing-2023",
@@ -380,7 +387,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nfl-receiving-2023",
@@ -429,7 +437,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nfl-passing-2022",
@@ -478,7 +487,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nfl-rushing-2022",
@@ -527,7 +537,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nfl-receiving-2022",
@@ -576,7 +587,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "mlb-homeRuns-2023",
@@ -623,7 +635,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "mlb-hits-2023",
@@ -670,7 +683,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "mlb-rbi-2023",
@@ -717,7 +731,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "mlb-homeRuns-2022",
@@ -764,7 +779,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "mlb-hits-2022",
@@ -811,7 +827,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "mlb-rbi-2022",
@@ -858,7 +875,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nhl-points-2024",
@@ -905,7 +923,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nhl-goals-2024",
@@ -952,7 +971,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nhl-assists-2024",
@@ -999,7 +1019,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nhl-points-2023",
@@ -1046,7 +1067,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nhl-goals-2023",
@@ -1093,7 +1115,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nhl-assists-2023",
@@ -1140,7 +1163,8 @@
       "checkedAt": "2026-10-22",
       "verification": "source-values-checked; human editorial review pending",
       "publicationStatus": "prototype-only",
-      "topic": "stats"
+      "topic": "stats",
+      "dailyEligible": false
     },
     {
       "id": "nba-awards-2010",
@@ -1179,7 +1203,8 @@
         "credit": "NBA historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-awards-2006",
@@ -1218,7 +1243,8 @@
         "credit": "NBA historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-awards-2013",
@@ -1257,7 +1283,8 @@
         "credit": "NBA historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-awards-1997",
@@ -1296,7 +1323,8 @@
         "credit": "NHL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-awards-2002",
@@ -1335,7 +1363,8 @@
         "credit": "NHL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-awards-2014",
@@ -1374,7 +1403,8 @@
         "credit": "NHL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-awards-1997",
@@ -1413,7 +1443,8 @@
         "credit": "MLB historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-awards-2001",
@@ -1452,7 +1483,8 @@
         "credit": "MLB historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-awards-2018",
@@ -1491,7 +1523,8 @@
         "credit": "MLB historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-awards-2007",
@@ -1530,7 +1563,8 @@
         "credit": "NFL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-dpoy-2010",
@@ -1569,7 +1603,8 @@
         "credit": "Pittsburgh Steelers · Troy Polamalu career biography"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-dpoy-2017",
@@ -1608,7 +1643,8 @@
         "credit": "Los Angeles Rams · Aaron Donald named AP Defensive Player of the Year, February 3, 2018"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-teams-2010",
@@ -1647,7 +1683,8 @@
         "credit": "NBA.com · NBA champions and Finals results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-teams-2003",
@@ -1686,7 +1723,8 @@
         "credit": "NBA.com · NBA champions and Finals results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-teams-2018",
@@ -1725,7 +1763,8 @@
         "credit": "NBA.com · NBA champions and Finals results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-teams-1998",
@@ -1764,7 +1803,8 @@
         "credit": "NHL · 2025 Awards Guide, Stanley Cup results, printed page 71"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-teams-2002",
@@ -1803,7 +1843,8 @@
         "credit": "NHL · 2025 Awards Guide, Stanley Cup results, printed page 71"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-teams-2018",
@@ -1842,7 +1883,8 @@
         "credit": "NHL · 2025 Awards Guide, Stanley Cup results, printed page 71"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-teams-2016",
@@ -1881,7 +1923,8 @@
         "credit": "Baseball-Reference · 2016 World Series results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-teams-2015",
@@ -1920,7 +1963,8 @@
         "credit": "Baseball-Reference · 2015 World Series results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-teams-2019",
@@ -1959,7 +2003,8 @@
         "credit": "Baseball-Reference · 2019 World Series results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-teams-1985",
@@ -1998,7 +2043,8 @@
         "credit": "Pro Football Hall of Fame · Super Bowl results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-teams-1999",
@@ -2037,7 +2083,8 @@
         "credit": "Pro Football Hall of Fame · Super Bowl results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-teams-2017",
@@ -2076,7 +2123,8 @@
         "credit": "Pro Football Hall of Fame · Super Bowl results"
       },
       "checkedAt": "2026-10-26",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-seasons-2007",
@@ -2115,7 +2163,8 @@
         "credit": "NBA historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-seasons-2016",
@@ -2154,7 +2203,8 @@
         "credit": "NBA historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-seasons-1994",
@@ -2193,7 +2243,8 @@
         "credit": "NHL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-seasons-2009",
@@ -2232,7 +2283,8 @@
         "credit": "NHL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-seasons-2009",
@@ -2271,7 +2323,8 @@
         "credit": "MLB historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-seasons-1990",
@@ -2310,7 +2363,8 @@
         "credit": "MLB historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-seasons-2015",
@@ -2349,7 +2403,8 @@
         "credit": "NFL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-seasons-2012",
@@ -2388,7 +2443,8 @@
         "credit": "NFL historical results"
       },
       "checkedAt": "2026-10-24",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-awards-1993",
@@ -2428,7 +2484,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-awards-2003",
@@ -2468,7 +2525,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-seasons-1992",
@@ -2508,7 +2566,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-seasons-1999",
@@ -2548,7 +2607,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-seasons-2000",
@@ -2588,7 +2648,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-teams-1995",
@@ -2628,7 +2689,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-teams-2007",
@@ -2668,7 +2730,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-teams-2015",
@@ -2708,7 +2771,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-awards-1999",
@@ -2748,7 +2812,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-awards-2000",
@@ -2788,7 +2853,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-seasons-2002",
@@ -2828,7 +2894,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-seasons-2005",
@@ -2868,7 +2935,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-seasons-2006",
@@ -2908,7 +2976,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-teams-1996",
@@ -2948,7 +3017,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-teams-2002",
@@ -2988,7 +3058,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-teams-2009",
@@ -3028,7 +3099,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-awards-2000",
@@ -3068,7 +3140,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-awards-2005",
@@ -3108,7 +3181,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-seasons-1999",
@@ -3148,7 +3222,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-seasons-2003",
@@ -3188,7 +3263,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-seasons-2010",
@@ -3228,7 +3304,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-teams-1993",
@@ -3268,7 +3345,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-teams-2000",
@@ -3308,7 +3386,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-teams-2010",
@@ -3348,7 +3427,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-awards-2006",
@@ -3388,7 +3468,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-awards-2007",
@@ -3428,7 +3509,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-seasons-2010",
@@ -3468,7 +3550,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-seasons-2012",
@@ -3508,7 +3591,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-seasons-2013",
@@ -3548,7 +3632,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-teams-2001",
@@ -3588,7 +3673,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-teams-2004",
@@ -3628,7 +3714,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-teams-2005",
@@ -3668,7 +3755,8 @@
       },
       "checkedAt": "2026-10-25",
       "verification": "source-fact-checked; human editorial review pending",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-wilt-century",
@@ -3708,7 +3796,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nba-mchale-sixth-man",
@@ -3748,7 +3837,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-dolphins-perfect",
@@ -3788,7 +3878,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nfl-moss-rookie",
@@ -3828,7 +3919,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-robinson-rookie",
@@ -3868,7 +3960,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "mlb-maris-61",
@@ -3908,7 +4001,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-expansion-six",
@@ -3948,7 +4042,8 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only"
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
     },
     {
       "id": "nhl-brodeur-calder",
@@ -3988,6 +4083,4697 @@
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
+      "publicationStatus": "prototype-only",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-pack1-01",
+      "revision": 1,
+      "factFamily": "nba-pack1-01",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored 100 points in a single NBA game?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Wilt Chamberlain"
+        },
+        {
+          "id": "p1",
+          "label": "Kobe Bryant"
+        },
+        {
+          "id": "p2",
+          "label": "Elgin Baylor"
+        },
+        {
+          "id": "p3",
+          "label": "David Thompson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Wilt Chamberlain.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_NBA_single-game_scoring_leaders",
+        "credit": "Single-game scoring list"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-02",
+      "revision": 1,
+      "factFamily": "nba-pack1-02",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Kobe Bryant scored 81 points in a 2006 game against which team?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Toronto Raptors"
+        },
+        {
+          "id": "p1",
+          "label": "Phoenix Suns"
+        },
+        {
+          "id": "p2",
+          "label": "Dallas Mavericks"
+        },
+        {
+          "id": "p3",
+          "label": "Sacramento Kings"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Toronto Raptors.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_NBA_single-game_scoring_leaders",
+        "credit": "Single-game scoring list"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-03",
+      "revision": 1,
+      "factFamily": "nba-warriors-73-wins",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team holds the NBA record for regular-season wins, going 73–9?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2015–16 Golden State Warriors"
+        },
+        {
+          "id": "p1",
+          "label": "1995–96 Chicago Bulls"
+        },
+        {
+          "id": "p2",
+          "label": "1971–72 Los Angeles Lakers"
+        },
+        {
+          "id": "p3",
+          "label": "1985–86 Boston Celtics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 2015–16 Golden State Warriors.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/2015%E2%80%9316_Golden_State_Warriors_season",
+        "credit": "2015–16 Warriors"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-04",
+      "revision": 1,
+      "factFamily": "nba-pack1-04",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won an NBA-record 33 games in a row?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1971–72 Los Angeles Lakers"
+        },
+        {
+          "id": "p1",
+          "label": "2012–13 Miami Heat"
+        },
+        {
+          "id": "p2",
+          "label": "2015–16 Golden State Warriors"
+        },
+        {
+          "id": "p3",
+          "label": "1995–96 Chicago Bulls"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 1971–72 Los Angeles Lakers.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_NBA_longest_winning_streaks",
+        "credit": "Longest winning streaks"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-05",
+      "revision": 1,
+      "factFamily": "nba-stockton-assists",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds the NBA record for career assists?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "John Stockton"
+        },
+        {
+          "id": "p1",
+          "label": "Chris Paul"
+        },
+        {
+          "id": "p2",
+          "label": "Jason Kidd"
+        },
+        {
+          "id": "p3",
+          "label": "Magic Johnson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is John Stockton (15,806).",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/ast_career.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-06",
+      "revision": 1,
+      "factFamily": "nba-pack1-06",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds the NBA record for career rebounds?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Wilt Chamberlain"
+        },
+        {
+          "id": "p1",
+          "label": "Bill Russell"
+        },
+        {
+          "id": "p2",
+          "label": "Moses Malone"
+        },
+        {
+          "id": "p3",
+          "label": "Kareem Abdul-Jabbar"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Wilt Chamberlain (23,924).",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/trb_career.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-07",
+      "revision": 1,
+      "factFamily": "nba-pack1-07",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who has made the most 3-pointers in NBA history?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Stephen Curry"
+        },
+        {
+          "id": "p1",
+          "label": "James Harden"
+        },
+        {
+          "id": "p2",
+          "label": "Ray Allen"
+        },
+        {
+          "id": "p3",
+          "label": "Reggie Miller"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Stephen Curry.",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/fg3_career.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-08",
+      "revision": 1,
+      "factFamily": "nba-pack1-08",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the NBA's all-time leading scorer?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p1",
+          "label": "Kareem Abdul-Jabbar"
+        },
+        {
+          "id": "p2",
+          "label": "Karl Malone"
+        },
+        {
+          "id": "p3",
+          "label": "Kobe Bryant"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is LeBron James.",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/pts_career.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-09",
+      "revision": 1,
+      "factFamily": "nba-pack1-09",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which player won a record 11 NBA championships?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bill Russell"
+        },
+        {
+          "id": "p1",
+          "label": "Sam Jones"
+        },
+        {
+          "id": "p2",
+          "label": "Robert Horry"
+        },
+        {
+          "id": "p3",
+          "label": "Michael Jordan"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bill Russell.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_NBA_players_with_most_championships",
+        "credit": "Most championships"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-10",
+      "revision": 1,
+      "factFamily": "nba-pack1-10",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which franchise has won the most NBA championships?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Boston Celtics"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Lakers"
+        },
+        {
+          "id": "p2",
+          "label": "Chicago Bulls"
+        },
+        {
+          "id": "p3",
+          "label": "Golden State Warriors"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Boston Celtics (18).",
+      "source": {
+        "url": "https://www.basketball-reference.com/leagues/",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-11",
+      "revision": 1,
+      "factFamily": "nba-pack1-11",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many points a game did Wilt Chamberlain average in 1961–62?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "50.4"
+        },
+        {
+          "id": "p1",
+          "label": "44.8"
+        },
+        {
+          "id": "p2",
+          "label": "37.6"
+        },
+        {
+          "id": "p3",
+          "label": "55.1"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 50.4.",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/pts_per_g_season.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-12",
+      "revision": 1,
+      "factFamily": "nba-pack1-12",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career points did Kareem Abdul-Jabbar score?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "38,387"
+        },
+        {
+          "id": "p1",
+          "label": "31,419"
+        },
+        {
+          "id": "p2",
+          "label": "35,100"
+        },
+        {
+          "id": "p3",
+          "label": "41,250"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 38,387.",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/pts_career.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-13",
+      "revision": 1,
+      "factFamily": "nba-stockton-assists",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career assists did John Stockton record?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "15,806"
+        },
+        {
+          "id": "p1",
+          "label": "12,091"
+        },
+        {
+          "id": "p2",
+          "label": "10,141"
+        },
+        {
+          "id": "p3",
+          "label": "18,240"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 15,806.",
+      "source": {
+        "url": "https://www.basketball-reference.com/leaders/ast_career.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-14",
+      "revision": 1,
+      "factFamily": "nba-warriors-73-wins",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many regular-season games did the 2015–16 Warriors win?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "73"
+        },
+        {
+          "id": "p1",
+          "label": "69"
+        },
+        {
+          "id": "p2",
+          "label": "70"
+        },
+        {
+          "id": "p3",
+          "label": "72"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 73.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/2015%E2%80%9316_Golden_State_Warriors_season",
+        "credit": "2015–16 Warriors"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-15",
+      "revision": 1,
+      "factFamily": "nba-pack1-15",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Mailman\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Karl Malone"
+        },
+        {
+          "id": "p1",
+          "label": "John Stockton"
+        },
+        {
+          "id": "p2",
+          "label": "Moses Malone"
+        },
+        {
+          "id": "p3",
+          "label": "Charles Barkley"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Karl Malone.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-16",
+      "revision": 1,
+      "factFamily": "nba-pack1-16",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Answer\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Allen Iverson"
+        },
+        {
+          "id": "p1",
+          "label": "Stephon Marbury"
+        },
+        {
+          "id": "p2",
+          "label": "Tracy McGrady"
+        },
+        {
+          "id": "p3",
+          "label": "Vince Carter"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Allen Iverson.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-17",
+      "revision": 1,
+      "factFamily": "nba-pack1-17",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Dr. J\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Julius Erving"
+        },
+        {
+          "id": "p1",
+          "label": "George Gervin"
+        },
+        {
+          "id": "p2",
+          "label": "Dominique Wilkins"
+        },
+        {
+          "id": "p3",
+          "label": "Connie Hawkins"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Julius Erving.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-18",
+      "revision": 1,
+      "factFamily": "nba-pack1-18",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Dream\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Hakeem Olajuwon"
+        },
+        {
+          "id": "p1",
+          "label": "Patrick Ewing"
+        },
+        {
+          "id": "p2",
+          "label": "David Robinson"
+        },
+        {
+          "id": "p3",
+          "label": "Dikembe Mutombo"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Hakeem Olajuwon.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-19",
+      "revision": 1,
+      "factFamily": "nba-pack1-19",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Pistol Pete\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pete Maravich"
+        },
+        {
+          "id": "p1",
+          "label": "Jerry West"
+        },
+        {
+          "id": "p2",
+          "label": "Oscar Robertson"
+        },
+        {
+          "id": "p3",
+          "label": "John Havlicek"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Pete Maravich.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-20",
+      "revision": 1,
+      "factFamily": "nba-pack1-20",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which center's nickname was \"The Admiral\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "David Robinson"
+        },
+        {
+          "id": "p1",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p2",
+          "label": "Patrick Ewing"
+        },
+        {
+          "id": "p3",
+          "label": "Alonzo Mourning"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is David Robinson.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-21",
+      "revision": 1,
+      "factFamily": "nba-pack1-21",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname is \"the Greek Freak\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Giannis Antetokounmpo"
+        },
+        {
+          "id": "p1",
+          "label": "Nikola Jokić"
+        },
+        {
+          "id": "p2",
+          "label": "Luka Dončić"
+        },
+        {
+          "id": "p3",
+          "label": "Dirk Nowitzki"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Giannis Antetokounmpo.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-22",
+      "revision": 1,
+      "factFamily": "nba-pack1-22",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Chocolate Thunder\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Darryl Dawkins"
+        },
+        {
+          "id": "p1",
+          "label": "Shawn Kemp"
+        },
+        {
+          "id": "p2",
+          "label": "Larry Nance"
+        },
+        {
+          "id": "p3",
+          "label": "Dominique Wilkins"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Darryl Dawkins.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-23",
+      "revision": 1,
+      "factFamily": "nba-pack1-23",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Big Fundamental\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p1",
+          "label": "Kevin Garnett"
+        },
+        {
+          "id": "p2",
+          "label": "David Robinson"
+        },
+        {
+          "id": "p3",
+          "label": "Shaquille O'Neal"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Tim Duncan.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-24",
+      "revision": 1,
+      "factFamily": "nba-pack1-24",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Logo\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jerry West"
+        },
+        {
+          "id": "p1",
+          "label": "Bob Cousy"
+        },
+        {
+          "id": "p2",
+          "label": "Elgin Baylor"
+        },
+        {
+          "id": "p3",
+          "label": "Oscar Robertson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Jerry West.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-25",
+      "revision": 1,
+      "factFamily": "nba-pack1-25",
+      "league": "nba",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team's late-1980s roster was nicknamed the \"Bad Boys\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Detroit Pistons"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Celtics"
+        },
+        {
+          "id": "p2",
+          "label": "Chicago Bulls"
+        },
+        {
+          "id": "p3",
+          "label": "New York Knicks"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Detroit Pistons.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
+        "credit": "Basketball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-26",
+      "revision": 1,
+      "factFamily": "nba-pack1-26",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the first NBA Finals MVP award in 1969, even though his team lost the series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jerry West"
+        },
+        {
+          "id": "p1",
+          "label": "Bill Russell"
+        },
+        {
+          "id": "p2",
+          "label": "Wilt Chamberlain"
+        },
+        {
+          "id": "p3",
+          "label": "John Havlicek"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Jerry West.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Bill_Russell_NBA_Finals_Most_Valuable_Player_Award",
+        "credit": "Finals MVP award"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-27",
+      "revision": 1,
+      "factFamily": "nba-pack1-27",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the NBA Finals MVP award named after?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bill Russell"
+        },
+        {
+          "id": "p1",
+          "label": "Magic Johnson"
+        },
+        {
+          "id": "p2",
+          "label": "Larry Bird"
+        },
+        {
+          "id": "p3",
+          "label": "Jerry West"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bill Russell.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Bill_Russell_NBA_Finals_Most_Valuable_Player_Award",
+        "credit": "Finals MVP award"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-28",
+      "revision": 1,
+      "factFamily": "nba-pack1-28",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who has won a record six NBA Finals MVP awards?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Michael Jordan"
+        },
+        {
+          "id": "p1",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p2",
+          "label": "Magic Johnson"
+        },
+        {
+          "id": "p3",
+          "label": "Shaquille O'Neal"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Michael Jordan.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Bill_Russell_NBA_Finals_Most_Valuable_Player_Award",
+        "credit": "Finals MVP award"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-29",
+      "revision": 1,
+      "factFamily": "nba-pack1-29",
+      "league": "nba",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who became the NBA's youngest MVP, at age 22?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Derrick Rose"
+        },
+        {
+          "id": "p1",
+          "label": "LeBron James"
+        },
+        {
+          "id": "p2",
+          "label": "Kevin Durant"
+        },
+        {
+          "id": "p3",
+          "label": "Wes Unseld"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Derrick Rose.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_NBA_regular_season_records",
+        "credit": "Regular-season records"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-pack1-30",
+      "revision": 1,
+      "factFamily": "nba-pack1-30",
+      "league": "nba",
+      "season": "2025–26",
+      "topic": "history",
+      "scope": "postseason",
+      "recheckBy": "2027-06-30",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the 2026 NBA Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New York Knicks"
+        },
+        {
+          "id": "p1",
+          "label": "Oklahoma City Thunder"
+        },
+        {
+          "id": "p2",
+          "label": "Boston Celtics"
+        },
+        {
+          "id": "p3",
+          "label": "Denver Nuggets"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is New York Knicks (4–1 over the Spurs).",
+      "source": {
+        "url": "https://www.basketball-reference.com/playoffs/NBA_2026.html",
+        "credit": "Basketball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-01",
+      "revision": 1,
+      "factFamily": "nfl-emmitt-rushing",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the NFL's all-time leading rusher?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Emmitt Smith"
+        },
+        {
+          "id": "p1",
+          "label": "Walter Payton"
+        },
+        {
+          "id": "p2",
+          "label": "Barry Sanders"
+        },
+        {
+          "id": "p3",
+          "label": "Frank Gore"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Emmitt Smith (18,355).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_rushing_yards_leaders",
+        "credit": "Career rushing leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-02",
+      "revision": 1,
+      "factFamily": "nfl-pack1-02",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds the NFL record for career passing yards?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Drew Brees"
+        },
+        {
+          "id": "p2",
+          "label": "Peyton Manning"
+        },
+        {
+          "id": "p3",
+          "label": "Brett Favre"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Tom Brady (89,214).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Tom_Brady",
+        "credit": "Tom Brady"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-03",
+      "revision": 1,
+      "factFamily": "nfl-rice-receiving",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds the NFL record for career receiving yards?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jerry Rice"
+        },
+        {
+          "id": "p1",
+          "label": "Larry Fitzgerald"
+        },
+        {
+          "id": "p2",
+          "label": "Terrell Owens"
+        },
+        {
+          "id": "p3",
+          "label": "Randy Moss"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Jerry Rice (22,895).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_receiving_yards_leaders",
+        "credit": "Career receiving leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-04",
+      "revision": 1,
+      "factFamily": "nfl-dickerson-2105",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who set the NFL single-season rushing record with 2,105 yards?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Eric Dickerson"
+        },
+        {
+          "id": "p1",
+          "label": "Adrian Peterson"
+        },
+        {
+          "id": "p2",
+          "label": "Jamal Lewis"
+        },
+        {
+          "id": "p3",
+          "label": "Barry Sanders"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Eric Dickerson.",
+      "source": {
+        "url": "https://www.pro-football-reference.com/leaders/rush_yds_single_season.htm",
+        "credit": "Pro Football Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-05",
+      "revision": 1,
+      "factFamily": "nfl-manning-55-td",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who threw a record 55 touchdown passes in a single season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Peyton Manning"
+        },
+        {
+          "id": "p1",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p2",
+          "label": "Patrick Mahomes"
+        },
+        {
+          "id": "p3",
+          "label": "Dan Marino"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Peyton Manning.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_annual_passing_touchdowns_leaders",
+        "credit": "Annual passing TD leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-06",
+      "revision": 1,
+      "factFamily": "nfl-pack1-06",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the NFL's official career sacks leader?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bruce Smith"
+        },
+        {
+          "id": "p1",
+          "label": "Reggie White"
+        },
+        {
+          "id": "p2",
+          "label": "Kevin Greene"
+        },
+        {
+          "id": "p3",
+          "label": "Julius Peppers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bruce Smith.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_sacks_leaders",
+        "credit": "Career sacks leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-07",
+      "revision": 1,
+      "factFamily": "nfl-pack1-07",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team is the only one to finish a season unbeaten and untied, playoffs included?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "1972 Miami Dolphins"
+        },
+        {
+          "id": "p1",
+          "label": "2007 New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "1985 Chicago Bears"
+        },
+        {
+          "id": "p3",
+          "label": "1998 Minnesota Vikings"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 1972 Miami Dolphins.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/1972_Miami_Dolphins_season",
+        "credit": "1972 Dolphins"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-08",
+      "revision": 1,
+      "factFamily": "nfl-brady-rings",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which player has won a record seven Super Bowls?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Charles Haley"
+        },
+        {
+          "id": "p2",
+          "label": "Joe Montana"
+        },
+        {
+          "id": "p3",
+          "label": "Terry Bradshaw"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Tom Brady.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Tom_Brady",
+        "credit": "Tom Brady"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-09",
+      "revision": 1,
+      "factFamily": "nfl-pack1-09",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who has won a record five Super Bowl MVP awards?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p1",
+          "label": "Joe Montana"
+        },
+        {
+          "id": "p2",
+          "label": "Terry Bradshaw"
+        },
+        {
+          "id": "p3",
+          "label": "Patrick Mahomes"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Tom Brady.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Super_Bowl_Most_Valuable_Player",
+        "credit": "Super Bowl MVP"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-10",
+      "revision": 1,
+      "factFamily": "nfl-emmitt-rushing",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career rushing yards did Emmitt Smith gain?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "18,355"
+        },
+        {
+          "id": "p1",
+          "label": "16,726"
+        },
+        {
+          "id": "p2",
+          "label": "15,269"
+        },
+        {
+          "id": "p3",
+          "label": "19,840"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 18,355.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_rushing_yards_leaders",
+        "credit": "Career rushing leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-11",
+      "revision": 1,
+      "factFamily": "nfl-rice-receiving",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career receiving yards did Jerry Rice gain?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "22,895"
+        },
+        {
+          "id": "p1",
+          "label": "17,492"
+        },
+        {
+          "id": "p2",
+          "label": "19,475"
+        },
+        {
+          "id": "p3",
+          "label": "25,310"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 22,895.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_receiving_yards_leaders",
+        "credit": "Career receiving leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-12",
+      "revision": 1,
+      "factFamily": "nfl-dickerson-2105",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many rushing yards did Eric Dickerson gain in 1984?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2,105"
+        },
+        {
+          "id": "p1",
+          "label": "1,863"
+        },
+        {
+          "id": "p2",
+          "label": "2,003"
+        },
+        {
+          "id": "p3",
+          "label": "2,250"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 2,105.",
+      "source": {
+        "url": "https://www.pro-football-reference.com/leaders/rush_yds_single_season.htm",
+        "credit": "Pro Football Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-13",
+      "revision": 1,
+      "factFamily": "nfl-manning-55-td",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many touchdown passes did Peyton Manning throw in 2013?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "55"
+        },
+        {
+          "id": "p1",
+          "label": "49"
+        },
+        {
+          "id": "p2",
+          "label": "50"
+        },
+        {
+          "id": "p3",
+          "label": "61"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 55.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_annual_passing_touchdowns_leaders",
+        "credit": "Annual passing TD leaders"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-14",
+      "revision": 1,
+      "factFamily": "nfl-brady-rings",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many Super Bowls did Tom Brady win?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "7"
+        },
+        {
+          "id": "p1",
+          "label": "5"
+        },
+        {
+          "id": "p2",
+          "label": "6"
+        },
+        {
+          "id": "p3",
+          "label": "8"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 7.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Tom_Brady",
+        "credit": "Tom Brady"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-15",
+      "revision": 1,
+      "factFamily": "nfl-pack1-15",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Sweetness\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Walter Payton"
+        },
+        {
+          "id": "p1",
+          "label": "Barry Sanders"
+        },
+        {
+          "id": "p2",
+          "label": "Eric Dickerson"
+        },
+        {
+          "id": "p3",
+          "label": "Tony Dorsett"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Walter Payton.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-16",
+      "revision": 1,
+      "factFamily": "nfl-pack1-16",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Refrigerator\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "William Perry"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Singletary"
+        },
+        {
+          "id": "p2",
+          "label": "Richard Dent"
+        },
+        {
+          "id": "p3",
+          "label": "Dan Hampton"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is William Perry.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-17",
+      "revision": 1,
+      "factFamily": "nfl-pack1-17",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Prime Time\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Deion Sanders"
+        },
+        {
+          "id": "p1",
+          "label": "Darrell Green"
+        },
+        {
+          "id": "p2",
+          "label": "Rod Woodson"
+        },
+        {
+          "id": "p3",
+          "label": "Ronnie Lott"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Deion Sanders.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-18",
+      "revision": 1,
+      "factFamily": "nfl-pack1-18",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Megatron\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Calvin Johnson"
+        },
+        {
+          "id": "p1",
+          "label": "Andre Johnson"
+        },
+        {
+          "id": "p2",
+          "label": "Randy Moss"
+        },
+        {
+          "id": "p3",
+          "label": "Larry Fitzgerald"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Calvin Johnson.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-19",
+      "revision": 1,
+      "factFamily": "nfl-pack1-19",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Broadway Joe\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Joe Namath"
+        },
+        {
+          "id": "p1",
+          "label": "Joe Montana"
+        },
+        {
+          "id": "p2",
+          "label": "Joe Theismann"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Greene"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Joe Namath.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-20",
+      "revision": 1,
+      "factFamily": "nfl-pack1-20",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Bus\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jerome Bettis"
+        },
+        {
+          "id": "p1",
+          "label": "Earl Campbell"
+        },
+        {
+          "id": "p2",
+          "label": "Larry Csonka"
+        },
+        {
+          "id": "p3",
+          "label": "Christian Okoye"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Jerome Bettis.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-21",
+      "revision": 1,
+      "factFamily": "nfl-pack1-21",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Beast Mode\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Marshawn Lynch"
+        },
+        {
+          "id": "p1",
+          "label": "Derrick Henry"
+        },
+        {
+          "id": "p2",
+          "label": "Adrian Peterson"
+        },
+        {
+          "id": "p3",
+          "label": "LeGarrette Blount"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Marshawn Lynch.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-22",
+      "revision": 1,
+      "factFamily": "nfl-pack1-22",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Night Train\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dick Lane"
+        },
+        {
+          "id": "p1",
+          "label": "Deacon Jones"
+        },
+        {
+          "id": "p2",
+          "label": "Mel Blount"
+        },
+        {
+          "id": "p3",
+          "label": "Herb Adderley"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Dick Lane.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-23",
+      "revision": 1,
+      "factFamily": "nfl-pack1-23",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Minister of Defense\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Reggie White"
+        },
+        {
+          "id": "p1",
+          "label": "Bruce Smith"
+        },
+        {
+          "id": "p2",
+          "label": "Deacon Jones"
+        },
+        {
+          "id": "p3",
+          "label": "Lawrence Taylor"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Reggie White.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-24",
+      "revision": 1,
+      "factFamily": "nfl-pack1-24",
+      "league": "nfl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team's 1970s defense was nicknamed the \"Steel Curtain\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pittsburgh Steelers"
+        },
+        {
+          "id": "p1",
+          "label": "Minnesota Vikings"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Rams"
+        },
+        {
+          "id": "p3",
+          "label": "Chicago Bears"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Pittsburgh Steelers.",
+      "source": {
+        "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
+        "credit": "NBC Sports nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-25",
+      "revision": 1,
+      "factFamily": "nfl-pack1-25",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won Super Bowl I?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Green Bay Packers"
+        },
+        {
+          "id": "p1",
+          "label": "Kansas City Chiefs"
+        },
+        {
+          "id": "p2",
+          "label": "Oakland Raiders"
+        },
+        {
+          "id": "p3",
+          "label": "Baltimore Colts"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Green Bay Packers (35–10 over the Chiefs).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_Super_Bowl_champions",
+        "credit": "Super Bowl champions"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-26",
+      "revision": 1,
+      "factFamily": "nfl-pack1-26",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who was named MVP of the first Super Bowl?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bart Starr"
+        },
+        {
+          "id": "p1",
+          "label": "Joe Namath"
+        },
+        {
+          "id": "p2",
+          "label": "Johnny Unitas"
+        },
+        {
+          "id": "p3",
+          "label": "Len Dawson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bart Starr.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Super_Bowl_Most_Valuable_Player",
+        "credit": "Super Bowl MVP"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-27",
+      "revision": 1,
+      "factFamily": "nfl-pack1-27",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the only Super Bowl MVP to come from the losing team?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Chuck Howley"
+        },
+        {
+          "id": "p1",
+          "label": "Bob Lilly"
+        },
+        {
+          "id": "p2",
+          "label": "Roger Staubach"
+        },
+        {
+          "id": "p3",
+          "label": "Johnny Unitas"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Chuck Howley.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Super_Bowl_Most_Valuable_Player",
+        "credit": "Super Bowl MVP"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-28",
+      "revision": 1,
+      "factFamily": "nfl-pack1-28",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who caught the \"Immaculate Reception\" in 1972?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Franco Harris"
+        },
+        {
+          "id": "p1",
+          "label": "Terry Bradshaw"
+        },
+        {
+          "id": "p2",
+          "label": "Lynn Swann"
+        },
+        {
+          "id": "p3",
+          "label": "John Stallworth"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Franco Harris.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Immaculate_Reception",
+        "credit": "Immaculate Reception"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-29",
+      "revision": 1,
+      "factFamily": "nfl-pack1-29",
+      "league": "nfl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which 49ers receiver made \"The Catch\" on a pass from Joe Montana?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dwight Clark"
+        },
+        {
+          "id": "p1",
+          "label": "Jerry Rice"
+        },
+        {
+          "id": "p2",
+          "label": "Roger Craig"
+        },
+        {
+          "id": "p3",
+          "label": "Freddie Solomon"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Dwight Clark.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/The_Catch_(American_football)",
+        "credit": "The Catch"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nfl-pack1-30",
+      "revision": 1,
+      "factFamily": "nfl-pack1-30",
+      "league": "nfl",
+      "season": "2025",
+      "topic": "history",
+      "scope": "postseason",
+      "recheckBy": "2027-02-15",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won Super Bowl LX in February 2026?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Seattle Seahawks"
+        },
+        {
+          "id": "p1",
+          "label": "Kansas City Chiefs"
+        },
+        {
+          "id": "p2",
+          "label": "Philadelphia Eagles"
+        },
+        {
+          "id": "p3",
+          "label": "Buffalo Bills"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Seattle Seahawks (29–13 over the Patriots).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_Super_Bowl_champions",
+        "credit": "Super Bowl champions"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-01",
+      "revision": 1,
+      "factFamily": "mlb-pack1-01",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds MLB's single-season home run record of 73?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Barry Bonds"
+        },
+        {
+          "id": "p1",
+          "label": "Mark McGwire"
+        },
+        {
+          "id": "p2",
+          "label": "Sammy Sosa"
+        },
+        {
+          "id": "p3",
+          "label": "Roger Maris"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Barry Bonds.",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/HR_season.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-02",
+      "revision": 1,
+      "factFamily": "mlb-pack1-02",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is MLB's career home run leader?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Barry Bonds"
+        },
+        {
+          "id": "p1",
+          "label": "Hank Aaron"
+        },
+        {
+          "id": "p2",
+          "label": "Babe Ruth"
+        },
+        {
+          "id": "p3",
+          "label": "Albert Pujols"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Barry Bonds (762).",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/HR_career.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-03",
+      "revision": 1,
+      "factFamily": "mlb-pack1-03",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is MLB's career hits leader?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pete Rose"
+        },
+        {
+          "id": "p1",
+          "label": "Ty Cobb"
+        },
+        {
+          "id": "p2",
+          "label": "Hank Aaron"
+        },
+        {
+          "id": "p3",
+          "label": "Stan Musial"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Pete Rose (4,256).",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/H_career.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-04",
+      "revision": 1,
+      "factFamily": "mlb-ripken-streak",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds the record for consecutive games played, with 2,632?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Cal Ripken Jr."
+        },
+        {
+          "id": "p1",
+          "label": "Lou Gehrig"
+        },
+        {
+          "id": "p2",
+          "label": "Everett Scott"
+        },
+        {
+          "id": "p3",
+          "label": "Miguel Tejada"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Cal Ripken Jr..",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Major_League_Baseball_consecutive_games_played_streaks",
+        "credit": "Consecutive games streaks"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-05",
+      "revision": 1,
+      "factFamily": "mlb-dimaggio-56",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds MLB's record 56-game hitting streak?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Joe DiMaggio"
+        },
+        {
+          "id": "p1",
+          "label": "Pete Rose"
+        },
+        {
+          "id": "p2",
+          "label": "Willie Keeler"
+        },
+        {
+          "id": "p3",
+          "label": "Ty Cobb"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Joe DiMaggio.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Joe_DiMaggio%27s_56-game_hitting_streak",
+        "credit": "The 56-game streak"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-06",
+      "revision": 1,
+      "factFamily": "mlb-pack1-06",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which pitcher won a record 511 games?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Cy Young"
+        },
+        {
+          "id": "p1",
+          "label": "Walter Johnson"
+        },
+        {
+          "id": "p2",
+          "label": "Christy Mathewson"
+        },
+        {
+          "id": "p3",
+          "label": "Grover Alexander"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Cy Young.",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/W_career.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-07",
+      "revision": 1,
+      "factFamily": "mlb-ryan-strikeouts",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is MLB's career strikeout leader?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Nolan Ryan"
+        },
+        {
+          "id": "p1",
+          "label": "Randy Johnson"
+        },
+        {
+          "id": "p2",
+          "label": "Roger Clemens"
+        },
+        {
+          "id": "p3",
+          "label": "Steve Carlton"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Nolan Ryan (5,714).",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/SO_p_career.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-08",
+      "revision": 1,
+      "factFamily": "mlb-pack1-08",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who threw a record seven no-hitters?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Nolan Ryan"
+        },
+        {
+          "id": "p1",
+          "label": "Sandy Koufax"
+        },
+        {
+          "id": "p2",
+          "label": "Bob Feller"
+        },
+        {
+          "id": "p3",
+          "label": "Justin Verlander"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Nolan Ryan.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_Major_League_Baseball_no-hitters",
+        "credit": "No-hitters"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-09",
+      "revision": 1,
+      "factFamily": "mlb-pack1-09",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who was the last player to hit .400 in a season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ted Williams"
+        },
+        {
+          "id": "p1",
+          "label": "Rogers Hornsby"
+        },
+        {
+          "id": "p2",
+          "label": "Tony Gwynn"
+        },
+        {
+          "id": "p3",
+          "label": "George Brett"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Ted Williams (.406).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Ted_Williams",
+        "credit": "Ted Williams"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-10",
+      "revision": 1,
+      "factFamily": "mlb-pack1-10",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which franchise has won the most World Series titles?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p1",
+          "label": "St. Louis Cardinals"
+        },
+        {
+          "id": "p2",
+          "label": "Boston Red Sox"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Dodgers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is New York Yankees (27).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_World_Series_champions",
+        "credit": "World Series champions"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-11",
+      "revision": 1,
+      "factFamily": "mlb-ripken-streak",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many consecutive games did Cal Ripken Jr. play?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2,632"
+        },
+        {
+          "id": "p1",
+          "label": "1,307"
+        },
+        {
+          "id": "p2",
+          "label": "2,130"
+        },
+        {
+          "id": "p3",
+          "label": "2,904"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 2,632.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Major_League_Baseball_consecutive_games_played_streaks",
+        "credit": "Consecutive games streaks"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-12",
+      "revision": 1,
+      "factFamily": "mlb-dimaggio-56",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many games did Joe DiMaggio's 1941 hitting streak last?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "56"
+        },
+        {
+          "id": "p1",
+          "label": "44"
+        },
+        {
+          "id": "p2",
+          "label": "48"
+        },
+        {
+          "id": "p3",
+          "label": "61"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 56.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Joe_DiMaggio%27s_56-game_hitting_streak",
+        "credit": "The 56-game streak"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-13",
+      "revision": 1,
+      "factFamily": "mlb-ryan-strikeouts",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career strikeouts did Nolan Ryan record?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "5,714"
+        },
+        {
+          "id": "p1",
+          "label": "4,136"
+        },
+        {
+          "id": "p2",
+          "label": "4,875"
+        },
+        {
+          "id": "p3",
+          "label": "6,320"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 5,714.",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/SO_p_career.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-14",
+      "revision": 1,
+      "factFamily": "mlb-pack1-14",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career home runs did Babe Ruth hit?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "714"
+        },
+        {
+          "id": "p1",
+          "label": "660"
+        },
+        {
+          "id": "p2",
+          "label": "755"
+        },
+        {
+          "id": "p3",
+          "label": "762"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 714.",
+      "source": {
+        "url": "https://www.baseball-reference.com/leaders/HR_career.shtml",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-15",
+      "revision": 1,
+      "factFamily": "mlb-pack1-15",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Say Hey Kid\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Willie Mays"
+        },
+        {
+          "id": "p1",
+          "label": "Hank Aaron"
+        },
+        {
+          "id": "p2",
+          "label": "Mickey Mantle"
+        },
+        {
+          "id": "p3",
+          "label": "Ernie Banks"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Willie Mays.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-16",
+      "revision": 1,
+      "factFamily": "mlb-pack1-16",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Sultan of Swat\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Babe Ruth"
+        },
+        {
+          "id": "p1",
+          "label": "Lou Gehrig"
+        },
+        {
+          "id": "p2",
+          "label": "Jimmie Foxx"
+        },
+        {
+          "id": "p3",
+          "label": "Ty Cobb"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Babe Ruth.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-17",
+      "revision": 1,
+      "factFamily": "mlb-pack1-17",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Iron Horse\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Lou Gehrig"
+        },
+        {
+          "id": "p1",
+          "label": "Cal Ripken Jr."
+        },
+        {
+          "id": "p2",
+          "label": "Babe Ruth"
+        },
+        {
+          "id": "p3",
+          "label": "Joe DiMaggio"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Lou Gehrig.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-18",
+      "revision": 1,
+      "factFamily": "mlb-pack1-18",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Mr. October\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Reggie Jackson"
+        },
+        {
+          "id": "p1",
+          "label": "Derek Jeter"
+        },
+        {
+          "id": "p2",
+          "label": "David Ortiz"
+        },
+        {
+          "id": "p3",
+          "label": "Babe Ruth"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Reggie Jackson.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-19",
+      "revision": 1,
+      "factFamily": "mlb-pack1-19",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Big Papi\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "David Ortiz"
+        },
+        {
+          "id": "p1",
+          "label": "Manny Ramirez"
+        },
+        {
+          "id": "p2",
+          "label": "Albert Pujols"
+        },
+        {
+          "id": "p3",
+          "label": "Vladimir Guerrero"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is David Ortiz.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-20",
+      "revision": 1,
+      "factFamily": "mlb-pack1-20",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Ryan Express\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Nolan Ryan"
+        },
+        {
+          "id": "p1",
+          "label": "Roger Clemens"
+        },
+        {
+          "id": "p2",
+          "label": "Randy Johnson"
+        },
+        {
+          "id": "p3",
+          "label": "Tom Seaver"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Nolan Ryan.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-21",
+      "revision": 1,
+      "factFamily": "mlb-pack1-21",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Hammerin' Hank\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Hank Aaron"
+        },
+        {
+          "id": "p1",
+          "label": "Hank Greenberg"
+        },
+        {
+          "id": "p2",
+          "label": "Harmon Killebrew"
+        },
+        {
+          "id": "p3",
+          "label": "Frank Robinson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Hank Aaron.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-22",
+      "revision": 1,
+      "factFamily": "mlb-pack1-22",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Yankee Clipper\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Joe DiMaggio"
+        },
+        {
+          "id": "p1",
+          "label": "Mickey Mantle"
+        },
+        {
+          "id": "p2",
+          "label": "Yogi Berra"
+        },
+        {
+          "id": "p3",
+          "label": "Lou Gehrig"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Joe DiMaggio.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-23",
+      "revision": 1,
+      "factFamily": "mlb-pack1-23",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Big Unit\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Randy Johnson"
+        },
+        {
+          "id": "p1",
+          "label": "Roger Clemens"
+        },
+        {
+          "id": "p2",
+          "label": "Pedro Martinez"
+        },
+        {
+          "id": "p3",
+          "label": "Curt Schilling"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Randy Johnson.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-24",
+      "revision": 1,
+      "factFamily": "mlb-pack1-24",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Charlie Hustle\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pete Rose"
+        },
+        {
+          "id": "p1",
+          "label": "Ty Cobb"
+        },
+        {
+          "id": "p2",
+          "label": "Rickey Henderson"
+        },
+        {
+          "id": "p3",
+          "label": "Johnny Bench"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Pete Rose.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-25",
+      "revision": 1,
+      "factFamily": "mlb-pack1-25",
+      "league": "mlb",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Splendid Splinter\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ted Williams"
+        },
+        {
+          "id": "p1",
+          "label": "Stan Musial"
+        },
+        {
+          "id": "p2",
+          "label": "Joe DiMaggio"
+        },
+        {
+          "id": "p3",
+          "label": "Carl Yastrzemski"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Ted Williams.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
+        "credit": "Baseball nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-26",
+      "revision": 1,
+      "factFamily": "mlb-pack1-26",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team did Jackie Robinson join when he broke baseball's color line in 1947?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Brooklyn Dodgers"
+        },
+        {
+          "id": "p1",
+          "label": "New York Giants"
+        },
+        {
+          "id": "p2",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p3",
+          "label": "Cleveland Indians"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Brooklyn Dodgers.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Jackie_Robinson",
+        "credit": "Jackie Robinson"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-27",
+      "revision": 1,
+      "factFamily": "mlb-pack1-27",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who was the first player to hit 40 home runs and steal 40 bases in one season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jose Canseco"
+        },
+        {
+          "id": "p1",
+          "label": "Barry Bonds"
+        },
+        {
+          "id": "p2",
+          "label": "Alex Rodriguez"
+        },
+        {
+          "id": "p3",
+          "label": "Alfonso Soriano"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Jose Canseco.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/40%E2%80%9340_club",
+        "credit": "40–40 club"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-28",
+      "revision": 1,
+      "factFamily": "mlb-pack1-28",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who was the first player to hit 50 home runs and steal 50 bases in one season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Shohei Ohtani"
+        },
+        {
+          "id": "p1",
+          "label": "Aaron Judge"
+        },
+        {
+          "id": "p2",
+          "label": "Ronald Acuña Jr."
+        },
+        {
+          "id": "p3",
+          "label": "Mookie Betts"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Shohei Ohtani.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/40%E2%80%9340_club",
+        "credit": "40–40 club"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-29",
+      "revision": 1,
+      "factFamily": "mlb-pack1-29",
+      "league": "mlb",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team broke the \"Curse of the Bambino\" by winning the 2004 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Boston Red Sox"
+        },
+        {
+          "id": "p1",
+          "label": "Chicago Cubs"
+        },
+        {
+          "id": "p2",
+          "label": "Chicago White Sox"
+        },
+        {
+          "id": "p3",
+          "label": "Cleveland Indians"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Boston Red Sox.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Curse_of_the_Bambino",
+        "credit": "Curse of the Bambino"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "mlb-pack1-30",
+      "revision": 1,
+      "factFamily": "mlb-pack1-30",
+      "league": "mlb",
+      "season": "2026",
+      "topic": "history",
+      "scope": "postseason",
+      "recheckBy": "2027-11-05",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the 2026 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Milwaukee Brewers"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Dodgers"
+        },
+        {
+          "id": "p2",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p3",
+          "label": "Philadelphia Phillies"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Milwaukee Brewers (4–1 over the Rays).",
+      "source": {
+        "url": "https://www.baseball-reference.com/postseason/",
+        "credit": "Baseball-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-01",
+      "revision": 1,
+      "factFamily": "nhl-pack1-01",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the NHL's career goals leader?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Alex Ovechkin"
+        },
+        {
+          "id": "p1",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p2",
+          "label": "Gordie Howe"
+        },
+        {
+          "id": "p3",
+          "label": "Jaromír Jágr"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Alex Ovechkin.",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/goals_career.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-02",
+      "revision": 1,
+      "factFamily": "nhl-gretzky-points",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the NHL's career points leader?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p1",
+          "label": "Jaromír Jágr"
+        },
+        {
+          "id": "p2",
+          "label": "Mark Messier"
+        },
+        {
+          "id": "p3",
+          "label": "Gordie Howe"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Wayne Gretzky (2,857).",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/points_career.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-03",
+      "revision": 1,
+      "factFamily": "nhl-gretzky-92",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored a record 92 goals in a single season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p1",
+          "label": "Brett Hull"
+        },
+        {
+          "id": "p2",
+          "label": "Mario Lemieux"
+        },
+        {
+          "id": "p3",
+          "label": "Phil Esposito"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Wayne Gretzky.",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/goals_season.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-04",
+      "revision": 1,
+      "factFamily": "nhl-pack1-04",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who holds the single-season points record, with 215?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p1",
+          "label": "Mario Lemieux"
+        },
+        {
+          "id": "p2",
+          "label": "Phil Esposito"
+        },
+        {
+          "id": "p3",
+          "label": "Connor McDavid"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Wayne Gretzky.",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/points_season.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-05",
+      "revision": 1,
+      "factFamily": "nhl-brodeur-wins",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie has the most wins in NHL history?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p1",
+          "label": "Marc-André Fleury"
+        },
+        {
+          "id": "p2",
+          "label": "Patrick Roy"
+        },
+        {
+          "id": "p3",
+          "label": "Roberto Luongo"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Martin Brodeur (691).",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/wins_goalie_career.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-06",
+      "revision": 1,
+      "factFamily": "nhl-pack1-06",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie has a record 125 career shutouts?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p1",
+          "label": "Terry Sawchuk"
+        },
+        {
+          "id": "p2",
+          "label": "George Hainsworth"
+        },
+        {
+          "id": "p3",
+          "label": "Glenn Hall"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Martin Brodeur.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Martin_Brodeur",
+        "credit": "Martin Brodeur"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-07",
+      "revision": 1,
+      "factFamily": "nhl-henri-richard-cups",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which player won a record 11 Stanley Cups?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Henri Richard"
+        },
+        {
+          "id": "p1",
+          "label": "Jean Béliveau"
+        },
+        {
+          "id": "p2",
+          "label": "Yvan Cournoyer"
+        },
+        {
+          "id": "p3",
+          "label": "Maurice Richard"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Henri Richard.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Henri_Richard",
+        "credit": "Henri Richard"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-08",
+      "revision": 1,
+      "factFamily": "nhl-pack1-08",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which franchise has won the most Stanley Cups?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Montreal Canadiens"
+        },
+        {
+          "id": "p1",
+          "label": "Toronto Maple Leafs"
+        },
+        {
+          "id": "p2",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p3",
+          "label": "Boston Bruins"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Montreal Canadiens (24).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_Stanley_Cup_champions",
+        "credit": "Stanley Cup champions"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-09",
+      "revision": 1,
+      "factFamily": "nhl-pack1-09",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the only defenseman to win the NHL scoring title?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bobby Orr"
+        },
+        {
+          "id": "p1",
+          "label": "Paul Coffey"
+        },
+        {
+          "id": "p2",
+          "label": "Denis Potvin"
+        },
+        {
+          "id": "p3",
+          "label": "Ray Bourque"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bobby Orr.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Bobby_Orr",
+        "credit": "Bobby Orr"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-10",
+      "revision": 1,
+      "factFamily": "nhl-pack1-10",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won a record eight straight Norris Trophies as the league's best defenseman?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bobby Orr"
+        },
+        {
+          "id": "p1",
+          "label": "Nicklas Lidström"
+        },
+        {
+          "id": "p2",
+          "label": "Doug Harvey"
+        },
+        {
+          "id": "p3",
+          "label": "Ray Bourque"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bobby Orr.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Bobby_Orr",
+        "credit": "Bobby Orr"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-11",
+      "revision": 1,
+      "factFamily": "nhl-gretzky-points",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career points did Wayne Gretzky score?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "2,857"
+        },
+        {
+          "id": "p1",
+          "label": "1,850"
+        },
+        {
+          "id": "p2",
+          "label": "1,921"
+        },
+        {
+          "id": "p3",
+          "label": "2,433"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 2,857.",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/points_career.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-12",
+      "revision": 1,
+      "factFamily": "nhl-gretzky-92",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many goals did Wayne Gretzky score in 1981–82?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "92"
+        },
+        {
+          "id": "p1",
+          "label": "76"
+        },
+        {
+          "id": "p2",
+          "label": "86"
+        },
+        {
+          "id": "p3",
+          "label": "99"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 92.",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/goals_season.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-13",
+      "revision": 1,
+      "factFamily": "nhl-brodeur-wins",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many career wins did Martin Brodeur record?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "691"
+        },
+        {
+          "id": "p1",
+          "label": "535"
+        },
+        {
+          "id": "p2",
+          "label": "551"
+        },
+        {
+          "id": "p3",
+          "label": "750"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 691.",
+      "source": {
+        "url": "https://www.hockey-reference.com/leaders/wins_goalie_career.html",
+        "credit": "Hockey-Reference"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-14",
+      "revision": 1,
+      "factFamily": "nhl-henri-richard-cups",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many Stanley Cups did Henri Richard win?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "11"
+        },
+        {
+          "id": "p1",
+          "label": "8"
+        },
+        {
+          "id": "p2",
+          "label": "9"
+        },
+        {
+          "id": "p3",
+          "label": "10"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is 11.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Henri_Richard",
+        "credit": "Henri Richard"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-15",
+      "revision": 1,
+      "factFamily": "nhl-pack1-15",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname is \"The Great One\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Wayne Gretzky"
+        },
+        {
+          "id": "p1",
+          "label": "Mario Lemieux"
+        },
+        {
+          "id": "p2",
+          "label": "Gordie Howe"
+        },
+        {
+          "id": "p3",
+          "label": "Bobby Orr"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Wayne Gretzky.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-16",
+      "revision": 1,
+      "factFamily": "nhl-pack1-16",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Mr. Hockey\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Gordie Howe"
+        },
+        {
+          "id": "p1",
+          "label": "Bobby Hull"
+        },
+        {
+          "id": "p2",
+          "label": "Maurice Richard"
+        },
+        {
+          "id": "p3",
+          "label": "Jean Béliveau"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Gordie Howe.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-17",
+      "revision": 1,
+      "factFamily": "nhl-pack1-17",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Rocket\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Maurice Richard"
+        },
+        {
+          "id": "p1",
+          "label": "Henri Richard"
+        },
+        {
+          "id": "p2",
+          "label": "Guy Lafleur"
+        },
+        {
+          "id": "p3",
+          "label": "Bobby Hull"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Maurice Richard.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-18",
+      "revision": 1,
+      "factFamily": "nhl-pack1-18",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Pocket Rocket\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Henri Richard"
+        },
+        {
+          "id": "p1",
+          "label": "Maurice Richard"
+        },
+        {
+          "id": "p2",
+          "label": "Yvan Cournoyer"
+        },
+        {
+          "id": "p3",
+          "label": "Stan Mikita"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Henri Richard.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-19",
+      "revision": 1,
+      "factFamily": "nhl-pack1-19",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Golden Jet\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bobby Hull"
+        },
+        {
+          "id": "p1",
+          "label": "Brett Hull"
+        },
+        {
+          "id": "p2",
+          "label": "Stan Mikita"
+        },
+        {
+          "id": "p3",
+          "label": "Phil Esposito"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Bobby Hull.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-20",
+      "revision": 1,
+      "factFamily": "nhl-pack1-20",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"Super Mario\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Mario Lemieux"
+        },
+        {
+          "id": "p1",
+          "label": "Jaromír Jágr"
+        },
+        {
+          "id": "p2",
+          "label": "Steve Yzerman"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Sakic"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Mario Lemieux.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-21",
+      "revision": 1,
+      "factFamily": "nhl-pack1-21",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie's nickname was \"The Dominator\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dominik Hašek"
+        },
+        {
+          "id": "p1",
+          "label": "Patrick Roy"
+        },
+        {
+          "id": "p2",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p3",
+          "label": "Ed Belfour"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Dominik Hašek.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-22",
+      "revision": 1,
+      "factFamily": "nhl-pack1-22",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Flower\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Guy Lafleur"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Bossy"
+        },
+        {
+          "id": "p2",
+          "label": "Marcel Dionne"
+        },
+        {
+          "id": "p3",
+          "label": "Jean Béliveau"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Guy Lafleur.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-23",
+      "revision": 1,
+      "factFamily": "nhl-pack1-23",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname was \"The Russian Rocket\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pavel Bure"
+        },
+        {
+          "id": "p1",
+          "label": "Sergei Fedorov"
+        },
+        {
+          "id": "p2",
+          "label": "Alexander Mogilny"
+        },
+        {
+          "id": "p3",
+          "label": "Ilya Kovalchuk"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Pavel Bure.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-24",
+      "revision": 1,
+      "factFamily": "nhl-pack1-24",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname is \"Sid the Kid\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Sidney Crosby"
+        },
+        {
+          "id": "p1",
+          "label": "Connor McDavid"
+        },
+        {
+          "id": "p2",
+          "label": "Nathan MacKinnon"
+        },
+        {
+          "id": "p3",
+          "label": "Steven Stamkos"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Sidney Crosby.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-25",
+      "revision": 1,
+      "factFamily": "nhl-pack1-25",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose nickname is \"The Great 8\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Alex Ovechkin"
+        },
+        {
+          "id": "p1",
+          "label": "Evgeni Malkin"
+        },
+        {
+          "id": "p2",
+          "label": "Nikita Kucherov"
+        },
+        {
+          "id": "p3",
+          "label": "Artemi Panarin"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Alex Ovechkin.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-26",
+      "revision": 1,
+      "factFamily": "nhl-pack1-26",
+      "league": "nhl",
+      "topic": "nicknames",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which enforcer's nickname was \"The Hammer\"?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dave Schultz"
+        },
+        {
+          "id": "p1",
+          "label": "Tiger Williams"
+        },
+        {
+          "id": "p2",
+          "label": "Bob Probert"
+        },
+        {
+          "id": "p3",
+          "label": "Tie Domi"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Dave Schultz.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
+        "credit": "Hockey nicknames"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-27",
+      "revision": 1,
+      "factFamily": "nhl-pack1-27",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Bobby Orr's famous \"flying\" goal won the 1970 Stanley Cup against which team?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "St. Louis Blues"
+        },
+        {
+          "id": "p1",
+          "label": "New York Rangers"
+        },
+        {
+          "id": "p2",
+          "label": "Chicago Black Hawks"
+        },
+        {
+          "id": "p3",
+          "label": "Montreal Canadiens"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is St. Louis Blues.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Bobby_Orr",
+        "credit": "Bobby Orr"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-28",
+      "revision": 1,
+      "factFamily": "nhl-pack1-28",
+      "league": "nhl",
+      "topic": "history",
+      "scope": "regular-season",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who is the Conn Smythe Trophy awarded to?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "The MVP of the playoffs"
+        },
+        {
+          "id": "p1",
+          "label": "The regular-season MVP"
+        },
+        {
+          "id": "p2",
+          "label": "The best goaltender"
+        },
+        {
+          "id": "p3",
+          "label": "The top scorer"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is the MVP of the playoffs.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Conn_Smythe_Trophy",
+        "credit": "Conn Smythe Trophy"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-29",
+      "revision": 1,
+      "factFamily": "nhl-pack1-29",
+      "league": "nhl",
+      "season": "2025–26",
+      "topic": "history",
+      "scope": "postseason",
+      "recheckBy": "2027-06-30",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won the 2026 Stanley Cup?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carolina Hurricanes"
+        },
+        {
+          "id": "p1",
+          "label": "Florida Panthers"
+        },
+        {
+          "id": "p2",
+          "label": "Edmonton Oilers"
+        },
+        {
+          "id": "p3",
+          "label": "Dallas Stars"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Carolina Hurricanes (4–2 over Vegas).",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/List_of_Stanley_Cup_champions",
+        "credit": "Stanley Cup champions"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nhl-pack1-30",
+      "revision": 1,
+      "factFamily": "nhl-pack1-30",
+      "league": "nhl",
+      "season": "2025–26",
+      "topic": "history",
+      "scope": "postseason",
+      "recheckBy": "2027-06-30",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the 2026 Conn Smythe Trophy?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jordan Staal"
+        },
+        {
+          "id": "p1",
+          "label": "Sebastian Aho"
+        },
+        {
+          "id": "p2",
+          "label": "Andrei Svechnikov"
+        },
+        {
+          "id": "p3",
+          "label": "Frederik Andersen"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The answer is Jordan Staal.",
+      "source": {
+        "url": "https://en.wikipedia.org/wiki/Conn_Smythe_Trophy",
+        "credit": "Conn Smythe Trophy"
+      },
+      "checkedAt": "2026-11-02",
+      "verification": "source-checked; reviewed by the site owner 2026-11-03",
       "publicationStatus": "prototype-only"
     }
   ]

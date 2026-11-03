@@ -16,6 +16,15 @@ The original prototype catalogue remains a design fixture. The server bank retai
 
 The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
 
+### Pack 1: records, nicknames and history
+
+The November 2026 pack adds 120 questions, 30 per league, in two new topics. `history` covers records, famous numbers ("How many career points did Wayne Gretzky score?"), firsts, trophies, famous moments and last season's champion. `nicknames` asks whose nickname a famous one was. Every question is four-choice trivia with a linked source, checked on November 2, 2026. The bank is now 216 questions.
+
+- **Daily rounds use pack questions only.** The original 96 questions carry `"dailyEligible": false`, so they stay in Practice but no longer appear in the daily round. A question without the field is daily-eligible.
+- **No season for timeless topics.** `history` and `nicknames` questions may leave out `season`, and the page never shows one for them. A practice round with year bounds leaves them out.
+- **Last season rotates out.** A question about last season's champion has a `recheckBy` date. Selection skips it after that date, until someone updates it.
+- **One feat per round.** A record question and the famous-number question about the same feat share a `factFamily`, so a round never holds both.
+
 ## Streaks
 
 Daily rounds return `dailyStreak`: the Eastern days in a row, ending today or yesterday, on which this browser finished the daily round. An unfinished round today does not break a streak that ran through yesterday. It is counted from the saved `NumbersPlays` rows, so no migration is needed. The page shows it on the results screen and in the share text, and shows a hot streak after three correct answers in a row.
@@ -42,4 +51,4 @@ Editorial standard for future additions:
 
 ## Verification
 
-Content tests validate the embedded bank and all 225 nonempty league/topic filter combinations. Integration tests exercise shared daily content, ownership, hidden unanswered solutions (including opaque season-question IDs), saved feedback, scoring, answer retry after completion, practice start retries and conflicting start filters. Browser tests play all five questions, wait for each new question before selecting its answer, reload between feedback and continuation, resume completed results, start NBA-only practice, check mobile overflow and verify the legacy preview redirect and removed answer-bank URL.
+Content tests validate the embedded bank and all 945 nonempty league/topic filter combinations, and check that daily rounds draw only daily-eligible questions. Integration tests exercise shared daily content, ownership, hidden unanswered solutions (including opaque season-question IDs), saved feedback, scoring, answer retry after completion, practice start retries and conflicting start filters. Browser tests play all five questions, wait for each new question before selecting its answer, reload between feedback and continuation, resume completed results, start NBA-only practice, check mobile overflow and verify the legacy preview redirect and removed answer-bank URL.

@@ -53,7 +53,7 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
   await page.getByRole('button', { name: 'Practice', exact: true }).click();
   for (const name of ['NFL', 'MLB', 'NHL']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
   await page.getByText('Customize topics and years', { exact: true }).click();
-  for (const name of ['awards', 'teams', 'seasons']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
+  for (const name of ['history', 'nicknames', 'awards', 'teams', 'seasons']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
   await page.getByLabel('From season year').fill('2023');
   await page.getByLabel('Through season year').fill('2023');
   await expect(page.locator('.filter-summary')).toHaveText('NBA · stats · 2023–2023');

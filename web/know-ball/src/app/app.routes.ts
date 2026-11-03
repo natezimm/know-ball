@@ -13,7 +13,7 @@ export const routes: Routes = [
     path: 'numbers-dont-lie',
     title: "Numbers Don't Lie — Know Ball",
     data: {
-      description: "Numbers Don't Lie: five questions about stats, awards, teams and past seasons. Choose your leagues in practice.",
+      description: "Numbers Don't Lie: five questions about sports records, nicknames, famous numbers and history. Choose your leagues in practice.",
     } satisfies PageMetaData,
     loadComponent: () => import('./games/numbers-dont-lie/numbers-dont-lie').then(m => m.NumbersDontLie),
   },
