@@ -18,6 +18,11 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
     await page.getByRole('radio').first().check();
     await page.getByRole('button',{name:'Lock in answer'}).click();
     await expect(page.locator('.feedback')).toBeVisible();
+    // The verdict is scrolled into view on a phone and marks the answer in the list.
+    await expect(page.locator('.verdict')).toBeInViewport();
+    await expect(page.locator('.verdict h3')).toHaveText(/^(Correct!|Not quite\.)$/);
+    await expect(page.locator('.choice.is-answer')).toHaveCount(1);
+    await expect(page.locator('.choice.is-answer')).toContainText('Answer');
     await page.reload();
     await expect(page.locator('.feedback')).toBeVisible();
     await page.getByRole('button',{name:i===4?'See results':'Next question'}).click();
