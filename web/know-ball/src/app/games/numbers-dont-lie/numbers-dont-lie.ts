@@ -65,7 +65,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
             </details>
           }
         } @else if (s.current; as q) {
-          <p>{{q.league.toUpperCase()}} · {{q.season || 'Name the season'}} · Question {{s.position + 1}} of 5</p>
+          <p>{{q.league.toUpperCase()}} · {{questionLabel(q)}} · Question {{s.position + 1}} of 5</p>
           <h2 tabindex="-1">{{q.prompt}}</h2>
           <fieldset [disabled]="busy() || s.answeredCount > s.position || !!error()"><legend>Choose one answer</legend>
             @for (option of (s.review[s.position]?.question ?? q).options; track option.id) {
@@ -133,6 +133,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
 })
 export class NumbersDontLie {
   private http = inject(HttpClient); private router = inject(Router);
+  readonly questionLabel = questionLabel;
   readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','seasons','stats'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
@@ -272,6 +273,13 @@ export class NumbersDontLie {
 }
 
 /** Spoiler-free share text: the score, a square per answer and the daily streak. */
+/** The header's middle segment: the season, a prompt to name it, or the topic for career-long questions. */
+export function questionLabel(q: Pick<Question,'season'|'topic'>): string {
+  if (q.season) return q.season;
+  if (q.topic === 'seasons') return 'Name the season';
+  return q.topic.charAt(0).toUpperCase() + q.topic.slice(1);
+}
+
 export function shareText(s: Pick<State, 'date' | 'mode' | 'correctCount' | 'review' | 'dailyStreak'>): string {
   const squares = s.review.map(a => a.correct ? '🟩' : '⬜').join('');
   const streak = s.mode === 'daily' && s.dailyStreak ? `\n🔥 ${s.dailyStreak}-day streak` : '';
