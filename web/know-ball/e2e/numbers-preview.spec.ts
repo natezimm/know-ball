@@ -10,7 +10,7 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
   await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(4);
-  await page.getByRole('link',{name:"Numbers Don't Lie: Play anytime"}).click();
+  await page.getByRole('link',{name:"Numbers Don't Lie: Play today's quiz"}).click();
   await expect(page.getByRole('heading',{name:"Numbers Don't Lie",exact:true})).toBeVisible();
   for(let i=0;i<5;i++) {
     await expect(page.getByText(new RegExp(`Question ${i + 1} of 5$`))).toBeVisible();
@@ -59,7 +59,7 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
   await page.getByLabel('From season year').fill('2023');
   await page.getByLabel('Through season year').fill('2023');
   await expect(page.locator('.filter-summary')).toHaveText('NBA · stats · 2023–2023');
-  await expect(page.getByText(/fresh facts \/ 6 matching facts/)).toBeVisible();
+  await expect(page.getByText(/questions? (you haven't seen )?match/)).toBeVisible();
   const repeat = page.getByRole('checkbox', { name: 'Allow previously included facts for this round' });
   if (await repeat.isVisible()) await repeat.check(); // Today's shared quiz may reserve one of these facts.
   await page.getByRole('button', { name: 'Start practice', exact: true }).click();

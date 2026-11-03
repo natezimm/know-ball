@@ -69,6 +69,10 @@ export class SpordleGame {
   readonly letterHint = signal<LetterHint | null>(null);
   readonly hintLoading = signal(false);
   readonly hintError = signal('');
+  /** Goes up each time a word is turned away, so the page can shake the row. */
+  readonly rejected = signal(0);
+  /** Keys pressed while tiles were still turning over, applied once they finish. */
+  private queued: string[] = [];
 
   /** A request or the tile reveal is in flight, so input is ignored. */
   readonly busy = computed(() => ['loading', 'validating', 'revealing'].includes(this.status()));
@@ -217,6 +221,11 @@ export class SpordleGame {
 
   /** A key from the on-screen or physical keyboard: a letter, "Enter" or "Backspace". */
   press(key: string): void {
+    // Fast typists start the next word while the last one is still flipping; keep those keys.
+    if (this.status() === 'revealing') {
+      if (key === 'Enter' || key === 'Backspace' || /^[a-zA-Z]$/.test(key)) this.queued.push(key);
+      return;
+    }
     if (this.status() !== 'playing' && this.status() !== 'loading') return;
     // Resume must finish before typing or submitting against the existing server round.
     if (this.status() === 'loading' && this.gameId()) return;
@@ -266,6 +275,7 @@ export class SpordleGame {
     }
     if (guess.length !== length) {
       this.message.set(`Guess must be ${length} letters.`);
+      this.rejected.update((n) => n + 1);
       return;
     }
 
@@ -312,6 +322,7 @@ export class SpordleGame {
     const score = result.score;
     if (!result.valid || !score) {
       this.message.set('Not in the word list. Try again.');
+      this.rejected.update((n) => n + 1);
       this.status.set('playing');
       return;
     }
@@ -339,8 +350,12 @@ export class SpordleGame {
       if (!result.complete) {
         this.message.set('');
         this.status.set('playing');
+        const keys = this.queued;
+        this.queued = [];
+        keys.forEach((key) => this.press(key));
         return;
       }
+      this.queued = [];
 
       const won = result.won === true;
       const answer = result.answer ?? guess;
@@ -361,6 +376,7 @@ export class SpordleGame {
   }
 
   private cancel(): void {
+    this.queued = [];
     this.request?.unsubscribe();
     this.hintRequest?.unsubscribe();
     this.timers.forEach((timer) => clearTimeout(timer));

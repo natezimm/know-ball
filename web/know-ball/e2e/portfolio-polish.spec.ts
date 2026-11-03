@@ -93,14 +93,14 @@ for (const action of ['4 letters', 'New game']) {
     await page.keyboard.type('about');
     await page.keyboard.press('Enter');
     await expect(page.locator('.status')).toHaveText('Guess 2 of 6');
-    page.once('dialog', async (dialog) => {
-      expect(dialog.message()).toContain('count this one as a loss');
-      await dialog.dismiss();
-    });
+    const confirm = page.getByRole('dialog', { name: 'Start a new word?' });
     await page.getByRole('button', { name: action, exact: true }).click();
+    await expect(confirm).toContainText('counts as a loss');
+    await confirm.getByRole('button', { name: 'Keep playing' }).click();
+    await expect(confirm).toBeHidden();
     await expect(page.locator('.status')).toHaveText('Guess 2 of 6');
-    page.once('dialog', (dialog) => dialog.accept());
     await page.getByRole('button', { name: action, exact: true }).click();
+    await confirm.getByRole('button', { name: 'Start new word' }).click();
     await expect(page.locator('.status')).toHaveText('Guess 1 of 6');
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('knowball.spordle.stats')!).byLength['5'])).toMatchObject({ totalGames: 1, wins: 0 });
   });

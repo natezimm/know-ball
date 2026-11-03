@@ -1,7 +1,11 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { easternDate, nextEasternMidnight } from '../../core/games';
+import { Countdown } from '../../shared/countdown/countdown';
+import { NextGame } from '../../shared/next-game/next-game';
 import { Observable, firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -13,69 +17,110 @@ interface Answer { question: Question; optionId: string; correct: boolean; }
 interface State { filters?: Filters | null; id: string; mode: string; date: string | null; position: number; revision: number; answeredCount: number; correctCount: number; dailyStreak?: number | null; complete: boolean; current: Question | null; review: Answer[]; }
 
 @Component({
-  selector: 'app-numbers-dont-lie', imports: [FormsModule, RouterLink],
+  selector: 'app-numbers-dont-lie', imports: [Countdown, DatePipe, FormsModule, NextGame],
   template: `
-    <a routerLink="/">← All games</a>
-    <header><p>Daily & practice</p><h1>Numbers Don't Lie</h1>
-    <p>Five questions. Records, nicknames, famous numbers and history across four leagues.</p></header>
-    <p class="note">Your progress saves in this browser. Practice rounds last 30 days.</p>
-    <nav aria-label="Quiz mode"><button class="kb-btn primary" (click)="daily()" [disabled]="busy()">Daily challenge</button>
-      <button class="kb-btn" (click)="customize()" [disabled]="busy()">Practice</button></nav>
-    @if (error()) { <p role="alert">{{error()}}</p><button class="kb-btn" (click)="retry()" [disabled]="busy()">Retry</button> }
-    @if (busy()) { <p role="status">Saving / loading…</p> }
+    <div class="nd">
+    <header class="kb-game-top">
+      <h1 class="kb-wordmark" aria-label="Numbers Don't Lie">Numbers Don't Lie</h1>
+      <div class="kb-icons">
+        <button type="button" class="kb-icon" aria-label="How to play" title="How to play" (click)="openHelp(helpDialog)">?</button>
+        <button type="button" class="kb-icon" aria-label="Practice" title="Practice" (click)="customize()" [disabled]="busy()">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h7.2a2 2 0 0 1 3.6 0H14v2h-1.2a2 2 0 0 1-3.6 0H2zm0 8h1.2a2 2 0 0 1 3.6 0H14v2H6.8a2 2 0 0 1-3.6 0H2z" /></svg>
+        </button>
+      </div>
+    </header>
+
+    @if (!setup() && state(); as s) {
+      <div class="kb-meta">
+        <span class="kb-label">@if (s.mode === 'daily') { Daily · {{ s.date | date: 'EEE, MMM d' }} } @else { Practice round }</span>
+        <span class="kb-dots" role="img" [attr.aria-label]="s.correctCount + ' right of ' + s.answeredCount + ' answered'">
+          @for (n of [0, 1, 2, 3, 4]; track n) { <i [class.hit]="s.review[n]?.correct" [class.miss]="s.review[n] && !s.review[n].correct"></i> }
+        </span>
+      </div>
+    } @else {
+      <div class="kb-meta"><span class="kb-label">Practice</span></div>
+    }
+    @if (setup() || state()?.mode === 'practice' || isPastDaily()) {
+      <nav class="modes" aria-label="Quiz mode"><button type="button" class="kb-btn" (click)="daily()" [disabled]="busy()">Today's quiz</button></nav>
+    }
+
+    @if (error()) { <div class="problem" role="alert"><p>{{error()}}</p><button class="kb-btn" (click)="retry()" [disabled]="busy()">Retry</button></div> }
+    @if (busy()) { <p class="kb-label busy" role="status">Loading…</p> }
+
     @if (setup()) {
-      <section><h2>Choose your practice</h2>
-        <fieldset><legend>Leagues</legend>
-          @for (league of leagues; track league) { <label><input type="checkbox" [checked]="selected.includes(league)" (change)="toggle(league, 'league')">{{league.toUpperCase()}}</label> }
+      <section class="panel"><h2>Choose your practice</h2>
+        <fieldset class="chips"><legend class="kb-label">Leagues</legend>
+          @for (league of leagues; track league) { <label class="kb-chip"><input type="checkbox" [checked]="selected.includes(league)" (change)="toggle(league, 'league')">{{league.toUpperCase()}}</label> }
         </fieldset>
         <details><summary>Customize topics and years</summary>
-          <fieldset><legend>Topics</legend>@for (topic of topics; track topic) { <label><input type="checkbox" [checked]="chosen.includes(topic)" (change)="toggle(topic, 'topic')">{{topic}}</label> }</fieldset>
-          <label>From season year <input type="number" [(ngModel)]="fromYear" (ngModelChange)="filtersChanged()" min="1900" max="2100"></label>
-          <label>Through season year <input type="number" [(ngModel)]="throughYear" (ngModelChange)="filtersChanged()" min="1900" max="2100"></label>
+          <fieldset class="chips"><legend class="kb-label">Topics</legend>@for (topic of topics; track topic) { <label class="kb-chip"><input type="checkbox" [checked]="chosen.includes(topic)" (change)="toggle(topic, 'topic')">{{topic}}</label> }</fieldset>
+          <div class="years">
+            <label>From season year <input type="number" [(ngModel)]="fromYear" (ngModelChange)="filtersChanged()" min="1900" max="2100" placeholder="Any"></label>
+            <label>Through season year <input type="number" [(ngModel)]="throughYear" (ngModelChange)="filtersChanged()" min="1900" max="2100" placeholder="Any"></label>
+          </div>
         </details>
         <p class="filter-summary">{{filterSummary()}}</p>
-        @if (coverageBusy()) { <p role="status">Checking available questions…</p> }
+        @if (coverageBusy()) { <p class="muted" role="status">Checking available questions…</p> }
         @if (coverageError()) { <p role="alert">{{coverageError()}}</p><button class="kb-btn" (click)="checkCoverage()">Check availability</button> }
         @if (coverage(); as c) {
-          <p role="status">{{c.freshFacts}} fresh facts / {{c.eligibleFacts}} matching facts.</p>
-          <p class="note">Fresh facts were not included in your rounds in the last 30 days. Five questions are balanced across your selected leagues.</p>
-          @for (entry of c.leagues; track entry.league) { <p class="note">{{entry.league.toUpperCase()}}: {{entry.fresh}} fresh / {{entry.eligible}} matching</p> }
-          @if (!c.canStartFresh) {
-            <p role="status">Not enough fresh facts for a full round. Add leagues or topics, or widen the years.</p>
-            @if (c.canStartWithRepeats) { <label><input type="checkbox" [(ngModel)]="allowRepeats">Allow previously included facts for this round</label> }
+          @if (c.canStartFresh) {
+            <p class="muted" role="status">Ready: {{c.freshFacts}} questions you haven't seen match.</p>
+          } @else {
+            <p role="status">Only {{c.freshFacts}} new {{c.freshFacts === 1 ? 'question matches' : 'questions match'}}, not enough for a fresh round. Add leagues or topics, or widen the years.</p>
+            @if (c.canStartWithRepeats) { <label class="check"><input type="checkbox" [(ngModel)]="allowRepeats">Allow previously included facts for this round</label> }
             @else { <p>These filters cannot fill a five-question round, even with repeats.</p> }
           }
         }
         <button class="kb-btn primary" (click)="practice()" [disabled]="busy() || coverageBusy() || !canStart()">Start practice</button>
       </section>
     } @else if (state(); as s) {
-      <section>
-        <p class="scoreline">{{s.mode === 'daily' ? 'Daily · ' + s.date : 'Practice'}} · Score {{s.correctCount}} / {{s.answeredCount}}
-          @if (hotStreak(s) >= 3) { <span class="hot"><span aria-hidden="true">🔥 </span>Hot streak: {{hotStreak(s)}}</span> }</p>
+      <section class="panel">
         @if (s.mode === 'practice') { <p class="filter-summary">{{filterSummary(s.filters)}}</p> }
         @if (s.complete) {
-          <h2 tabindex="-1">That’s the final score.</h2><p class="score">{{s.correctCount}} / 5</p>
-          @if (s.mode === 'daily' && s.dailyStreak) { <p class="final-detail"><span aria-hidden="true">🔥 </span>Daily streak: {{s.dailyStreak}} {{s.dailyStreak === 1 ? 'day' : 'days'}}</p> }
-          <button class="kb-btn" (click)="practice()" [disabled]="busy()">Play another round</button><button class="kb-btn" (click)="customize()">Customize practice</button>
-          <button class="kb-btn" (click)="share()">Share result</button><p role="status">{{shareStatus()}}</p>
-          @for (answer of s.review; track answer.question.id) {
-            <details><summary>{{answer.correct ? 'Correct' : 'Missed'}} · {{answer.question.prompt}}</summary>
-              <p>{{answer.question.explanation}}</p>
-              @if (answer.question.source; as source) { <a [href]="source.url" target="_blank" rel="noopener">{{source.credit}}</a> }
-            </details>
-          }
+          <div class="final kb-result" [class.won]="s.correctCount === 5" role="status">
+            <div class="kb-result-who">
+              <h2 class="kb-label" tabindex="-1">That’s the final score.</h2>
+              <p class="score">{{s.correctCount}} / 5</p>
+              <p class="pips" [attr.aria-label]="s.correctCount + ' of 5 right'">
+                @for (a of s.review; track a.question.id) { <span [class.right]="a.correct" aria-hidden="true">{{a.correct ? '✓' : '✗'}}</span> }
+              </p>
+              @if (s.mode === 'daily' && s.dailyStreak) { <p class="final-detail"><span aria-hidden="true">🔥 </span>Daily streak: {{s.dailyStreak}} {{s.dailyStreak === 1 ? 'day' : 'days'}}</p> }
+              @if (s.mode === 'daily' && !isPastDaily()) { <p class="kb-result-detail">Next quiz in <app-countdown [until]="nextDaily" (done)="nextDaily = nextEasternMidnight()" /></p> }
+            </div>
+            <div class="kb-result-next">
+              <button class="kb-btn primary" (click)="share()">Share result</button>
+              <button class="kb-btn" (click)="practice()" [disabled]="busy()">Play another round</button>
+              <app-next-game current="numbers-dont-lie" />
+              <button class="kb-link" (click)="customize()">Customize practice</button>
+            </div>
+          </div>
+          @if (shareStatus()) { <p class="muted" role="status">{{shareStatus()}}</p> }
+          <ol class="recap">
+            @for (answer of s.review; track answer.question.id) {
+              <li [class.right]="answer.correct"><details><summary><span class="mark" aria-hidden="true">{{answer.correct ? '✓' : '✗'}}</span><span>{{answer.correct ? 'Correct' : 'Missed'}} · {{answer.question.prompt}}</span></summary>
+                <p>{{answer.question.explanation}}</p>
+                @if (answer.question.source; as source) { <a [href]="source.url" target="_blank" rel="noopener">{{source.credit}}</a> }
+              </details></li>
+            }
+          </ol>
         } @else if (s.current; as q) {
-          <p>{{q.league.toUpperCase()}} · {{questionLabel(q)}} · Question {{s.position + 1}} of 5</p>
+          <p class="qmeta">{{q.league.toUpperCase()}} · {{questionLabel(q)}} · Question {{s.position + 1}} of 5</p>
+          @if (hotStreak(s) >= 3) { <p class="hot"><span aria-hidden="true">🔥 </span>Hot streak: {{hotStreak(s)}}</p> }
           <h2 tabindex="-1">{{q.prompt}}</h2>
-          <fieldset [disabled]="busy() || s.answeredCount > s.position || !!error()"><legend>Choose one answer</legend>
-            @for (option of (s.review[s.position]?.question ?? q).options; track option.id) {
+          <fieldset [disabled]="busy() || s.answeredCount > s.position || !!error()"><legend class="visually-hidden">Choose one answer</legend>
+            @let shown = (s.review[s.position]?.question ?? q);
+            @for (option of shown.options; track option.id; let i = $index) {
               @let answered = s.review[s.position];
               @let isAnswer = !!answered && option.id === answered.question.correctOptionId;
               @let isMiss = !!answered && !answered.correct && option.id === answered.optionId;
-              <label class="choice" [class.is-answer]="isAnswer" [class.is-miss]="isMiss"><input type="radio" name="answer" [value]="option.id" [(ngModel)]="choice">
-                <span class="choice-label">{{option.label}}</span>
-                @if (isAnswer) { <span class="tag"><span aria-hidden="true">✓ </span>Answer</span> }
-                @else if (isMiss) { <span class="tag"><span aria-hidden="true">✗ </span>Your pick</span> }
+              <label class="choice" [class.is-answer]="isAnswer" [class.is-miss]="isMiss" [class.locked]="!!answered">
+                <input type="radio" name="answer" [value]="option.id" [(ngModel)]="choice">
+                @if (answered && option.value !== undefined) { <span class="bar" aria-hidden="true" [style.--share]="valueShare(shown, option) + '%'"></span> }
+                <span class="letter" aria-hidden="true">{{'ABCDEF'[i]}}</span>
+                <span class="choice-label">{{option.label}}
+                  @if (isAnswer) { <span class="tag"><span aria-hidden="true">✓ </span>Answer</span> }
+                  @else if (isMiss) { <span class="tag"><span aria-hidden="true">✗ </span>Your pick</span> }
+                </span>
                 @if (answered && option.value !== undefined) { <span class="choice-value">{{option.value}}</span> }
               </label>
             }
@@ -90,31 +135,69 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
             <p>{{answer.question.explanation}}</p>
             @if (answer.question.source; as source) {
               <a [href]="source.url" target="_blank" rel="noopener">{{source.credit}}</a>
-              @if (source.licenseUrl) { <p><a [href]="source.licenseUrl" target="_blank" rel="noopener">CC BY 4.0</a> · Weekly totals aggregated by Know Ball; no endorsement.</p> }
+              @if (source.licenseUrl) { <p class="muted"><a [href]="source.licenseUrl" target="_blank" rel="noopener">CC BY 4.0</a> · Weekly totals aggregated by Know Ball; no endorsement.</p> }
             }</div>
-            <button class="kb-btn primary" (click)="advance()" [disabled]="busy()">{{s.position === 4 ? 'See results' : 'Next question'}}</button>
-          } @else { <button class="kb-btn primary" (click)="answer()" [disabled]="!choice || busy() || !!error()">Lock in answer</button> }
+            <button class="kb-btn primary go" (click)="advance()" [disabled]="busy()">{{s.position === 4 ? 'See results' : 'Next question'}}</button>
+          } @else { <button class="kb-btn primary go" (click)="answer()" [disabled]="!choice || busy() || !!error()">Lock in answer</button> }
         }
       </section>
     }
+    </div>
+
+    <dialog #helpDialog class="kb-dialog" aria-labelledby="nd-help-title" (click)="closeOnBackdrop($event)">
+      <div class="kb-dialog-head">
+        <h2 id="nd-help-title">How to play</h2>
+        <button type="button" class="kb-close" aria-label="Close" (click)="helpDialog.close()">×</button>
+      </div>
+      <p>Five questions a day about records, nicknames, famous numbers and history across the NBA, NFL, MLB and NHL.</p>
+      <p>Pick an answer and lock it in. The reveal shows the real numbers behind every choice.</p>
+      <p>Finish the daily quiz on consecutive days to build a streak. A new quiz arrives at midnight Eastern.</p>
+      <p>Practice (the sliders button) lets you choose leagues, topics and seasons, and never touches your streak.</p>
+      <p class="muted">Your progress is saved in this browser. Practice rounds are kept for 30 days.</p>
+    </dialog>
   `,
   styles: `
-    :host {display:block;max-width:740px;margin:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom));}
-    header {margin:24px 0;} h1 {font:400 clamp(30px,6vw,48px)/1.15 var(--display);margin:12px 0;}
-    h2 {font:400 25px/1.3 var(--display);overflow-wrap:anywhere;}
-    p,label {font-size:18px;line-height:1.5;} .note {color:var(--muted);font-size:15px;}
-    section {margin-top:20px;padding:24px;background:var(--surface);border:5px solid var(--teal);border-radius:8px;}
-    fieldset {border:0;padding:0;margin:18px 0;} label {display:block;padding:10px 0;}
-    .choice {border:2px solid var(--navy);border-radius:6px;margin:10px 0;padding:12px;cursor:pointer;}
-    input {margin-right:12px;max-width:100%;} button {margin:8px 8px 8px 0;padding:12px 18px;cursor:pointer;}
-    button:disabled {opacity:.6;cursor:default;} .feedback {margin-top:20px;}
-    .choice {display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;} .choice input {margin:0 2px 0 0;}
-    .choice-label {flex:1 1 auto;min-width:0;overflow-wrap:anywhere;} .choice-value {font-weight:700;font-variant-numeric:tabular-nums;}
-    .tag {font:400 12px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:4px;}
-    .choice.is-answer {border:3px solid var(--ok);background:color-mix(in srgb, var(--ok) 14%, var(--surface));}
+    :host {display:block;padding-bottom:calc(24px + env(safe-area-inset-bottom));}
+    .nd {max-width:620px;margin:0 auto;display:grid;gap:12px;--trim:var(--navy);}
+    .kb-game-top .kb-wordmark {font-size:clamp(27px,8vw,44px);}
+    h2 {font:400 24px/1.3 var(--display);margin:4px 0 0;overflow-wrap:anywhere;text-wrap:balance;}
+    p,label {font-size:18px;line-height:1.45;} p {margin:0;}
+    .muted {color:var(--muted);font-size:16px;}
+    .modes {display:flex;} .busy {color:var(--muted);}
+    .problem {display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 12px;border:2px solid var(--bad);border-radius:6px;background:var(--surface);}
+    .panel {display:grid;gap:12px;padding:20px;background:var(--surface);border:2px solid var(--navy);border-radius:8px;box-shadow:4px 4px 0 var(--navy);}
+    fieldset {border:0;padding:0;margin:0;min-width:0;}
+    .qmeta {font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+    .hot {justify-self:start;padding:2px 8px;border-radius:4px;background:var(--mustard);color:var(--navy);font-weight:700;font-size:15px;}
+
+    /* Each answer is a card: a lettered badge, the name, and once locked, its real number with a bar to scale. */
+    .choice {position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;margin:8px 0;padding:11px 12px;
+      border:2px solid var(--navy);border-radius:6px;background:var(--surface);cursor:pointer;overflow:hidden;}
+    .choice input {position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2;}
+    .choice:hover:not(.locked) {background:var(--surface-2);}
+    .choice:has(input:checked):not(.locked) {background:var(--navy);color:var(--cream);transform:translateX(4px);}
+    .choice:has(input:checked):not(.locked) .letter {background:var(--mustard);color:var(--navy);}
+    .choice:has(input:focus-visible) {outline:3px solid var(--mustard);outline-offset:2px;}
+    .choice.locked {cursor:default;} .choice.locked input {cursor:default;}
+    .letter {position:relative;z-index:1;display:grid;place-items:center;width:30px;height:30px;border:2px solid currentColor;border-radius:50%;
+      background:var(--cream);color:var(--navy);font:400 14px/1 var(--display);}
+    .choice-label {position:relative;z-index:1;min-width:0;overflow-wrap:anywhere;font-weight:700;}
+    .choice-value {position:relative;z-index:1;font:400 20px/1 var(--display);font-variant-numeric:tabular-nums;}
+    .bar {position:absolute;inset:0 auto 0 0;width:var(--share);background:color-mix(in srgb, var(--navy) 9%, transparent);
+      animation:grow .7s cubic-bezier(.2,.9,.3,1) both;}
+    .is-answer .bar {background:color-mix(in srgb, var(--ok) 22%, transparent);}
+    .is-miss .bar {background:color-mix(in srgb, var(--bad) 16%, transparent);}
+    @keyframes grow {from {width:0;}}
+    .tag {display:inline-block;margin-left:6px;vertical-align:2px;font:400 11px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:4px;white-space:nowrap;}
+    .choice.is-answer {border:3px solid var(--ok);}
     .choice.is-answer .tag {background:var(--ok);color:var(--ok-ink);}
-    .choice.is-miss {border:3px solid var(--bad);background:color-mix(in srgb, var(--bad) 10%, var(--surface));}
+    .choice.is-answer .letter {background:var(--ok);color:var(--ok-ink);border-color:var(--ok);}
+    .choice.is-miss {border:3px solid var(--bad);}
     .choice.is-miss .tag {background:var(--bad);color:var(--cream);}
+    .choice.is-miss .letter {background:var(--bad);color:var(--cream);border-color:var(--bad);}
+    .go {justify-self:start;padding:10px 20px;font-size:14px;}
+
+    .feedback {display:grid;gap:10px;}
     .verdict {display:flex;align-items:center;gap:14px;padding:14px 16px;border:3px solid var(--navy);border-radius:8px;
       box-shadow:4px 4px 0 var(--navy);animation:verdict-in .35s cubic-bezier(.2,1.4,.4,1) both;outline-offset:4px;scroll-margin:96px 0 24px;}
     .verdict.right {background:var(--ok);color:var(--ok-ink);} .verdict.wrong {background:var(--bad);color:var(--cream);}
@@ -124,15 +207,46 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
       background:var(--cream);color:var(--navy);font:700 28px/1 var(--font);border:3px solid var(--navy);}
     .verdict.right .verdict-icon {color:var(--ok);} .verdict.wrong .verdict-icon {color:var(--bad);}
     @keyframes verdict-in {from {transform:scale(.85);opacity:0;}}
-    @media (prefers-reduced-motion: reduce) {.verdict {animation:none;}}
-    .score {font:700 64px/1 var(--display);color:var(--teal);margin:12px 0 20px;} details {padding:14px 0;} a {overflow-wrap:anywhere;}
-    .scoreline .hot {display:inline-block;margin-left:6px;padding:2px 8px;border-radius:4px;background:var(--mustard);color:var(--navy);font-weight:700;font-size:15px;}
-    .final-detail {margin-top:-8px;font-weight:700;}
-    [role=alert] {color:var(--red);} @media(max-width:400px){section{padding:14px;} }
+    @media (prefers-reduced-motion: reduce) {.verdict, .bar {animation:none;}}
+    a {overflow-wrap:anywhere;}
+
+    .final {grid-template-columns:1fr;}
+    .final .kb-result-who > h2.kb-label {font:700 13px/1.2 var(--font);color:var(--muted);margin:0;}
+    .score {font:400 64px/1 var(--display);color:var(--teal);margin:4px 0;}
+    .pips {display:flex;gap:6px;}
+    .pips span {display:grid;place-items:center;width:28px;height:28px;border-radius:4px;border:2px solid var(--navy);
+      background:var(--miss);color:var(--miss-ink);font-weight:700;}
+    .pips .right {background:var(--ok);color:var(--ok-ink);}
+    .final-detail {font-weight:700;}
+    .recap {list-style:none;margin:0;padding:0;display:grid;}
+    .recap li {border-bottom:1px dashed var(--miss-line);}
+    .recap summary {display:flex;gap:10px;align-items:baseline;padding:10px 0;cursor:pointer;list-style:none;font-size:17px;}
+    .recap summary::-webkit-details-marker {display:none;}
+    .recap summary::after {content:"+";margin-left:auto;font-weight:700;}
+    .recap details[open] summary::after {content:"−";}
+    .recap .mark {flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--bad);color:var(--cream);font-size:13px;font-weight:700;}
+    .recap .right .mark {background:var(--ok);}
+    .recap details > :not(summary) {margin:0 0 10px 32px;}
+
+    .chips {display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+    .chips legend {float:left;width:100%;margin-bottom:6px;}
+    details {display:grid;gap:10px;}
+    details > summary {cursor:pointer;font-weight:700;}
+    .years {display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;}
+    .years label {display:grid;gap:2px;font-size:15px;color:var(--muted);}
+    .years input {width:120px;padding:6px 8px;border:2px solid var(--navy);border-radius:4px;background:var(--cream);color:var(--navy);font:700 16px/1.2 var(--font);}
+    .filter-summary {font-weight:700;}
+    .check {display:flex;gap:8px;align-items:center;} .check input {width:18px;height:18px;accent-color:var(--navy);}
+    [role=alert] {color:var(--red);} @media(max-width:400px){.panel{padding:14px;}}
   `
 })
 export class NumbersDontLie {
   private http = inject(HttpClient); private router = inject(Router);
+  /** When tomorrow's daily quiz opens. */
+  nextDaily = nextEasternMidnight();
+  protected readonly nextEasternMidnight = nextEasternMidnight;
+  /** A daily round from an earlier day, reopened from its address: it needs a way to today's quiz. */
+  isPastDaily() { const s = this.state(); return s?.mode === 'daily' && !!s.date && s.date !== easternDate(); }
   readonly questionLabel = questionLabel;
   readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','seasons','stats'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
@@ -264,6 +378,17 @@ export class NumbersDontLie {
   }
   /** Correct answers in a row, ending with the latest answer. */
   hotStreak(s: State) { let n = 0; for (let i = s.review.length - 1; i >= 0 && s.review[i].correct; i--) n++; return n; }
+  openHelp(d: HTMLDialogElement) { if (d.open) return; if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', ''); }
+  closeOnBackdrop(event: MouseEvent) { const d = event.currentTarget as HTMLDialogElement; if (event.target === d) d.close(); }
+  /**
+   * How far the bar behind an option reaches: the smallest number among the choices gets a stub and the
+   * largest the full width, so close totals such as 120 and 144 still look different.
+   */
+  valueShare(q: Question, option: Choice) {
+    const values = q.options.map(o => o.value ?? 0);
+    const low = Math.min(...values), high = Math.max(...values);
+    return high === low ? 100 : Math.round(15 + 85 * ((option.value ?? 0) - low) / (high - low));
+  }
   correctLabel(q:Question) { return q.options.find(o => o.id === q.correctOptionId)?.label || ''; }
   async share() {
     const s = this.state(); if(!s?.complete) return;

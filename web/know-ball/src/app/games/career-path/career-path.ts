@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
 import { GameState } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -59,12 +59,15 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
         <p>A team that moved or changed its name appears as it was at the time, with a lettered badge in place of a logo.</p>
       </div>
 
+      @if (answerLine()) {
+        <span answer class="kb-result-detail">{{ answerLine() }}</span>
+      }
       @if (state()?.answer?.alsoAccepted; as others) {
-        <span answer class="also">{{ others }} other {{ others === 1 ? 'player shares' : 'players share' }} this exact path.</span>
+        <span answer class="kb-result-detail">{{ others }} other {{ others === 1 ? 'player shares' : 'players share' }} this exact path.</span>
       }
 
       @if (state(); as s) {
-        <h2 class="ask">Whose career is this?</h2>
+        <h2 class="ask">{{ s.answer ? possessive(s.answer.name) + ' career' : 'Whose career is this?' }}</h2>
         <ol class="rail">
           @for (stop of s.payload.stops; track $index) {
             <li>
@@ -78,7 +81,9 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
               <div>
                 <b>{{ stop.team }}</b>
                 <small>{{ years(stop) }} · {{ stop.seasons }} {{ stop.seasons === 1 ? 'season' : 'seasons' }}</small>
-                <span class="bar"><i [style.width.%]="(stop.seasons / longest()) * 100"></i></span>
+                <span class="pips" aria-hidden="true">
+                  @for (n of seasonPips(stop.seasons); track $index) { <i></i> }
+                </span>
               </div>
             </li>
           }
@@ -86,7 +91,7 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
 
         <ul class="hints" aria-label="Hints">
           @for (hint of s.clues?.hints ?? []; track hint.label) {
-            <li [class.open]="hint.value">
+            <li [class.open]="hint.value" [class.fresh]="hint.value && $index >= openedOnLoad()">
               @if (hint.value) {
                 <small>{{ hint.label }}</small>{{ hint.value }}
               } @else {
@@ -101,10 +106,8 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
             @for (g of misses(); track g.playerId) {
               <li>
                 <app-avatar [src]="g.headshotUrl" [name]="g.name" />
-                <span>
-                  <s>{{ g.name }}</s>
-                  <small>{{ sharedWith(s.payload.stops, g.feedback) }}</small>
-                </span>
+                <s>{{ g.name }}</s>
+                <small [class.shared]="g.feedback?.shared?.length">{{ sharedWith(s.payload.stops, g.feedback) }}</small>
               </li>
             }
           </ol>
@@ -125,12 +128,13 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
       display: grid; place-items: center; overflow: hidden;
     }
     .logo img { width: 38px; height: 38px; }
-    .logo.badge { background: var(--mustard); font: 400 13px/1 var(--display); letter-spacing: .02em; }
+    .logo.badge { background: var(--surface); color: var(--navy); font: 400 13px/1 var(--display); letter-spacing: .02em; }
     .rail div { flex: 1; min-width: 0; display: grid; gap: 1px; }
     .rail b { font-size: 19px; line-height: 1.15; }
     .rail small { color: var(--muted); font-size: 16px; }
-    .bar { height: 6px; margin-top: 3px; border: 1.5px solid var(--navy); border-radius: 4px; background: var(--surface); }
-    .bar i { display: block; height: 100%; min-width: 6px; background: var(--mustard); }
+    /* One pip per season, so a long stay reads at a glance. */
+    .pips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+    .pips i { width: 9px; height: 9px; border-radius: 2px; background: var(--navy); }
 
     /* Hints are ticket stubs: dashed until earned, filled once open. */
     .hints { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
@@ -140,17 +144,18 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
     }
     .hints small { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
     .hints .open { border-style: solid; background: var(--mustard); color: var(--navy); }
+    /* A hint opened by the guess just made turns over like a card. */
+    .hints .fresh { animation: hint-flip .5s ease-out both; }
+    @keyframes hint-flip { from { transform: rotateY(90deg); } }
+    @media (prefers-reduced-motion: reduce) { .hints .fresh { animation: none; } }
 
-    .misses { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; }
-    .misses li {
-      display: flex; align-items: center; gap: 10px; padding: 6px 10px; border: 2px solid var(--miss-line); border-radius: 4px;
-      background: var(--miss);
-    }
-    .misses app-avatar { --size: 36px; }
-    .misses span { display: grid; min-width: 0; }
-    .misses s { font-weight: 700; text-decoration-color: var(--bad); text-decoration-thickness: 2px; }
-    .misses small { color: var(--miss-ink); font-size: 15px; }
-    .also { color: var(--muted); font-size: 16px; }
+    /* Misses are one line each: who, struck out, and which stops they share. */
+    .misses { list-style: none; margin: 4px 0 0; padding: 0; display: grid; }
+    .misses li { display: flex; align-items: center; gap: 8px; padding: 5px 2px; border-bottom: 1px dashed var(--miss-line); }
+    .misses app-avatar { --size: 26px; }
+    .misses s { flex: 1; min-width: 0; font-weight: 700; text-decoration-color: var(--bad); text-decoration-thickness: 2px; overflow-wrap: anywhere; }
+    .misses small { flex: none; padding: 1px 8px; border-radius: 999px; background: var(--miss); color: var(--miss-ink); font-size: 13px; font-weight: 700; }
+    .misses small.shared { background: var(--close); color: var(--close-ink); }
   `,
 })
 export class CareerPath {
@@ -164,13 +169,36 @@ export class CareerPath {
   protected readonly state = computed(
     () => this.store.state() as GameState<{ stops: CareerStop[] }, { hints: CareerHint[] }, CareerFeedback, CareerAnswer> | null,
   );
-  protected readonly longest = computed(() => Math.max(1, ...(this.state()?.payload.stops ?? []).map((s) => s.seasons)));
   protected readonly misses = computed(() => (this.state()?.guesses ?? []).filter((g) => !g.correct).reverse());
+  /** Position, draft, college and initials, which every finished game has opened. */
+  protected readonly answerLine = computed(() => {
+    const s = this.state();
+    if (!s?.answer) return '';
+    return (s.clues?.hints ?? []).filter((h) => h.value && h.label !== 'Initials').map((h) => h.value).join(' · ');
+  });
+  /** Hints already open when the puzzle loaded stay still; only those opened since turn over. */
+  private readonly loaded = signal<{ puzzleId: number; open: number } | null>(null);
+  protected readonly openedOnLoad = computed(() => this.loaded()?.open ?? Infinity);
   /** One square per guess: red for a miss, green for the one that got it. */
   protected readonly rows = computed(() => [(this.state()?.guesses ?? []).map((g) => (g.correct ? '🟩' : '🟥')).join('')]);
 
   constructor() {
     loadFromRoute(this.store, 'career-path', this.puzzleId);
+    effect(() => {
+      const s = this.state();
+      if (s && untracked(this.loaded)?.puzzleId !== s.puzzleId) {
+        this.loaded.set({ puzzleId: s.puzzleId, open: (s.clues?.hints ?? []).filter((h) => h.value).length });
+      }
+    });
+  }
+
+  protected seasonPips(seasons: number): number[] {
+    return Array.from({ length: Math.max(1, seasons) });
+  }
+
+  /** "Russell Westbrook's"; a name ending in s takes a bare apostrophe: "Jamal Mashburn's", "Kevin Willis'". */
+  protected possessive(name: string): string {
+    return /s$/i.test(name) ? `${name}'` : `${name}'s`;
   }
 
   protected showLogo(stop: CareerStop): boolean {

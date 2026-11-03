@@ -1,12 +1,16 @@
 import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GameApi, GameSlug, TodayEntry } from '../../core/game-api';
+import { GameApi, GameSlug, GameStats, TodayEntry } from '../../core/game-api';
 
 interface GameCard {
   name: string;
   blurb: string;
-  /** Which icon sits in the navy circle; drawn as inline SVG so it is centred whatever the font. */
-  icon: 'grid' | 'diamond' | 'arrow' | 'hash';
+  /** What kind of game it is, in a word or two, above its name. */
+  kind: string;
+  /** Which badge sits in the navy circle; drawn as inline SVG so it is centred whatever the font. */
+  icon: 'tile' | 'clipboard' | 'jersey' | 'chart';
+  /** The play label for a game without a tracked daily puzzle. */
+  play?: string;
   /** The colour of this game's card border. One theme for the site, one trim per game. */
   trim: string;
   link: string;
@@ -15,8 +19,8 @@ interface GameCard {
 }
 
 /** What a card says under its blurb, and whether it can be opened. */
-export function cardStatus(card: Pick<GameCard, 'daily'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
-  if (!card.daily) return { label: 'Play anytime', open: true };
+export function cardStatus(card: Pick<GameCard, 'daily' | 'play'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
+  if (!card.daily) return { label: card.play ?? 'Play anytime', open: true };
   if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
   if (!today.available) return { label: 'No puzzle today', open: false };
@@ -46,17 +50,35 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     </section>
 
     <ul class="grid" aria-label="Games">
-      @for (card of cards(); track card.name; let i = $index) {
+      @for (card of cards(); track card.name) {
         <li class="card" [style.--trim]="card.trim" [class.off]="!card.status.open">
           <div class="top">
-            <span class="no">No. {{ i + 1 }}</span>
+            <span class="no">{{ card.kind }}</span>
+            @if (card.streak) {
+              <span class="streak" [attr.aria-label]="card.streak + '-day streak'"><span aria-hidden="true">🔥</span>{{ card.streak }}</span>
+            }
             <span class="glyph" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 @switch (card.icon) {
-                  @case ('grid') { <rect x="4" y="4" width="16" height="16" rx="1.5" /><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16" /> }
-                  @case ('diamond') { <path d="M12 2.5 21.5 12 12 21.5 2.5 12Z" /><path d="M12 8l4 4-4 4-4-4Z" fill="currentColor" stroke="none" /> }
-                  @case ('arrow') { <path d="M4 12h15M13 6l6 6-6 6" /> }
-                  @case ('hash') { <path d="M9.5 4 8 20M16 4l-1.5 16M4.5 9h16M3.5 15h16" /> }
+                  @case ('tile') {
+                    <rect x="3.5" y="3.5" width="17" height="17" rx="2" fill="var(--mustard)" stroke="var(--cream)" />
+                    <path d="M14.8 8.3c-.6-.8-1.6-1.2-2.8-1.2-1.7 0-2.9.9-2.9 2.2 0 3 6 1.6 6 4.6 0 1.4-1.3 2.4-3.1 2.4-1.3 0-2.4-.5-3-1.4" stroke="var(--navy)" stroke-width="2.2" />
+                  }
+                  @case ('clipboard') {
+                    <rect x="5" y="4.5" width="14" height="16.5" rx="1.5" />
+                    <path d="M9 3h6v3H9z" fill="currentColor" />
+                    <path d="M8.5 10.5h1.5M12 10.5h3.5M8.5 14h1.5M12 14h3.5M8.5 17.5h1.5M12 17.5h2" />
+                  }
+                  @case ('jersey') {
+                    <path d="M9 3.5c.5 1.4 1.6 2.2 3 2.2s2.5-.8 3-2.2l5 2.3-1.8 4.4-2.2-.9V20.5H8V9.3l-2.2.9L4 5.8z" />
+                    <path d="M10.2 11h3.6l-2.4 6" stroke-width="2" />
+                  }
+                  @case ('chart') {
+                    <path d="M4 20.5h16" />
+                    <rect x="5.5" y="12" width="3" height="8.5" fill="currentColor" stroke="none" />
+                    <rect x="10.5" y="6" width="3" height="14.5" fill="var(--mustard)" stroke="none" />
+                    <rect x="15.5" y="9.5" width="3" height="11" fill="currentColor" stroke="none" />
+                  }
                 }
               </svg>
             </span>
@@ -74,7 +96,12 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
       }
     </ul>
 
-    <p class="later"><span>On deck</span> {{ later.join(' · ') }}</p>
+    <section class="later" aria-labelledby="on-deck">
+      <h2 id="on-deck">On deck</h2>
+      <ul>
+        @for (name of later; track name) { <li>{{ name }}</li> }
+      </ul>
+    </section>
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
@@ -101,9 +128,10 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     .card.off { opacity: .75; }
     .top { display: flex; align-items: center; justify-content: space-between; }
     .no { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+    .streak { margin-left: auto; margin-right: 8px; font-weight: 700; font-size: 15px; }
     .glyph {
-      width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
-      background: var(--navy); color: var(--cream);
+      width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--navy); color: var(--cream); box-shadow: 0 0 0 2px var(--cream), 0 0 0 4px var(--trim);
     }
     .glyph svg { display: block; }
     h2 { margin: 8px 0 0; font: 400 21px/1.15 var(--display); }
@@ -118,8 +146,14 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     .badge.play::after { content: ""; position: absolute; inset: 0; border-radius: 4px; }
     .card:has(.play):hover { transform: translateY(-3px) rotate(-.6deg); }
 
-    .later { margin: 36px 0 0; color: var(--muted); font-size: 17px; }
-    .later span { margin-right: 8px; color: var(--text); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+    /* Games still being designed, as blank card backs waiting in the deck. */
+    .later { margin: 36px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+    .later h2 { margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+    .later ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .later li {
+      padding: 6px 12px; border: 2px dashed var(--miss-line); border-radius: 6px; color: var(--muted); font-size: 16px;
+    }
+    .later li::after { content: " · soon"; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
     @media (prefers-reduced-motion: reduce) {
       .card { transition: none; }
       .card:has(.play):hover { transform: none; }
@@ -129,16 +163,16 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
 export class Home {
   /** The four games, in the order the home page shows them. */
   private readonly games: GameCard[] = [
-    { name: 'Spordle', link: '/spordle', icon: 'grid', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
+    { name: 'Spordle', kind: 'Word game', link: '/spordle', icon: 'tile', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
-      name: 'Scouting Report', link: '/scouting-report', daily: 'scouting-report', icon: 'diamond', trim: 'var(--teal)',
+      name: 'Scouting Report', kind: 'Daily', link: '/scouting-report', daily: 'scouting-report', icon: 'clipboard', trim: 'var(--teal)',
       blurb: 'Guess the player in 8 tries with team, position, height, age and number clues.',
     },
     {
-      name: 'Career Path', link: '/career-path', daily: 'career-path', icon: 'arrow', trim: 'var(--mustard)',
+      name: 'Career Path', kind: 'Daily', link: '/career-path', daily: 'career-path', icon: 'jersey', trim: 'var(--mustard)',
       blurb: 'Every team they played for, in order. Who is it?',
     },
-    { name: "Numbers Don't Lie", link: '/numbers-dont-lie', icon: 'hash', trim: 'var(--teal)',
+    { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz",
       blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },
   ];
 
@@ -147,15 +181,24 @@ export class Home {
 
   // Undefined while checking availability; null after a failed request.
   private readonly today = signal<TodayEntry[] | null | undefined>(undefined);
+  private readonly stats = signal<GameStats[]>([]);
 
   protected readonly cards = computed(() => {
     const today = this.today();
-    return this.games.map((card) => ({ ...card, status: cardStatus(card, today?.find((t) => t.game === card.daily), today === undefined ? null : today !== null) }));
+    const stats = this.stats();
+    return this.games.map((card) => ({
+      ...card,
+      status: cardStatus(card, today?.find((t) => t.game === card.daily), today === undefined ? null : today !== null),
+      streak: stats.find((s) => s.game === card.daily)?.currentStreak ?? 0,
+    }));
   });
   protected readonly countWord = computed(() => this.today() === undefined ? 'Four' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Four');
 
   constructor() {
     // If the API is down the cards still link to the games, which report the problem themselves.
-    inject(GameApi).today().subscribe({ next: (entries) => this.today.set(entries), error: () => this.today.set(null) });
+    const api = inject(GameApi);
+    api.today().subscribe({ next: (entries) => this.today.set(entries), error: () => this.today.set(null) });
+    // Streaks are a bonus; the cards work without them.
+    api.stats().subscribe({ next: (stats) => this.stats.set(stats), error: () => {} });
   }
 }

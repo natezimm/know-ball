@@ -9,6 +9,8 @@ export interface LengthStats {
   longestStreak: number;
   fastestSolveMs: number | null;
   fewestGuesses: number | null;
+  /** Wins by the number of guesses they took: index 0 is a win on the first guess. */
+  distribution: number[];
 }
 
 interface StoredStats {
@@ -26,6 +28,7 @@ const emptyStats = (): LengthStats => ({
   longestStreak: 0,
   fastestSolveMs: null,
   fewestGuesses: null,
+  distribution: [0, 0, 0, 0, 0, 0],
 });
 
 const emptyAll = (): StoredStats => ({
@@ -43,7 +46,11 @@ function loadAll(): StoredStats {
       ? parsed.recordedGames.filter((id: unknown) => typeof id === 'string') : [];
     for (const length of WORD_LENGTHS) {
       const saved = parsed?.byLength?.[String(length)];
-      if (saved && typeof saved === 'object') all.byLength[String(length)] = { ...emptyStats(), ...saved };
+      if (saved && typeof saved === 'object') {
+        const distribution = Array.isArray(saved.distribution) && saved.distribution.length === 6 && saved.distribution.every(Number.isInteger)
+          ? saved.distribution : emptyStats().distribution;
+        all.byLength[String(length)] = { ...emptyStats(), ...saved, distribution };
+      }
     }
   } catch {
     // Unreadable or blocked storage: start from zero.
@@ -83,6 +90,7 @@ export function recordGame(
       stats.fastestSolveMs = game.timeMs;
     }
     if (stats.fewestGuesses === null || game.guesses < stats.fewestGuesses) stats.fewestGuesses = game.guesses;
+    if (game.guesses >= 1 && game.guesses <= 6) stats.distribution[game.guesses - 1] += 1;
   } else {
     stats.currentStreak = 0;
   }

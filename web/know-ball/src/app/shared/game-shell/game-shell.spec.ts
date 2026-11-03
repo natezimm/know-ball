@@ -67,9 +67,10 @@ describe('GameShell', () => {
     expect(el.querySelector('input')?.getAttribute('placeholder')).toBe('Guess 3 of 8: type a name');
   });
 
-  it('offers practice before a daily guess and keeps mode changes disabled during a save', async () => {
+  it('offers practice from the archive before a daily guess and keeps mode changes disabled during a save', async () => {
     await flushDaily();
-    const practice = el.querySelector<HTMLButtonElement>('.modes button')!;
+    expect(el.querySelector('.modes')).toBeNull();
+    const practice = el.querySelector<HTMLButtonElement>('.practice button')!;
     expect(practice.textContent?.trim()).toBe('Practice round');
     expect(practice.disabled).toBe(false);
     store.busy.set(true); await fixture.whenStable();
@@ -78,7 +79,7 @@ describe('GameShell', () => {
     store.state.set(gameState({ practice: true, puzzleId: 99, number: null, date: null }));
     await fixture.whenStable();
     expect(el.querySelector('.modes a')?.getAttribute('href')).toBe('/scouting-report');
-    expect(el.querySelector('.modes')?.textContent).toContain('daily progress stays saved');
+    expect(el.querySelector('.practice')).toBeNull();
   });
 
   it('swaps the guess box for the answer when the game is won', async () => {
@@ -98,7 +99,7 @@ describe('GameShell', () => {
     expect(el.querySelector('.who .extra')?.textContent).toBe('Celtics');
     expect(el.querySelector('.count')?.textContent).toMatch(/Next puzzle in\s+0\d:\d\d:\d\d/);
     expect([...el.querySelectorAll('.dots i')].map((d) => d.className).slice(0, 3)).toEqual(['miss', 'hit', '']);
-    expect([...el.querySelectorAll('.next .kb-btn')].map((b) => b.textContent?.trim())).toEqual(['Share', 'Practice round']);
+    expect([...el.querySelectorAll('.next .kb-btn')].map((b) => b.textContent?.trim())).toEqual(['Share', 'Practice round', 'Play Career Path →']);
   });
 
   it('names the answer after a loss, and offers the way back from a practice round', async () => {

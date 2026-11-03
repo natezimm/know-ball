@@ -5,6 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { NumbersDontLie, questionLabel, shareText } from './numbers-dont-lie';
 import { useMemoryStorage } from '../spordle/memory-storage';
+import { easternDate } from '../../core/games';
 
 const ROOT = '/api/numbers-dont-lie';
 const filters = { leagues: ['nba'], topics: ['stats'], fromYear: 2023, throughYear: 2023 };
@@ -71,6 +72,14 @@ describe('Numbers practice filters and coverage', () => {
     expect(game.error()).toBe('');
     game.customize(); http.expectOne(ROOT + '/practice/coverage').flush(fresh); await settle();
     expect(game.allowRepeats).toBe(false);
+  });
+
+  it("offers today's quiz from a daily round of an earlier day", async () => {
+    expect(game.isPastDaily()).toBe(true); // The fixture's daily is from 2026-10-28.
+    game.state.set({ ...daily, date: easternDate() } as never);
+    expect(game.isPastDaily()).toBe(false);
+    game.state.set({ ...daily, mode: 'practice', date: null } as never);
+    expect(game.isPastDaily()).toBe(false);
   });
 
   it('blocks invalid year ranges locally and handles damaged preferences', async () => {

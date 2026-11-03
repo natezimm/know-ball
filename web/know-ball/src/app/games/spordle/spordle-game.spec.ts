@@ -116,6 +116,33 @@ describe('SpordleGame', () => {
     expect(game.attempts()).toHaveLength(1);
   });
 
+  it('keeps keys typed while the tiles turn over and applies them after', () => {
+    startGame();
+    type('about');
+    game.press('Enter');
+    http.expectOne(GUESSES).flush(miss);
+    expect(game.status()).toBe('revealing');
+    type('ot');
+    game.press('Backspace');
+    type('th');
+    expect(game.currentGuess()).toBe('');
+    vi.runAllTimers();
+    expect(game.status()).toBe('playing');
+    expect(game.currentGuess()).toBe('oth');
+  });
+
+  it('counts each word turned away, so the row can shake', () => {
+    startGame();
+    type('abc');
+    game.press('Enter');
+    expect(game.rejected()).toBe(1);
+    type('de');
+    game.press('Enter');
+    http.expectOne(GUESSES).flush({ valid: false });
+    expect(game.rejected()).toBe(2);
+    expect(game.status()).toBe('playing');
+  });
+
   it('restores a completed round once even when reload interrupts the tile reveal', () => {
     startGame();
     type('blitz');
