@@ -104,7 +104,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
             }
           </ol>
         } @else if (s.current; as q) {
-          <p class="qmeta">{{q.league.toUpperCase()}} · {{q.season || 'Name the season'}} · Question {{s.position + 1}} of 5</p>
+          <p class="qmeta">{{q.league.toUpperCase()}} · {{questionLabel(q)}} · Question {{s.position + 1}} of 5</p>
           @if (hotStreak(s) >= 3) { <p class="hot"><span aria-hidden="true">🔥 </span>Hot streak: {{hotStreak(s)}}</p> }
           <h2 tabindex="-1">{{q.prompt}}</h2>
           <fieldset [disabled]="busy() || s.answeredCount > s.position || !!error()"><legend class="visually-hidden">Choose one answer</legend>
@@ -149,7 +149,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
         <h2 id="nd-help-title">How to play</h2>
         <button type="button" class="kb-close" aria-label="Close" (click)="helpDialog.close()">×</button>
       </div>
-      <p>Five questions a day about stats, awards, teams and past seasons across the NBA, NFL, MLB and NHL.</p>
+      <p>Five questions a day about records, nicknames, famous numbers and history across the NBA, NFL, MLB and NHL.</p>
       <p>Pick an answer and lock it in. The reveal shows the real numbers behind every choice.</p>
       <p>Finish the daily quiz on consecutive days to build a streak. A new quiz arrives at midnight Eastern.</p>
       <p>Practice (the sliders button) lets you choose leagues, topics and seasons, and never touches your streak.</p>
@@ -247,7 +247,8 @@ export class NumbersDontLie {
   protected readonly nextEasternMidnight = nextEasternMidnight;
   /** A daily round from an earlier day, reopened from its address: it needs a way to today's quiz. */
   isPastDaily() { const s = this.state(); return s?.mode === 'daily' && !!s.date && s.date !== easternDate(); }
-  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['stats','awards','teams','seasons'];
+  readonly questionLabel = questionLabel;
+  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','seasons','stats'];
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
   readonly coverage = signal<Coverage | null>(null); readonly coverageBusy = signal(false); readonly coverageError = signal('');
@@ -397,6 +398,13 @@ export class NumbersDontLie {
 }
 
 /** Spoiler-free share text: the score, a square per answer and the daily streak. */
+/** The header's middle segment: the season, a prompt to name it, or the topic for career-long questions. */
+export function questionLabel(q: Pick<Question,'season'|'topic'>): string {
+  if (q.season) return q.season;
+  if (q.topic === 'seasons') return 'Name the season';
+  return q.topic.charAt(0).toUpperCase() + q.topic.slice(1);
+}
+
 export function shareText(s: Pick<State, 'date' | 'mode' | 'correctCount' | 'review' | 'dailyStreak'>): string {
   const squares = s.review.map(a => a.correct ? '🟩' : '⬜').join('');
   const streak = s.mode === 'daily' && s.dailyStreak ? `\n🔥 ${s.dailyStreak}-day streak` : '';

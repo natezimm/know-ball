@@ -173,7 +173,7 @@ export class Home {
       blurb: 'Every team they played for, in order. Who is it?',
     },
     { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz",
-      blurb: 'Five questions about stats, awards, teams and past seasons. Choose your leagues in practice.' },
+      blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },
   ];
 
   /** Designed but not scheduled; replay numbers after version 1 decide which comes first. */

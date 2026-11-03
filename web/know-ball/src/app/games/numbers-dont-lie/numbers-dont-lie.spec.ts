@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { NumbersDontLie, shareText } from './numbers-dont-lie';
+import { NumbersDontLie, questionLabel, shareText } from './numbers-dont-lie';
 import { useMemoryStorage } from '../spordle/memory-storage';
 import { easternDate } from '../../core/games';
 
@@ -116,5 +116,12 @@ describe('Numbers practice filters and coverage', () => {
     expect(daily).toBe("Numbers Don't Lie · 2026-11-02\n4/5 🟩🟩⬜🟩🟩\n🔥 4-day streak\nhttps://knowball.nathanzimmerman.com/numbers-dont-lie");
     expect(daily).not.toContain('Secret');
     expect(shareText({ mode: 'practice', date: null, correctCount: 4, review, dailyStreak: null })).not.toContain('streak');
+  });
+
+  it('labels career-long questions by topic instead of asking for a season', () => {
+    expect(questionLabel({ season: '2023–24', topic: 'stats' })).toBe('2023–24');
+    expect(questionLabel({ season: null, topic: 'seasons' })).toBe('Name the season');
+    expect(questionLabel({ season: null, topic: 'nicknames' })).toBe('Nicknames');
+    expect(questionLabel({ season: null, topic: 'history' })).toBe('History');
   });
 });
