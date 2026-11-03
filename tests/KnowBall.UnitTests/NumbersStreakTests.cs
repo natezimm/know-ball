@@ -5,7 +5,7 @@ using Microsoft.Extensions.Time.Testing;
 
 namespace KnowBall.UnitTests;
 
-public class NumbersScoringTests
+public class NumbersStreakTests
 {
     private static int Streak(object view) => JsonSerializer.SerializeToElement(view).GetProperty("dailyStreak").GetInt32();
 
@@ -34,7 +34,7 @@ public class NumbersScoringTests
     }
 
     [Fact]
-    public async Task Practice_rounds_have_no_daily_streak_and_score_out_of_fifteen()
+    public async Task Practice_rounds_have_no_daily_streak()
     {
         using var testDb = new TestDb();
         await using var context = testDb.NewContext();
@@ -42,7 +42,5 @@ public class NumbersScoringTests
         var view = JsonSerializer.SerializeToElement(await service.Start("anon-2",
             new(["nba"], ["awards"], null, null, Guid.NewGuid()), CancellationToken.None));
         Assert.Equal(JsonValueKind.Null, view.GetProperty("dailyStreak").ValueKind);
-        Assert.Equal(15, view.GetProperty("maxPoints").GetInt32());
-        Assert.Equal(0, view.GetProperty("points").GetInt32());
     }
 }

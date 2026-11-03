@@ -16,9 +16,9 @@ The original prototype catalogue remains a design fixture. The server bank retai
 
 The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
 
-## Confidence scoring
+## Streaks
 
-Before locking in, a player bets 1, 2 or 3 points on the answer (2 by default). The server scores it: a correct answer earns its bet and a wrong one earns nothing, so a round is out of 15, shown beside the correct count. Bets are stored with each answer in `AnswersJson`; answers saved before bets existed count as 2, so no migration is needed. The page shows a hot streak after three correct answers in a row, and daily rounds show a daily streak counted from this browser's finished daily rounds. The share text adds the points, each answer's bet and the daily streak, and still names no answers.
+Daily rounds return `dailyStreak`: the Eastern days in a row, ending today or yesterday, on which this browser finished the daily round. An unfinished round today does not break a streak that ran through yesterday. It is counted from the saved `NumbersPlays` rows, so no migration is needed. The page shows it on the results screen and in the share text, and shows a hot streak after three correct answers in a row.
 
 ## Question quality and variety
 

@@ -100,29 +100,12 @@ describe('Numbers practice filters and coverage', () => {
     focus.mockRestore(); vi.useRealTimers();
   });
 
-  it('sends the confidence bet with an answer and restores the saved bet', async () => {
-    const question = { id: 'q1', prompt: 'Who?', league: 'nba', topic: 'awards', season: '2010–11', options: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }] };
-    create(); http.expectOne(ROOT + '/daily').flush({ ...daily, current: question }); await settle();
-    expect(game.confidence).toBe(2);
-    game.choice = 'a'; game.confidence = 3; game.answer();
-    const sent = http.expectOne(ROOT + '/quizzes/daily/answers');
-    expect(sent.request.body).toMatchObject({ questionId: 'q1', optionId: 'a', confidence: 3 });
-    sent.flush({ ...daily, current: question, answeredCount: 1, correctCount: 1, points: 3, maxPoints: 15,
-      review: [{ question: { ...question, correctOptionId: 'a' }, optionId: 'a', correct: true, confidence: 3 }] }); await settle();
-    game.confidence = 1;
-    create(); http.expectOne(ROOT + '/daily').flush({ ...daily, current: question, answeredCount: 1,
-      review: [{ question: { ...question, correctOptionId: 'a' }, optionId: 'a', correct: true, confidence: 3 }] }); await settle();
-    expect(game.confidence).toBe(3);
-    game.advance();
-    expect(http.expectOne(ROOT + '/quizzes/daily/continue').request.body.confidence).toBeUndefined();
-  });
-
-  it('shares points, each bet and the daily streak without spoilers', () => {
-    const answer = (correct: boolean, confidence?: number) => ({ question: { id: 'x', prompt: 'Secret answer?', league: 'nba', topic: 'awards', season: null, options: [] }, optionId: 'o', correct, confidence });
-    const review = [answer(true, 3), answer(true, 1), answer(false, 2), answer(true, 3), answer(true)];
-    const daily = shareText({ mode: 'daily', date: '2026-11-02', points: 9, maxPoints: 15, correctCount: 4, review, dailyStreak: 4 });
-    expect(daily).toBe("Numbers Don't Lie · 2026-11-02\n9/15 pts · 4/5\n🟩3 🟩1 ⬜2 🟩3 🟩2\n🔥 4-day streak\nhttps://knowball.nathanzimmerman.com/numbers-dont-lie");
+  it('shares the score and the daily streak without spoilers', () => {
+    const answer = (correct: boolean) => ({ question: { id: 'x', prompt: 'Secret answer?', league: 'nba', topic: 'awards', season: null, options: [] }, optionId: 'o', correct });
+    const review = [answer(true), answer(true), answer(false), answer(true), answer(true)];
+    const daily = shareText({ mode: 'daily', date: '2026-11-02', correctCount: 4, review, dailyStreak: 4 });
+    expect(daily).toBe("Numbers Don't Lie · 2026-11-02\n4/5 🟩🟩⬜🟩🟩\n🔥 4-day streak\nhttps://knowball.nathanzimmerman.com/numbers-dont-lie");
     expect(daily).not.toContain('Secret');
-    expect(shareText({ mode: 'practice', date: null, points: 9, maxPoints: 15, correctCount: 4, review, dailyStreak: null })).not.toContain('streak');
+    expect(shareText({ mode: 'practice', date: null, correctCount: 4, review, dailyStreak: null })).not.toContain('streak');
   });
 });

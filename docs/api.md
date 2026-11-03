@@ -49,10 +49,8 @@ nightly importer delete expired rows, and an expired round offers a fresh game w
 | `POST /api/numbers-dont-lie/quizzes/{id}/continue` | Acknowledge the explanation and move on |
 
 Moves carry a `requestId` for safe retries and an `expectedRevision` so two tabs cannot advance the same round
-twice. An answer may also carry `confidence`, the 1–3 points bet on it (default 2; anything else is a 400). A
-correct answer earns its bet and a wrong one earns nothing, so `points` runs out of `maxPoints` (15); retrying a
-`requestId` with a different bet returns 409. Daily rounds also return `dailyStreak`, the Eastern days in a row,
-ending today or yesterday, on which this browser finished the daily round (`null` in practice). The server scores answers and reveals a solution only after its question is answered. See
+twice. Daily rounds also return `dailyStreak`, the Eastern days in a row, ending today or
+yesterday, on which this browser finished the daily round (`null` in practice). The server scores answers and reveals a solution only after its question is answered. See
 [numbers-dont-lie/](numbers-dont-lie/README.md) for the content scope and design notes.
 
 ## Monitoring
