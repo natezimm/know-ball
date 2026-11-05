@@ -94,12 +94,23 @@ describe('GameShell', () => {
 
     expect(el.querySelector('input')).toBeNull();
     expect(el.querySelector('.result')?.classList.contains('won')).toBe(true);
+    // A win comes up as a foil card; only a first-guess win is gold and stamped.
+    expect(el.querySelector('.result')?.getAttribute('data-tier')).toBe('holo');
+    expect(el.querySelector('.result')?.hasAttribute('data-stamp')).toBe(false);
     expect(el.querySelector('.who .kb-label')?.textContent).toBe('Solved in 2 guesses');
     expect(el.querySelector('.who strong')?.textContent).toBe('Jayson Tatum');
     expect(el.querySelector('.who .extra')?.textContent).toBe('Celtics');
     expect(el.querySelector('.count')?.textContent).toMatch(/Next puzzle in\s+0\d:\d\d:\d\d/);
     expect([...el.querySelectorAll('.dots i')].map((d) => d.className).slice(0, 3)).toEqual(['miss', 'hit', '']);
     expect([...el.querySelectorAll('.next .kb-btn')].map((b) => b.textContent?.trim())).toEqual(['Share', 'Practice round', 'Play Career Path →']);
+  });
+
+  it('turns a first-guess win into a gold card stamped First try', async () => {
+    await flushDaily(gameState({ status: 'won', guesses: [guess('Jayson Tatum', true)], answer: { playerId: 1, name: 'Jayson Tatum' } }));
+
+    expect(el.querySelector('.result')?.getAttribute('data-tier')).toBe('gold');
+    expect(el.querySelector('.result')?.getAttribute('data-stamp')).toBe('First try');
+    expect(el.querySelector('.who .kb-label')?.textContent).toBe('Solved on the first guess');
   });
 
   it('names the answer after a loss, and offers the way back from a practice round', async () => {
@@ -117,6 +128,7 @@ describe('GameShell', () => {
     expect(el.querySelector('.meta .kb-label')?.textContent?.trim()).toBe('Practice round');
     expect(el.querySelector('.who .kb-label')?.textContent).toBe('The answer was');
     expect(el.querySelector('.result')?.classList.contains('won')).toBe(false);
+    expect(el.querySelector('.result')?.hasAttribute('data-tier')).toBe(false);
     expect(el.querySelector('.next a')?.textContent).toBe("Today's puzzle");
   });
 
