@@ -14,6 +14,7 @@ public sealed class NumbersFailure(int status, string message) : Exception(messa
 public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
 {
     private const int RoundLength = 5;
+    public static readonly string[] Topics = ["history", "nicknames", "awards", "teams", "playoff-moments"];
 
     private static readonly Lazy<string> Content = new(() => {
         using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
@@ -30,7 +31,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         if (shared is null)
         {
             shared = await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = "_daily", StartKey = key, Date = date,
-                SecretJson = Select(new(QuizCatalogue.Leagues, QuizCatalogue.Topics), key, asOf: date, dailyOnly: true) }, ct);
+                SecretJson = Select(new(QuizCatalogue.Leagues, Topics), key, asOf: date, dailyOnly: true) }, ct);
         }
         var play = await db.NumbersPlays.AsNoTracking().SingleOrDefaultAsync(x => x.Owner == owner && x.StartKey == key, ct)
             ?? await Create(new NumbersPlay { Id = Guid.NewGuid(), Owner = owner, StartKey = key, Date = date, SecretJson = shared.SecretJson }, ct);
@@ -50,7 +51,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         }
         string secret;
         var recent = await RecentFamilies(owner, ct);
-        try { secret = Select(filters, key, request.AllowRepeats ? null : recent, request.AllowRepeats ? recent : null, Today); }
+        try { secret = Select(CurrentTopics(filters), key, request.AllowRepeats ? null : recent, request.AllowRepeats ? recent : null, Today); }
         catch (InvalidOperationException) { throw new NumbersFailure(409,
             request.AllowRepeats ? "Not enough questions for these filters. Add leagues/topics or widen the years."
                 : "Not enough fresh facts for these filters. Customize practice to widen them or explicitly allow repeats."); }
@@ -69,6 +70,12 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
             request.FromYear > request.ThroughYear) throw new NumbersFailure(400, "Select supported leagues, topics and an ordered year range (1900–2100).");
         return new(request.Leagues.Distinct().Order().ToArray(), request.Topics.Distinct().Order().ToArray(), request.FromYear, request.ThroughYear);
     }
+
+    // Keep the submitted filters as the retry signature for rounds started by older clients.
+    private static QuizFilters CurrentTopics(QuizFilters filters) =>
+        filters with { Topics = Topics.Where(topic => filters.Topics.Contains(topic) ||
+            (topic == "playoff-moments" && filters.Topics.Contains("stats")) ||
+            ((topic is "awards" or "history") && filters.Topics.Contains("seasons"))).ToArray() };
 
     // Reserve whole rounds, including unfinished ones, so restarting cannot offer the same facts.
     // Only the last 30 days of dailies and unexpired practice are read; the nightly import deletes
@@ -95,7 +102,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
 
     public async Task<object> Coverage(string owner, NumbersStart request, CancellationToken ct)
     {
-        var filters = Filters(request);
+        var filters = CurrentTopics(Filters(request));
         var recent = await RecentFamilies(owner, ct);
         using var catalogue = QuizCatalogue.Read(Content.Value);
         var today = Today;
@@ -184,7 +191,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
         var nodes = set.Select(q => JsonNode.Parse(q.GetRawText())!).ToArray();
         for (var i = 0; i < nodes.Length; i++)
         {
-            // Catalogue IDs include the answer year for season questions. Persist only opaque
+            // Catalogue IDs may hint at the answer. Persist only opaque
             // gameplay IDs so neither the current question nor subsequent moves disclose it.
             nodes[i]["id"] = Guid.NewGuid().ToString("N");
             var options = nodes[i]["options"]!.AsArray().Select(o => o!.DeepClone()).ToArray();

@@ -6,7 +6,7 @@ namespace KnowBall.Application.Numbers;
 public static class QuizCatalogue
 {
     public static readonly string[] Leagues = ["nba", "nfl", "mlb", "nhl"];
-    public static readonly string[] Topics = ["stats", "awards", "teams", "seasons", "history", "nicknames"];
+    public static readonly string[] Topics = ["stats", "awards", "teams", "seasons", "history", "nicknames", "playoff-moments"];
     /// <summary>Topics whose questions are about a whole career or era, so a season is optional and never shown.</summary>
     public static readonly string[] TimelessTopics = ["history", "nicknames"];
     public static readonly string[] Difficulties = ["approachable", "medium", "harder"];

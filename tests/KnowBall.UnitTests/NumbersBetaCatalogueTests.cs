@@ -12,18 +12,20 @@ public class NumbersBetaCatalogueTests
         using var reader = new StreamReader(stream);
         using var catalogue = QuizCatalogue.Read(reader.ReadToEnd());
         var questions = catalogue.RootElement.GetProperty("questions").EnumerateArray().ToArray();
-        Assert.Equal(216, questions.Length);
-        // Pack 1 pairs 14 record questions with a famous-number question about the same feat.
-        Assert.Equal(216 - 14, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
+        Assert.Equal(214, questions.Length);
+        // The bank links record variants and playoff plays to related facts.
+        Assert.Equal(214 - 17, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
+        Assert.All(questions, q => Assert.Contains(q.GetProperty("topic").GetString(), NumbersPlayService.Topics));
         foreach (var league in QuizCatalogue.Leagues)
-            Assert.Equal(54, questions.Count(q => q.GetProperty("league").GetString() == league));
+            Assert.Equal(6, questions.Count(q => q.GetProperty("league").GetString() == league &&
+                q.GetProperty("topic").GetString() == "playoff-moments"));
 
-        // All 945 nonempty filter combinations must produce a full round with no year bounds.
+        // All nonempty live filter combinations must produce a full round with no year bounds.
         for (var leaguesMask = 1; leaguesMask < 16; leaguesMask++)
-        for (var topicsMask = 1; topicsMask < 1 << QuizCatalogue.Topics.Length; topicsMask++)
+        for (var topicsMask = 1; topicsMask < 1 << NumbersPlayService.Topics.Length; topicsMask++)
         {
             var leagues = QuizCatalogue.Leagues.Where((_, i) => (leaguesMask & (1 << i)) != 0).ToArray();
-            var topics = QuizCatalogue.Topics.Where((_, i) => (topicsMask & (1 << i)) != 0).ToArray();
+            var topics = NumbersPlayService.Topics.Where((_, i) => (topicsMask & (1 << i)) != 0).ToArray();
             var filters = new QuizFilters(leagues, topics);
             var round = QuizSelection.Select(catalogue.RootElement, filters, "beta-coverage", requireApproved: false, preferVariety: true);
             Assert.Equal(5, round.Length);
@@ -41,43 +43,26 @@ public class NumbersBetaCatalogueTests
     }
 
     [Fact]
-    public void Stats_rounds_mix_challenge_styles_across_seeds()
+    public void Playoff_moments_respect_year_bounds_and_reserved_facts()
     {
-        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
-        using var reader = new StreamReader(stream);
-        using var catalogue = QuizCatalogue.Read(reader.ReadToEnd());
-        foreach (var league in QuizCatalogue.Leagues)
-        for (var seed = 0; seed < 20; seed++)
-        {
-            var round = QuizSelection.Select(catalogue.RootElement, new([league], ["stats"]),
-                $"styles-{seed}", requireApproved: false, preferVariety: true);
-            Assert.Equal(3, round.Select(q => q.GetProperty("template").GetString()).Distinct().Count());
-        }
-    }
-
-    [Fact]
-    public void Variety_preserves_year_bounds_and_reserved_facts()
-    {
-        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
-        using var reader = new StreamReader(stream);
-        using var catalogue = QuizCatalogue.Read(reader.ReadToEnd());
-        var reserved = new HashSet<string> { "nba-2024-regular-points" };
-        var round = QuizSelection.Select(catalogue.RootElement, new(["nba"], ["stats"], 2023, 2023),
+        using var catalogue = Bank();
+        var reserved = new HashSet<string> { "nba-lillard-wave" };
+        var round = QuizSelection.Select(catalogue.RootElement, new(["nba"], ["playoff-moments"], 1979, 2020),
             "filtered", reserved, requireApproved: false, preferVariety: true);
         Assert.Equal(5, round.Length);
         Assert.All(round, q => {
-            Assert.Equal("2023–24", q.GetProperty("season").GetString());
+            Assert.InRange(QuizCatalogue.SeasonYear(q)!.Value, 1979, 2020);
             Assert.DoesNotContain(q.GetProperty("factFamily").GetString()!, reserved);
         });
         Assert.Throws<InvalidOperationException>(() => QuizSelection.Select(catalogue.RootElement,
-            new(["nba"], ["stats"], 1990, 1991), "empty", requireApproved: false, preferVariety: true));
+            new(["nba"], ["playoff-moments"], 2018, 2018), "too-narrow", requireApproved: false, preferVariety: true));
     }
 
     [Fact]
     public void Daily_rounds_draw_only_daily_eligible_questions_and_skip_ones_past_recheck()
     {
         using var catalogue = Bank();
-        var all = new QuizFilters(QuizCatalogue.Leagues, QuizCatalogue.Topics);
+        var all = new QuizFilters(QuizCatalogue.Leagues, NumbersPlayService.Topics);
         var asOf = new DateOnly(2026, 11, 3);
         for (var seed = 0; seed < 50; seed++)
         {

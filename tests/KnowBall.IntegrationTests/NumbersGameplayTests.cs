@@ -15,16 +15,17 @@ public class NumbersGameplayTests(ApiFactory factory)
     [InlineData("nfl")]
     [InlineData("mlb")]
     [InlineData("nhl")]
-    public async Task Season_questions_hide_catalogue_ids_and_answers_until_submission(string league)
+    public async Task Playoff_questions_hide_catalogue_ids_and_answers_until_submission(string league)
     {
         using var client = Client();
         var response = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice",
-            new { leagues = new[] { league }, topics = new[] { "seasons" }, requestId = Guid.NewGuid() });
+            new { leagues = new[] { league }, topics = new[] { "playoff-moments" }, requestId = Guid.NewGuid() });
         response.EnsureSuccessStatusCode();
         var state = await response.Content.ReadFromJsonAsync<JsonElement>();
         var question = state.GetProperty("current");
         Assert.True(Guid.TryParseExact(question.GetProperty("id").GetString(), "N", out _));
-        Assert.Equal(JsonValueKind.Null, question.GetProperty("season").ValueKind);
+        Assert.Equal("playoff-moments", question.GetProperty("topic").GetString());
+        Assert.Equal(JsonValueKind.String, question.GetProperty("season").ValueKind);
         Assert.DoesNotContain("factFamily", state.GetRawText());
         Assert.DoesNotContain("correctOptionId", state.GetRawText());
         Assert.DoesNotContain("explanation", state.GetRawText());
@@ -51,7 +52,7 @@ public class NumbersGameplayTests(ApiFactory factory)
 
         var practice = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice", new {
             leagues = new[] { "nba", "nfl", "mlb", "nhl" },
-            topics = new[] { "history", "nicknames", "awards", "teams", "seasons", "stats" }, requestId = Guid.NewGuid() });
+            topics = new[] { "history", "nicknames", "awards", "teams", "playoff-moments" }, requestId = Guid.NewGuid() });
         practice.EnsureSuccessStatusCode();
         var unknown = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice", new {
             leagues = new[] { "nba" }, topics = new[] { "moments" }, requestId = Guid.NewGuid() });
@@ -61,7 +62,7 @@ public class NumbersGameplayTests(ApiFactory factory)
     private HttpClient Client() { var client = factory.CreateClient(); client.DefaultRequestHeaders.Add("X-Anon-Id",Guid.NewGuid().ToString()); return client; }
 
     [Fact]
-    public async Task Stats_practice_scores_closest_answers_after_shuffling_and_hides_supporting_values()
+    public async Task Legacy_stats_filter_starts_and_scores_playoff_moments()
     {
         using var client = Client();
         var response = await client.PostAsJsonAsync("/api/numbers-dont-lie/practice",
@@ -76,7 +77,7 @@ public class NumbersGameplayTests(ApiFactory factory)
             var row = await db.NumbersPlays.AsNoTracking().SingleAsync(x => x.Id == id);
             snapshots = JsonSerializer.Deserialize<JsonElement[]>(row.SecretJson)!;
         }
-        Assert.Contains(snapshots, q => q.GetProperty("template").GetString() == "closest-value");
+        Assert.All(snapshots, q => Assert.Equal("playoff-moments", q.GetProperty("topic").GetString()));
         foreach (var snapshot in snapshots)
         {
             var question = state.GetProperty("current");
@@ -84,13 +85,6 @@ public class NumbersGameplayTests(ApiFactory factory)
             Assert.DoesNotContain("targetValue", question.GetRawText());
             Assert.DoesNotContain("correctOptionId", question.GetRawText());
             var answer = snapshot.GetProperty("correctOptionId").GetString();
-            if (snapshot.GetProperty("template").GetString() == "closest-value")
-            {
-                var target = snapshot.GetProperty("targetValue").GetDecimal();
-                answer = snapshot.GetProperty("options").EnumerateArray()
-                    .OrderBy(o => Math.Abs(o.GetProperty("value").GetDecimal() - target))
-                    .First().GetProperty("id").GetString();
-            }
             var questionId = question.GetProperty("id").GetString();
             response = await client.PostAsJsonAsync($"/api/numbers-dont-lie/quizzes/{id}/answers",
                 new { questionId, optionId = answer, requestId = Guid.NewGuid(), expectedRevision = state.GetProperty("revision").GetInt32() });
@@ -151,7 +145,7 @@ public class NumbersGameplayTests(ApiFactory factory)
     {
         using var client = Client(); using var other = Client();
         var requestId=Guid.NewGuid();
-        var request=new {leagues=new[]{"nba"},topics=new[]{"stats","awards","teams","seasons"},requestId};
+        var request=new {leagues=new[]{"nba"},topics=new[]{"playoff-moments","awards","teams"},requestId};
         var first=await client.PostAsJsonAsync("/api/numbers-dont-lie/practice",request);
         first.EnsureSuccessStatusCode();
         var state=await first.Content.ReadFromJsonAsync<JsonElement>();

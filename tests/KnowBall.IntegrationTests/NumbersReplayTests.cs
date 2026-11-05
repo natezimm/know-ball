@@ -18,7 +18,7 @@ public class NumbersReplayTests(ApiFactory factory)
     }
 
     private static object Request(Guid id, bool repeats = false) => new {
-        leagues = new[] { "nba" }, topics = new[] { "stats" }, fromYear = 2023, throughYear = 2023,
+        leagues = new[] { "nba" }, topics = new[] { "playoff-moments" }, fromYear = 1979, throughYear = 2020,
         requestId = id, allowRepeats = repeats
     };
 
@@ -54,8 +54,9 @@ public class NumbersReplayTests(ApiFactory factory)
         Assert.Equal(firstId, retry.GetProperty("id").GetGuid());
         var restored = await client.GetFromJsonAsync<JsonElement>($"/api/numbers-dont-lie/quizzes/{firstId}");
         Assert.Equal(first.GetProperty("filters").GetRawText(), restored.GetProperty("filters").GetRawText());
-        Assert.Equal(2023, restored.GetProperty("filters").GetProperty("fromYear").GetInt32());
-        Assert.Equal("stats", restored.GetProperty("filters").GetProperty("topics")[0].GetString());
+        Assert.Equal(1979, restored.GetProperty("filters").GetProperty("fromYear").GetInt32());
+        Assert.Equal(2020, restored.GetProperty("filters").GetProperty("throughYear").GetInt32());
+        Assert.Equal("playoff-moments", restored.GetProperty("filters").GetProperty("topics")[0].GetString());
 
         var secondRequestId = Guid.NewGuid();
         coverage = await Post(client, "practice/coverage", Request(secondRequestId));
@@ -83,7 +84,7 @@ public class NumbersReplayTests(ApiFactory factory)
         for (var i = 0; i < 4; i++)
         {
             var state = await Post(client, "practice", new {
-                leagues = new[] { "nba" }, topics = new[] { "stats", "awards", "teams", "seasons" }, requestId = Guid.NewGuid()
+                leagues = new[] { "nba" }, topics = new[] { "playoff-moments", "awards", "teams", "history" }, requestId = Guid.NewGuid()
             });
             var families = await Families(state.GetProperty("id").GetGuid());
             Assert.Empty(families.Intersect(seen));
@@ -106,7 +107,7 @@ public class NumbersReplayTests(ApiFactory factory)
         }
         var coverage = await Post(client, "practice/coverage", Request(Guid.NewGuid()));
         Assert.Equal(6, coverage.GetProperty("freshFacts").GetInt32());
-        var empty = new { leagues = new[] { "nba" }, topics = new[] { "stats" }, fromYear = 1900, throughYear = 1901,
+        var empty = new { leagues = new[] { "nba" }, topics = new[] { "playoff-moments" }, fromYear = 1900, throughYear = 1901,
             requestId = Guid.NewGuid(), allowRepeats = true };
         coverage = await Post(client, "practice/coverage", empty);
         Assert.Equal(0, coverage.GetProperty("eligibleFacts").GetInt32());
