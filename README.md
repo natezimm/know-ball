@@ -1,6 +1,6 @@
 # Know Ball
 
-Sports trivia: two daily guess-the-player games, a daily stats quiz and an unlimited word game, with new
+Sports trivia: two daily guess-the-player games, a daily sports trivia quiz and an unlimited word game, with new
 dailies at midnight Eastern. Angular front end, ASP.NET Core API and PostgreSQL, fed by a nightly import of every NBA player
 since 1947.
 
@@ -30,7 +30,7 @@ stays with your browser.
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.
 - Scouting Report and Career Path have practice rounds, an archive of past dailies, stats and streaks, and a
   spoiler-free share card. Spordle keeps stats and streaks per word length. Numbers Don't Lie has a daily round,
-  filtered practice and a share card; it has no archive or stats yet.
+  filtered practice with a Playoff Moments topic and a share card; it has no archive or stats yet.
 - Installable as a phone app (PWA), and built for phones first.
 
 ## Engineering highlights

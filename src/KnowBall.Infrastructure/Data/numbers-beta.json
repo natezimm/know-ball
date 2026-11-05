@@ -3,1170 +3,6 @@
   "purpose": "Server-backed beta catalogue; human editorial approval pending. Never expose unanswered solutions through the public API.",
   "questions": [
     {
-      "id": "nba-points-2024",
-      "revision": 2,
-      "factFamily": "nba-2024-regular-points",
-      "league": "nba",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "points",
-      "unit": "points",
-      "template": "closest-value",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 2,250 points in the 2023–24 NBA regular season?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "Luka Dončić",
-          "value": 2370
-        },
-        {
-          "id": "p1",
-          "label": "Shai Gilgeous-Alexander",
-          "value": 2254
-        },
-        {
-          "id": "p2",
-          "label": "Giannis Antetokounmpo",
-          "value": 2222
-        },
-        {
-          "id": "p3",
-          "label": "Jalen Brunson",
-          "value": 2212
-        }
-      ],
-      "correctOptionId": "p1",
-      "targetValue": 2250,
-      "explanation": "Shai Gilgeous-Alexander finished with 2,254 points, just 4 from 2,250. Giannis Antetokounmpo was the next closest of these four at 2,222, 28 away.",
-      "source": {
-        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
-        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nba-rebounds-2024",
-      "revision": 2,
-      "factFamily": "nba-2024-regular-rebounds",
-      "league": "nba",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "rebounds",
-      "unit": "rebounds",
-      "template": "match-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who put up 1,120 rebounds in the 2023–24 NBA regular season?",
-      "options": [
-        {
-          "id": "p3",
-          "label": "Nikola Jokić",
-          "value": 976
-        },
-        {
-          "id": "p0",
-          "label": "Domantas Sabonis",
-          "value": 1120
-        },
-        {
-          "id": "p1",
-          "label": "Rudy Gobert",
-          "value": 982
-        },
-        {
-          "id": "p2",
-          "label": "Anthony Davis",
-          "value": 961
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": 1120,
-      "explanation": "Domantas Sabonis recorded 1,120 rebounds. That was 138 more than Rudy Gobert (982), the nearest total among the other choices.",
-      "source": {
-        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
-        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nba-assists-2024",
-      "revision": 2,
-      "factFamily": "nba-2024-regular-assists",
-      "league": "nba",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "assists",
-      "unit": "assists",
-      "template": "closest-value",
-      "difficulty": "harder",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 700 assists in the 2023–24 NBA regular season?",
-      "options": [
-        {
-          "id": "p2",
-          "label": "Nikola Jokić",
-          "value": 708
-        },
-        {
-          "id": "p3",
-          "label": "Domantas Sabonis",
-          "value": 673
-        },
-        {
-          "id": "p0",
-          "label": "Tyrese Haliburton",
-          "value": 752
-        },
-        {
-          "id": "p1",
-          "label": "Luka Dončić",
-          "value": 686
-        }
-      ],
-      "correctOptionId": "p2",
-      "targetValue": 700,
-      "explanation": "Nikola Jokić finished with 708 assists, just 8 from 700. Luka Dončić was the next closest of these four at 686, 14 away.",
-      "source": {
-        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
-        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nba-blocks-2024",
-      "revision": 2,
-      "factFamily": "nba-2024-regular-blocks",
-      "league": "nba",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "blocks",
-      "unit": "blocks",
-      "template": "compare-four",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most blocks among these four in the 2023–24 NBA regular season?",
-      "options": [
-        {
-          "id": "p1",
-          "label": "Walker Kessler",
-          "value": 154
-        },
-        {
-          "id": "p2",
-          "label": "Brook Lopez",
-          "value": 189
-        },
-        {
-          "id": "p3",
-          "label": "Chet Holmgren",
-          "value": 190
-        },
-        {
-          "id": "p0",
-          "label": "Victor Wembanyama",
-          "value": 254
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Victor Wembanyama recorded 254 blocks. That was 64 more than Chet Holmgren (190), the nearest total among the other choices.",
-      "source": {
-        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
-        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nba-steals-2024",
-      "revision": 2,
-      "factFamily": "nba-2024-regular-steals",
-      "league": "nba",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "steals",
-      "unit": "steals",
-      "template": "match-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who put up 150 steals in the 2023–24 NBA regular season?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "De’Aaron Fox",
-          "value": 150
-        },
-        {
-          "id": "p1",
-          "label": "Alex Caruso",
-          "value": 120
-        },
-        {
-          "id": "p2",
-          "label": "Matisse Thybulle",
-          "value": 113
-        },
-        {
-          "id": "p3",
-          "label": "Kawhi Leonard",
-          "value": 111
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": 150,
-      "explanation": "De’Aaron Fox recorded 150 steals. That was 30 more than Alex Caruso (120), the nearest total among the other choices.",
-      "source": {
-        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
-        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nba-threes-2024",
-      "revision": 2,
-      "factFamily": "nba-2024-regular-threes",
-      "league": "nba",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "threes",
-      "unit": "three-pointers made",
-      "template": "compare-four",
-      "difficulty": "harder",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most made threes among these four in the 2023–24 NBA regular season?",
-      "options": [
-        {
-          "id": "p3",
-          "label": "Mike Conley",
-          "value": 179
-        },
-        {
-          "id": "p0",
-          "label": "CJ McCollum",
-          "value": 239
-        },
-        {
-          "id": "p1",
-          "label": "Grayson Allen",
-          "value": 205
-        },
-        {
-          "id": "p2",
-          "label": "Luke Kennard",
-          "value": 107
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "CJ McCollum recorded 239 made threes. That was 34 more than Grayson Allen (205), the nearest total among the other choices.",
-      "source": {
-        "url": "https://cdn.nba.com/teams/uploads/sites/1610612758/2024/10/2024-25SacramentoKingsMediaGuide.pdf",
-        "credit": "NBA.com · Sacramento Kings 2024–25 media guide, printed page 89"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nfl-passing-2023",
-      "revision": 2,
-      "factFamily": "nfl-2023-regular-passing",
-      "league": "nfl",
-      "season": "2023",
-      "scope": "regular-season",
-      "metric": "passing",
-      "unit": "passing yards",
-      "template": "closest-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 4,500 passing yards in the 2023 NFL regular season?",
-      "options": [
-        {
-          "id": "p2",
-          "label": "Dak Prescott",
-          "value": 4516
-        },
-        {
-          "id": "p3",
-          "label": "Josh Allen",
-          "value": 4306
-        },
-        {
-          "id": "p0",
-          "label": "Tua Tagovailoa",
-          "value": 4624
-        },
-        {
-          "id": "p1",
-          "label": "Jared Goff",
-          "value": 4575
-        }
-      ],
-      "correctOptionId": "p2",
-      "targetValue": 4500,
-      "explanation": "Dak Prescott finished with 4,516 passing yards, just 16 from 4,500. Jared Goff was the next closest of these four at 4,575, 75 away.",
-      "source": {
-        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
-        "credit": "nflverse contributors · player statistics",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-        "transformation": "REG weekly rows summed by player_id; integer yard totals."
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nfl-rushing-2023",
-      "revision": 2,
-      "factFamily": "nfl-2023-regular-rushing",
-      "league": "nfl",
-      "season": "2023",
-      "scope": "regular-season",
-      "metric": "rushing",
-      "unit": "rushing yards",
-      "template": "match-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who put up 1,459 rushing yards in the 2023 NFL regular season?",
-      "options": [
-        {
-          "id": "p1",
-          "label": "Derrick Henry",
-          "value": 1167
-        },
-        {
-          "id": "p2",
-          "label": "Kyren Williams",
-          "value": 1144
-        },
-        {
-          "id": "p3",
-          "label": "James Cook",
-          "value": 1122
-        },
-        {
-          "id": "p0",
-          "label": "Christian McCaffrey",
-          "value": 1459
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": 1459,
-      "explanation": "Christian McCaffrey recorded 1,459 rushing yards. That was 292 more than Derrick Henry (1,167), the nearest total among the other choices.",
-      "source": {
-        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
-        "credit": "nflverse contributors · player statistics",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-        "transformation": "REG weekly rows summed by player_id; integer yard totals."
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nfl-receiving-2023",
-      "revision": 2,
-      "factFamily": "nfl-2023-regular-receiving",
-      "league": "nfl",
-      "season": "2023",
-      "scope": "regular-season",
-      "metric": "receiving",
-      "unit": "receiving yards",
-      "template": "compare-four",
-      "difficulty": "harder",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most receiving yards among these four in the 2023 NFL regular season?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "Tyreek Hill",
-          "value": 1799
-        },
-        {
-          "id": "p1",
-          "label": "CeeDee Lamb",
-          "value": 1749
-        },
-        {
-          "id": "p2",
-          "label": "Amon-Ra St. Brown",
-          "value": 1515
-        },
-        {
-          "id": "p3",
-          "label": "Puka Nacua",
-          "value": 1486
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Tyreek Hill recorded 1,799 receiving yards. That was 50 more than CeeDee Lamb (1,749), the nearest total among the other choices.",
-      "source": {
-        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2023.csv",
-        "credit": "nflverse contributors · player statistics",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-        "transformation": "REG weekly rows summed by player_id; integer yard totals."
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nfl-passing-2022",
-      "revision": 2,
-      "factFamily": "nfl-2022-regular-passing",
-      "league": "nfl",
-      "season": "2022",
-      "scope": "regular-season",
-      "metric": "passing",
-      "unit": "passing yards",
-      "template": "closest-value",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 4,700 passing yards in the 2022 NFL regular season?",
-      "options": [
-        {
-          "id": "p3",
-          "label": "Kirk Cousins",
-          "value": 4547
-        },
-        {
-          "id": "p0",
-          "label": "Patrick Mahomes",
-          "value": 5250
-        },
-        {
-          "id": "p1",
-          "label": "Justin Herbert",
-          "value": 4739
-        },
-        {
-          "id": "p2",
-          "label": "Tom Brady",
-          "value": 4694
-        }
-      ],
-      "correctOptionId": "p2",
-      "targetValue": 4700,
-      "explanation": "Tom Brady finished with 4,694 passing yards, just 6 from 4,700. Justin Herbert was the next closest of these four at 4,739, 39 away.",
-      "source": {
-        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
-        "credit": "nflverse contributors · player statistics",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-        "transformation": "REG weekly rows summed by player_id; integer yard totals."
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nfl-rushing-2022",
-      "revision": 2,
-      "factFamily": "nfl-2022-regular-rushing",
-      "league": "nfl",
-      "season": "2022",
-      "scope": "regular-season",
-      "metric": "rushing",
-      "unit": "rushing yards",
-      "template": "match-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who put up 1,653 rushing yards in the 2022 NFL regular season?",
-      "options": [
-        {
-          "id": "p2",
-          "label": "Nick Chubb",
-          "value": 1525
-        },
-        {
-          "id": "p3",
-          "label": "Saquon Barkley",
-          "value": 1312
-        },
-        {
-          "id": "p0",
-          "label": "Josh Jacobs",
-          "value": 1653
-        },
-        {
-          "id": "p1",
-          "label": "Derrick Henry",
-          "value": 1538
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": 1653,
-      "explanation": "Josh Jacobs recorded 1,653 rushing yards. That was 115 more than Derrick Henry (1,538), the nearest total among the other choices.",
-      "source": {
-        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
-        "credit": "nflverse contributors · player statistics",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-        "transformation": "REG weekly rows summed by player_id; integer yard totals."
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nfl-receiving-2022",
-      "revision": 2,
-      "factFamily": "nfl-2022-regular-receiving",
-      "league": "nfl",
-      "season": "2022",
-      "scope": "regular-season",
-      "metric": "receiving",
-      "unit": "receiving yards",
-      "template": "compare-four",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most receiving yards among these four in the 2022 NFL regular season?",
-      "options": [
-        {
-          "id": "p1",
-          "label": "Tyreek Hill",
-          "value": 1710
-        },
-        {
-          "id": "p2",
-          "label": "Davante Adams",
-          "value": 1516
-        },
-        {
-          "id": "p3",
-          "label": "A.J. Brown",
-          "value": 1496
-        },
-        {
-          "id": "p0",
-          "label": "Justin Jefferson",
-          "value": 1809
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Justin Jefferson recorded 1,809 receiving yards. That was 99 more than Tyreek Hill (1,710), the nearest total among the other choices.",
-      "source": {
-        "url": "https://github.com/nflverse/nflverse-data/releases/download/player_stats/player_stats_2022.csv",
-        "credit": "nflverse contributors · player statistics",
-        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-        "transformation": "REG weekly rows summed by player_id; integer yard totals."
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "mlb-homeRuns-2023",
-      "revision": 2,
-      "factFamily": "mlb-2023-regular-homeRuns",
-      "league": "mlb",
-      "season": "2023",
-      "scope": "regular-season",
-      "metric": "homeRuns",
-      "unit": "home runs",
-      "template": "compare-four",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most home runs among these four in the 2023 MLB regular season?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "Matt Olson",
-          "value": 54
-        },
-        {
-          "id": "p1",
-          "label": "Kyle Schwarber",
-          "value": 47
-        },
-        {
-          "id": "p2",
-          "label": "Pete Alonso",
-          "value": 46
-        },
-        {
-          "id": "p3",
-          "label": "Shohei Ohtani",
-          "value": 44
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Matt Olson recorded 54 home runs. That was 7 more than Kyle Schwarber (47), the nearest total among the other choices.",
-      "source": {
-        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
-        "credit": "MLB.com · season hitting statistics"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "mlb-hits-2023",
-      "revision": 2,
-      "factFamily": "mlb-2023-regular-hits",
-      "league": "mlb",
-      "season": "2023",
-      "scope": "regular-season",
-      "metric": "hits",
-      "unit": "hits",
-      "template": "closest-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 200 hits in the 2023 MLB regular season?",
-      "options": [
-        {
-          "id": "p3",
-          "label": "Marcus Semien",
-          "value": 185
-        },
-        {
-          "id": "p0",
-          "label": "Ronald Acuña Jr.",
-          "value": 217
-        },
-        {
-          "id": "p1",
-          "label": "Freddie Freeman",
-          "value": 211
-        },
-        {
-          "id": "p2",
-          "label": "Luis Arraez",
-          "value": 203
-        }
-      ],
-      "correctOptionId": "p2",
-      "targetValue": 200,
-      "explanation": "Luis Arraez finished with 203 hits, just 3 from 200. Freddie Freeman was the next closest of these four at 211, 11 away.",
-      "source": {
-        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
-        "credit": "MLB.com · season hitting statistics"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "mlb-rbi-2023",
-      "revision": 2,
-      "factFamily": "mlb-2023-regular-rbi",
-      "league": "mlb",
-      "season": "2023",
-      "scope": "regular-season",
-      "metric": "rbi",
-      "unit": "runs batted in",
-      "template": "compare-four",
-      "difficulty": "harder",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most RBIs among these four in the 2023 MLB regular season?",
-      "options": [
-        {
-          "id": "p2",
-          "label": "Ozzie Albies",
-          "value": 109
-        },
-        {
-          "id": "p3",
-          "label": "Juan Soto",
-          "value": 109
-        },
-        {
-          "id": "p0",
-          "label": "Pete Alonso",
-          "value": 118
-        },
-        {
-          "id": "p1",
-          "label": "Kyle Tucker",
-          "value": 112
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Pete Alonso recorded 118 RBIs. That was 6 more than Kyle Tucker (112), the nearest total among the other choices.",
-      "source": {
-        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2023&sportIds=1&limit=300",
-        "credit": "MLB.com · season hitting statistics"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "mlb-homeRuns-2022",
-      "revision": 2,
-      "factFamily": "mlb-2022-regular-homeRuns",
-      "league": "mlb",
-      "season": "2022",
-      "scope": "regular-season",
-      "metric": "homeRuns",
-      "unit": "home runs",
-      "template": "compare-four",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most home runs among these four in the 2022 MLB regular season?",
-      "options": [
-        {
-          "id": "p1",
-          "label": "Kyle Schwarber",
-          "value": 46
-        },
-        {
-          "id": "p2",
-          "label": "Pete Alonso",
-          "value": 40
-        },
-        {
-          "id": "p3",
-          "label": "Austin Riley",
-          "value": 38
-        },
-        {
-          "id": "p0",
-          "label": "Aaron Judge",
-          "value": 62
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Aaron Judge recorded 62 home runs. That was 16 more than Kyle Schwarber (46), the nearest total among the other choices.",
-      "source": {
-        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
-        "credit": "MLB.com · season hitting statistics"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "mlb-hits-2022",
-      "revision": 2,
-      "factFamily": "mlb-2022-regular-hits",
-      "league": "mlb",
-      "season": "2022",
-      "scope": "regular-season",
-      "metric": "hits",
-      "unit": "hits",
-      "template": "match-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who put up 199 hits in the 2022 MLB regular season?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "Freddie Freeman",
-          "value": 199
-        },
-        {
-          "id": "p1",
-          "label": "Trea Turner",
-          "value": 194
-        },
-        {
-          "id": "p2",
-          "label": "Bo Bichette",
-          "value": 189
-        },
-        {
-          "id": "p3",
-          "label": "José Abreu",
-          "value": 183
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": 199,
-      "explanation": "Freddie Freeman recorded 199 hits. That was 5 more than Trea Turner (194), the nearest total among the other choices.",
-      "source": {
-        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
-        "credit": "MLB.com · season hitting statistics"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "mlb-rbi-2022",
-      "revision": 2,
-      "factFamily": "mlb-2022-regular-rbi",
-      "league": "mlb",
-      "season": "2022",
-      "scope": "regular-season",
-      "metric": "rbi",
-      "unit": "runs batted in",
-      "template": "closest-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 125 RBIs in the 2022 MLB regular season?",
-      "options": [
-        {
-          "id": "p3",
-          "label": "Francisco Lindor",
-          "value": 107
-        },
-        {
-          "id": "p0",
-          "label": "Pete Alonso",
-          "value": 131
-        },
-        {
-          "id": "p1",
-          "label": "José Ramírez",
-          "value": 126
-        },
-        {
-          "id": "p2",
-          "label": "Paul Goldschmidt",
-          "value": 115
-        }
-      ],
-      "correctOptionId": "p1",
-      "targetValue": 125,
-      "explanation": "José Ramírez finished with 126 RBIs, just 1 from 125. Pete Alonso was the next closest of these four at 131, 6 away.",
-      "source": {
-        "url": "https://statsapi.mlb.com/api/v1/stats?stats=season&group=hitting&season=2022&sportIds=1&limit=300",
-        "credit": "MLB.com · season hitting statistics"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-points-2024",
-      "revision": 2,
-      "factFamily": "nhl-2024-regular-points",
-      "league": "nhl",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "points",
-      "unit": "points",
-      "template": "closest-value",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 130 points in the 2023–24 NHL regular season?",
-      "options": [
-        {
-          "id": "p2",
-          "label": "Connor McDavid",
-          "value": 132
-        },
-        {
-          "id": "p3",
-          "label": "Artemi Panarin",
-          "value": 120
-        },
-        {
-          "id": "p0",
-          "label": "Nikita Kucherov",
-          "value": 144
-        },
-        {
-          "id": "p1",
-          "label": "Nathan MacKinnon",
-          "value": 140
-        }
-      ],
-      "correctOptionId": "p2",
-      "targetValue": 130,
-      "explanation": "Connor McDavid finished with 132 points, just 2 from 130. Artemi Panarin was the next closest of these four at 120, 10 away.",
-      "source": {
-        "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
-        "credit": "NHL · 2023–24 regular-season recap"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-goals-2024",
-      "revision": 2,
-      "factFamily": "nhl-2024-regular-goals",
-      "league": "nhl",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "goals",
-      "unit": "goals",
-      "template": "match-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who put up 69 goals in the 2023–24 NHL regular season?",
-      "options": [
-        {
-          "id": "p1",
-          "label": "Sam Reinhart",
-          "value": 57
-        },
-        {
-          "id": "p2",
-          "label": "Zach Hyman",
-          "value": 54
-        },
-        {
-          "id": "p3",
-          "label": "Nathan MacKinnon",
-          "value": 51
-        },
-        {
-          "id": "p0",
-          "label": "Auston Matthews",
-          "value": 69
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": 69,
-      "explanation": "Auston Matthews recorded 69 goals. That was 12 more than Sam Reinhart (57), the nearest total among the other choices.",
-      "source": {
-        "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
-        "credit": "NHL · 2023–24 regular-season recap"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-assists-2024",
-      "revision": 2,
-      "factFamily": "nhl-2024-regular-assists",
-      "league": "nhl",
-      "season": "2023–24",
-      "scope": "regular-season",
-      "metric": "assists",
-      "unit": "assists",
-      "template": "compare-four",
-      "difficulty": "harder",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most assists among these four in the 2023–24 NHL regular season?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "Nathan MacKinnon",
-          "value": 89
-        },
-        {
-          "id": "p1",
-          "label": "Quinn Hughes",
-          "value": 75
-        },
-        {
-          "id": "p2",
-          "label": "Cale Makar",
-          "value": 69
-        },
-        {
-          "id": "p3",
-          "label": "Artemi Panarin",
-          "value": 71
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Nathan MacKinnon recorded 89 assists. That was 14 more than Quinn Hughes (75), the nearest total among the other choices.",
-      "source": {
-        "url": "https://media.nhl.com/site/vasset/public/attachments/2024/04/17943/RegularSeasonRecap.pdf",
-        "credit": "NHL · 2023–24 regular-season recap"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-points-2023",
-      "revision": 2,
-      "factFamily": "nhl-2023-regular-points",
-      "league": "nhl",
-      "season": "2022–23",
-      "scope": "regular-season",
-      "metric": "points",
-      "unit": "points",
-      "template": "compare-four",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most points among these four in the 2022–23 NHL regular season?",
-      "options": [
-        {
-          "id": "p3",
-          "label": "Nathan MacKinnon",
-          "value": 111
-        },
-        {
-          "id": "p0",
-          "label": "Connor McDavid",
-          "value": 153
-        },
-        {
-          "id": "p1",
-          "label": "Leon Draisaitl",
-          "value": 128
-        },
-        {
-          "id": "p2",
-          "label": "David Pastrnak",
-          "value": 113
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Connor McDavid recorded 153 points. That was 25 more than Leon Draisaitl (128), the nearest total among the other choices.",
-      "source": {
-        "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
-        "credit": "NHL · 2022–23 final statistics release"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-goals-2023",
-      "revision": 2,
-      "factFamily": "nhl-2023-regular-goals",
-      "league": "nhl",
-      "season": "2022–23",
-      "scope": "regular-season",
-      "metric": "goals",
-      "unit": "goals",
-      "template": "closest-value",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Which of these players finished closest to 60 goals in the 2022–23 NHL regular season?",
-      "options": [
-        {
-          "id": "p2",
-          "label": "Mikko Rantanen",
-          "value": 55
-        },
-        {
-          "id": "p3",
-          "label": "Leon Draisaitl",
-          "value": 52
-        },
-        {
-          "id": "p0",
-          "label": "Connor McDavid",
-          "value": 64
-        },
-        {
-          "id": "p1",
-          "label": "David Pastrnak",
-          "value": 61
-        }
-      ],
-      "correctOptionId": "p1",
-      "targetValue": 60,
-      "explanation": "David Pastrnak finished with 61 goals, just 1 from 60. Connor McDavid was the next closest of these four at 64, 4 away.",
-      "source": {
-        "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
-        "credit": "NHL · 2022–23 final statistics release"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-assists-2023",
-      "revision": 2,
-      "factFamily": "nhl-2023-regular-assists",
-      "league": "nhl",
-      "season": "2022–23",
-      "scope": "regular-season",
-      "metric": "assists",
-      "unit": "assists",
-      "template": "compare-four",
-      "difficulty": "medium",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "Who had the most assists among these four in the 2022–23 NHL regular season?",
-      "options": [
-        {
-          "id": "p1",
-          "label": "Leon Draisaitl",
-          "value": 76
-        },
-        {
-          "id": "p2",
-          "label": "Erik Karlsson",
-          "value": 76
-        },
-        {
-          "id": "p3",
-          "label": "Nathan MacKinnon",
-          "value": 69
-        },
-        {
-          "id": "p0",
-          "label": "Nikita Kucherov",
-          "value": 83
-        }
-      ],
-      "correctOptionId": "p0",
-      "targetValue": null,
-      "explanation": "Nikita Kucherov recorded 83 assists. That was 7 more than Leon Draisaitl (76), the nearest total among the other choices.",
-      "source": {
-        "url": "https://media.d3.nhle.com/image/private/t_document/prd/vl7oourkyjfv0ms2f5w4.pdf",
-        "credit": "NHL · 2022–23 final statistics release"
-      },
-      "checkedAt": "2026-10-22",
-      "verification": "source-values-checked; human editorial review pending",
-      "publicationStatus": "prototype-only",
-      "topic": "stats",
-      "dailyEligible": false
-    },
-    {
       "id": "nba-awards-2010",
       "revision": 2,
       "factFamily": "nba-awards-2010",
@@ -2128,32 +964,32 @@
     },
     {
       "id": "nba-seasons-2007",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-seasons-2007",
       "league": "nba",
       "season": "2007–08",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Kobe Bryant win the NBA regular-season MVP?",
+      "prompt": "Who won the NBA regular-season MVP for the 2007–08 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2007–08"
+          "label": "Kobe Bryant"
         },
         {
           "id": "p1",
-          "label": "2005–06"
+          "label": "Chris Paul"
         },
         {
           "id": "p2",
-          "label": "2009–10"
+          "label": "LeBron James"
         },
         {
           "id": "p3",
-          "label": "2011–12"
+          "label": "Kevin Garnett"
         }
       ],
       "correctOptionId": "p0",
@@ -2168,32 +1004,32 @@
     },
     {
       "id": "nba-seasons-2016",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-seasons-2016",
       "league": "nba",
       "season": "2016–17",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Russell Westbrook win the NBA regular-season MVP?",
+      "prompt": "Who won the NBA regular-season MVP for the 2016–17 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2016–17"
+          "label": "Russell Westbrook"
         },
         {
           "id": "p1",
-          "label": "2013–14"
+          "label": "James Harden"
         },
         {
           "id": "p2",
-          "label": "2014–15"
+          "label": "Kawhi Leonard"
         },
         {
           "id": "p3",
-          "label": "2018–19"
+          "label": "LeBron James"
         }
       ],
       "correctOptionId": "p0",
@@ -2208,32 +1044,32 @@
     },
     {
       "id": "nhl-seasons-1994",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-seasons-1994",
       "league": "nhl",
       "season": "1994–95",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Eric Lindros win the Hart Memorial Trophy?",
+      "prompt": "Who won the Hart Memorial Trophy for the 1994–95 season?",
       "options": [
         {
           "id": "p0",
-          "label": "1994–95"
+          "label": "Eric Lindros"
         },
         {
           "id": "p1",
-          "label": "1991–92"
+          "label": "Jaromír Jágr"
         },
         {
           "id": "p2",
-          "label": "1997–98"
+          "label": "Dominik Hašek"
         },
         {
           "id": "p3",
-          "label": "2000–01"
+          "label": "Paul Coffey"
         }
       ],
       "correctOptionId": "p0",
@@ -2248,32 +1084,32 @@
     },
     {
       "id": "nhl-seasons-2009",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-seasons-2009",
       "league": "nhl",
       "season": "2009–10",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Henrik Sedin win the Hart Memorial Trophy?",
+      "prompt": "Who won the Hart Memorial Trophy for the 2009–10 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2009–10"
+          "label": "Henrik Sedin"
         },
         {
           "id": "p1",
-          "label": "2006–07"
+          "label": "Alex Ovechkin"
         },
         {
           "id": "p2",
-          "label": "2012–13"
+          "label": "Sidney Crosby"
         },
         {
           "id": "p3",
-          "label": "2015–16"
+          "label": "Ryan Miller"
         }
       ],
       "correctOptionId": "p0",
@@ -2288,32 +1124,32 @@
     },
     {
       "id": "mlb-seasons-2009",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-seasons-2009",
       "league": "mlb",
       "season": "2009",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Joe Mauer win the American League MVP?",
+      "prompt": "Who won the American League MVP for the 2009 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2009"
+          "label": "Joe Mauer"
         },
         {
           "id": "p1",
-          "label": "2006"
+          "label": "Mark Teixeira"
         },
         {
           "id": "p2",
-          "label": "2012"
+          "label": "Derek Jeter"
         },
         {
           "id": "p3",
-          "label": "2015"
+          "label": "Miguel Cabrera"
         }
       ],
       "correctOptionId": "p0",
@@ -2328,32 +1164,32 @@
     },
     {
       "id": "mlb-seasons-1990",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-seasons-1990",
       "league": "mlb",
       "season": "1990",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Rickey Henderson win the American League MVP?",
+      "prompt": "Who won the American League MVP for the 1990 season?",
       "options": [
         {
           "id": "p0",
-          "label": "1990"
+          "label": "Rickey Henderson"
         },
         {
           "id": "p1",
-          "label": "1987"
+          "label": "Cecil Fielder"
         },
         {
           "id": "p2",
-          "label": "1993"
+          "label": "Roger Clemens"
         },
         {
           "id": "p3",
-          "label": "1996"
+          "label": "George Brett"
         }
       ],
       "correctOptionId": "p0",
@@ -2368,32 +1204,32 @@
     },
     {
       "id": "nfl-seasons-2015",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-seasons-2015",
       "league": "nfl",
       "season": "2015",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Cam Newton win the AP NFL MVP?",
+      "prompt": "Who won the AP NFL MVP for the 2015 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2015"
+          "label": "Cam Newton"
         },
         {
           "id": "p1",
-          "label": "2012"
+          "label": "Tom Brady"
         },
         {
           "id": "p2",
-          "label": "2013"
+          "label": "Carson Palmer"
         },
         {
           "id": "p3",
-          "label": "2017"
+          "label": "Russell Wilson"
         }
       ],
       "correctOptionId": "p0",
@@ -2408,32 +1244,32 @@
     },
     {
       "id": "nfl-seasons-2012",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-seasons-2012",
       "league": "nfl",
       "season": "2012",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Adrian Peterson win the AP NFL MVP?",
+      "prompt": "Who won the AP NFL MVP for the 2012 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2012"
+          "label": "Adrian Peterson"
         },
         {
           "id": "p1",
-          "label": "2009"
+          "label": "Peyton Manning"
         },
         {
           "id": "p2",
-          "label": "2010"
+          "label": "Tom Brady"
         },
         {
           "id": "p3",
-          "label": "2014"
+          "label": "Aaron Rodgers"
         }
       ],
       "correctOptionId": "p0",
@@ -2530,32 +1366,32 @@
     },
     {
       "id": "nba-seasons-1992",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-nba-regular-season-mvp-1992",
       "league": "nba",
       "season": "1992–93",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Charles Barkley win the NBA regular-season MVP?",
+      "prompt": "Who won the NBA regular-season MVP for the 1992–93 season?",
       "options": [
         {
-          "id": "p2",
-          "label": "1994–95"
-        },
-        {
-          "id": "p3",
-          "label": "1996–97"
-        },
-        {
           "id": "p0",
-          "label": "1992–93"
+          "label": "Charles Barkley"
         },
         {
           "id": "p1",
-          "label": "1990–91"
+          "label": "Michael Jordan"
+        },
+        {
+          "id": "p2",
+          "label": "Hakeem Olajuwon"
+        },
+        {
+          "id": "p3",
+          "label": "Patrick Ewing"
         }
       ],
       "correctOptionId": "p0",
@@ -2571,32 +1407,32 @@
     },
     {
       "id": "nba-seasons-1999",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-nba-regular-season-mvp-1999",
       "league": "nba",
       "season": "1999–00",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Shaquille O’Neal win the NBA regular-season MVP?",
+      "prompt": "Who won the NBA regular-season MVP for the 1999–00 season?",
       "options": [
         {
-          "id": "p3",
-          "label": "2003–04"
-        },
-        {
           "id": "p0",
-          "label": "1999–00"
+          "label": "Shaquille O’Neal"
         },
         {
           "id": "p1",
-          "label": "1997–98"
+          "label": "Kevin Garnett"
         },
         {
           "id": "p2",
-          "label": "2001–02"
+          "label": "Alonzo Mourning"
+        },
+        {
+          "id": "p3",
+          "label": "Tim Duncan"
         }
       ],
       "correctOptionId": "p0",
@@ -2612,32 +1448,32 @@
     },
     {
       "id": "nba-seasons-2000",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-nba-regular-season-mvp-2000",
       "league": "nba",
       "season": "2000–01",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Allen Iverson win the NBA regular-season MVP?",
+      "prompt": "Who won the NBA regular-season MVP for the 2000–01 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2000–01"
+          "label": "Allen Iverson"
         },
         {
           "id": "p1",
-          "label": "1998–99"
+          "label": "Tim Duncan"
         },
         {
           "id": "p2",
-          "label": "2002–03"
+          "label": "Shaquille O’Neal"
         },
         {
           "id": "p3",
-          "label": "2004–05"
+          "label": "Chris Webber"
         }
       ],
       "correctOptionId": "p0",
@@ -2858,32 +1694,32 @@
     },
     {
       "id": "nfl-seasons-2002",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-ap-nfl-mvp-2002",
       "league": "nfl",
       "season": "2002",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Rich Gannon win the AP NFL MVP?",
+      "prompt": "Who won the AP NFL MVP for the 2002 season?",
       "options": [
         {
-          "id": "p2",
-          "label": "2004"
-        },
-        {
-          "id": "p3",
-          "label": "2006"
-        },
-        {
           "id": "p0",
-          "label": "2002"
+          "label": "Rich Gannon"
         },
         {
           "id": "p1",
-          "label": "2000"
+          "label": "Brett Favre"
+        },
+        {
+          "id": "p2",
+          "label": "Steve McNair"
+        },
+        {
+          "id": "p3",
+          "label": "Peyton Manning"
         }
       ],
       "correctOptionId": "p0",
@@ -2899,32 +1735,32 @@
     },
     {
       "id": "nfl-seasons-2005",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-ap-nfl-mvp-2005",
       "league": "nfl",
       "season": "2005",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Shaun Alexander win the AP NFL MVP?",
+      "prompt": "Who won the AP NFL MVP for the 2005 season?",
       "options": [
         {
-          "id": "p3",
-          "label": "2009"
-        },
-        {
           "id": "p0",
-          "label": "2005"
+          "label": "Shaun Alexander"
         },
         {
           "id": "p1",
-          "label": "2003"
+          "label": "Peyton Manning"
         },
         {
           "id": "p2",
-          "label": "2007"
+          "label": "Tom Brady"
+        },
+        {
+          "id": "p3",
+          "label": "Tiki Barber"
         }
       ],
       "correctOptionId": "p0",
@@ -2940,32 +1776,32 @@
     },
     {
       "id": "nfl-seasons-2006",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-ap-nfl-mvp-2006",
       "league": "nfl",
       "season": "2006",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did LaDainian Tomlinson win the AP NFL MVP?",
+      "prompt": "Who won the AP NFL MVP for the 2006 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2006"
+          "label": "LaDainian Tomlinson"
         },
         {
           "id": "p1",
-          "label": "2004"
+          "label": "Drew Brees"
         },
         {
           "id": "p2",
-          "label": "2008"
+          "label": "Peyton Manning"
         },
         {
           "id": "p3",
-          "label": "2010"
+          "label": "Larry Johnson"
         }
       ],
       "correctOptionId": "p0",
@@ -3186,32 +2022,32 @@
     },
     {
       "id": "nhl-seasons-1999",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-hart-memorial-trophy-1999",
       "league": "nhl",
       "season": "1999–00",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Chris Pronger win the Hart Memorial Trophy?",
+      "prompt": "Who won the Hart Memorial Trophy for the 1999–00 season?",
       "options": [
         {
-          "id": "p2",
-          "label": "2001–02"
-        },
-        {
-          "id": "p3",
-          "label": "2003–04"
-        },
-        {
           "id": "p0",
-          "label": "1999–00"
+          "label": "Chris Pronger"
         },
         {
           "id": "p1",
-          "label": "1997–98"
+          "label": "Jaromír Jágr"
+        },
+        {
+          "id": "p2",
+          "label": "Pavel Bure"
+        },
+        {
+          "id": "p3",
+          "label": "Owen Nolan"
         }
       ],
       "correctOptionId": "p0",
@@ -3227,32 +2063,32 @@
     },
     {
       "id": "nhl-seasons-2003",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-hart-memorial-trophy-2003",
       "league": "nhl",
       "season": "2003–04",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Martin St. Louis win the Hart Memorial Trophy?",
+      "prompt": "Who won the Hart Memorial Trophy for the 2003–04 season?",
       "options": [
         {
-          "id": "p3",
-          "label": "2007–08"
-        },
-        {
           "id": "p0",
-          "label": "2003–04"
+          "label": "Martin St. Louis"
         },
         {
           "id": "p1",
-          "label": "2001–02"
+          "label": "Jarome Iginla"
         },
         {
           "id": "p2",
-          "label": "2005–06"
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Sakic"
         }
       ],
       "correctOptionId": "p0",
@@ -3268,32 +2104,32 @@
     },
     {
       "id": "nhl-seasons-2010",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-hart-memorial-trophy-2010",
       "league": "nhl",
       "season": "2010–11",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Corey Perry win the Hart Memorial Trophy?",
+      "prompt": "Who won the Hart Memorial Trophy for the 2010–11 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2010–11"
+          "label": "Corey Perry"
         },
         {
           "id": "p1",
-          "label": "2008–09"
+          "label": "Daniel Sedin"
         },
         {
           "id": "p2",
-          "label": "2012–13"
+          "label": "Martin St. Louis"
         },
         {
           "id": "p3",
-          "label": "2014–15"
+          "label": "Tim Thomas"
         }
       ],
       "correctOptionId": "p0",
@@ -3514,32 +2350,32 @@
     },
     {
       "id": "mlb-seasons-2010",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-national-league-mvp-2010",
       "league": "mlb",
       "season": "2010",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Joey Votto win the National League MVP?",
+      "prompt": "Who won the National League MVP for the 2010 season?",
       "options": [
         {
-          "id": "p2",
-          "label": "2012"
-        },
-        {
-          "id": "p3",
-          "label": "2014"
-        },
-        {
           "id": "p0",
-          "label": "2010"
+          "label": "Joey Votto"
         },
         {
           "id": "p1",
-          "label": "2008"
+          "label": "Albert Pujols"
+        },
+        {
+          "id": "p2",
+          "label": "Carlos González"
+        },
+        {
+          "id": "p3",
+          "label": "Adrián González"
         }
       ],
       "correctOptionId": "p0",
@@ -3555,32 +2391,32 @@
     },
     {
       "id": "mlb-seasons-2012",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-national-league-mvp-2012",
       "league": "mlb",
       "season": "2012",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Buster Posey win the National League MVP?",
+      "prompt": "Who won the National League MVP for the 2012 season?",
       "options": [
         {
-          "id": "p3",
-          "label": "2016"
-        },
-        {
           "id": "p0",
-          "label": "2012"
+          "label": "Buster Posey"
         },
         {
           "id": "p1",
-          "label": "2010"
+          "label": "Ryan Braun"
         },
         {
           "id": "p2",
-          "label": "2014"
+          "label": "Andrew McCutchen"
+        },
+        {
+          "id": "p3",
+          "label": "Yadier Molina"
         }
       ],
       "correctOptionId": "p0",
@@ -3596,32 +2432,32 @@
     },
     {
       "id": "mlb-seasons-2013",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-national-league-mvp-2013",
       "league": "mlb",
       "season": "2013",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "awards",
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Andrew McCutchen win the National League MVP?",
+      "prompt": "Who won the National League MVP for the 2013 season?",
       "options": [
         {
           "id": "p0",
-          "label": "2013"
+          "label": "Andrew McCutchen"
         },
         {
           "id": "p1",
-          "label": "2011"
+          "label": "Paul Goldschmidt"
         },
         {
           "id": "p2",
-          "label": "2015"
+          "label": "Yadier Molina"
         },
         {
           "id": "p3",
-          "label": "2017"
+          "label": "Matt Carpenter"
         }
       ],
       "correctOptionId": "p0",
@@ -3759,47 +2595,6 @@
       "dailyEligible": false
     },
     {
-      "id": "nba-wilt-century",
-      "revision": 1,
-      "factFamily": "nba-wilt-century",
-      "league": "nba",
-      "season": "1961–62",
-      "scope": "regular-season",
-      "topic": "seasons",
-      "template": "trivia",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did Wilt Chamberlain score 100 points in one NBA game?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "1959–60"
-        },
-        {
-          "id": "p1",
-          "label": "1960–61"
-        },
-        {
-          "id": "p2",
-          "label": "1961–62"
-        },
-        {
-          "id": "p3",
-          "label": "1962–63"
-        }
-      ],
-      "correctOptionId": "p2",
-      "explanation": "Chamberlain’s 100-point game was on March 2, 1962, for the Philadelphia Warriors against New York.",
-      "source": {
-        "url": "https://api-hub.nba.com/news/most-points-scored-by-a-player-in-an-nba-game",
-        "credit": "NBA.com · single-game scoring history"
-      },
-      "checkedAt": "2026-10-28",
-      "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only",
-      "dailyEligible": false
-    },
-    {
       "id": "nba-mchale-sixth-man",
       "revision": 1,
       "factFamily": "nba-mchale-sixth-man",
@@ -3883,35 +2678,35 @@
     },
     {
       "id": "nfl-moss-rookie",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-moss-rookie",
       "league": "nfl",
       "season": "1998",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "history",
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did rookie Randy Moss catch 17 touchdown passes?",
+      "prompt": "Which team drafted Randy Moss before his rookie-record 17 receiving touchdowns?",
       "options": [
         {
           "id": "p0",
-          "label": "1996"
+          "label": "Minnesota Vikings"
         },
         {
           "id": "p1",
-          "label": "1997"
+          "label": "Dallas Cowboys"
         },
         {
           "id": "p2",
-          "label": "1998"
+          "label": "Oakland Raiders"
         },
         {
           "id": "p3",
-          "label": "1999"
+          "label": "New England Patriots"
         }
       ],
-      "correctOptionId": "p2",
+      "correctOptionId": "p0",
       "explanation": "Minnesota drafted Moss in 1998. His first season produced a rookie-record 17 receiving touchdowns.",
       "source": {
         "url": "https://www.vikings.com/team/front-office-roster/randy-moss",
@@ -3965,80 +2760,39 @@
     },
     {
       "id": "mlb-maris-61",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-maris-61",
       "league": "mlb",
       "season": "1961",
       "scope": "regular-season",
-      "topic": "seasons",
+      "topic": "history",
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which season produced Roger Maris’s 61 home runs?",
+      "prompt": "Whose single-season home run record did Roger Maris break when he hit 61 in 1961?",
       "options": [
         {
           "id": "p0",
-          "label": "1959"
+          "label": "Babe Ruth"
         },
         {
           "id": "p1",
-          "label": "1960"
+          "label": "Jimmie Foxx"
         },
         {
           "id": "p2",
-          "label": "1961"
+          "label": "Hank Greenberg"
         },
         {
           "id": "p3",
-          "label": "1962"
+          "label": "Mickey Mantle"
         }
       ],
-      "correctOptionId": "p2",
+      "correctOptionId": "p0",
       "explanation": "Maris hit 61 in 1961, surpassing Ruth’s 60.",
       "source": {
         "url": "https://www.mlb.com/amp/news/roger-maris-stats-and-facts.html",
         "credit": "MLB.com · Roger Maris history"
-      },
-      "checkedAt": "2026-10-28",
-      "verification": "primary-source-checked; difficulty uncalibrated",
-      "publicationStatus": "prototype-only",
-      "dailyEligible": false
-    },
-    {
-      "id": "nhl-expansion-six",
-      "revision": 1,
-      "factFamily": "nhl-expansion-six",
-      "league": "nhl",
-      "season": "1967–68",
-      "scope": "regular-season",
-      "topic": "seasons",
-      "template": "trivia",
-      "difficulty": "approachable",
-      "difficultyStatus": "uncalibrated",
-      "prompt": "In which season did six expansion teams double the NHL to 12 clubs?",
-      "options": [
-        {
-          "id": "p0",
-          "label": "1965–66"
-        },
-        {
-          "id": "p1",
-          "label": "1966–67"
-        },
-        {
-          "id": "p2",
-          "label": "1967–68"
-        },
-        {
-          "id": "p3",
-          "label": "1968–69"
-        }
-      ],
-      "correctOptionId": "p2",
-      "explanation": "The 1967–68 expansion ended the six-team era. The newcomers played together in the West Division.",
-      "source": {
-        "url": "https://media.nhl.com/site/vasset/public/attachments/2023/04/16925/NHLStatsPack_Clinched_SEA.pdf",
-        "credit": "NHL Stats · expansion history, page 4"
       },
       "checkedAt": "2026-10-28",
       "verification": "primary-source-checked; difficulty uncalibrated",
@@ -8775,6 +7529,1038 @@
       "checkedAt": "2026-11-02",
       "verification": "source-checked; reviewed by the site owner 2026-11-03",
       "publicationStatus": "prototype-only"
+    },
+    {
+      "id": "nba-kawhi-four-bounces",
+      "revision": 1,
+      "factFamily": "nba-kawhi-four-bounces",
+      "league": "nba",
+      "season": "2018–19",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose Game 7 buzzer-beater bounced four times before knocking out the 76ers?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kawhi Leonard"
+        },
+        {
+          "id": "p1",
+          "label": "Kyle Lowry"
+        },
+        {
+          "id": "p2",
+          "label": "Jimmy Butler"
+        },
+        {
+          "id": "p3",
+          "label": "Pascal Siakam"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Leonard’s corner jumper dropped after four bounces, sending Toronto to the Eastern Conference Finals.",
+      "source": {
+        "url": "https://www.nba.com/news/horry-scale-kawhi-leonard-historic-game-7-buzzer-beater",
+        "credit": "NBA · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-ray-allen-corner-three",
+      "revision": 1,
+      "factFamily": "nba-ray-allen-corner-three",
+      "league": "nba",
+      "season": "2012–13",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who hit the corner three that forced overtime for Miami in Game 6 of the 2013 NBA Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ray Allen"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Miller"
+        },
+        {
+          "id": "p2",
+          "label": "Shane Battier"
+        },
+        {
+          "id": "p3",
+          "label": "Mario Chalmers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Allen tied Game 6 against San Antonio. Miami won in overtime and took the title in Game 7.",
+      "source": {
+        "url": "https://www.nba.com/news/history-finals-moments-ray-allen-3-pointer-game-6",
+        "credit": "NBA · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-lebron-chasedown",
+      "revision": 1,
+      "factFamily": "nba-champion-2015",
+      "league": "nba",
+      "season": "2015–16",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose layup did LeBron James block on the fast break late in Game 7 of the 2016 NBA Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Andre Iguodala"
+        },
+        {
+          "id": "p1",
+          "label": "Stephen Curry"
+        },
+        {
+          "id": "p2",
+          "label": "Klay Thompson"
+        },
+        {
+          "id": "p3",
+          "label": "Draymond Green"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "James chased down Iguodala with the score tied at 89. Cleveland went on to win its first NBA title.",
+      "source": {
+        "url": "https://www.nba.com/news/history-finals-moments-lebron-chasedown-block-2016",
+        "credit": "NBA · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-magic-game-six",
+      "revision": 1,
+      "factFamily": "nba-magic-game-six",
+      "league": "nba",
+      "season": "1979–80",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Lakers rookie stepped in for an injured Kareem Abdul-Jabbar and scored 42 in the 1980 Finals clincher?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Magic Johnson"
+        },
+        {
+          "id": "p1",
+          "label": "James Worthy"
+        },
+        {
+          "id": "p2",
+          "label": "Byron Scott"
+        },
+        {
+          "id": "p3",
+          "label": "Michael Cooper"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Johnson started in Abdul-Jabbar’s place and added 15 rebounds and seven assists as Los Angeles clinched the title in Game 6.",
+      "source": {
+        "url": "https://www.nba.com/news/history-top-moments-magic-center",
+        "credit": "NBA · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-lillard-wave",
+      "revision": 1,
+      "factFamily": "nba-lillard-wave",
+      "league": "nba",
+      "season": "2018–19",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team did Damian Lillard eliminate with a 37-foot buzzer-beater and a goodbye wave?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Oklahoma City Thunder"
+        },
+        {
+          "id": "p1",
+          "label": "Denver Nuggets"
+        },
+        {
+          "id": "p2",
+          "label": "Houston Rockets"
+        },
+        {
+          "id": "p3",
+          "label": "Utah Jazz"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Lillard hit the deep three over Paul George in Game 5 to send Portland through to the second round.",
+      "source": {
+        "url": "https://www.nba.com/news/about-last-night-4-23-19",
+        "credit": "NBA · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-giannis-fifty",
+      "revision": 1,
+      "factFamily": "nba-giannis-fifty",
+      "league": "nba",
+      "season": "2020–21",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many points did Giannis Antetokounmpo score in the game that clinched Milwaukee’s 2021 title?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "50"
+        },
+        {
+          "id": "p1",
+          "label": "42"
+        },
+        {
+          "id": "p2",
+          "label": "45"
+        },
+        {
+          "id": "p3",
+          "label": "55"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Antetokounmpo scored 50 in Game 6 against Phoenix, giving Milwaukee its first championship since 1971.",
+      "source": {
+        "url": "https://www.nba.com/playoffs/2021/the-finals",
+        "credit": "NBA · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-butler-goal-line",
+      "revision": 1,
+      "factFamily": "nfl-butler-goal-line",
+      "league": "nfl",
+      "season": "2014",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who intercepted Russell Wilson at the goal line to seal Super Bowl XLIX?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Malcolm Butler"
+        },
+        {
+          "id": "p1",
+          "label": "Darrelle Revis"
+        },
+        {
+          "id": "p2",
+          "label": "Devin McCourty"
+        },
+        {
+          "id": "p3",
+          "label": "Brandon Browner"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Butler picked off Wilson with 20 seconds left to preserve New England’s 28–24 win over Seattle.",
+      "source": {
+        "url": "https://www.nfl.com/news/butler-s-late-int-lifts-patriots-to-fourth-super-bowl-title-0ap3000000467455",
+        "credit": "NFL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-helmet-catch",
+      "revision": 1,
+      "factFamily": "nfl-helmet-catch",
+      "league": "nfl",
+      "season": "2007",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Giants receiver pinned the ball against his helmet on the winning drive of Super Bowl XLII?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "David Tyree"
+        },
+        {
+          "id": "p1",
+          "label": "Plaxico Burress"
+        },
+        {
+          "id": "p2",
+          "label": "Amani Toomer"
+        },
+        {
+          "id": "p3",
+          "label": "Steve Smith"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Tyree kept the drive alive with the Helmet Catch. Plaxico Burress later caught the winning touchdown.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/",
+        "credit": "NFL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-white-overtime",
+      "revision": 1,
+      "factFamily": "nfl-white-overtime",
+      "league": "nfl",
+      "season": "2016",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored the overtime touchdown that finished New England’s comeback from 28–3 in Super Bowl LI?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "James White"
+        },
+        {
+          "id": "p1",
+          "label": "LeGarrette Blount"
+        },
+        {
+          "id": "p2",
+          "label": "Dion Lewis"
+        },
+        {
+          "id": "p3",
+          "label": "Julian Edelman"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "White ran in from two yards out to beat Atlanta in the first Super Bowl decided in overtime.",
+      "source": {
+        "url": "https://www.nfl.com/news/patriots-rb-james-white-retiring-after-eight-seasons-in-nfl",
+        "credit": "NFL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-philly-special",
+      "revision": 1,
+      "factFamily": "nfl-teams-2017",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who threw the touchdown pass to Nick Foles on the Philly Special?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Trey Burton"
+        },
+        {
+          "id": "p1",
+          "label": "Corey Clement"
+        },
+        {
+          "id": "p2",
+          "label": "Alshon Jeffery"
+        },
+        {
+          "id": "p3",
+          "label": "Zach Ertz"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Clement took the direct snap and flipped the ball to Burton, who threw to Foles for the touchdown in Super Bowl LII.",
+      "source": {
+        "url": "https://www.nfl.com/news/nick-foles-ordered-up-philly-special-trick-td-play-call-0ap3000000915082",
+        "credit": "NFL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-minneapolis-miracle",
+      "revision": 1,
+      "factFamily": "nfl-minneapolis-miracle",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team did Stefon Diggs knock out with the Minneapolis Miracle?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New Orleans Saints"
+        },
+        {
+          "id": "p1",
+          "label": "Green Bay Packers"
+        },
+        {
+          "id": "p2",
+          "label": "Philadelphia Eagles"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Falcons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Diggs turned a Case Keenum pass into a 61-yard touchdown as time expired, sending Minnesota to the NFC Championship Game.",
+      "source": {
+        "url": "https://www.nfl.com/news/stefon-diggs-last-second-td-caps-vikings-wild-win-0ap3000000906708",
+        "credit": "NFL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-thirteen-seconds",
+      "revision": 1,
+      "factFamily": "nfl-thirteen-seconds",
+      "league": "nfl",
+      "season": "2021",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who caught the overtime touchdown after Kansas City tied Buffalo with a drive that began with 13 seconds left?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Travis Kelce"
+        },
+        {
+          "id": "p1",
+          "label": "Tyreek Hill"
+        },
+        {
+          "id": "p2",
+          "label": "Mecole Hardman"
+        },
+        {
+          "id": "p3",
+          "label": "Byron Pringle"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kelce helped set up the tying field goal, then caught Patrick Mahomes’s eight-yard touchdown pass in overtime.",
+      "source": {
+        "url": "https://www.nfl.com/games/bills-at-chiefs-2021-post-2",
+        "credit": "NFL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-freese-walkoff",
+      "revision": 1,
+      "factFamily": "mlb-freese-walkoff",
+      "league": "mlb",
+      "season": "2011",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team did David Freese beat with his walk-off homer to force Game 7 of the 2011 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Texas Rangers"
+        },
+        {
+          "id": "p1",
+          "label": "Detroit Tigers"
+        },
+        {
+          "id": "p2",
+          "label": "New York Yankees"
+        },
+        {
+          "id": "p3",
+          "label": "Tampa Bay Rays"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Freese tied Game 6 with a triple in the ninth and won it for St. Louis with a solo homer in the 11th.",
+      "source": {
+        "url": "https://www.mlb.com/news/david-freese-game-6-2011",
+        "credit": "MLB · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-carter-walkoff",
+      "revision": 1,
+      "factFamily": "mlb-carter-walkoff",
+      "league": "mlb",
+      "season": "1993",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who hit a walk-off homer to give Toronto its second straight World Series title?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Joe Carter"
+        },
+        {
+          "id": "p1",
+          "label": "Paul Molitor"
+        },
+        {
+          "id": "p2",
+          "label": "Roberto Alomar"
+        },
+        {
+          "id": "p3",
+          "label": "John Olerud"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Carter hit a three-run homer off Mitch Williams in Game 6 to beat Philadelphia and clinch the 1993 title.",
+      "source": {
+        "url": "https://www.mlb.com/news/greatest-world-series-homers",
+        "credit": "MLB · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-gibson-pinch-hit",
+      "revision": 1,
+      "factFamily": "mlb-gibson-pinch-hit",
+      "league": "mlb",
+      "season": "1988",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which injured Dodgers slugger came off the bench to hit the walk-off homer in Game 1 of the 1988 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kirk Gibson"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Marshall"
+        },
+        {
+          "id": "p2",
+          "label": "John Shelby"
+        },
+        {
+          "id": "p3",
+          "label": "Mike Scioscia"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Gibson pinch-hit against Dennis Eckersley and hit a two-run homer to beat Oakland in his only at-bat of the series.",
+      "source": {
+        "url": "https://www.mlb.com/news/greatest-world-series-homers",
+        "credit": "MLB · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-larsen-perfect-game",
+      "revision": 1,
+      "factFamily": "mlb-larsen-perfect-game",
+      "league": "mlb",
+      "season": "1956",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which pitcher retired all 27 batters he faced in Game 5 of the 1956 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Don Larsen"
+        },
+        {
+          "id": "p1",
+          "label": "Whitey Ford"
+        },
+        {
+          "id": "p2",
+          "label": "Sal Maglie"
+        },
+        {
+          "id": "p3",
+          "label": "Johnny Podres"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Larsen struck out Dale Mitchell to finish a perfect game for the Yankees against the Brooklyn Dodgers.",
+      "source": {
+        "url": "https://www.mlb.com/news/top-perfect-games-and-no-hitters-in-mlb-history",
+        "credit": "MLB · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-gonzalez-bloop",
+      "revision": 1,
+      "factFamily": "mlb-champion-2001",
+      "league": "mlb",
+      "season": "2001",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose bloop single off Mariano Rivera won Game 7 of the 2001 World Series for Arizona?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Luis Gonzalez"
+        },
+        {
+          "id": "p1",
+          "label": "Tony Womack"
+        },
+        {
+          "id": "p2",
+          "label": "Craig Counsell"
+        },
+        {
+          "id": "p3",
+          "label": "Matt Williams"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Gonzalez lifted a single over the drawn-in infield in the ninth, scoring Jay Bell and giving Arizona its first title.",
+      "source": {
+        "url": "https://www.mlb.com/news/final-moments-of-world-series",
+        "credit": "MLB · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-freeman-grand-slam",
+      "revision": 1,
+      "factFamily": "mlb-freeman-grand-slam",
+      "league": "mlb",
+      "season": "2024",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who hit the first walk-off grand slam in World Series history?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Freddie Freeman"
+        },
+        {
+          "id": "p1",
+          "label": "Shohei Ohtani"
+        },
+        {
+          "id": "p2",
+          "label": "Mookie Betts"
+        },
+        {
+          "id": "p3",
+          "label": "Teoscar Hernández"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Freeman hit it in the 10th inning of Game 1 in 2024 to give the Dodgers a 6–3 win over the Yankees.",
+      "source": {
+        "url": "https://www.mlb.com/news/freddie-freeman-walk-off-grand-slam-world-series-game-1-2024",
+        "credit": "MLB · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-martinez-double-ot",
+      "revision": 1,
+      "factFamily": "nhl-martinez-double-ot",
+      "league": "nhl",
+      "season": "2013–14",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored in double overtime to win the Stanley Cup for the Kings against the Rangers?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Alec Martinez"
+        },
+        {
+          "id": "p1",
+          "label": "Justin Williams"
+        },
+        {
+          "id": "p2",
+          "label": "Jeff Carter"
+        },
+        {
+          "id": "p3",
+          "label": "Anže Kopitar"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Martinez scored in the second overtime of Game 5 to clinch the 2014 Cup for Los Angeles.",
+      "source": {
+        "url": "https://records.nhl.com/lak/playoff-summary/stanley-cup-winner?season=20132014",
+        "credit": "NHL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-kane-overtime",
+      "revision": 1,
+      "factFamily": "nhl-kane-overtime",
+      "league": "nhl",
+      "season": "2009–10",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who slipped the puck in from a sharp angle in overtime to end Chicago’s 49-year Stanley Cup drought?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Patrick Kane"
+        },
+        {
+          "id": "p1",
+          "label": "Jonathan Toews"
+        },
+        {
+          "id": "p2",
+          "label": "Dustin Byfuglien"
+        },
+        {
+          "id": "p3",
+          "label": "Patrick Sharp"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kane’s Game 6 goal beat Philadelphia and gave the Blackhawks their first Cup since 1961.",
+      "source": {
+        "url": "https://www.nhl.com/news/patrick-kane-ends-blackhawks-stanley-cup-drought-289818270",
+        "credit": "NHL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-krupp-triple-ot",
+      "revision": 1,
+      "factFamily": "nhl-krupp-triple-ot",
+      "league": "nhl",
+      "season": "1995–96",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "How many overtime periods did Colorado and Florida need before Uwe Krupp scored the Cup-winning goal in 1996?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Three"
+        },
+        {
+          "id": "p1",
+          "label": "One"
+        },
+        {
+          "id": "p2",
+          "label": "Two"
+        },
+        {
+          "id": "p3",
+          "label": "Four"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Krupp scored in the third overtime of Game 4, finishing Colorado’s sweep of Florida.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-1990-1999-287977078",
+        "credit": "NHL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-messier-guarantee",
+      "revision": 1,
+      "factFamily": "nhl-messier-guarantee",
+      "league": "nhl",
+      "season": "1993–94",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Rangers captain guaranteed a Game 6 win against the Devils and then scored a third-period hat trick?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Mark Messier"
+        },
+        {
+          "id": "p1",
+          "label": "Brian Leetch"
+        },
+        {
+          "id": "p2",
+          "label": "Adam Graves"
+        },
+        {
+          "id": "p3",
+          "label": "Steve Larmer"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Messier scored three straight goals in the third to force Game 7 of the 1994 Eastern Conference Final.",
+      "source": {
+        "url": "https://www.nhl.com/news/mark-messier-backed-guarantee-of-new-york-rangers-victory-with-hat-tri-289583798",
+        "credit": "NHL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-lehkonen-winner",
+      "revision": 1,
+      "factFamily": "nhl-lehkonen-winner",
+      "league": "nhl",
+      "season": "2021–22",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team’s bid for a third straight Stanley Cup ended on Artturi Lehkonen’s Game 6 winner?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tampa Bay Lightning"
+        },
+        {
+          "id": "p1",
+          "label": "Vegas Golden Knights"
+        },
+        {
+          "id": "p2",
+          "label": "Dallas Stars"
+        },
+        {
+          "id": "p3",
+          "label": "St. Louis Blues"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Lehkonen broke a 1–1 tie in the second period, and Colorado held on to beat Tampa Bay 2–1 in the 2022 clincher.",
+      "source": {
+        "url": "https://www.nhl.com/news/colorado-avalanche-tampa-bay-lightning-game-6-recap-334578586",
+        "credit": "NHL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-reinhart-game-seven",
+      "revision": 1,
+      "factFamily": "nhl-reinhart-game-seven",
+      "league": "nhl",
+      "season": "2023–24",
+      "scope": "postseason",
+      "metric": "playoff-moment",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored the Game 7 winner against Edmonton to give Florida its first Stanley Cup?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Sam Reinhart"
+        },
+        {
+          "id": "p1",
+          "label": "Aleksander Barkov"
+        },
+        {
+          "id": "p2",
+          "label": "Matthew Tkachuk"
+        },
+        {
+          "id": "p3",
+          "label": "Carter Verhaeghe"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Reinhart broke the tie late in the second period, and the Panthers beat the Oilers 2–1 to win the 2024 Cup.",
+      "source": {
+        "url": "https://www.nhl.com/news/edmonton-oilers-florida-panthers-game-7-recap-june-24",
+        "credit": "NHL · Playoff history"
+      },
+      "checkedAt": "2026-11-04",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
     }
   ]
 }

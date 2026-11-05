@@ -8,7 +8,7 @@ import { useMemoryStorage } from '../spordle/memory-storage';
 import { easternDate } from '../../core/games';
 
 const ROOT = '/api/numbers-dont-lie';
-const filters = { leagues: ['nba'], topics: ['stats'], fromYear: 2023, throughYear: 2023 };
+const filters = { leagues: ['nba'], topics: ['playoff-moments'], fromYear: 2023, throughYear: 2023 };
 const daily = { id: 'daily', mode: 'daily', date: '2026-10-28', position: 0, revision: 0, answeredCount: 0,
   correctCount: 0, complete: false, current: null, review: [] };
 const fresh = { eligibleFacts: 6, freshFacts: 6, canStartFresh: true, canStartWithRepeats: true,
@@ -29,10 +29,10 @@ describe('Numbers practice filters and coverage', () => {
   afterEach(() => http.verify());
 
   it('persists all filters and restores the saved round filters over later preferences', async () => {
-    game.selected = ['nba']; game.chosen = ['stats']; game.fromYear = 2023; game.throughYear = 2023;
+    game.selected = ['nba']; game.chosen = ['playoff-moments']; game.fromYear = 2023; game.throughYear = 2023;
     game.filtersChanged(); http.expectOne(ROOT + '/practice/coverage').flush(fresh); await settle();
     create(); http.expectOne(ROOT + '/daily').flush(daily); await settle();
-    expect(game.selected).toEqual(['nba']); expect(game.chosen).toEqual(['stats']);
+    expect(game.selected).toEqual(['nba']); expect(game.chosen).toEqual(['playoff-moments']);
     expect(game.fromYear).toBe(2023); expect(game.throughYear).toBe(2023);
     game.practice();
     http.expectOne(ROOT + '/practice/coverage').flush(fresh); await settle();
@@ -43,12 +43,12 @@ describe('Numbers practice filters and coverage', () => {
     game.retry();
     http.expectOne(ROOT + '/practice').flush({ ...daily, id: 'practice', mode: 'practice', complete: true, filters }); await settle();
     expect(game.selected).toEqual(['nba']);
-    expect(game.filterSummary()).toBe('NBA · stats · 2023–2023');
+    expect(game.filterSummary()).toBe('NBA · Playoff Moments · 2023–2023');
   });
 
   it('does not let an older coverage response enable starting with newer filters', async () => {
     game.customize(); const old = http.expectOne(ROOT + '/practice/coverage');
-    game.chosen = ['stats']; game.filtersChanged(); const latest = http.expectOne(ROOT + '/practice/coverage');
+    game.chosen = ['playoff-moments']; game.filtersChanged(); const latest = http.expectOne(ROOT + '/practice/coverage');
     latest.flush({ ...fresh, freshFacts: 1, canStartFresh: false }); await settle();
     old.flush(fresh); await settle();
     expect(game.coverage()!.freshFacts).toBe(1); expect(game.canStart()).toBe(false);
@@ -119,7 +119,7 @@ describe('Numbers practice filters and coverage', () => {
   });
 
   it('labels career-long questions by topic instead of asking for a season', () => {
-    expect(questionLabel({ season: '2023–24', topic: 'stats' })).toBe('2023–24');
+    expect(questionLabel({ season: '2023–24', topic: 'playoff-moments' })).toBe('2023–24');
     expect(questionLabel({ season: null, topic: 'seasons' })).toBe('Name the season');
     expect(questionLabel({ season: null, topic: 'nicknames' })).toBe('Nicknames');
     expect(questionLabel({ season: null, topic: 'history' })).toBe('History');

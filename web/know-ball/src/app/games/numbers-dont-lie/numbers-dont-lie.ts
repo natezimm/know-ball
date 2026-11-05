@@ -53,7 +53,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
           @for (league of leagues; track league) { <label class="kb-chip"><input type="checkbox" [checked]="selected.includes(league)" (change)="toggle(league, 'league')">{{league.toUpperCase()}}</label> }
         </fieldset>
         <details><summary>Customize topics and years</summary>
-          <fieldset class="chips"><legend class="kb-label">Topics</legend>@for (topic of topics; track topic) { <label class="kb-chip"><input type="checkbox" [checked]="chosen.includes(topic)" (change)="toggle(topic, 'topic')">{{topic}}</label> }</fieldset>
+          <fieldset class="chips"><legend class="kb-label">Topics</legend>@for (topic of topics; track topic) { <label class="kb-chip"><input type="checkbox" [checked]="chosen.includes(topic)" (change)="toggle(topic, 'topic')">{{topicName(topic)}}</label> }</fieldset>
           <div class="years">
             <label>From season year <input type="number" [(ngModel)]="fromYear" (ngModelChange)="filtersChanged()" min="1900" max="2100" placeholder="Any"></label>
             <label>Through season year <input type="number" [(ngModel)]="throughYear" (ngModelChange)="filtersChanged()" min="1900" max="2100" placeholder="Any"></label>
@@ -152,7 +152,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
       <p>Five questions a day about records, nicknames, famous numbers and history across the NBA, NFL, MLB and NHL.</p>
       <p>Pick an answer and lock it in. The reveal shows the real numbers behind every choice.</p>
       <p>Finish the daily quiz on consecutive days to build a streak. A new quiz arrives at midnight Eastern.</p>
-      <p>Practice (the sliders button) lets you choose leagues, topics and seasons, and never touches your streak.</p>
+      <p>Practice (the sliders button) includes Playoff Moments and lets you filter by league, topic and year, and never touches your streak.</p>
       <p class="muted">Your progress is saved in this browser. Practice rounds are kept for 30 days.</p>
     </dialog>
   `,
@@ -248,7 +248,8 @@ export class NumbersDontLie {
   /** A daily round from an earlier day, reopened from its address: it needs a way to today's quiz. */
   isPastDaily() { const s = this.state(); return s?.mode === 'daily' && !!s.date && s.date !== easternDate(); }
   readonly questionLabel = questionLabel;
-  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','seasons','stats'];
+  readonly leagues = ['nba','nfl','mlb','nhl']; readonly topics = ['history','nicknames','awards','teams','playoff-moments'];
+  readonly topicName = topicName;
   selected = [...this.leagues]; chosen = [...this.topics]; fromYear: number | null = null; throughYear: number | null = null;
   state = signal<State | null>(null); setup = signal(false); busy = signal(false); error = signal(''); shareStatus = signal(''); choice = '';
   readonly coverage = signal<Coverage | null>(null); readonly coverageBusy = signal(false); readonly coverageError = signal('');
@@ -284,7 +285,13 @@ export class NumbersDontLie {
   private filters(): Filters { return { leagues: [...this.selected], topics: [...this.chosen], fromYear: this.fromYear, throughYear: this.throughYear }; }
   private restoreFilters(value: Partial<Filters>) {
     if (Array.isArray(value.leagues)) { const valid = this.leagues.filter(l => value.leagues!.includes(l)); if (valid.length) this.selected = valid; }
-    if (Array.isArray(value.topics)) { const valid = this.topics.filter(t => value.topics!.includes(t)); if (valid.length) this.chosen = valid; }
+    if (Array.isArray(value.topics)) {
+      const stored = value.topics;
+      const valid = this.topics.filter(topic => stored.includes(topic) ||
+        (topic === 'playoff-moments' && stored.includes('stats')) ||
+        ((topic === 'awards' || topic === 'history') && stored.includes('seasons')));
+      if (valid.length) this.chosen = valid;
+    }
     const year = (n: unknown): number | null => typeof n === 'number' && Number.isInteger(n) && n >= 1900 && n <= 2100 ? n : null;
     this.fromYear = year(value.fromYear); this.throughYear = year(value.throughYear);
     if (this.fromYear !== null && this.throughYear !== null && this.fromYear > this.throughYear) { this.fromYear = null; this.throughYear = null; }
@@ -292,7 +299,7 @@ export class NumbersDontLie {
   private saveFilters() { try { localStorage.setItem('knowball.numbers.filters', JSON.stringify(this.filters())); } catch {} }
   filterSummary(filters: Filters | null | undefined = this.filters()): string {
     const f = filters || this.filters();
-    return f.leagues.map(l => l.toUpperCase()).join(', ') + ' · ' + f.topics.join(', ') + ' · ' +
+    return f.leagues.map(l => l.toUpperCase()).join(', ') + ' · ' + f.topics.map(topicName).join(', ') + ' · ' +
       (f.fromYear === null && f.throughYear === null ? 'All years' : (f.fromYear ?? 'Earliest') + '–' + (f.throughYear ?? 'Latest'));
   }
   filtersChanged() {
@@ -398,6 +405,10 @@ export class NumbersDontLie {
 }
 
 /** Spoiler-free share text: the score, a square per answer and the daily streak. */
+function topicName(topic: string): string {
+  return topic === 'playoff-moments' ? 'Playoff Moments' : topic;
+}
+
 /** The header's middle segment: the season, a prompt to name it, or the topic for career-long questions. */
 export function questionLabel(q: Pick<Question,'season'|'topic'>): string {
   if (q.season) return q.season;
