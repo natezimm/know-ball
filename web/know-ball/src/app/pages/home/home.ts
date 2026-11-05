@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameApi, GameSlug, GameStats, TodayEntry } from '../../core/game-api';
+import { Tilt } from '../../shared/tilt/tilt';
 
 interface GameCard {
   name: string;
@@ -18,8 +19,13 @@ interface GameCard {
   daily?: GameSlug;
 }
 
-/** What a card says under its blurb, and whether it can be opened. */
-export function cardStatus(card: Pick<GameCard, 'daily' | 'play'>, today: TodayEntry | undefined, loaded: boolean | null): { label: string; open: boolean; done?: boolean } {
+/**
+ * What a card says under its blurb, and whether it can be opened. A daily solved today turns foil, in gold when it
+ * took one guess, so the cards you have won today look like the ones worth keeping.
+ */
+export function cardStatus(
+  card: Pick<GameCard, 'daily' | 'play'>, today: TodayEntry | undefined, loaded: boolean | null,
+): { label: string; open: boolean; done?: boolean; foil?: 'gold' | 'holo' } {
   if (!card.daily) return { label: card.play ?? 'Play anytime', open: true };
   if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
@@ -27,7 +33,7 @@ export function cardStatus(card: Pick<GameCard, 'daily' | 'play'>, today: TodayE
 
   switch (today.status) {
     case 'won':
-      return { label: today.guesses === 1 ? 'Solved in 1 guess' : `Solved in ${today.guesses}`, open: true, done: true };
+      return { label: today.guesses === 1 ? 'Solved in 1 guess' : `Solved in ${today.guesses}`, open: true, done: true, foil: today.guesses === 1 ? 'gold' : 'holo' };
     case 'lost':
       return { label: 'Missed · see the answer', open: true, done: true };
     case 'playing':
@@ -41,7 +47,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [RouterLink, Tilt],
   template: `
     <section class="hero">
       <p class="kicker">Daily sports trivia</p>
@@ -50,8 +56,9 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     </section>
 
     <ul class="grid" aria-label="Games">
-      @for (card of cards(); track card.name) {
-        <li class="card" [style.--trim]="card.trim" [class.off]="!card.status.open">
+      @for (card of cards(); track card.name; let i = $index) {
+        <li class="card" kbTilt [style.--trim]="card.trim" [class.off]="!card.status.open" [class.kb-foil]="card.status.foil">
+          <i class="kb-shine" [class.gold]="card.status.foil === 'gold'" aria-hidden="true"></i>
           <div class="top">
             <span class="no">{{ card.kind }}</span>
             @if (card.streak) {
@@ -92,6 +99,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
           } @else {
             <span class="badge">{{ card.status.label }}</span>
           }
+          <span class="set-no" aria-hidden="true">No. {{ i + 1 }}</span>
         </li>
       }
     </ul>
@@ -99,7 +107,9 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     <section class="later" aria-labelledby="on-deck">
       <h2 id="on-deck">On deck</h2>
       <ul>
-        @for (name of later; track name) { <li>{{ name }}</li> }
+        @for (name of later; track name) {
+          <li><span class="back kb-card-back" aria-hidden="true">★</span><span class="name">{{ name }}</span></li>
+        }
       </ul>
     </section>
   `,
@@ -120,10 +130,10 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     }
     /* Each game is a card from the same set: trim colour outside, then a cream gap and a navy line. */
     .card {
-      position: relative; min-height: 220px; padding: 22px 20px 20px; display: flex; flex-direction: column; gap: 6px;
+      position: relative; isolation: isolate; min-height: 220px; padding: 22px 20px 20px; display: flex; flex-direction: column; gap: 6px;
       background: var(--surface); border: 6px solid var(--trim); border-radius: 8px;
-      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 4px var(--navy);
-      transition: transform .12s ease;
+      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 4px var(--navy), var(--card-lift);
+      transition: transform .12s ease, box-shadow .12s ease;
     }
     .card.off { opacity: .75; }
     .top { display: flex; align-items: center; justify-content: space-between; }
@@ -143,20 +153,32 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     .badge.play { background: var(--accent); color: var(--accent-ink); text-decoration: none; }
     .badge.done { background: var(--ok); color: var(--ok-ink); }
     /* Stretch the link over the whole card so the card itself is the tap target. */
-    .badge.play::after { content: ""; position: absolute; inset: 0; border-radius: 4px; }
+    .badge.play::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: 4px; }
+    /* The card's number in the set, on a tab that breaks the bottom border. */
+    .set-no {
+      position: absolute; right: 16px; bottom: -13px; padding: 2px 7px 1px; border: 2px solid var(--trim); border-radius: 4px;
+      background: var(--surface); color: var(--navy); font: 400 12px/1.2 var(--display); letter-spacing: .06em;
+    }
     .card:has(.play):hover { transform: translateY(-3px) rotate(-.6deg); }
+    /* With a mouse the card turns toward the pointer and lifts off the table. */
+    .card:has(.play).tilting {
+      transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-4px);
+      box-shadow: inset 0 0 0 2px var(--cream), inset 0 0 0 4px var(--navy), 6px 12px 0 rgb(29 43 83 / .14);
+      transition: box-shadow .12s ease;
+    }
 
     /* Games still being designed, as blank card backs waiting in the deck. */
-    .later { margin: 36px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+    .later { margin: 40px 0 0; display: grid; gap: 14px; }
     .later h2 { margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
-    .later ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-    .later li {
-      padding: 6px 12px; border: 2px dashed var(--miss-line); border-radius: 6px; color: var(--muted); font-size: 16px;
-    }
-    .later li::after { content: " · soon"; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .later ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 96px)); gap: 12px; }
+    .later li { display: grid; gap: 7px; justify-items: center; text-align: center; color: var(--muted); font-size: 15px; line-height: 1.2; }
+    .later li:nth-child(odd) .back { transform: rotate(-2.5deg); }
+    .later li:nth-child(even) .back { transform: rotate(2deg); }
+    .back { width: min(72px, 100%); aspect-ratio: 5 / 7; border-radius: 6px; font-size: 15px; box-shadow: inset 0 0 0 3px var(--navy), inset 0 0 0 5px var(--cream), inset 0 0 0 7px var(--red), var(--card-lift); }
+    .later .name::after { content: "Soon"; display: block; margin-top: 2px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
     @media (prefers-reduced-motion: reduce) {
       .card { transition: none; }
-      .card:has(.play):hover { transform: none; }
+      .card:has(.play):hover, .card:has(.play).tilting { transform: none; }
     }
   `,
 })

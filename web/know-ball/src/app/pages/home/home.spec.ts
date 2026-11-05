@@ -45,6 +45,8 @@ describe('Home', () => {
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/scouting-report', '/career-path', '/numbers-dont-lie']);
     expect(el.querySelector('h1')?.textContent).toContain('Four ways');
     expect(el.querySelector('.badge.done')?.textContent?.trim()).toBe('Solved in 2');
+    // A daily won today turns foil; the others stay plain card stock.
+    expect([...el.querySelectorAll('.card.kb-foil h2')].map((h) => h.textContent)).toEqual(['Career Path']);
   });
 
   it('names each kind of game and shows a running daily streak', async () => {
@@ -86,7 +88,8 @@ describe('Home', () => {
 
   it('words each state of a card', () => {
     const daily = { daily: 'scouting-report' as const };
-    expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true).label).toBe('Solved in 1 guess');
+    expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true)).toEqual({ label: 'Solved in 1 guess', open: true, done: true, foil: 'gold' });
+    expect(cardStatus(daily, entry({ status: 'won', guesses: 4 }), true).foil).toBe('holo');
     expect(cardStatus(daily, entry({ status: 'lost', guesses: 8 }), true)).toEqual({ label: 'Missed · see the answer', open: true, done: true });
     expect(cardStatus(daily, undefined, true)).toEqual({ label: 'Coming soon', open: false });
     expect(cardStatus(daily, undefined, false)).toEqual({ label: 'Play today', open: true });

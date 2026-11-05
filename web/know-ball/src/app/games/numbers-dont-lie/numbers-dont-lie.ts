@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { easternDate, nextEasternMidnight } from '../../core/games';
 import { Countdown } from '../../shared/countdown/countdown';
 import { NextGame } from '../../shared/next-game/next-game';
+import { Tilt } from '../../shared/tilt/tilt';
 import { Observable, firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -17,7 +18,7 @@ interface Answer { question: Question; optionId: string; correct: boolean; }
 interface State { filters?: Filters | null; id: string; mode: string; date: string | null; position: number; revision: number; answeredCount: number; correctCount: number; dailyStreak?: number | null; complete: boolean; current: Question | null; review: Answer[]; }
 
 @Component({
-  selector: 'app-numbers-dont-lie', imports: [Countdown, DatePipe, FormsModule, NextGame],
+  selector: 'app-numbers-dont-lie', imports: [Countdown, DatePipe, FormsModule, NextGame, Tilt],
   template: `
     <div class="nd">
     <header class="kb-game-top">
@@ -77,7 +78,9 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
       <section class="panel">
         @if (s.mode === 'practice') { <p class="filter-summary">{{filterSummary(s.filters)}}</p> }
         @if (s.complete) {
-          <div class="final kb-result" [class.won]="s.correctCount === 5" role="status">
+          <div class="final kb-result" kbTilt [class.won]="s.correctCount === 5" [attr.data-tier]="s.correctCount === 5 ? 'gold' : s.correctCount >= 3 ? 'holo' : null"
+            [attr.data-stamp]="s.correctCount === 5 ? 'Perfect' : null" role="status">
+            <i class="kb-shine" aria-hidden="true"></i>
             <div class="kb-result-who">
               <h2 class="kb-label" tabindex="-1">That’s the final score.</h2>
               <p class="score">{{s.correctCount}} / 5</p>

@@ -1,6 +1,7 @@
 import { Component, ElementRef, computed, effect, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { shareText } from '../../core/share';
 import { NextGame } from '../../shared/next-game/next-game';
+import { Tilt } from '../../shared/tilt/tilt';
 import { SpordleKeyboard } from './keyboard';
 import { HintType } from './spordle-api';
 import { MAX_ATTEMPTS, SpordleGame } from './spordle-game';
@@ -15,7 +16,7 @@ const MESSAGE_MS = 3000;
  */
 @Component({
   selector: 'app-spordle',
-  imports: [NextGame, SpordleGrid, SpordleKeyboard],
+  imports: [NextGame, SpordleGrid, SpordleKeyboard, Tilt],
   providers: [SpordleGame],
   host: { '(window:keydown)': 'onKeydown($event)' },
   template: `
@@ -71,7 +72,9 @@ const MESSAGE_MS = 3000;
       }
 
       @if (game.result(); as result) {
-        <div class="outcome kb-result" [class.won]="result.won">
+        <div class="outcome kb-result" kbTilt [class.won]="result.won"
+          [attr.data-tier]="result.won ? (result.guesses === 1 ? 'gold' : 'holo') : null" [attr.data-stamp]="result.won && result.guesses === 1 ? 'First try' : null">
+          <i class="kb-shine" aria-hidden="true"></i>
           <span class="tile-mark" aria-hidden="true">{{ result.answer[0] }}</span>
           <div class="kb-result-who">
             <span class="kb-label">

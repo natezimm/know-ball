@@ -8,6 +8,7 @@ import { Avatar } from '../avatar/avatar';
 import { Countdown } from '../countdown/countdown';
 import { NextGame } from '../next-game/next-game';
 import { PlayerSearch } from '../player-search/player-search';
+import { Tilt } from '../tilt/tilt';
 
 const NOTICE_MS = 3500;
 
@@ -19,7 +20,7 @@ const NOTICE_MS = 3500;
  */
 @Component({
   selector: 'app-game-shell',
-  imports: [Avatar, Countdown, DatePipe, NextGame, PlayerSearch, RouterLink],
+  imports: [Avatar, Countdown, DatePipe, NextGame, PlayerSearch, RouterLink, Tilt],
   template: `
     <section class="game" [style.--trim]="trim()" [attr.aria-label]="name()">
       <header class="top kb-game-top">
@@ -92,7 +93,8 @@ const NOTICE_MS = 3500;
           }
 
           @if (store.over()) {
-            <div class="result kb-result" [class.won]="s.status === 'won'" role="status">
+            <div class="result kb-result" kbTilt [class.won]="s.status === 'won'" [attr.data-tier]="tier(s)" [attr.data-stamp]="stamp(s)" role="status">
+              <i class="kb-shine" aria-hidden="true"></i>
               <app-avatar [src]="$safeNavigationMigration(s.answer?.headshotUrl)" [name]="s.answer?.name ?? ''" />
               <div class="who kb-result-who">
                 <span class="kb-label">{{ verdict(s) }}</span>
@@ -210,10 +212,19 @@ const NOTICE_MS = 3500;
 
     .help { display: grid; gap: 10px; }
     .fine { margin: 14px 0 0; color: var(--muted); font-size: 15px; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 16px; }
-    .stats div { padding: 10px 4px; border: 2px solid var(--navy); border-radius: 4px; background: var(--cream); text-align: center; }
-    .stats dd { margin: 0; font: 400 24px/1.1 var(--display); }
-    .stats dt { margin-top: 3px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    /* The stat line from the back of a card: a navy heading row over the numbers, one ruled table. */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 0 16px; overflow: hidden;
+      border: 2px solid var(--navy); border-radius: 4px; background: var(--cream);
+    }
+    .stats div { display: flex; flex-direction: column-reverse; text-align: center; }
+    .stats div + div { border-left: 2px solid var(--navy); }
+    .stats dd { margin: 0; padding: 9px 2px 8px; font: 400 23px/1.1 var(--display); }
+    .stats div:nth-child(even) dd { background: var(--surface-2); }
+    .stats dt {
+      padding: 4px 2px 3px; background: var(--navy); color: var(--cream);
+      font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    }
     .bars { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
     .bars li { display: grid; grid-template-columns: 14px 1fr; align-items: center; gap: 8px; font-weight: 700; }
     .bars i {
@@ -285,6 +296,16 @@ export class GameShell {
   protected verdict(state: GameState): string {
     if (state.status !== 'won') return 'The answer was';
     return state.guesses.length === 1 ? 'Solved on the first guess' : `Solved in ${state.guesses.length} guesses`;
+  }
+
+  /** The finish the answer card comes up in: gold foil for a first-guess win, foil for any other win, plain for a loss. */
+  protected tier(state: GameState): 'gold' | 'holo' | null {
+    if (state.status !== 'won') return null;
+    return state.guesses.length === 1 ? 'gold' : 'holo';
+  }
+
+  protected stamp(state: GameState): string | null {
+    return state.status === 'won' && state.guesses.length === 1 ? 'First try' : null;
   }
 
   protected startPractice(): void {
