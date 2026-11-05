@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "purpose": "Server-backed beta catalogue; human editorial approval pending. Never expose unanswered solutions through the public API.",
+  "purpose": "Question catalogue for Daily and Practice. The server reveals each solution after the question is answered.",
   "questions": [
     {
       "id": "nba-awards-2010",

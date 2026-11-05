@@ -8,7 +8,7 @@ the project as it was when they were written; the code, the README and the docs 
 | [implementation-plan.md](implementation-plan.md) | The version 1 plan, milestones and launch checklist |
 | [future-games.md](future-games.md) | Candidate games and why the photo game was deferred |
 | [whos-that-photo-catalog.md](whos-that-photo-catalog.md) | Photo research for the retired Who's That Sportsman? game |
-| [numbers-dont-lie-implementation-plan.md](numbers-dont-lie-implementation-plan.md) | The plan for the fourth game, now a playable beta |
+| [numbers-dont-lie-implementation-plan.md](numbers-dont-lie-implementation-plan.md) | The original plan for Numbers Don't Lie |
 | [numbers-dont-lie-data-sources.md](numbers-dont-lie-data-sources.md) | Source proof for the first 24 questions |
 | [numbers-preview-expansion.md](numbers-preview-expansion.md) | The expanded browser-only preview |
 
