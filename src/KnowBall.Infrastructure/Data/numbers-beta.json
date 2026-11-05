@@ -8561,6 +8561,2070 @@
       "publicationStatus": "prototype-only",
       "topic": "playoff-moments",
       "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-jordan-shrug",
+      "revision": 1,
+      "factFamily": "nba-expansion-jordan-shrug",
+      "league": "nba",
+      "season": "1991–92",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team faced Michael Jordan’s famous shrug after six first-half threes in the 1992 Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Portland Trail Blazers"
+        },
+        {
+          "id": "p1",
+          "label": "Phoenix Suns"
+        },
+        {
+          "id": "p2",
+          "label": "Utah Jazz"
+        },
+        {
+          "id": "p3",
+          "label": "Seattle SuperSonics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Jordan’s hot shooting came in Game 1 against Portland.",
+      "source": {
+        "url": "https://www.nba.com/news/history-top-moments-michael-jordan-shrug-1992",
+        "credit": "NBA · Jordan’s shrug"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-miller-eight-points",
+      "revision": 1,
+      "factFamily": "nba-expansion-miller-eight-points",
+      "league": "nba",
+      "season": "1994–95",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who stunned the Knicks by scoring eight points in nine seconds during the 1995 playoffs?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Reggie Miller"
+        },
+        {
+          "id": "p1",
+          "label": "Mark Jackson"
+        },
+        {
+          "id": "p2",
+          "label": "Byron Scott"
+        },
+        {
+          "id": "p3",
+          "label": "Rik Smits"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Miller’s late burst won Game 1 for Indiana.",
+      "source": {
+        "url": "https://www.nba.com/pacers/eight-points-about-8-points-9-seconds",
+        "credit": "Indiana Pacers · Eight points in nine seconds"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-fisher-point-four",
+      "revision": 1,
+      "factFamily": "nba-expansion-fisher-point-four",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Laker beat the Spurs with only 0.4 seconds left in a 2004 playoff game?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Derek Fisher"
+        },
+        {
+          "id": "p1",
+          "label": "Kobe Bryant"
+        },
+        {
+          "id": "p2",
+          "label": "Gary Payton"
+        },
+        {
+          "id": "p3",
+          "label": "Devean George"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Fisher’s turnaround jumper won Game 5 of the Western Conference semifinals.",
+      "source": {
+        "url": "https://www.nba.com/news/nba-flashback-podcast-derek-fisher",
+        "credit": "NBA · Derek Fisher buzzer-beater"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-prince-chasedown",
+      "revision": 1,
+      "factFamily": "nba-expansion-prince-chasedown",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who chased down Reggie Miller to block a layup in the 2004 Eastern Conference finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tayshaun Prince"
+        },
+        {
+          "id": "p1",
+          "label": "Richard Hamilton"
+        },
+        {
+          "id": "p2",
+          "label": "Chauncey Billups"
+        },
+        {
+          "id": "p3",
+          "label": "Rasheed Wallace"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Prince’s recovery helped Detroit hold on in Game 2.",
+      "source": {
+        "url": "https://www.nba.com/watch/video/next-man-up-tayshaun-prince-chasedown-block-reggie-miller",
+        "credit": "NBA · Tayshaun Prince’s block"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-wallace-dpoy",
+      "revision": 1,
+      "factFamily": "nba-expansion-wallace-dpoy",
+      "league": "nba",
+      "season": "2001–02",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won NBA Defensive Player of the Year in 2001–02?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ben Wallace"
+        },
+        {
+          "id": "p1",
+          "label": "Dikembe Mutombo"
+        },
+        {
+          "id": "p2",
+          "label": "Kevin Garnett"
+        },
+        {
+          "id": "p3",
+          "label": "Tim Duncan"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Wallace won the award with Detroit.",
+      "source": {
+        "url": "https://www.nba.com/news/history-defensive-player-of-the-year-winners",
+        "credit": "NBA · Defensive Player of the Year winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-duncan-rookie",
+      "revision": 1,
+      "factFamily": "nba-expansion-duncan-rookie",
+      "league": "nba",
+      "season": "1997–98",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won NBA Rookie of the Year in 1997–98?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p1",
+          "label": "Keith Van Horn"
+        },
+        {
+          "id": "p2",
+          "label": "Tracy McGrady"
+        },
+        {
+          "id": "p3",
+          "label": "Chauncey Billups"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Duncan won it as a San Antonio Spur.",
+      "source": {
+        "url": "https://www.nba.com/news/history-rookie-of-the-year-winners",
+        "credit": "NBA · Rookie of the Year winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-ginobili-sixth",
+      "revision": 1,
+      "factFamily": "nba-expansion-ginobili-sixth",
+      "league": "nba",
+      "season": "2007–08",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Spur won Sixth Man of the Year in 2007–08?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Manu Ginóbili"
+        },
+        {
+          "id": "p1",
+          "label": "Brent Barry"
+        },
+        {
+          "id": "p2",
+          "label": "Michael Finley"
+        },
+        {
+          "id": "p3",
+          "label": "Ime Udoka"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ginóbili earned the league’s award for a reserve.",
+      "source": {
+        "url": "https://www.nba.com/news/history-sixth-man-of-the-year-winners",
+        "credit": "NBA · Sixth Man of the Year winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-giannis-improved",
+      "revision": 1,
+      "factFamily": "nba-expansion-giannis-improved",
+      "league": "nba",
+      "season": "2016–17",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won NBA Most Improved Player in 2016–17?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Giannis Antetokounmpo"
+        },
+        {
+          "id": "p1",
+          "label": "Nikola Jokić"
+        },
+        {
+          "id": "p2",
+          "label": "Rudy Gobert"
+        },
+        {
+          "id": "p3",
+          "label": "Gordon Hayward"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Antetokounmpo won the award with Milwaukee.",
+      "source": {
+        "url": "https://www.nba.com/news/history-most-improved-award-winners",
+        "credit": "NBA · Most Improved Player winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-rockets-sweep",
+      "revision": 1,
+      "factFamily": "nba-expansion-rockets-sweep",
+      "league": "nba",
+      "season": "1994–95",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team swept Shaquille O’Neal’s Orlando Magic in the 1995 NBA Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Houston Rockets"
+        },
+        {
+          "id": "p1",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p2",
+          "label": "Utah Jazz"
+        },
+        {
+          "id": "p3",
+          "label": "Seattle SuperSonics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Houston completed back-to-back championships.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-review-1994-95",
+        "credit": "NBA · 1994–95 season review"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-heat-first-lebron-title",
+      "revision": 1,
+      "factFamily": "nba-expansion-heat-first-lebron-title",
+      "league": "nba",
+      "season": "2011–12",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Oklahoma City to win the 2012 NBA championship?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Miami Heat"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Celtics"
+        },
+        {
+          "id": "p2",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Lakers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Miami won the Finals in five games.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-review-2011-12",
+        "credit": "NBA · 2011–12 season review"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-spurs-rematch",
+      "revision": 1,
+      "factFamily": "nba-expansion-spurs-rematch",
+      "league": "nba",
+      "season": "2013–14",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Miami in the 2014 Finals rematch?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p1",
+          "label": "Oklahoma City Thunder"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Clippers"
+        },
+        {
+          "id": "p3",
+          "label": "Portland Trail Blazers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "San Antonio won the title in five games.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-review-2013-14",
+        "credit": "NBA · 2013–14 season review"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-nuggets-first-title",
+      "revision": 1,
+      "factFamily": "nba-expansion-nuggets-first-title",
+      "league": "nba",
+      "season": "2022–23",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won its first NBA title by beating Miami in 2023?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Denver Nuggets"
+        },
+        {
+          "id": "p1",
+          "label": "Phoenix Suns"
+        },
+        {
+          "id": "p2",
+          "label": "Memphis Grizzlies"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Clippers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Denver closed out the series in Game 5.",
+      "source": {
+        "url": "https://www.nba.com/playoffs/2023/the-finals/news",
+        "credit": "NBA · 2023 Finals coverage"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-music-city-lateral",
+      "revision": 1,
+      "factFamily": "nfl-expansion-music-city-lateral",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who took Frank Wycheck’s lateral to the end zone in the Music City Miracle?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kevin Dyson"
+        },
+        {
+          "id": "p1",
+          "label": "Derrick Mason"
+        },
+        {
+          "id": "p2",
+          "label": "Eddie George"
+        },
+        {
+          "id": "p3",
+          "label": "Yancey Thigpen"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dyson’s return knocked Buffalo out of the playoffs.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/detail.html?slug=plays-4",
+        "credit": "NFL · Music City Miracle"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-jones-tackle",
+      "revision": 1,
+      "factFamily": "nfl-teams-1999",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who tackled Kevin Dyson one yard short on the final play of Super Bowl XXXIV?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Mike Jones"
+        },
+        {
+          "id": "p1",
+          "label": "London Fletcher"
+        },
+        {
+          "id": "p2",
+          "label": "Todd Lyght"
+        },
+        {
+          "id": "p3",
+          "label": "Dexter McCleon"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Jones’s tackle sealed the Rams’ championship.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/detail.html?slug=plays-11",
+        "credit": "NFL · The Tackle"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-beast-quake",
+      "revision": 1,
+      "factFamily": "nfl-expansion-beast-quake",
+      "league": "nfl",
+      "season": "2010",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team did Marshawn Lynch shake off on his Beast Quake touchdown run?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New Orleans Saints"
+        },
+        {
+          "id": "p1",
+          "label": "Chicago Bears"
+        },
+        {
+          "id": "p2",
+          "label": "Green Bay Packers"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Falcons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Lynch’s 67-yard run helped Seattle win the wild-card game.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/detail.html?slug=plays-13",
+        "credit": "NFL · Beast Quake"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-harrison-return",
+      "revision": 1,
+      "factFamily": "nfl-expansion-harrison-return",
+      "league": "nfl",
+      "season": "2008",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who returned an interception 100 yards for a touchdown just before halftime of Super Bowl XLIII?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "James Harrison"
+        },
+        {
+          "id": "p1",
+          "label": "Troy Polamalu"
+        },
+        {
+          "id": "p2",
+          "label": "James Farrior"
+        },
+        {
+          "id": "p3",
+          "label": "Lawrence Timmons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Harrison’s return put Pittsburgh ahead of Arizona at the break.",
+      "source": {
+        "url": "https://www.nfl.com/news/steelers-harrison-goes-the-distance-for-super-bowl-record-int-r-09000d5d80e8364c",
+        "credit": "NFL · Harrison’s interception return"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-smith-comeback",
+      "revision": 1,
+      "factFamily": "nfl-expansion-smith-comeback",
+      "league": "nfl",
+      "season": "2020",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won AP Comeback Player of the Year after returning from a devastating leg injury in 2020?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Alex Smith"
+        },
+        {
+          "id": "p1",
+          "label": "Ben Roethlisberger"
+        },
+        {
+          "id": "p2",
+          "label": "Cam Newton"
+        },
+        {
+          "id": "p3",
+          "label": "Matthew Stafford"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Smith returned to quarterback Washington.",
+      "source": {
+        "url": "https://www.nfl.com/news/washington-qb-alex-smith-wins-ap-comeback-player-of-the-year",
+        "credit": "NFL · Alex Smith’s comeback award"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-watt-payton",
+      "revision": 1,
+      "factFamily": "nfl-expansion-watt-payton",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the 2017 Walter Payton NFL Man of the Year award after his Hurricane Harvey relief efforts?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "J.J. Watt"
+        },
+        {
+          "id": "p1",
+          "label": "Greg Olsen"
+        },
+        {
+          "id": "p2",
+          "label": "Benjamin Watson"
+        },
+        {
+          "id": "p3",
+          "label": "Julius Peppers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Watt was honored for his work in Houston.",
+      "source": {
+        "url": "https://www.nfl.com/honors/man-of-the-year/winners",
+        "credit": "NFL · Walter Payton award winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-griffin-rookie",
+      "revision": 1,
+      "factFamily": "nfl-expansion-griffin-rookie",
+      "league": "nfl",
+      "season": "2012",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won AP Offensive Rookie of the Year for the 2012 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Robert Griffin III"
+        },
+        {
+          "id": "p1",
+          "label": "Andrew Luck"
+        },
+        {
+          "id": "p2",
+          "label": "Russell Wilson"
+        },
+        {
+          "id": "p3",
+          "label": "Alfred Morris"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Griffin won the award with Washington.",
+      "source": {
+        "url": "https://www.nfl.com/news/robert-griffin-iii-wins-offensive-rookie-of-the-year-0ap1000000134287",
+        "credit": "NFL · Robert Griffin III’s rookie award"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-kupp-offense",
+      "revision": 1,
+      "factFamily": "nfl-expansion-kupp-offense",
+      "league": "nfl",
+      "season": "2021",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which receiver won AP Offensive Player of the Year for the 2021 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Cooper Kupp"
+        },
+        {
+          "id": "p1",
+          "label": "Davante Adams"
+        },
+        {
+          "id": "p2",
+          "label": "Justin Jefferson"
+        },
+        {
+          "id": "p3",
+          "label": "Deebo Samuel"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kupp won the award as a Los Angeles Ram.",
+      "source": {
+        "url": "https://www.nfl.com/news/rams-wr-cooper-kupp-named-2021-ap-nfl-offensive-player-of-the-year",
+        "credit": "NFL · Cooper Kupp’s offensive award"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-jets-guarantee",
+      "revision": 1,
+      "factFamily": "nfl-expansion-jets-guarantee",
+      "league": "nfl",
+      "season": "1968",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which AFL team backed Joe Namath’s guarantee by beating Baltimore in Super Bowl III?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New York Jets"
+        },
+        {
+          "id": "p1",
+          "label": "Oakland Raiders"
+        },
+        {
+          "id": "p2",
+          "label": "Kansas City Chiefs"
+        },
+        {
+          "id": "p3",
+          "label": "San Diego Chargers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The Jets won 16–7 in January 1969, following the 1968 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/super-bowl-memories-from-max-mcgee-to-mario-manningham-0ap2000000319387",
+        "credit": "NFL · Super Bowl III retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-washington-williams",
+      "revision": 1,
+      "factFamily": "nfl-expansion-washington-williams",
+      "league": "nfl",
+      "season": "1987",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won Super Bowl XXII with Doug Williams at quarterback?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Washington Redskins"
+        },
+        {
+          "id": "p1",
+          "label": "New York Giants"
+        },
+        {
+          "id": "p2",
+          "label": "San Francisco 49ers"
+        },
+        {
+          "id": "p3",
+          "label": "Chicago Bears"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Washington beat Denver after the 1987 season; the game was played in January 1988.",
+      "source": {
+        "url": "https://www.nfl.com/news/super-bowl-memories-from-max-mcgee-to-mario-manningham-0ap2000000319387",
+        "credit": "NFL · Super Bowl XXII retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-ravens-blackout",
+      "revision": 1,
+      "factFamily": "nfl-expansion-ravens-blackout",
+      "league": "nfl",
+      "season": "2012",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team held off San Francisco in the Super Bowl interrupted by a power outage?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Baltimore Ravens"
+        },
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Pittsburgh Steelers"
+        },
+        {
+          "id": "p3",
+          "label": "Denver Broncos"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Baltimore won Super Bowl XLVII in February 2013, following the 2012 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/ravens-defeat-49ers-in-super-bowl-xlvii-0ap1000000135344",
+        "credit": "NFL · Super Bowl XLVII recap"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-seahawks-first-title",
+      "revision": 1,
+      "factFamily": "nfl-expansion-seahawks-first-title",
+      "league": "nfl",
+      "season": "2013",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Peyton Manning’s Broncos 43–8 to win its first Super Bowl?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Seattle Seahawks"
+        },
+        {
+          "id": "p1",
+          "label": "San Francisco 49ers"
+        },
+        {
+          "id": "p2",
+          "label": "Carolina Panthers"
+        },
+        {
+          "id": "p3",
+          "label": "Arizona Cardinals"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Seattle won Super Bowl XLVIII in February 2014, following the 2013 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/seahawks-crush-broncos-for-first-super-bowl-win-0ap2000000322949",
+        "credit": "NFL · Super Bowl XLVIII recap"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-mazeroski-game-seven",
+      "revision": 1,
+      "factFamily": "mlb-expansion-mazeroski-game-seven",
+      "league": "mlb",
+      "season": "1960",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who ended the 1960 World Series with a walk-off homer in Game 7?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bill Mazeroski"
+        },
+        {
+          "id": "p1",
+          "label": "Roberto Clemente"
+        },
+        {
+          "id": "p2",
+          "label": "Dick Groat"
+        },
+        {
+          "id": "p3",
+          "label": "Rocky Nelson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Mazeroski’s home run gave Pittsburgh the championship.",
+      "source": {
+        "url": "https://www.mlb.com/news/bill-mazeroski-s-1960-world-series-winning-walk-off-home-run",
+        "credit": "MLB · Mazeroski’s Game 7 home run"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-fisk-fair",
+      "revision": 1,
+      "factFamily": "mlb-expansion-fisk-fair",
+      "league": "mlb",
+      "season": "1975",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which catcher waved his home run fair in Game 6 of the 1975 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carlton Fisk"
+        },
+        {
+          "id": "p1",
+          "label": "Bob Montgomery"
+        },
+        {
+          "id": "p2",
+          "label": "Johnny Bench"
+        },
+        {
+          "id": "p3",
+          "label": "Darrell Porter"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Fisk’s 12th-inning shot for Boston forced a seventh game.",
+      "source": {
+        "url": "https://www.mlb.com/news/carlton-fisk-greatest-moments",
+        "credit": "MLB · Carlton Fisk’s greatest moments"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-halladay-postseason-nohitter",
+      "revision": 1,
+      "factFamily": "mlb-expansion-halladay-postseason-nohitter",
+      "league": "mlb",
+      "season": "2010",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who threw a no-hitter against Cincinnati in his first postseason appearance?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Roy Halladay"
+        },
+        {
+          "id": "p1",
+          "label": "Cliff Lee"
+        },
+        {
+          "id": "p2",
+          "label": "Cole Hamels"
+        },
+        {
+          "id": "p3",
+          "label": "Roy Oswalt"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Halladay did it for Philadelphia in the 2010 NLDS opener.",
+      "source": {
+        "url": "https://www.mlb.com/news/roy-halladay-timeline-of-hall-of-fame-career-c303007616",
+        "credit": "MLB · Roy Halladay’s career timeline"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-edgar-double",
+      "revision": 1,
+      "factFamily": "mlb-expansion-edgar-double",
+      "league": "mlb",
+      "season": "1995",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose double scored Ken Griffey Jr. to eliminate the Yankees in the 1995 ALDS?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Edgar Martínez"
+        },
+        {
+          "id": "p1",
+          "label": "Jay Buhner"
+        },
+        {
+          "id": "p2",
+          "label": "Tino Martinez"
+        },
+        {
+          "id": "p3",
+          "label": "Joey Cora"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Martínez’s hit sent Seattle to the ALCS.",
+      "source": {
+        "url": "https://www.mlb.com/news/edgar-martinez-s-the-double-in-1995-alds",
+        "credit": "MLB · Edgar Martínez’s double"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-pedro-cy-young",
+      "revision": 1,
+      "factFamily": "mlb-expansion-pedro-cy-young",
+      "league": "mlb",
+      "season": "1999",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who unanimously won the 1999 American League Cy Young Award?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pedro Martínez"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Mussina"
+        },
+        {
+          "id": "p2",
+          "label": "David Cone"
+        },
+        {
+          "id": "p3",
+          "label": "Bartolo Colón"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Martínez won the award with Boston.",
+      "source": {
+        "url": "https://www.mlb.com/player/pedro-martinez-118377",
+        "credit": "MLB · Pedro Martínez career biography"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-pujols-rookie",
+      "revision": 1,
+      "factFamily": "mlb-expansion-pujols-rookie",
+      "league": "mlb",
+      "season": "2001",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won National League Rookie of the Year in 2001?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Albert Pujols"
+        },
+        {
+          "id": "p1",
+          "label": "Roy Oswalt"
+        },
+        {
+          "id": "p2",
+          "label": "Jimmy Rollins"
+        },
+        {
+          "id": "p3",
+          "label": "Adam Dunn"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Pujols won unanimously with St. Louis.",
+      "source": {
+        "url": "https://www.mlb.com/stories/albert-pujols-career-timeline",
+        "credit": "MLB · Albert Pujols career timeline"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-bumgarner-series-mvp",
+      "revision": 1,
+      "factFamily": "mlb-expansion-bumgarner-series-mvp",
+      "league": "mlb",
+      "season": "2014",
+      "scope": "postseason",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won 2014 World Series MVP after five shutout innings of relief in Game 7?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Madison Bumgarner"
+        },
+        {
+          "id": "p1",
+          "label": "Pablo Sandoval"
+        },
+        {
+          "id": "p2",
+          "label": "Hunter Pence"
+        },
+        {
+          "id": "p3",
+          "label": "Buster Posey"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Bumgarner helped San Francisco finish off Kansas City.",
+      "source": {
+        "url": "https://www.mlb.com/awards/2014",
+        "credit": "MLB · 2014 award winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-francona-manager",
+      "revision": 1,
+      "factFamily": "mlb-expansion-francona-manager",
+      "league": "mlb",
+      "season": "2013",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won AL Manager of the Year in his first season managing Cleveland in 2013?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Terry Francona"
+        },
+        {
+          "id": "p1",
+          "label": "John Farrell"
+        },
+        {
+          "id": "p2",
+          "label": "Bob Melvin"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Maddon"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Francona guided Cleveland to an AL Wild Card berth.",
+      "source": {
+        "url": "https://www.mlb.com/news/2013-bbwaa-managers-of-the-year-announced/c-63879932",
+        "credit": "MLB · 2013 Managers of the Year"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-mets-comeback-title",
+      "revision": 1,
+      "factFamily": "mlb-expansion-mets-comeback-title",
+      "league": "mlb",
+      "season": "1986",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Boston in Game 7 to win the 1986 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New York Mets"
+        },
+        {
+          "id": "p1",
+          "label": "St. Louis Cardinals"
+        },
+        {
+          "id": "p2",
+          "label": "San Francisco Giants"
+        },
+        {
+          "id": "p3",
+          "label": "Houston Astros"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The Mets won the deciding game 8–5.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/1986",
+        "credit": "MLB · 1986 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-reds-sweep",
+      "revision": 1,
+      "factFamily": "mlb-expansion-reds-sweep",
+      "league": "mlb",
+      "season": "1990",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team swept Oakland in the 1990 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Cincinnati Reds"
+        },
+        {
+          "id": "p1",
+          "label": "Pittsburgh Pirates"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Dodgers"
+        },
+        {
+          "id": "p3",
+          "label": "New York Mets"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Cincinnati won all four games.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/1990",
+        "credit": "MLB · 1990 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-giants-san-francisco-title",
+      "revision": 1,
+      "factFamily": "mlb-expansion-giants-san-francisco-title",
+      "league": "mlb",
+      "season": "2010",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Texas to win the 2010 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "San Francisco Giants"
+        },
+        {
+          "id": "p1",
+          "label": "Philadelphia Phillies"
+        },
+        {
+          "id": "p2",
+          "label": "Atlanta Braves"
+        },
+        {
+          "id": "p3",
+          "label": "Cincinnati Reds"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "San Francisco won the series in five games.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2010",
+        "credit": "MLB · 2010 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-braves-2021-title",
+      "revision": 1,
+      "factFamily": "mlb-expansion-braves-2021-title",
+      "league": "mlb",
+      "season": "2021",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Houston in the 2021 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Atlanta Braves"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Dodgers"
+        },
+        {
+          "id": "p2",
+          "label": "San Francisco Giants"
+        },
+        {
+          "id": "p3",
+          "label": "Milwaukee Brewers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Atlanta closed out the series in Game 6.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2021",
+        "credit": "MLB · 2021 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-matteau-double-ot",
+      "revision": 1,
+      "factFamily": "nhl-expansion-matteau-double-ot",
+      "league": "nhl",
+      "season": "1993–94",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored in double overtime against New Jersey to send the Rangers to the 1994 Stanley Cup Final?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Stéphane Matteau"
+        },
+        {
+          "id": "p1",
+          "label": "Alex Kovalev"
+        },
+        {
+          "id": "p2",
+          "label": "Adam Graves"
+        },
+        {
+          "id": "p3",
+          "label": "Esa Tikkanen"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Matteau’s Game 7 winner ended the conference final.",
+      "source": {
+        "url": "https://www.nhl.com/news/rangers-1994-game-7-conference-final-victory-over-devils-still-unforge-289611024",
+        "credit": "NHL · Rangers–Devils Game 7 retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-mccarty-clincher",
+      "revision": 1,
+      "factFamily": "nhl-expansion-mccarty-clincher",
+      "league": "nhl",
+      "season": "1996–97",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored Detroit’s Stanley Cup-winning goal on a solo rush in Game 4 against Philadelphia in 1997?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Darren McCarty"
+        },
+        {
+          "id": "p1",
+          "label": "Kirk Maltby"
+        },
+        {
+          "id": "p2",
+          "label": "Joe Kocur"
+        },
+        {
+          "id": "p3",
+          "label": "Doug Brown"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "McCarty’s goal helped finish Detroit’s sweep.",
+      "source": {
+        "url": "https://www.nhl.com/news/this-date-in-nhl-history-june-7-280871200",
+        "credit": "NHL · Detroit’s 1997 Cup clincher"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-holtby-save",
+      "revision": 1,
+      "factFamily": "nhl-expansion-capitals-title",
+      "league": "nhl",
+      "season": "2017–18",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who stretched across the crease to deny Alex Tuch in Game 2 of the 2018 Stanley Cup Final?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Braden Holtby"
+        },
+        {
+          "id": "p1",
+          "label": "Philipp Grubauer"
+        },
+        {
+          "id": "p2",
+          "label": "Marc-André Fleury"
+        },
+        {
+          "id": "p3",
+          "label": "Malcolm Subban"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Holtby’s save protected Washington’s lead against Vegas.",
+      "source": {
+        "url": "https://www.nhl.com/news/save-of-the-decade-holtby-game-2-2018-stanley-cup-final-313881530",
+        "credit": "NHL · Holtby’s save"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-bolland-seventeen-seconds",
+      "revision": 1,
+      "factFamily": "nhl-expansion-bolland-seventeen-seconds",
+      "league": "nhl",
+      "season": "2012–13",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored Chicago’s Cup-winning goal 17 seconds after Bryan Bickell tied Game 6 against Boston in 2013?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dave Bolland"
+        },
+        {
+          "id": "p1",
+          "label": "Patrick Sharp"
+        },
+        {
+          "id": "p2",
+          "label": "Andrew Shaw"
+        },
+        {
+          "id": "p3",
+          "label": "Marian Hossa"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Bolland completed Chicago’s late comeback.",
+      "source": {
+        "url": "https://records.nhl.com/playoff-summary/stanley-cup-winner?season=20122013",
+        "credit": "NHL Records · 2012–13 Stanley Cup winner"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-thomas-vezina",
+      "revision": 1,
+      "factFamily": "nhl-expansion-thomas-vezina",
+      "league": "nhl",
+      "season": "2010–11",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie won the Vezina Trophy for 2010–11?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tim Thomas"
+        },
+        {
+          "id": "p1",
+          "label": "Roberto Luongo"
+        },
+        {
+          "id": "p2",
+          "label": "Pekka Rinne"
+        },
+        {
+          "id": "p3",
+          "label": "Carey Price"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Thomas won the award with Boston.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-vezina-trophy-winners-complete-list-287773436",
+        "credit": "NHL · Vezina Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-lidstrom-norris",
+      "revision": 1,
+      "factFamily": "nhl-expansion-lidstrom-norris",
+      "league": "nhl",
+      "season": "2006–07",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which defenseman won the Norris Trophy for 2006–07?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Nicklas Lidström"
+        },
+        {
+          "id": "p1",
+          "label": "Scott Niedermayer"
+        },
+        {
+          "id": "p2",
+          "label": "Chris Pronger"
+        },
+        {
+          "id": "p3",
+          "label": "Sergei Zubov"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Lidström won the award with Detroit.",
+      "source": {
+        "url": "https://www.nhl.com/news/topic/nhl-awards/nhl-james-norris-memorial-trophy-winners-complete-list-287778852",
+        "credit": "NHL · Norris Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-bergeron-selke",
+      "revision": 1,
+      "factFamily": "nhl-expansion-bergeron-selke",
+      "league": "nhl",
+      "season": "2011–12",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Selke Trophy as the NHL’s best defensive forward in 2011–12?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Patrice Bergeron"
+        },
+        {
+          "id": "p1",
+          "label": "Pavel Datsyuk"
+        },
+        {
+          "id": "p2",
+          "label": "David Backes"
+        },
+        {
+          "id": "p3",
+          "label": "Ryan Kesler"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Bergeron won the award with Boston.",
+      "source": {
+        "url": "https://www.nhl.com/news/topic/playoffs/nhl-frank-j-selke-trophy-winners-complete-list-287904026",
+        "credit": "NHL · Selke Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-giguere-conn-smythe",
+      "revision": 1,
+      "factFamily": "nhl-expansion-giguere-conn-smythe",
+      "league": "nhl",
+      "season": "2002–03",
+      "scope": "postseason",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie won the Conn Smythe Trophy in 2003?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jean-Sébastien Giguère"
+        },
+        {
+          "id": "p1",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p2",
+          "label": "Patrick Lalime"
+        },
+        {
+          "id": "p3",
+          "label": "Manny Fernandez"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Giguère earned playoff MVP honors with Anaheim.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-conn-smythe-trophy-winners-complete-list-287709808",
+        "credit": "NHL · Conn Smythe Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-penguins-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-penguins-first-title",
+      "league": "nhl",
+      "season": "1990–91",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Minnesota to win its first Stanley Cup in 1991?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pittsburgh Penguins"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Bruins"
+        },
+        {
+          "id": "p2",
+          "label": "Washington Capitals"
+        },
+        {
+          "id": "p3",
+          "label": "New York Rangers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Pittsburgh won the Final in six games.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-1990-1999-287977078",
+        "credit": "NHL · 1990s Stanley Cup champions"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-hurricanes-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-hurricanes-first-title",
+      "league": "nhl",
+      "season": "2005–06",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Edmonton in Game 7 to win the 2006 Stanley Cup?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carolina Hurricanes"
+        },
+        {
+          "id": "p1",
+          "label": "Buffalo Sabres"
+        },
+        {
+          "id": "p2",
+          "label": "Ottawa Senators"
+        },
+        {
+          "id": "p3",
+          "label": "New Jersey Devils"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Carolina won its first Stanley Cup.",
+      "source": {
+        "url": "https://records.nhl.com/playoff-summary/stanley-cup-winner?season=20052006",
+        "credit": "NHL Records · 2005–06 Stanley Cup winner"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-ducks-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-ducks-first-title",
+      "league": "nhl",
+      "season": "2006–07",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Ottawa in the 2007 Stanley Cup Final?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Anaheim Ducks"
+        },
+        {
+          "id": "p1",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p2",
+          "label": "San Jose Sharks"
+        },
+        {
+          "id": "p3",
+          "label": "Vancouver Canucks"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Anaheim won the Final in five games.",
+      "source": {
+        "url": "https://www.nhl.com/news/edmonton-has-chance-to-end-canadas-stanley-cup-drought",
+        "credit": "NHL · Canadian finalists retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-capitals-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-capitals-title",
+      "league": "nhl",
+      "season": "2017–18",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Vegas to win its first Stanley Cup in 2018?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Washington Capitals"
+        },
+        {
+          "id": "p1",
+          "label": "Tampa Bay Lightning"
+        },
+        {
+          "id": "p2",
+          "label": "Pittsburgh Penguins"
+        },
+        {
+          "id": "p3",
+          "label": "Boston Bruins"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Washington won the Final in five games.",
+      "source": {
+        "url": "https://www.nhl.com/capitals/history/2018-stanley-cup",
+        "credit": "Washington Capitals · 2018 championship"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
     }
   ]
 }

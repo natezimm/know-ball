@@ -18,7 +18,7 @@ public class NumbersReplayTests(ApiFactory factory)
     }
 
     private static object Request(Guid id, bool repeats = false) => new {
-        leagues = new[] { "nba" }, topics = new[] { "playoff-moments" }, fromYear = 1979, throughYear = 2020,
+        leagues = new[] { "nba" }, topics = new[] { "playoff-moments" }, fromYear = 1991, throughYear = 2015,
         requestId = id, allowRepeats = repeats
     };
 
@@ -54,8 +54,8 @@ public class NumbersReplayTests(ApiFactory factory)
         Assert.Equal(firstId, retry.GetProperty("id").GetGuid());
         var restored = await client.GetFromJsonAsync<JsonElement>($"/api/numbers-dont-lie/quizzes/{firstId}");
         Assert.Equal(first.GetProperty("filters").GetRawText(), restored.GetProperty("filters").GetRawText());
-        Assert.Equal(1979, restored.GetProperty("filters").GetProperty("fromYear").GetInt32());
-        Assert.Equal(2020, restored.GetProperty("filters").GetProperty("throughYear").GetInt32());
+        Assert.Equal(1991, restored.GetProperty("filters").GetProperty("fromYear").GetInt32());
+        Assert.Equal(2015, restored.GetProperty("filters").GetProperty("throughYear").GetInt32());
         Assert.Equal("playoff-moments", restored.GetProperty("filters").GetProperty("topics")[0].GetString());
 
         var secondRequestId = Guid.NewGuid();

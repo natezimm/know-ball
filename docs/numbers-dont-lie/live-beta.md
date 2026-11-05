@@ -27,7 +27,13 @@ The November 2026 pack adds 120 questions, 30 per league, in two new topics. `hi
 
 ### Playoff Moments
 
-Practice now has six Playoff Moments questions per league. They replace the Stats topic and use the starting year of the season for year filters. Former Seasons prompts about awards and records were rewritten and moved into Awards and History. The duplicate Wilt Chamberlain 100-point prompt and the NHL expansion-year question were removed. The bank now has 214 questions, with 120 eligible for Daily before recheck dates. Previously saved rounds still use their original questions.
+The first Playoff Moments pack introduced six questions per league. They replace the Stats topic and use the starting year of the season for year filters. Former Seasons prompts about awards and records were rewritten and moved into Awards and History. The duplicate Wilt Chamberlain 100-point prompt and the NHL expansion-year question were removed. That change brought the bank to 214 questions, with 120 eligible for Daily before recheck dates. Previously saved rounds still use their original questions.
+
+### Awards, Teams and Playoff Moments expansion
+
+The November 5 expansion adds 48 Practice questions, four per league in each of Awards, Teams and Playoff Moments. The bank now has 262 questions, including ten Playoff Moments per league. Awards include rookie, defensive, reserve, comeback, managerial and postseason honors. Teams questions use championship opponents or recognizable title runs as clues. Each addition has four alternatives, a short explanation and an official league or team source checked on November 5, 2026. The new questions retain the bank’s prototype review status and are Practice-only.
+
+Related championship and playoff facts share a fact family. The six-question NBA playoff window used by replay tests is now 1991–2015, preserving coverage of exhaustion, explicit repeats, saved filters and start retries as the bank grows.
 
 ## Streaks
 

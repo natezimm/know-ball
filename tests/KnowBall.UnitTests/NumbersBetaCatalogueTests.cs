@@ -12,12 +12,12 @@ public class NumbersBetaCatalogueTests
         using var reader = new StreamReader(stream);
         using var catalogue = QuizCatalogue.Read(reader.ReadToEnd());
         var questions = catalogue.RootElement.GetProperty("questions").EnumerateArray().ToArray();
-        Assert.Equal(214, questions.Length);
+        Assert.Equal(262, questions.Length);
         // The bank links record variants and playoff plays to related facts.
-        Assert.Equal(214 - 17, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
+        Assert.Equal(262 - 19, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
         Assert.All(questions, q => Assert.Contains(q.GetProperty("topic").GetString(), NumbersPlayService.Topics));
         foreach (var league in QuizCatalogue.Leagues)
-            Assert.Equal(6, questions.Count(q => q.GetProperty("league").GetString() == league &&
+            Assert.Equal(10, questions.Count(q => q.GetProperty("league").GetString() == league &&
                 q.GetProperty("topic").GetString() == "playoff-moments"));
 
         // All nonempty live filter combinations must produce a full round with no year bounds.
