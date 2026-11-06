@@ -103,15 +103,6 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
         </li>
       }
     </ul>
-
-    <section class="later" aria-labelledby="on-deck">
-      <h2 id="on-deck">On deck</h2>
-      <ul>
-        @for (name of later; track name) {
-          <li><span class="back kb-card-back" aria-hidden="true">★</span><span class="name">{{ name }}</span></li>
-        }
-      </ul>
-    </section>
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
@@ -167,15 +158,6 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
       transition: box-shadow .12s ease;
     }
 
-    /* Games still being designed, as blank card backs waiting in the deck. */
-    .later { margin: 40px 0 0; display: grid; gap: 14px; }
-    .later h2 { margin: 0; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
-    .later ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 96px)); gap: 12px; }
-    .later li { display: grid; gap: 7px; justify-items: center; text-align: center; color: var(--muted); font-size: 15px; line-height: 1.2; }
-    .later li:nth-child(odd) .back { transform: rotate(-2.5deg); }
-    .later li:nth-child(even) .back { transform: rotate(2deg); }
-    .back { width: min(72px, 100%); aspect-ratio: 5 / 7; border-radius: 6px; font-size: 15px; box-shadow: inset 0 0 0 3px var(--navy), inset 0 0 0 5px var(--cream), inset 0 0 0 7px var(--red), var(--card-lift); }
-    .later .name::after { content: "Soon"; display: block; margin-top: 2px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
     @media (prefers-reduced-motion: reduce) {
       .card { transition: none; }
       .card:has(.play):hover, .card:has(.play).tilting { transform: none; }
@@ -197,9 +179,6 @@ export class Home {
     { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz",
       blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },
   ];
-
-  /** Designed but not scheduled; replay numbers after version 1 decide which comes first. */
-  protected readonly later = ['Geo Sports', 'Sportle', 'Sound It Out', "Who's the GOAT?"];
 
   // Undefined while checking availability; null after a failed request.
   private readonly today = signal<TodayEntry[] | null | undefined>(undefined);
