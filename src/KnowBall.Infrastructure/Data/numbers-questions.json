@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "purpose": "Server-backed beta catalogue; human editorial approval pending. Never expose unanswered solutions through the public API.",
+  "purpose": "Question catalogue for Daily and Practice. The server reveals each solution after the question is answered.",
   "questions": [
     {
       "id": "nba-awards-2010",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-awards-2010",
       "league": "nba",
       "season": "2010–11",
@@ -13,7 +13,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2010–11 season?",
+      "prompt": "Who won the NBA MVP award for the 2010–11 regular season?",
       "options": [
         {
           "id": "p0",
@@ -33,7 +33,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Derrick Rose received the NBA regular-season MVP for 2010–11.",
+      "explanation": "Derrick Rose won the NBA MVP award for the 2010–11 regular season.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -44,7 +44,7 @@
     },
     {
       "id": "nba-awards-2006",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-awards-2006",
       "league": "nba",
       "season": "2006–07",
@@ -53,7 +53,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2006–07 season?",
+      "prompt": "Who won the NBA MVP award for the 2006–07 regular season?",
       "options": [
         {
           "id": "p0",
@@ -73,7 +73,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Dirk Nowitzki received the NBA regular-season MVP for 2006–07.",
+      "explanation": "Dirk Nowitzki won the NBA MVP award for the 2006–07 regular season.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -84,7 +84,7 @@
     },
     {
       "id": "nba-awards-2013",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-awards-2013",
       "league": "nba",
       "season": "2013–14",
@@ -93,7 +93,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2013–14 season?",
+      "prompt": "Who won the NBA MVP award for the 2013–14 regular season?",
       "options": [
         {
           "id": "p0",
@@ -113,7 +113,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Kevin Durant received the NBA regular-season MVP for 2013–14.",
+      "explanation": "Kevin Durant won the NBA MVP award for the 2013–14 regular season.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -124,7 +124,7 @@
     },
     {
       "id": "nhl-awards-1997",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nhl-awards-1997",
       "league": "nhl",
       "season": "1997–98",
@@ -137,11 +137,11 @@
       "options": [
         {
           "id": "p0",
-          "label": "Dominik Hasek"
+          "label": "Dominik Hašek"
         },
         {
           "id": "p1",
-          "label": "Jaromir Jagr"
+          "label": "Jaromír Jágr"
         },
         {
           "id": "p2",
@@ -153,7 +153,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Dominik Hasek received the Hart Memorial Trophy for 1997–98.",
+      "explanation": "Dominik Hašek received the Hart Memorial Trophy for 1997–98.",
       "source": {
         "url": "https://www.nhl.com/news/nhl-hart-memorial-trophy-winners-complete-list-287743272",
         "credit": "NHL historical results"
@@ -164,7 +164,7 @@
     },
     {
       "id": "nhl-awards-2002",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nhl-awards-2002",
       "league": "nhl",
       "season": "2002–03",
@@ -189,7 +189,7 @@
         },
         {
           "id": "p3",
-          "label": "Jaromir Jagr"
+          "label": "Jaromír Jágr"
         }
       ],
       "correctOptionId": "p0",
@@ -244,7 +244,7 @@
     },
     {
       "id": "mlb-awards-1997",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-awards-1997",
       "league": "mlb",
       "season": "1997",
@@ -253,7 +253,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the American League MVP for the 1997 season?",
+      "prompt": "Who won the American League MVP award in 1997?",
       "options": [
         {
           "id": "p0",
@@ -273,7 +273,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Ken Griffey Jr. received the American League MVP for 1997.",
+      "explanation": "Ken Griffey Jr. won the 1997 American League MVP award.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -284,7 +284,7 @@
     },
     {
       "id": "mlb-awards-2001",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-awards-2001",
       "league": "mlb",
       "season": "2001",
@@ -293,7 +293,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the American League MVP for the 2001 season?",
+      "prompt": "Who won the American League MVP award in 2001?",
       "options": [
         {
           "id": "p0",
@@ -313,7 +313,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Ichiro Suzuki received the American League MVP for 2001.",
+      "explanation": "Ichiro Suzuki won the 2001 American League MVP award.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -324,7 +324,7 @@
     },
     {
       "id": "mlb-awards-2018",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-awards-2018",
       "league": "mlb",
       "season": "2018",
@@ -333,7 +333,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the American League MVP for the 2018 season?",
+      "prompt": "Who won the American League MVP award in 2018?",
       "options": [
         {
           "id": "p0",
@@ -353,7 +353,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Mookie Betts received the American League MVP for 2018.",
+      "explanation": "Mookie Betts won the 2018 American League MVP award.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -364,7 +364,7 @@
     },
     {
       "id": "nfl-awards-2007",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-awards-2007",
       "league": "nfl",
       "season": "2007",
@@ -373,7 +373,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2007 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2007 season?",
       "options": [
         {
           "id": "p0",
@@ -393,7 +393,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Tom Brady received the AP NFL MVP for 2007.",
+      "explanation": "Tom Brady won the 2007 AP NFL MVP award.",
       "source": {
         "url": "https://www.patriots.com/news/tom-brady-bio",
         "credit": "NFL historical results"
@@ -404,7 +404,7 @@
     },
     {
       "id": "nfl-dpoy-2010",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2010-ap-defensive-player-of-year",
       "league": "nfl",
       "season": "2010",
@@ -413,7 +413,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won AP NFL Defensive Player of the Year for the 2010 season?",
+      "prompt": "Who won the AP NFL Defensive Player of the Year award for the 2010 season?",
       "options": [
         {
           "id": "p0",
@@ -444,7 +444,7 @@
     },
     {
       "id": "nfl-dpoy-2017",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-2017-ap-defensive-player-of-year",
       "league": "nfl",
       "season": "2017",
@@ -453,7 +453,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won AP NFL Defensive Player of the Year for the 2017 season?",
+      "prompt": "Who won the AP NFL Defensive Player of the Year award for the 2017 season?",
       "options": [
         {
           "id": "p0",
@@ -484,7 +484,7 @@
     },
     {
       "id": "nba-teams-2010",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-teams-2010",
       "league": "nba",
       "season": "2010–11",
@@ -513,7 +513,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The Dallas Mavericks defeated the Miami Heat 4–2 to win the 2011 NBA Finals. The series lasted 6 games.",
+      "explanation": "The Dallas Mavericks defeated the Miami Heat in six games to win the 2011 NBA Finals.",
       "source": {
         "url": "https://www.nba.com/news/history-nba-champions",
         "credit": "NBA.com · NBA champions and Finals results"
@@ -524,7 +524,7 @@
     },
     {
       "id": "nba-teams-2003",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-teams-2003",
       "league": "nba",
       "season": "2003–04",
@@ -553,7 +553,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The Detroit Pistons defeated the Los Angeles Lakers 4–1 to win the 2004 NBA Finals. The series lasted 5 games.",
+      "explanation": "The Detroit Pistons defeated the Los Angeles Lakers in five games to win the 2004 NBA Finals.",
       "source": {
         "url": "https://www.nba.com/news/history-nba-champions",
         "credit": "NBA.com · NBA champions and Finals results"
@@ -564,7 +564,7 @@
     },
     {
       "id": "nba-teams-2018",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-teams-2018",
       "league": "nba",
       "season": "2018–19",
@@ -593,7 +593,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The Toronto Raptors defeated the Golden State Warriors 4–2 to win the 2019 NBA Finals. The series lasted 6 games.",
+      "explanation": "The Toronto Raptors defeated the Golden State Warriors in six games to win the 2019 NBA Finals.",
       "source": {
         "url": "https://www.nba.com/news/history-nba-champions",
         "credit": "NBA.com · NBA champions and Finals results"
@@ -724,7 +724,7 @@
     },
     {
       "id": "mlb-teams-2016",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-teams-2016",
       "league": "mlb",
       "season": "2016",
@@ -753,7 +753,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The Chicago Cubs defeated the Cleveland Indians 4–3 to win the 2016 World Series. The series lasted 7 games.",
+      "explanation": "The Chicago Cubs defeated the Cleveland Indians in seven games to win the 2016 World Series.",
       "source": {
         "url": "https://www.baseball-reference.com/postseason/2016_WS.shtml",
         "credit": "Baseball-Reference · 2016 World Series results"
@@ -764,7 +764,7 @@
     },
     {
       "id": "mlb-teams-2015",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-teams-2015",
       "league": "mlb",
       "season": "2015",
@@ -793,7 +793,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The Kansas City Royals defeated the New York Mets 4–1 to win the 2015 World Series. The series lasted 5 games.",
+      "explanation": "The Kansas City Royals defeated the New York Mets in five games to win the 2015 World Series.",
       "source": {
         "url": "https://www.baseball-reference.com/postseason/2015_WS.shtml",
         "credit": "Baseball-Reference · 2015 World Series results"
@@ -804,7 +804,7 @@
     },
     {
       "id": "mlb-teams-2019",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-teams-2019",
       "league": "mlb",
       "season": "2019",
@@ -833,7 +833,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The Washington Nationals defeated the Houston Astros 4–3 to win the 2019 World Series. The series lasted 7 games.",
+      "explanation": "The Washington Nationals defeated the Houston Astros in seven games to win the 2019 World Series.",
       "source": {
         "url": "https://www.baseball-reference.com/postseason/2019_WS.shtml",
         "credit": "Baseball-Reference · 2019 World Series results"
@@ -964,7 +964,7 @@
     },
     {
       "id": "nba-seasons-2007",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-seasons-2007",
       "league": "nba",
       "season": "2007–08",
@@ -973,7 +973,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2007–08 season?",
+      "prompt": "Who won the NBA MVP award for the 2007–08 regular season?",
       "options": [
         {
           "id": "p0",
@@ -993,7 +993,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Kobe Bryant earned the NBA regular-season MVP for the 2007–08 season.",
+      "explanation": "Kobe Bryant won the NBA MVP award for the 2007–08 regular season.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -1004,7 +1004,7 @@
     },
     {
       "id": "nba-seasons-2016",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-seasons-2016",
       "league": "nba",
       "season": "2016–17",
@@ -1013,7 +1013,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2016–17 season?",
+      "prompt": "Who won the NBA MVP award for the 2016–17 regular season?",
       "options": [
         {
           "id": "p0",
@@ -1033,7 +1033,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Russell Westbrook earned the NBA regular-season MVP for the 2016–17 season.",
+      "explanation": "Russell Westbrook won the NBA MVP award for the 2016–17 regular season.",
       "source": {
         "url": "https://www.nba.com/news/history-season-recaps-index",
         "credit": "NBA historical results"
@@ -1124,7 +1124,7 @@
     },
     {
       "id": "mlb-seasons-2009",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-seasons-2009",
       "league": "mlb",
       "season": "2009",
@@ -1133,7 +1133,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the American League MVP for the 2009 season?",
+      "prompt": "Who won the American League MVP award in 2009?",
       "options": [
         {
           "id": "p0",
@@ -1153,7 +1153,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Joe Mauer earned the American League MVP for the 2009 season.",
+      "explanation": "Joe Mauer won the 2009 American League MVP award.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -1164,7 +1164,7 @@
     },
     {
       "id": "mlb-seasons-1990",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-seasons-1990",
       "league": "mlb",
       "season": "1990",
@@ -1173,7 +1173,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the American League MVP for the 1990 season?",
+      "prompt": "Who won the American League MVP award in 1990?",
       "options": [
         {
           "id": "p0",
@@ -1193,7 +1193,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Rickey Henderson earned the American League MVP for the 1990 season.",
+      "explanation": "Rickey Henderson won the 1990 American League MVP award.",
       "source": {
         "url": "https://www.mlb.com/awards/most-valuable-player",
         "credit": "MLB historical results"
@@ -1204,7 +1204,7 @@
     },
     {
       "id": "nfl-seasons-2015",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-seasons-2015",
       "league": "nfl",
       "season": "2015",
@@ -1213,7 +1213,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2015 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2015 season?",
       "options": [
         {
           "id": "p0",
@@ -1233,7 +1233,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Cam Newton earned the AP NFL MVP for the 2015 season.",
+      "explanation": "Cam Newton won the 2015 AP NFL MVP award.",
       "source": {
         "url": "https://www.nfl.com/news/panthers-release-cam-newton-after-nine-seasons-0ap3000001107394",
         "credit": "NFL historical results"
@@ -1244,7 +1244,7 @@
     },
     {
       "id": "nfl-seasons-2012",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-seasons-2012",
       "league": "nfl",
       "season": "2012",
@@ -1253,7 +1253,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2012 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2012 season?",
       "options": [
         {
           "id": "p0",
@@ -1273,7 +1273,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Adrian Peterson earned the AP NFL MVP for the 2012 season.",
+      "explanation": "Adrian Peterson won the 2012 AP NFL MVP award.",
       "source": {
         "url": "https://www.cbssports.com/nfl/news/adrian-peterson-takes-home-2012-nfl-mvp-opoy-awards/",
         "credit": "NFL historical results"
@@ -1284,7 +1284,7 @@
     },
     {
       "id": "nba-awards-1993",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-nba-regular-season-mvp-1993",
       "league": "nba",
       "season": "1993–94",
@@ -1293,7 +1293,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 1993–94 season?",
+      "prompt": "Who won the NBA MVP award for the 1993–94 regular season?",
       "options": [
         {
           "id": "p0",
@@ -1313,7 +1313,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Hakeem Olajuwon earned the 1993–94 NBA regular-season MVP.",
+      "explanation": "Hakeem Olajuwon won the NBA MVP award for the 1993–94 regular season.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
         "credit": "NBA · MVP award history"
@@ -1325,7 +1325,7 @@
     },
     {
       "id": "nba-awards-2003",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-nba-regular-season-mvp-2003",
       "league": "nba",
       "season": "2003–04",
@@ -1334,7 +1334,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2003–04 season?",
+      "prompt": "Who won the NBA MVP award for the 2003–04 regular season?",
       "options": [
         {
           "id": "p1",
@@ -1354,7 +1354,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Kevin Garnett earned the 2003–04 NBA regular-season MVP.",
+      "explanation": "Kevin Garnett won the NBA MVP award for the 2003–04 regular season.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
         "credit": "NBA · MVP award history"
@@ -1366,7 +1366,7 @@
     },
     {
       "id": "nba-seasons-1992",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-nba-regular-season-mvp-1992",
       "league": "nba",
       "season": "1992–93",
@@ -1375,7 +1375,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 1992–93 season?",
+      "prompt": "Who won the NBA MVP award for the 1992–93 regular season?",
       "options": [
         {
           "id": "p0",
@@ -1395,7 +1395,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Charles Barkley earned the 1992–93 NBA regular-season MVP.",
+      "explanation": "Charles Barkley won the NBA MVP award for the 1992–93 regular season.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
         "credit": "NBA · MVP award history"
@@ -1407,7 +1407,7 @@
     },
     {
       "id": "nba-seasons-1999",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-nba-regular-season-mvp-1999",
       "league": "nba",
       "season": "1999–00",
@@ -1416,7 +1416,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 1999–00 season?",
+      "prompt": "Who won the NBA MVP award for the 1999–00 regular season?",
       "options": [
         {
           "id": "p0",
@@ -1436,7 +1436,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Shaquille O’Neal earned the 1999–00 NBA regular-season MVP.",
+      "explanation": "Shaquille O’Neal won the NBA MVP award for the 1999–00 regular season.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
         "credit": "NBA · MVP award history"
@@ -1448,7 +1448,7 @@
     },
     {
       "id": "nba-seasons-2000",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nba-nba-regular-season-mvp-2000",
       "league": "nba",
       "season": "2000–01",
@@ -1457,7 +1457,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the NBA regular-season MVP for the 2000–01 season?",
+      "prompt": "Who won the NBA MVP award for the 2000–01 regular season?",
       "options": [
         {
           "id": "p0",
@@ -1477,7 +1477,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Allen Iverson earned the 2000–01 NBA regular-season MVP.",
+      "explanation": "Allen Iverson won the NBA MVP award for the 2000–01 regular season.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-mvp-award-winners",
         "credit": "NBA · MVP award history"
@@ -1489,7 +1489,7 @@
     },
     {
       "id": "nba-teams-1995",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-champion-1995",
       "league": "nba",
       "season": "1995–96",
@@ -1518,7 +1518,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Chicago Bulls won the 1995–96 NBA championship.",
+      "explanation": "The Chicago Bulls won the 1995–96 NBA championship.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-nba-champions",
         "credit": "NBA · championship history"
@@ -1530,7 +1530,7 @@
     },
     {
       "id": "nba-teams-2007",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-champion-2007",
       "league": "nba",
       "season": "2007–08",
@@ -1559,7 +1559,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Boston Celtics won the 2007–08 NBA championship.",
+      "explanation": "The Boston Celtics won the 2007–08 NBA championship.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-nba-champions",
         "credit": "NBA · championship history"
@@ -1571,7 +1571,7 @@
     },
     {
       "id": "nba-teams-2015",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-champion-2015",
       "league": "nba",
       "season": "2015–16",
@@ -1600,7 +1600,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Cleveland Cavaliers won the 2015–16 NBA championship.",
+      "explanation": "The Cleveland Cavaliers won the 2015–16 NBA championship.",
       "source": {
         "url": "https://cdn-uat.nba.com/news/history-nba-champions",
         "credit": "NBA · championship history"
@@ -1612,7 +1612,7 @@
     },
     {
       "id": "nfl-awards-1999",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-ap-nfl-mvp-1999",
       "league": "nfl",
       "season": "1999",
@@ -1621,7 +1621,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 1999 season?",
+      "prompt": "Who won the AP NFL MVP award for the 1999 season?",
       "options": [
         {
           "id": "p0",
@@ -1641,7 +1641,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Kurt Warner earned the 1999 AP NFL MVP.",
+      "explanation": "Kurt Warner won the 1999 AP NFL MVP award.",
       "source": {
         "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
         "credit": "EDSFootball · AP NFL MVP winners"
@@ -1653,7 +1653,7 @@
     },
     {
       "id": "nfl-awards-2000",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-ap-nfl-mvp-2000",
       "league": "nfl",
       "season": "2000",
@@ -1662,7 +1662,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2000 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2000 season?",
       "options": [
         {
           "id": "p1",
@@ -1682,7 +1682,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Marshall Faulk earned the 2000 AP NFL MVP.",
+      "explanation": "Marshall Faulk won the 2000 AP NFL MVP award.",
       "source": {
         "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
         "credit": "EDSFootball · AP NFL MVP winners"
@@ -1694,7 +1694,7 @@
     },
     {
       "id": "nfl-seasons-2002",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-ap-nfl-mvp-2002",
       "league": "nfl",
       "season": "2002",
@@ -1703,7 +1703,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2002 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2002 season?",
       "options": [
         {
           "id": "p0",
@@ -1723,7 +1723,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Rich Gannon earned the 2002 AP NFL MVP.",
+      "explanation": "Rich Gannon won the 2002 AP NFL MVP award.",
       "source": {
         "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
         "credit": "EDSFootball · AP NFL MVP winners"
@@ -1735,7 +1735,7 @@
     },
     {
       "id": "nfl-seasons-2005",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-ap-nfl-mvp-2005",
       "league": "nfl",
       "season": "2005",
@@ -1744,7 +1744,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2005 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2005 season?",
       "options": [
         {
           "id": "p0",
@@ -1764,7 +1764,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Shaun Alexander earned the 2005 AP NFL MVP.",
+      "explanation": "Shaun Alexander won the 2005 AP NFL MVP award.",
       "source": {
         "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
         "credit": "EDSFootball · AP NFL MVP winners"
@@ -1776,7 +1776,7 @@
     },
     {
       "id": "nfl-seasons-2006",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-ap-nfl-mvp-2006",
       "league": "nfl",
       "season": "2006",
@@ -1785,7 +1785,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the AP NFL MVP for the 2006 season?",
+      "prompt": "Who won the AP NFL MVP award for the 2006 season?",
       "options": [
         {
           "id": "p0",
@@ -1805,7 +1805,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "LaDainian Tomlinson earned the 2006 AP NFL MVP.",
+      "explanation": "LaDainian Tomlinson won the 2006 AP NFL MVP award.",
       "source": {
         "url": "https://www.eatdrinkandsleepfootball.com/history/awards/",
         "credit": "EDSFootball · AP NFL MVP winners"
@@ -1817,7 +1817,7 @@
     },
     {
       "id": "nfl-teams-1996",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-champion-1996",
       "league": "nfl",
       "season": "1996",
@@ -1846,7 +1846,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Green Bay Packers won the 1996 Super Bowl. Super Bowl XXXI was played in January 1997.",
+      "explanation": "The Green Bay Packers won Super Bowl XXXI in January 1997, following the 1996 NFL season.",
       "source": {
         "url": "https://www.packers.com/history/championship-seasons",
         "credit": "Green Bay Packers · championship seasons"
@@ -1858,7 +1858,7 @@
     },
     {
       "id": "nfl-teams-2002",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-champion-2002",
       "league": "nfl",
       "season": "2002",
@@ -1887,7 +1887,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Tampa Bay Buccaneers won the 2002 Super Bowl. Super Bowl XXXVII was played in January 2003.",
+      "explanation": "The Tampa Bay Buccaneers won Super Bowl XXXVII in January 2003, following the 2002 NFL season.",
       "source": {
         "url": "https://www.buccaneers.com/team/history/2002",
         "credit": "Tampa Bay Buccaneers · 2002 season history"
@@ -1899,7 +1899,7 @@
     },
     {
       "id": "nfl-teams-2009",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-champion-2009",
       "league": "nfl",
       "season": "2009",
@@ -1928,7 +1928,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "New Orleans Saints won the 2009 Super Bowl. Super Bowl XLIV was played in February 2010.",
+      "explanation": "The New Orleans Saints won Super Bowl XLIV in February 2010, following the 2009 NFL season.",
       "source": {
         "url": "https://www.neworleanssaints.com/team/history/super-bowl-xliv",
         "credit": "New Orleans Saints · Super Bowl XLIV history"
@@ -1940,7 +1940,7 @@
     },
     {
       "id": "nhl-awards-2000",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-hart-memorial-trophy-2000",
       "league": "nhl",
       "season": "2000–01",
@@ -1961,7 +1961,7 @@
         },
         {
           "id": "p2",
-          "label": "Jaromir Jagr"
+          "label": "Jaromír Jágr"
         },
         {
           "id": "p3",
@@ -1981,7 +1981,7 @@
     },
     {
       "id": "nhl-awards-2005",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-hart-memorial-trophy-2005",
       "league": "nhl",
       "season": "2005–06",
@@ -1994,7 +1994,7 @@
       "options": [
         {
           "id": "p1",
-          "label": "Jaromir Jagr"
+          "label": "Jaromír Jágr"
         },
         {
           "id": "p2",
@@ -2145,7 +2145,7 @@
     },
     {
       "id": "nhl-teams-1993",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-champion-1993",
       "league": "nhl",
       "season": "1993–94",
@@ -2174,7 +2174,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "New York Rangers won the 1993–94 Stanley Cup.",
+      "explanation": "The New York Rangers won the 1993–94 Stanley Cup.",
       "source": {
         "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
         "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
@@ -2186,7 +2186,7 @@
     },
     {
       "id": "nhl-teams-2000",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-champion-2000",
       "league": "nhl",
       "season": "2000–01",
@@ -2215,7 +2215,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Colorado Avalanche won the 2000–01 Stanley Cup.",
+      "explanation": "The Colorado Avalanche won the 2000–01 Stanley Cup.",
       "source": {
         "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
         "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
@@ -2227,7 +2227,7 @@
     },
     {
       "id": "nhl-teams-2010",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-champion-2010",
       "league": "nhl",
       "season": "2010–11",
@@ -2256,7 +2256,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Boston Bruins won the 2010–11 Stanley Cup.",
+      "explanation": "The Boston Bruins won the 2010–11 Stanley Cup.",
       "source": {
         "url": "https://media.nhl.com/site/asset/public/ext/2024-25/2025AwardsGuide.pdf",
         "credit": "NHL · 2025 Awards Guide, Hart winners p. 23 and Stanley Cup winners p. 71"
@@ -2268,7 +2268,7 @@
     },
     {
       "id": "mlb-awards-2006",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-national-league-mvp-2006",
       "league": "mlb",
       "season": "2006",
@@ -2277,7 +2277,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the National League MVP for the 2006 season?",
+      "prompt": "Who won the National League MVP award in 2006?",
       "options": [
         {
           "id": "p0",
@@ -2297,7 +2297,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Ryan Howard earned the 2006 National League MVP.",
+      "explanation": "Ryan Howard won the 2006 National League MVP award.",
       "source": {
         "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
         "credit": "Baseball Almanac · MLB MVP award history"
@@ -2309,7 +2309,7 @@
     },
     {
       "id": "mlb-awards-2007",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-national-league-mvp-2007",
       "league": "mlb",
       "season": "2007",
@@ -2318,7 +2318,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the National League MVP for the 2007 season?",
+      "prompt": "Who won the National League MVP award in 2007?",
       "options": [
         {
           "id": "p1",
@@ -2338,7 +2338,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Jimmy Rollins earned the 2007 National League MVP.",
+      "explanation": "Jimmy Rollins won the 2007 National League MVP award.",
       "source": {
         "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
         "credit": "Baseball Almanac · MLB MVP award history"
@@ -2350,7 +2350,7 @@
     },
     {
       "id": "mlb-seasons-2010",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-national-league-mvp-2010",
       "league": "mlb",
       "season": "2010",
@@ -2359,7 +2359,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the National League MVP for the 2010 season?",
+      "prompt": "Who won the National League MVP award in 2010?",
       "options": [
         {
           "id": "p0",
@@ -2379,7 +2379,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Joey Votto earned the 2010 National League MVP.",
+      "explanation": "Joey Votto won the 2010 National League MVP award.",
       "source": {
         "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
         "credit": "Baseball Almanac · MLB MVP award history"
@@ -2391,7 +2391,7 @@
     },
     {
       "id": "mlb-seasons-2012",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-national-league-mvp-2012",
       "league": "mlb",
       "season": "2012",
@@ -2400,7 +2400,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the National League MVP for the 2012 season?",
+      "prompt": "Who won the National League MVP award in 2012?",
       "options": [
         {
           "id": "p0",
@@ -2420,7 +2420,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Buster Posey earned the 2012 National League MVP.",
+      "explanation": "Buster Posey won the 2012 National League MVP award.",
       "source": {
         "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
         "credit": "Baseball Almanac · MLB MVP award history"
@@ -2432,7 +2432,7 @@
     },
     {
       "id": "mlb-seasons-2013",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "mlb-national-league-mvp-2013",
       "league": "mlb",
       "season": "2013",
@@ -2441,7 +2441,7 @@
       "template": "trivia",
       "difficulty": "harder",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won the National League MVP for the 2013 season?",
+      "prompt": "Who won the National League MVP award in 2013?",
       "options": [
         {
           "id": "p0",
@@ -2461,7 +2461,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Andrew McCutchen earned the 2013 National League MVP.",
+      "explanation": "Andrew McCutchen won the 2013 National League MVP award.",
       "source": {
         "url": "https://www.baseball-almanac.com/awards/aw_mvp.shtml",
         "credit": "Baseball Almanac · MLB MVP award history"
@@ -2473,7 +2473,7 @@
     },
     {
       "id": "mlb-teams-2001",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-champion-2001",
       "league": "mlb",
       "season": "2001",
@@ -2502,7 +2502,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Arizona Diamondbacks won the 2001 World Series.",
+      "explanation": "The Arizona Diamondbacks won the 2001 World Series.",
       "source": {
         "url": "https://www.mlb.com/postseason/history/2001",
         "credit": "MLB · 2001 postseason history"
@@ -2514,7 +2514,7 @@
     },
     {
       "id": "mlb-teams-2004",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-champion-2004",
       "league": "mlb",
       "season": "2004",
@@ -2543,7 +2543,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Boston Red Sox won the 2004 World Series.",
+      "explanation": "The Boston Red Sox won the 2004 World Series.",
       "source": {
         "url": "https://www.mlb.com/postseason/history/2004",
         "credit": "MLB · 2004 postseason history"
@@ -2555,7 +2555,7 @@
     },
     {
       "id": "mlb-teams-2005",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-champion-2005",
       "league": "mlb",
       "season": "2005",
@@ -2584,7 +2584,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "Chicago White Sox won the 2005 World Series.",
+      "explanation": "The Chicago White Sox won the 2005 World Series.",
       "source": {
         "url": "https://www.mlb.com/postseason/history/2005",
         "credit": "MLB · 2005 postseason history"
@@ -2596,7 +2596,7 @@
     },
     {
       "id": "nba-mchale-sixth-man",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-mchale-sixth-man",
       "league": "nba",
       "season": "1983–84",
@@ -2605,7 +2605,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won Sixth Man of the Year in 1983–84?",
+      "prompt": "Who won the NBA Sixth Man of the Year award in 1983–84?",
       "options": [
         {
           "id": "p0",
@@ -2625,7 +2625,7 @@
         }
       ],
       "correctOptionId": "p1",
-      "explanation": "Kevin McHale won it for Boston.",
+      "explanation": "Kevin McHale won the award with Boston.",
       "source": {
         "url": "https://www.nba.com/news/history-sixth-man-of-the-year-winners",
         "credit": "NBA.com · Sixth Man winners"
@@ -2678,7 +2678,7 @@
     },
     {
       "id": "nfl-moss-rookie",
-      "revision": 2,
+      "revision": 3,
       "factFamily": "nfl-moss-rookie",
       "league": "nfl",
       "season": "1998",
@@ -2687,7 +2687,7 @@
       "template": "trivia",
       "difficulty": "approachable",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team drafted Randy Moss before his rookie-record 17 receiving touchdowns?",
+      "prompt": "Which team drafted Randy Moss before he caught a rookie-record 17 touchdown passes in 1998?",
       "options": [
         {
           "id": "p0",
@@ -2842,7 +2842,7 @@
     },
     {
       "id": "nba-pack1-01",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-01",
       "league": "nba",
       "topic": "history",
@@ -2870,7 +2870,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Wilt Chamberlain.",
+      "explanation": "Wilt Chamberlain scored 100 points in a single NBA game.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_NBA_single-game_scoring_leaders",
         "credit": "Single-game scoring list"
@@ -2881,7 +2881,7 @@
     },
     {
       "id": "nba-pack1-02",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-02",
       "league": "nba",
       "topic": "history",
@@ -2909,7 +2909,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Toronto Raptors.",
+      "explanation": "Bryant scored 81 points against the Toronto Raptors.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_NBA_single-game_scoring_leaders",
         "credit": "Single-game scoring list"
@@ -2920,7 +2920,7 @@
     },
     {
       "id": "nba-pack1-03",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-warriors-73-wins",
       "league": "nba",
       "topic": "history",
@@ -2928,7 +2928,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team holds the NBA record for regular-season wins, going 73–9?",
+      "prompt": "Which team holds the NBA record for wins in a single regular season, with a 73–9 record?",
       "options": [
         {
           "id": "p0",
@@ -2948,7 +2948,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 2015–16 Golden State Warriors.",
+      "explanation": "The 2015–16 Golden State Warriors set the record with a 73–9 regular-season record.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/2015%E2%80%9316_Golden_State_Warriors_season",
         "credit": "2015–16 Warriors"
@@ -2959,7 +2959,7 @@
     },
     {
       "id": "nba-pack1-04",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-04",
       "league": "nba",
       "topic": "history",
@@ -2987,7 +2987,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 1971–72 Los Angeles Lakers.",
+      "explanation": "The 1971–72 Los Angeles Lakers won 33 consecutive games.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_NBA_longest_winning_streaks",
         "credit": "Longest winning streaks"
@@ -2998,7 +2998,7 @@
     },
     {
       "id": "nba-pack1-05",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-stockton-assists",
       "league": "nba",
       "topic": "history",
@@ -3026,7 +3026,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is John Stockton (15,806).",
+      "explanation": "John Stockton holds the career assists record with 15,806.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/ast_career.html",
         "credit": "Basketball-Reference"
@@ -3037,7 +3037,7 @@
     },
     {
       "id": "nba-pack1-06",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-06",
       "league": "nba",
       "topic": "history",
@@ -3065,7 +3065,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Wilt Chamberlain (23,924).",
+      "explanation": "Wilt Chamberlain holds the career rebounds record with 23,924.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/trb_career.html",
         "credit": "Basketball-Reference"
@@ -3076,7 +3076,7 @@
     },
     {
       "id": "nba-pack1-07",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-07",
       "league": "nba",
       "topic": "history",
@@ -3084,7 +3084,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who has made the most 3-pointers in NBA history?",
+      "prompt": "Who has made the most three-pointers in NBA history?",
       "options": [
         {
           "id": "p0",
@@ -3104,7 +3104,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Stephen Curry.",
+      "explanation": "Stephen Curry has made the most three-pointers in NBA history.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/fg3_career.html",
         "credit": "Basketball-Reference"
@@ -3115,7 +3115,7 @@
     },
     {
       "id": "nba-pack1-08",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-08",
       "league": "nba",
       "topic": "history",
@@ -3123,7 +3123,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the NBA's all-time leading scorer?",
+      "prompt": "Who is the NBA’s all-time leading scorer?",
       "options": [
         {
           "id": "p0",
@@ -3143,7 +3143,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is LeBron James.",
+      "explanation": "LeBron James is the NBA’s all-time leading scorer.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/pts_career.html",
         "credit": "Basketball-Reference"
@@ -3154,7 +3154,7 @@
     },
     {
       "id": "nba-pack1-09",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-09",
       "league": "nba",
       "topic": "history",
@@ -3182,7 +3182,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bill Russell.",
+      "explanation": "Bill Russell won 11 NBA championships.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_NBA_players_with_most_championships",
         "credit": "Most championships"
@@ -3193,7 +3193,7 @@
     },
     {
       "id": "nba-pack1-10",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-10",
       "league": "nba",
       "topic": "history",
@@ -3221,7 +3221,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Boston Celtics (18).",
+      "explanation": "The Boston Celtics have won 18 NBA championships.",
       "source": {
         "url": "https://www.basketball-reference.com/leagues/",
         "credit": "Basketball-Reference"
@@ -3232,7 +3232,7 @@
     },
     {
       "id": "nba-pack1-11",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-11",
       "league": "nba",
       "topic": "history",
@@ -3240,7 +3240,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "How many points a game did Wilt Chamberlain average in 1961–62?",
+      "prompt": "How many points per game did Wilt Chamberlain average in 1961–62?",
       "options": [
         {
           "id": "p0",
@@ -3260,7 +3260,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 50.4.",
+      "explanation": "Wilt Chamberlain averaged 50.4 points per game in 1961–62.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/pts_per_g_season.html",
         "credit": "Basketball-Reference"
@@ -3271,7 +3271,7 @@
     },
     {
       "id": "nba-pack1-12",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-12",
       "league": "nba",
       "topic": "history",
@@ -3299,7 +3299,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 38,387.",
+      "explanation": "Kareem Abdul-Jabbar scored 38,387 career points.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/pts_career.html",
         "credit": "Basketball-Reference"
@@ -3310,7 +3310,7 @@
     },
     {
       "id": "nba-pack1-13",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-stockton-assists",
       "league": "nba",
       "topic": "history",
@@ -3338,7 +3338,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 15,806.",
+      "explanation": "John Stockton recorded 15,806 career assists.",
       "source": {
         "url": "https://www.basketball-reference.com/leaders/ast_career.html",
         "credit": "Basketball-Reference"
@@ -3349,7 +3349,7 @@
     },
     {
       "id": "nba-pack1-14",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-warriors-73-wins",
       "league": "nba",
       "topic": "history",
@@ -3377,7 +3377,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 73.",
+      "explanation": "The 2015–16 Warriors won 73 regular-season games.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/2015%E2%80%9316_Golden_State_Warriors_season",
         "credit": "2015–16 Warriors"
@@ -3388,7 +3388,7 @@
     },
     {
       "id": "nba-pack1-15",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-15",
       "league": "nba",
       "topic": "nicknames",
@@ -3396,7 +3396,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Mailman\"?",
+      "prompt": "Which player is known as “The Mailman”?",
       "options": [
         {
           "id": "p0",
@@ -3416,7 +3416,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Karl Malone.",
+      "explanation": "Karl Malone is known as “The Mailman.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3427,7 +3427,7 @@
     },
     {
       "id": "nba-pack1-16",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-16",
       "league": "nba",
       "topic": "nicknames",
@@ -3435,7 +3435,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Answer\"?",
+      "prompt": "Which player is known as “The Answer”?",
       "options": [
         {
           "id": "p0",
@@ -3455,7 +3455,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Allen Iverson.",
+      "explanation": "Allen Iverson is known as “The Answer.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3466,7 +3466,7 @@
     },
     {
       "id": "nba-pack1-17",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-17",
       "league": "nba",
       "topic": "nicknames",
@@ -3474,7 +3474,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Dr. J\"?",
+      "prompt": "Which player is known as “Dr. J”?",
       "options": [
         {
           "id": "p0",
@@ -3494,7 +3494,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Julius Erving.",
+      "explanation": "Julius Erving is known as “Dr. J.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3505,7 +3505,7 @@
     },
     {
       "id": "nba-pack1-18",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-18",
       "league": "nba",
       "topic": "nicknames",
@@ -3513,7 +3513,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Dream\"?",
+      "prompt": "Which player is known as “The Dream”?",
       "options": [
         {
           "id": "p0",
@@ -3533,7 +3533,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Hakeem Olajuwon.",
+      "explanation": "Hakeem Olajuwon is known as “The Dream.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3544,7 +3544,7 @@
     },
     {
       "id": "nba-pack1-19",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-19",
       "league": "nba",
       "topic": "nicknames",
@@ -3552,7 +3552,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Pistol Pete\"?",
+      "prompt": "Which player is known as “Pistol Pete”?",
       "options": [
         {
           "id": "p0",
@@ -3572,7 +3572,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Pete Maravich.",
+      "explanation": "Pete Maravich is known as “Pistol Pete.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3583,7 +3583,7 @@
     },
     {
       "id": "nba-pack1-20",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-20",
       "league": "nba",
       "topic": "nicknames",
@@ -3591,7 +3591,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which center's nickname was \"The Admiral\"?",
+      "prompt": "Which center is known as “The Admiral”?",
       "options": [
         {
           "id": "p0",
@@ -3611,7 +3611,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is David Robinson.",
+      "explanation": "David Robinson is known as “The Admiral.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3622,7 +3622,7 @@
     },
     {
       "id": "nba-pack1-21",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-21",
       "league": "nba",
       "topic": "nicknames",
@@ -3630,7 +3630,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname is \"the Greek Freak\"?",
+      "prompt": "Which player is known as “The Greek Freak”?",
       "options": [
         {
           "id": "p0",
@@ -3650,7 +3650,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Giannis Antetokounmpo.",
+      "explanation": "Giannis Antetokounmpo is known as “The Greek Freak.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3661,7 +3661,7 @@
     },
     {
       "id": "nba-pack1-22",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-22",
       "league": "nba",
       "topic": "nicknames",
@@ -3669,7 +3669,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Chocolate Thunder\"?",
+      "prompt": "Which player is known as “Chocolate Thunder”?",
       "options": [
         {
           "id": "p0",
@@ -3689,7 +3689,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Darryl Dawkins.",
+      "explanation": "Darryl Dawkins is known as “Chocolate Thunder.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3700,7 +3700,7 @@
     },
     {
       "id": "nba-pack1-23",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-23",
       "league": "nba",
       "topic": "nicknames",
@@ -3708,7 +3708,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Big Fundamental\"?",
+      "prompt": "Which player is known as “The Big Fundamental”?",
       "options": [
         {
           "id": "p0",
@@ -3724,11 +3724,11 @@
         },
         {
           "id": "p3",
-          "label": "Shaquille O'Neal"
+          "label": "Shaquille O’Neal"
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Tim Duncan.",
+      "explanation": "Tim Duncan is known as “The Big Fundamental.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3739,7 +3739,7 @@
     },
     {
       "id": "nba-pack1-24",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-24",
       "league": "nba",
       "topic": "nicknames",
@@ -3747,7 +3747,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Logo\"?",
+      "prompt": "Which player is known as “The Logo”?",
       "options": [
         {
           "id": "p0",
@@ -3767,7 +3767,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Jerry West.",
+      "explanation": "Jerry West is known as “The Logo.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3778,7 +3778,7 @@
     },
     {
       "id": "nba-pack1-25",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-25",
       "league": "nba",
       "topic": "nicknames",
@@ -3786,7 +3786,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team's late-1980s roster was nicknamed the \"Bad Boys\"?",
+      "prompt": "Which team’s late-1980s roster was nicknamed the “Bad Boys”?",
       "options": [
         {
           "id": "p0",
@@ -3806,7 +3806,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Detroit Pistons.",
+      "explanation": "The late-1980s Detroit Pistons were known as the “Bad Boys.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_nicknames_in_basketball",
         "credit": "Basketball nicknames"
@@ -3817,7 +3817,7 @@
     },
     {
       "id": "nba-pack1-26",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-26",
       "league": "nba",
       "topic": "history",
@@ -3845,7 +3845,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Jerry West.",
+      "explanation": "Jerry West won the first NBA Finals MVP award in 1969 despite his team losing the series.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Bill_Russell_NBA_Finals_Most_Valuable_Player_Award",
         "credit": "Finals MVP award"
@@ -3856,7 +3856,7 @@
     },
     {
       "id": "nba-pack1-27",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-27",
       "league": "nba",
       "topic": "history",
@@ -3864,7 +3864,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the NBA Finals MVP award named after?",
+      "prompt": "Which player is the NBA Finals MVP award named after?",
       "options": [
         {
           "id": "p0",
@@ -3884,7 +3884,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bill Russell.",
+      "explanation": "The NBA Finals MVP award is named after Bill Russell.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Bill_Russell_NBA_Finals_Most_Valuable_Player_Award",
         "credit": "Finals MVP award"
@@ -3895,7 +3895,7 @@
     },
     {
       "id": "nba-pack1-28",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-28",
       "league": "nba",
       "topic": "history",
@@ -3919,11 +3919,11 @@
         },
         {
           "id": "p3",
-          "label": "Shaquille O'Neal"
+          "label": "Shaquille O’Neal"
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Michael Jordan.",
+      "explanation": "Michael Jordan won six NBA Finals MVP awards.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Bill_Russell_NBA_Finals_Most_Valuable_Player_Award",
         "credit": "Finals MVP award"
@@ -3934,7 +3934,7 @@
     },
     {
       "id": "nba-pack1-29",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-29",
       "league": "nba",
       "topic": "history",
@@ -3942,7 +3942,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who became the NBA's youngest MVP, at age 22?",
+      "prompt": "Who became the NBA’s youngest MVP, at age 22?",
       "options": [
         {
           "id": "p0",
@@ -3962,7 +3962,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Derrick Rose.",
+      "explanation": "Derrick Rose became the NBA’s youngest MVP at age 22.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_NBA_regular_season_records",
         "credit": "Regular-season records"
@@ -3973,7 +3973,7 @@
     },
     {
       "id": "nba-pack1-30",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nba-pack1-30",
       "league": "nba",
       "season": "2025–26",
@@ -4003,7 +4003,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is New York Knicks (4–1 over the Spurs).",
+      "explanation": "The New York Knicks defeated the San Antonio Spurs four games to one in the 2026 NBA Finals.",
       "source": {
         "url": "https://www.basketball-reference.com/playoffs/NBA_2026.html",
         "credit": "Basketball-Reference"
@@ -4014,7 +4014,7 @@
     },
     {
       "id": "nfl-pack1-01",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-emmitt-rushing",
       "league": "nfl",
       "topic": "history",
@@ -4022,7 +4022,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the NFL's all-time leading rusher?",
+      "prompt": "Who is the NFL’s all-time leading rusher?",
       "options": [
         {
           "id": "p0",
@@ -4042,7 +4042,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Emmitt Smith (18,355).",
+      "explanation": "Emmitt Smith is the NFL’s all-time leading rusher with 18,355 yards.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_rushing_yards_leaders",
         "credit": "Career rushing leaders"
@@ -4053,7 +4053,7 @@
     },
     {
       "id": "nfl-pack1-02",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-02",
       "league": "nfl",
       "topic": "history",
@@ -4081,7 +4081,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Tom Brady (89,214).",
+      "explanation": "Tom Brady holds the career passing yards record with 89,214.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Tom_Brady",
         "credit": "Tom Brady"
@@ -4092,7 +4092,7 @@
     },
     {
       "id": "nfl-pack1-03",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-rice-receiving",
       "league": "nfl",
       "topic": "history",
@@ -4120,7 +4120,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Jerry Rice (22,895).",
+      "explanation": "Jerry Rice holds the career receiving yards record with 22,895.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_receiving_yards_leaders",
         "credit": "Career receiving leaders"
@@ -4131,7 +4131,7 @@
     },
     {
       "id": "nfl-pack1-04",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-dickerson-2105",
       "league": "nfl",
       "topic": "history",
@@ -4159,7 +4159,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Eric Dickerson.",
+      "explanation": "Eric Dickerson set the single-season rushing record with 2,105 yards.",
       "source": {
         "url": "https://www.pro-football-reference.com/leaders/rush_yds_single_season.htm",
         "credit": "Pro Football Reference"
@@ -4170,7 +4170,7 @@
     },
     {
       "id": "nfl-pack1-05",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-manning-55-td",
       "league": "nfl",
       "topic": "history",
@@ -4198,7 +4198,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Peyton Manning.",
+      "explanation": "Peyton Manning threw 55 touchdown passes in a single season.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_annual_passing_touchdowns_leaders",
         "credit": "Annual passing TD leaders"
@@ -4209,7 +4209,7 @@
     },
     {
       "id": "nfl-pack1-06",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-06",
       "league": "nfl",
       "topic": "history",
@@ -4217,7 +4217,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the NFL's official career sacks leader?",
+      "prompt": "Who is the NFL’s official career sacks leader?",
       "options": [
         {
           "id": "p0",
@@ -4237,7 +4237,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bruce Smith.",
+      "explanation": "Bruce Smith is the NFL’s official career sacks leader.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_sacks_leaders",
         "credit": "Career sacks leaders"
@@ -4248,7 +4248,7 @@
     },
     {
       "id": "nfl-pack1-07",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-07",
       "league": "nfl",
       "topic": "history",
@@ -4276,7 +4276,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 1972 Miami Dolphins.",
+      "explanation": "The 1972 Miami Dolphins finished the season unbeaten and untied, including the playoffs.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/1972_Miami_Dolphins_season",
         "credit": "1972 Dolphins"
@@ -4287,7 +4287,7 @@
     },
     {
       "id": "nfl-pack1-08",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-brady-rings",
       "league": "nfl",
       "topic": "history",
@@ -4315,7 +4315,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Tom Brady.",
+      "explanation": "Tom Brady won seven Super Bowls.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Tom_Brady",
         "credit": "Tom Brady"
@@ -4326,7 +4326,7 @@
     },
     {
       "id": "nfl-pack1-09",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-09",
       "league": "nfl",
       "topic": "history",
@@ -4354,7 +4354,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Tom Brady.",
+      "explanation": "Tom Brady won five Super Bowl MVP awards.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Super_Bowl_Most_Valuable_Player",
         "credit": "Super Bowl MVP"
@@ -4365,7 +4365,7 @@
     },
     {
       "id": "nfl-pack1-10",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-emmitt-rushing",
       "league": "nfl",
       "topic": "history",
@@ -4393,7 +4393,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 18,355.",
+      "explanation": "Emmitt Smith gained 18,355 career rushing yards.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_rushing_yards_leaders",
         "credit": "Career rushing leaders"
@@ -4404,7 +4404,7 @@
     },
     {
       "id": "nfl-pack1-11",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-rice-receiving",
       "league": "nfl",
       "topic": "history",
@@ -4432,7 +4432,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 22,895.",
+      "explanation": "Jerry Rice gained 22,895 career receiving yards.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_career_receiving_yards_leaders",
         "credit": "Career receiving leaders"
@@ -4443,7 +4443,7 @@
     },
     {
       "id": "nfl-pack1-12",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-dickerson-2105",
       "league": "nfl",
       "topic": "history",
@@ -4471,7 +4471,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 2,105.",
+      "explanation": "Eric Dickerson gained 2,105 rushing yards in 1984.",
       "source": {
         "url": "https://www.pro-football-reference.com/leaders/rush_yds_single_season.htm",
         "credit": "Pro Football Reference"
@@ -4482,7 +4482,7 @@
     },
     {
       "id": "nfl-pack1-13",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-manning-55-td",
       "league": "nfl",
       "topic": "history",
@@ -4510,7 +4510,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 55.",
+      "explanation": "Peyton Manning threw 55 touchdown passes in 2013.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_National_Football_League_annual_passing_touchdowns_leaders",
         "credit": "Annual passing TD leaders"
@@ -4521,7 +4521,7 @@
     },
     {
       "id": "nfl-pack1-14",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-brady-rings",
       "league": "nfl",
       "topic": "history",
@@ -4549,7 +4549,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 7.",
+      "explanation": "Tom Brady won seven Super Bowls.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Tom_Brady",
         "credit": "Tom Brady"
@@ -4560,7 +4560,7 @@
     },
     {
       "id": "nfl-pack1-15",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-15",
       "league": "nfl",
       "topic": "nicknames",
@@ -4568,7 +4568,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Sweetness\"?",
+      "prompt": "Which player is known as “Sweetness”?",
       "options": [
         {
           "id": "p0",
@@ -4588,7 +4588,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Walter Payton.",
+      "explanation": "Walter Payton is known as “Sweetness.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4599,7 +4599,7 @@
     },
     {
       "id": "nfl-pack1-16",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-16",
       "league": "nfl",
       "topic": "nicknames",
@@ -4607,7 +4607,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Refrigerator\"?",
+      "prompt": "Which player is known as “The Refrigerator”?",
       "options": [
         {
           "id": "p0",
@@ -4627,7 +4627,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is William Perry.",
+      "explanation": "William Perry is known as “The Refrigerator.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4638,7 +4638,7 @@
     },
     {
       "id": "nfl-pack1-17",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-17",
       "league": "nfl",
       "topic": "nicknames",
@@ -4646,7 +4646,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Prime Time\"?",
+      "prompt": "Which player is known as “Prime Time”?",
       "options": [
         {
           "id": "p0",
@@ -4666,7 +4666,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Deion Sanders.",
+      "explanation": "Deion Sanders is known as “Prime Time.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4677,7 +4677,7 @@
     },
     {
       "id": "nfl-pack1-18",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-18",
       "league": "nfl",
       "topic": "nicknames",
@@ -4685,7 +4685,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Megatron\"?",
+      "prompt": "Which player is known as “Megatron”?",
       "options": [
         {
           "id": "p0",
@@ -4705,7 +4705,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Calvin Johnson.",
+      "explanation": "Calvin Johnson is known as “Megatron.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4716,7 +4716,7 @@
     },
     {
       "id": "nfl-pack1-19",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-19",
       "league": "nfl",
       "topic": "nicknames",
@@ -4724,7 +4724,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Broadway Joe\"?",
+      "prompt": "Which player is known as “Broadway Joe”?",
       "options": [
         {
           "id": "p0",
@@ -4744,7 +4744,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Joe Namath.",
+      "explanation": "Joe Namath is known as “Broadway Joe.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4755,7 +4755,7 @@
     },
     {
       "id": "nfl-pack1-20",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-20",
       "league": "nfl",
       "topic": "nicknames",
@@ -4763,7 +4763,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Bus\"?",
+      "prompt": "Which player is known as “The Bus”?",
       "options": [
         {
           "id": "p0",
@@ -4783,7 +4783,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Jerome Bettis.",
+      "explanation": "Jerome Bettis is known as “The Bus.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4794,7 +4794,7 @@
     },
     {
       "id": "nfl-pack1-21",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-21",
       "league": "nfl",
       "topic": "nicknames",
@@ -4802,7 +4802,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Beast Mode\"?",
+      "prompt": "Which player is known as “Beast Mode”?",
       "options": [
         {
           "id": "p0",
@@ -4822,7 +4822,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Marshawn Lynch.",
+      "explanation": "Marshawn Lynch is known as “Beast Mode.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4833,7 +4833,7 @@
     },
     {
       "id": "nfl-pack1-22",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-22",
       "league": "nfl",
       "topic": "nicknames",
@@ -4841,7 +4841,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Night Train\"?",
+      "prompt": "Which player is known as “Night Train”?",
       "options": [
         {
           "id": "p0",
@@ -4861,7 +4861,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Dick Lane.",
+      "explanation": "Dick Lane is known as “Night Train.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4872,7 +4872,7 @@
     },
     {
       "id": "nfl-pack1-23",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-23",
       "league": "nfl",
       "topic": "nicknames",
@@ -4880,7 +4880,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Minister of Defense\"?",
+      "prompt": "Which player is known as “The Minister of Defense”?",
       "options": [
         {
           "id": "p0",
@@ -4900,7 +4900,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Reggie White.",
+      "explanation": "Reggie White is known as “The Minister of Defense.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4911,7 +4911,7 @@
     },
     {
       "id": "nfl-pack1-24",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-24",
       "league": "nfl",
       "topic": "nicknames",
@@ -4919,7 +4919,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team's 1970s defense was nicknamed the \"Steel Curtain\"?",
+      "prompt": "Which team’s 1970s defense was nicknamed the “Steel Curtain”?",
       "options": [
         {
           "id": "p0",
@@ -4939,7 +4939,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Pittsburgh Steelers.",
+      "explanation": "The Pittsburgh Steelers’ defense of the 1970s was known as the “Steel Curtain.”",
       "source": {
         "url": "https://www.nbcsportsboston.com/news/sports/nfl/best-nfl-nicknames-of-all-time/",
         "credit": "NBC Sports nicknames"
@@ -4950,7 +4950,7 @@
     },
     {
       "id": "nfl-pack1-25",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-25",
       "league": "nfl",
       "topic": "history",
@@ -4978,7 +4978,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Green Bay Packers (35–10 over the Chiefs).",
+      "explanation": "The Green Bay Packers defeated the Kansas City Chiefs 35–10 in Super Bowl I.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_Super_Bowl_champions",
         "credit": "Super Bowl champions"
@@ -4989,7 +4989,7 @@
     },
     {
       "id": "nfl-pack1-26",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-26",
       "league": "nfl",
       "topic": "history",
@@ -5017,7 +5017,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bart Starr.",
+      "explanation": "Bart Starr was named MVP of the first Super Bowl.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Super_Bowl_Most_Valuable_Player",
         "credit": "Super Bowl MVP"
@@ -5028,7 +5028,7 @@
     },
     {
       "id": "nfl-pack1-27",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-27",
       "league": "nfl",
       "topic": "history",
@@ -5056,7 +5056,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Chuck Howley.",
+      "explanation": "Chuck Howley was named Super Bowl MVP despite playing for the losing team.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Super_Bowl_Most_Valuable_Player",
         "credit": "Super Bowl MVP"
@@ -5067,7 +5067,7 @@
     },
     {
       "id": "nfl-pack1-28",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-28",
       "league": "nfl",
       "topic": "history",
@@ -5075,7 +5075,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who caught the \"Immaculate Reception\" in 1972?",
+      "prompt": "Who caught the “Immaculate Reception” in 1972?",
       "options": [
         {
           "id": "p0",
@@ -5095,7 +5095,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Franco Harris.",
+      "explanation": "Franco Harris caught the pass known as the “Immaculate Reception.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Immaculate_Reception",
         "credit": "Immaculate Reception"
@@ -5106,7 +5106,7 @@
     },
     {
       "id": "nfl-pack1-29",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-29",
       "league": "nfl",
       "topic": "history",
@@ -5114,7 +5114,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which 49ers receiver made \"The Catch\" on a pass from Joe Montana?",
+      "prompt": "Which 49ers receiver made “The Catch” on a pass from Joe Montana?",
       "options": [
         {
           "id": "p0",
@@ -5134,7 +5134,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Dwight Clark.",
+      "explanation": "Dwight Clark made “The Catch” on a pass from Joe Montana.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/The_Catch_(American_football)",
         "credit": "The Catch"
@@ -5145,7 +5145,7 @@
     },
     {
       "id": "nfl-pack1-30",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nfl-pack1-30",
       "league": "nfl",
       "season": "2025",
@@ -5175,7 +5175,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Seattle Seahawks (29–13 over the Patriots).",
+      "explanation": "The Seattle Seahawks defeated the New England Patriots 29–13 in Super Bowl LX.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_Super_Bowl_champions",
         "credit": "Super Bowl champions"
@@ -5186,7 +5186,7 @@
     },
     {
       "id": "mlb-pack1-01",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-01",
       "league": "mlb",
       "topic": "history",
@@ -5194,7 +5194,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who holds MLB's single-season home run record of 73?",
+      "prompt": "Who holds MLB’s single-season home run record of 73?",
       "options": [
         {
           "id": "p0",
@@ -5214,7 +5214,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Barry Bonds.",
+      "explanation": "Barry Bonds set MLB’s single-season home run record with 73.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/HR_season.shtml",
         "credit": "Baseball-Reference"
@@ -5225,7 +5225,7 @@
     },
     {
       "id": "mlb-pack1-02",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-02",
       "league": "mlb",
       "topic": "history",
@@ -5233,7 +5233,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is MLB's career home run leader?",
+      "prompt": "Who is MLB’s career home run leader?",
       "options": [
         {
           "id": "p0",
@@ -5253,7 +5253,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Barry Bonds (762).",
+      "explanation": "Barry Bonds holds the career home run record with 762.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/HR_career.shtml",
         "credit": "Baseball-Reference"
@@ -5264,7 +5264,7 @@
     },
     {
       "id": "mlb-pack1-03",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-03",
       "league": "mlb",
       "topic": "history",
@@ -5272,7 +5272,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is MLB's career hits leader?",
+      "prompt": "Who is MLB’s career hits leader?",
       "options": [
         {
           "id": "p0",
@@ -5292,7 +5292,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Pete Rose (4,256).",
+      "explanation": "Pete Rose holds the career hits record with 4,256.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/H_career.shtml",
         "credit": "Baseball-Reference"
@@ -5303,7 +5303,7 @@
     },
     {
       "id": "mlb-pack1-04",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-ripken-streak",
       "league": "mlb",
       "topic": "history",
@@ -5311,7 +5311,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who holds the record for consecutive games played, with 2,632?",
+      "prompt": "Who holds MLB’s record for consecutive games played, with 2,632?",
       "options": [
         {
           "id": "p0",
@@ -5331,7 +5331,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Cal Ripken Jr..",
+      "explanation": "Cal Ripken Jr. played in 2,632 consecutive games.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Major_League_Baseball_consecutive_games_played_streaks",
         "credit": "Consecutive games streaks"
@@ -5342,7 +5342,7 @@
     },
     {
       "id": "mlb-pack1-05",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-dimaggio-56",
       "league": "mlb",
       "topic": "history",
@@ -5350,7 +5350,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who holds MLB's record 56-game hitting streak?",
+      "prompt": "Who set MLB’s record with a 56-game hitting streak?",
       "options": [
         {
           "id": "p0",
@@ -5370,7 +5370,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Joe DiMaggio.",
+      "explanation": "Joe DiMaggio holds the record with a 56-game hitting streak.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Joe_DiMaggio%27s_56-game_hitting_streak",
         "credit": "The 56-game streak"
@@ -5381,7 +5381,7 @@
     },
     {
       "id": "mlb-pack1-06",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-06",
       "league": "mlb",
       "topic": "history",
@@ -5409,7 +5409,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Cy Young.",
+      "explanation": "Cy Young won 511 games.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/W_career.shtml",
         "credit": "Baseball-Reference"
@@ -5420,7 +5420,7 @@
     },
     {
       "id": "mlb-pack1-07",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-ryan-strikeouts",
       "league": "mlb",
       "topic": "history",
@@ -5428,7 +5428,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is MLB's career strikeout leader?",
+      "prompt": "Who is MLB’s career strikeout leader?",
       "options": [
         {
           "id": "p0",
@@ -5448,7 +5448,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Nolan Ryan (5,714).",
+      "explanation": "Nolan Ryan holds the career strikeout record with 5,714.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/SO_p_career.shtml",
         "credit": "Baseball-Reference"
@@ -5459,7 +5459,7 @@
     },
     {
       "id": "mlb-pack1-08",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-08",
       "league": "mlb",
       "topic": "history",
@@ -5487,7 +5487,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Nolan Ryan.",
+      "explanation": "Nolan Ryan threw seven no-hitters.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_Major_League_Baseball_no-hitters",
         "credit": "No-hitters"
@@ -5498,7 +5498,7 @@
     },
     {
       "id": "mlb-pack1-09",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-09",
       "league": "mlb",
       "topic": "history",
@@ -5506,7 +5506,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who was the last player to hit .400 in a season?",
+      "prompt": "Who was the last qualified AL or NL hitter to bat .400 or better in a season?",
       "options": [
         {
           "id": "p0",
@@ -5526,18 +5526,18 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Ted Williams (.406).",
+      "explanation": "Ted Williams batted .406 in 1941.",
       "source": {
-        "url": "https://en.wikipedia.org/wiki/Ted_Williams",
-        "credit": "Ted Williams"
+        "url": "https://www.mlb.com/news/luis-arraez-chasing-400",
+        "credit": "MLB · AL/NL .400 batting-average history"
       },
-      "checkedAt": "2026-11-02",
-      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "checkedAt": "2026-11-05",
+      "verification": "source-checked; scope clarified",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "mlb-pack1-10",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-10",
       "league": "mlb",
       "topic": "history",
@@ -5565,7 +5565,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is New York Yankees (27).",
+      "explanation": "The New York Yankees have won 27 World Series titles.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_World_Series_champions",
         "credit": "World Series champions"
@@ -5576,7 +5576,7 @@
     },
     {
       "id": "mlb-pack1-11",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-ripken-streak",
       "league": "mlb",
       "topic": "history",
@@ -5604,7 +5604,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 2,632.",
+      "explanation": "Cal Ripken Jr. played in 2,632 consecutive games.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Major_League_Baseball_consecutive_games_played_streaks",
         "credit": "Consecutive games streaks"
@@ -5615,7 +5615,7 @@
     },
     {
       "id": "mlb-pack1-12",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-dimaggio-56",
       "league": "mlb",
       "topic": "history",
@@ -5623,7 +5623,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "How many games did Joe DiMaggio's 1941 hitting streak last?",
+      "prompt": "How many games did Joe DiMaggio’s 1941 hitting streak last?",
       "options": [
         {
           "id": "p0",
@@ -5643,7 +5643,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 56.",
+      "explanation": "Joe DiMaggio’s 1941 hitting streak lasted 56 games.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Joe_DiMaggio%27s_56-game_hitting_streak",
         "credit": "The 56-game streak"
@@ -5654,7 +5654,7 @@
     },
     {
       "id": "mlb-pack1-13",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-ryan-strikeouts",
       "league": "mlb",
       "topic": "history",
@@ -5682,7 +5682,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 5,714.",
+      "explanation": "Nolan Ryan recorded 5,714 career strikeouts.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/SO_p_career.shtml",
         "credit": "Baseball-Reference"
@@ -5693,7 +5693,7 @@
     },
     {
       "id": "mlb-pack1-14",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-14",
       "league": "mlb",
       "topic": "history",
@@ -5721,7 +5721,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 714.",
+      "explanation": "Babe Ruth hit 714 career home runs.",
       "source": {
         "url": "https://www.baseball-reference.com/leaders/HR_career.shtml",
         "credit": "Baseball-Reference"
@@ -5732,7 +5732,7 @@
     },
     {
       "id": "mlb-pack1-15",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-15",
       "league": "mlb",
       "topic": "nicknames",
@@ -5740,7 +5740,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Say Hey Kid\"?",
+      "prompt": "Which player is known as “The Say Hey Kid”?",
       "options": [
         {
           "id": "p0",
@@ -5760,7 +5760,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Willie Mays.",
+      "explanation": "Willie Mays is known as “The Say Hey Kid.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -5771,7 +5771,7 @@
     },
     {
       "id": "mlb-pack1-16",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-16",
       "league": "mlb",
       "topic": "nicknames",
@@ -5779,7 +5779,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Sultan of Swat\"?",
+      "prompt": "Which player is known as “The Sultan of Swat”?",
       "options": [
         {
           "id": "p0",
@@ -5799,7 +5799,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Babe Ruth.",
+      "explanation": "Babe Ruth is known as “The Sultan of Swat.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -5810,7 +5810,7 @@
     },
     {
       "id": "mlb-pack1-17",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-17",
       "league": "mlb",
       "topic": "nicknames",
@@ -5818,7 +5818,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Iron Horse\"?",
+      "prompt": "Which player is known as “The Iron Horse”?",
       "options": [
         {
           "id": "p0",
@@ -5838,7 +5838,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Lou Gehrig.",
+      "explanation": "Lou Gehrig is known as “The Iron Horse.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -5849,7 +5849,7 @@
     },
     {
       "id": "mlb-pack1-18",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-18",
       "league": "mlb",
       "topic": "nicknames",
@@ -5857,7 +5857,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Mr. October\"?",
+      "prompt": "Which player is known as “Mr. October”?",
       "options": [
         {
           "id": "p0",
@@ -5877,7 +5877,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Reggie Jackson.",
+      "explanation": "Reggie Jackson is known as “Mr. October.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -5888,7 +5888,7 @@
     },
     {
       "id": "mlb-pack1-19",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-19",
       "league": "mlb",
       "topic": "nicknames",
@@ -5896,7 +5896,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Big Papi\"?",
+      "prompt": "Which player is known as “Big Papi”?",
       "options": [
         {
           "id": "p0",
@@ -5916,7 +5916,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is David Ortiz.",
+      "explanation": "David Ortiz is known as “Big Papi.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -5927,7 +5927,7 @@
     },
     {
       "id": "mlb-pack1-20",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-20",
       "league": "mlb",
       "topic": "nicknames",
@@ -5935,7 +5935,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Ryan Express\"?",
+      "prompt": "Which player is known as “The Ryan Express”?",
       "options": [
         {
           "id": "p0",
@@ -5955,7 +5955,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Nolan Ryan.",
+      "explanation": "Nolan Ryan is known as “The Ryan Express.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -5966,7 +5966,7 @@
     },
     {
       "id": "mlb-pack1-21",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-21",
       "league": "mlb",
       "topic": "nicknames",
@@ -5974,7 +5974,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Hammerin' Hank\"?",
+      "prompt": "Which Braves player is known as “Hammerin’ Hank”?",
       "options": [
         {
           "id": "p0",
@@ -5994,18 +5994,18 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Hank Aaron.",
+      "explanation": "Hank Aaron is known as “Hammerin’ Hank.”",
       "source": {
-        "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
-        "credit": "Baseball nicknames"
+        "url": "https://baseballhall.org/hall-of-famers/aaron-hank",
+        "credit": "National Baseball Hall of Fame · Hank Aaron"
       },
-      "checkedAt": "2026-11-02",
-      "verification": "source-checked; reviewed by the site owner 2026-11-03",
+      "checkedAt": "2026-11-05",
+      "verification": "source-checked; wording clarified",
       "publicationStatus": "prototype-only"
     },
     {
       "id": "mlb-pack1-22",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-22",
       "league": "mlb",
       "topic": "nicknames",
@@ -6013,7 +6013,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Yankee Clipper\"?",
+      "prompt": "Which player is known as “The Yankee Clipper”?",
       "options": [
         {
           "id": "p0",
@@ -6033,7 +6033,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Joe DiMaggio.",
+      "explanation": "Joe DiMaggio is known as “The Yankee Clipper.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -6044,7 +6044,7 @@
     },
     {
       "id": "mlb-pack1-23",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-23",
       "league": "mlb",
       "topic": "nicknames",
@@ -6052,7 +6052,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Big Unit\"?",
+      "prompt": "Which player is known as “The Big Unit”?",
       "options": [
         {
           "id": "p0",
@@ -6064,7 +6064,7 @@
         },
         {
           "id": "p2",
-          "label": "Pedro Martinez"
+          "label": "Pedro Martínez"
         },
         {
           "id": "p3",
@@ -6072,7 +6072,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Randy Johnson.",
+      "explanation": "Randy Johnson is known as “The Big Unit.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -6083,7 +6083,7 @@
     },
     {
       "id": "mlb-pack1-24",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-24",
       "league": "mlb",
       "topic": "nicknames",
@@ -6091,7 +6091,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Charlie Hustle\"?",
+      "prompt": "Which player is known as “Charlie Hustle”?",
       "options": [
         {
           "id": "p0",
@@ -6111,7 +6111,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Pete Rose.",
+      "explanation": "Pete Rose is known as “Charlie Hustle.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -6122,7 +6122,7 @@
     },
     {
       "id": "mlb-pack1-25",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-25",
       "league": "mlb",
       "topic": "nicknames",
@@ -6130,7 +6130,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Splendid Splinter\"?",
+      "prompt": "Which player is known as “The Splendid Splinter”?",
       "options": [
         {
           "id": "p0",
@@ -6150,7 +6150,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Ted Williams.",
+      "explanation": "Ted Williams is known as “The Splendid Splinter.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_baseball_nicknames",
         "credit": "Baseball nicknames"
@@ -6161,7 +6161,7 @@
     },
     {
       "id": "mlb-pack1-26",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-26",
       "league": "mlb",
       "topic": "history",
@@ -6169,7 +6169,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team did Jackie Robinson join when he broke baseball's color line in 1947?",
+      "prompt": "Which team did Jackie Robinson join when he broke baseball’s color line in 1947?",
       "options": [
         {
           "id": "p0",
@@ -6189,7 +6189,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Brooklyn Dodgers.",
+      "explanation": "Jackie Robinson joined the Brooklyn Dodgers in 1947.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Jackie_Robinson",
         "credit": "Jackie Robinson"
@@ -6200,7 +6200,7 @@
     },
     {
       "id": "mlb-pack1-27",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-27",
       "league": "mlb",
       "topic": "history",
@@ -6228,7 +6228,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Jose Canseco.",
+      "explanation": "Jose Canseco was the first player to hit 40 home runs and steal 40 bases in one season.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/40%E2%80%9340_club",
         "credit": "40–40 club"
@@ -6239,7 +6239,7 @@
     },
     {
       "id": "mlb-pack1-28",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-28",
       "league": "mlb",
       "topic": "history",
@@ -6267,7 +6267,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Shohei Ohtani.",
+      "explanation": "Shohei Ohtani was the first player to hit 50 home runs and steal 50 bases in one season.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/40%E2%80%9340_club",
         "credit": "40–40 club"
@@ -6278,7 +6278,7 @@
     },
     {
       "id": "mlb-pack1-29",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-29",
       "league": "mlb",
       "topic": "history",
@@ -6286,7 +6286,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which team broke the \"Curse of the Bambino\" by winning the 2004 World Series?",
+      "prompt": "Which team broke the “Curse of the Bambino” by winning the 2004 World Series?",
       "options": [
         {
           "id": "p0",
@@ -6306,7 +6306,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Boston Red Sox.",
+      "explanation": "The Boston Red Sox ended the “Curse of the Bambino” by winning the 2004 World Series.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Curse_of_the_Bambino",
         "credit": "Curse of the Bambino"
@@ -6317,7 +6317,7 @@
     },
     {
       "id": "mlb-pack1-30",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "mlb-pack1-30",
       "league": "mlb",
       "season": "2026",
@@ -6347,7 +6347,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Milwaukee Brewers (4–1 over the Rays).",
+      "explanation": "The Milwaukee Brewers defeated the Tampa Bay Rays four games to one in the 2026 World Series.",
       "source": {
         "url": "https://www.baseball-reference.com/postseason/",
         "credit": "Baseball-Reference"
@@ -6358,7 +6358,7 @@
     },
     {
       "id": "nhl-pack1-01",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-01",
       "league": "nhl",
       "topic": "history",
@@ -6366,7 +6366,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the NHL's career goals leader?",
+      "prompt": "Who is the NHL’s career goals leader?",
       "options": [
         {
           "id": "p0",
@@ -6386,7 +6386,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Alex Ovechkin.",
+      "explanation": "Alex Ovechkin is the NHL’s career goals leader.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/goals_career.html",
         "credit": "Hockey-Reference"
@@ -6397,7 +6397,7 @@
     },
     {
       "id": "nhl-pack1-02",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-gretzky-points",
       "league": "nhl",
       "topic": "history",
@@ -6405,7 +6405,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the NHL's career points leader?",
+      "prompt": "Who is the NHL’s career points leader?",
       "options": [
         {
           "id": "p0",
@@ -6425,7 +6425,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Wayne Gretzky (2,857).",
+      "explanation": "Wayne Gretzky holds the career points record with 2,857.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/points_career.html",
         "credit": "Hockey-Reference"
@@ -6436,7 +6436,7 @@
     },
     {
       "id": "nhl-pack1-03",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-gretzky-92",
       "league": "nhl",
       "topic": "history",
@@ -6464,7 +6464,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Wayne Gretzky.",
+      "explanation": "Wayne Gretzky scored 92 goals in a single season.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/goals_season.html",
         "credit": "Hockey-Reference"
@@ -6475,7 +6475,7 @@
     },
     {
       "id": "nhl-pack1-04",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-04",
       "league": "nhl",
       "topic": "history",
@@ -6483,7 +6483,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who holds the single-season points record, with 215?",
+      "prompt": "Who holds the NHL record for points in a single season, with 215?",
       "options": [
         {
           "id": "p0",
@@ -6503,7 +6503,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Wayne Gretzky.",
+      "explanation": "Wayne Gretzky holds the single-season points record with 215.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/points_season.html",
         "credit": "Hockey-Reference"
@@ -6514,7 +6514,7 @@
     },
     {
       "id": "nhl-pack1-05",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-brodeur-wins",
       "league": "nhl",
       "topic": "history",
@@ -6542,7 +6542,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Martin Brodeur (691).",
+      "explanation": "Martin Brodeur holds the career wins record with 691.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/wins_goalie_career.html",
         "credit": "Hockey-Reference"
@@ -6553,7 +6553,7 @@
     },
     {
       "id": "nhl-pack1-06",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-06",
       "league": "nhl",
       "topic": "history",
@@ -6561,7 +6561,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which goalie has a record 125 career shutouts?",
+      "prompt": "Which goalie holds the NHL record with 125 career shutouts?",
       "options": [
         {
           "id": "p0",
@@ -6581,7 +6581,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Martin Brodeur.",
+      "explanation": "Martin Brodeur recorded 125 career shutouts.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Martin_Brodeur",
         "credit": "Martin Brodeur"
@@ -6592,7 +6592,7 @@
     },
     {
       "id": "nhl-pack1-07",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-henri-richard-cups",
       "league": "nhl",
       "topic": "history",
@@ -6620,7 +6620,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Henri Richard.",
+      "explanation": "Henri Richard won 11 Stanley Cups.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Henri_Richard",
         "credit": "Henri Richard"
@@ -6631,7 +6631,7 @@
     },
     {
       "id": "nhl-pack1-08",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-08",
       "league": "nhl",
       "topic": "history",
@@ -6659,7 +6659,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Montreal Canadiens (24).",
+      "explanation": "The Montreal Canadiens have won 24 Stanley Cups.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_Stanley_Cup_champions",
         "credit": "Stanley Cup champions"
@@ -6670,7 +6670,7 @@
     },
     {
       "id": "nhl-pack1-09",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-09",
       "league": "nhl",
       "topic": "history",
@@ -6698,7 +6698,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bobby Orr.",
+      "explanation": "Bobby Orr is the only defenseman to have won the NHL scoring title.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Bobby_Orr",
         "credit": "Bobby Orr"
@@ -6709,7 +6709,7 @@
     },
     {
       "id": "nhl-pack1-10",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-10",
       "league": "nhl",
       "topic": "history",
@@ -6717,7 +6717,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who won a record eight straight Norris Trophies as the league's best defenseman?",
+      "prompt": "Who won a record eight straight Norris Trophies as the league’s best defenseman?",
       "options": [
         {
           "id": "p0",
@@ -6737,7 +6737,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bobby Orr.",
+      "explanation": "Bobby Orr won eight consecutive Norris Trophies.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Bobby_Orr",
         "credit": "Bobby Orr"
@@ -6748,7 +6748,7 @@
     },
     {
       "id": "nhl-pack1-11",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-gretzky-points",
       "league": "nhl",
       "topic": "history",
@@ -6776,7 +6776,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 2,857.",
+      "explanation": "Wayne Gretzky scored 2,857 career points.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/points_career.html",
         "credit": "Hockey-Reference"
@@ -6787,7 +6787,7 @@
     },
     {
       "id": "nhl-pack1-12",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-gretzky-92",
       "league": "nhl",
       "topic": "history",
@@ -6815,7 +6815,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 92.",
+      "explanation": "Wayne Gretzky scored 92 goals in 1981–82.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/goals_season.html",
         "credit": "Hockey-Reference"
@@ -6826,7 +6826,7 @@
     },
     {
       "id": "nhl-pack1-13",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-brodeur-wins",
       "league": "nhl",
       "topic": "history",
@@ -6854,7 +6854,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 691.",
+      "explanation": "Martin Brodeur recorded 691 career wins.",
       "source": {
         "url": "https://www.hockey-reference.com/leaders/wins_goalie_career.html",
         "credit": "Hockey-Reference"
@@ -6865,7 +6865,7 @@
     },
     {
       "id": "nhl-pack1-14",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-henri-richard-cups",
       "league": "nhl",
       "topic": "history",
@@ -6893,7 +6893,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is 11.",
+      "explanation": "Henri Richard won 11 Stanley Cups.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Henri_Richard",
         "credit": "Henri Richard"
@@ -6904,7 +6904,7 @@
     },
     {
       "id": "nhl-pack1-15",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-15",
       "league": "nhl",
       "topic": "nicknames",
@@ -6912,7 +6912,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname is \"The Great One\"?",
+      "prompt": "Which player is known as “The Great One”?",
       "options": [
         {
           "id": "p0",
@@ -6932,7 +6932,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Wayne Gretzky.",
+      "explanation": "Wayne Gretzky is known as “The Great One.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -6943,7 +6943,7 @@
     },
     {
       "id": "nhl-pack1-16",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-16",
       "league": "nhl",
       "topic": "nicknames",
@@ -6951,7 +6951,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Mr. Hockey\"?",
+      "prompt": "Which player is known as “Mr. Hockey”?",
       "options": [
         {
           "id": "p0",
@@ -6971,7 +6971,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Gordie Howe.",
+      "explanation": "Gordie Howe is known as “Mr. Hockey.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -6982,7 +6982,7 @@
     },
     {
       "id": "nhl-pack1-17",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-17",
       "league": "nhl",
       "topic": "nicknames",
@@ -6990,7 +6990,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Rocket\"?",
+      "prompt": "Which player is known as “The Rocket”?",
       "options": [
         {
           "id": "p0",
@@ -7010,7 +7010,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Maurice Richard.",
+      "explanation": "Maurice Richard is known as “The Rocket.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7021,7 +7021,7 @@
     },
     {
       "id": "nhl-pack1-18",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-18",
       "league": "nhl",
       "topic": "nicknames",
@@ -7029,7 +7029,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Pocket Rocket\"?",
+      "prompt": "Which player is known as “The Pocket Rocket”?",
       "options": [
         {
           "id": "p0",
@@ -7049,7 +7049,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Henri Richard.",
+      "explanation": "Henri Richard is known as “The Pocket Rocket.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7060,7 +7060,7 @@
     },
     {
       "id": "nhl-pack1-19",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-19",
       "league": "nhl",
       "topic": "nicknames",
@@ -7068,7 +7068,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Golden Jet\"?",
+      "prompt": "Which player is known as “The Golden Jet”?",
       "options": [
         {
           "id": "p0",
@@ -7088,7 +7088,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Bobby Hull.",
+      "explanation": "Bobby Hull is known as “The Golden Jet.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7099,7 +7099,7 @@
     },
     {
       "id": "nhl-pack1-20",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-20",
       "league": "nhl",
       "topic": "nicknames",
@@ -7107,7 +7107,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"Super Mario\"?",
+      "prompt": "Which player is known as “Super Mario”?",
       "options": [
         {
           "id": "p0",
@@ -7127,7 +7127,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Mario Lemieux.",
+      "explanation": "Mario Lemieux is known as “Super Mario.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7138,7 +7138,7 @@
     },
     {
       "id": "nhl-pack1-21",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-21",
       "league": "nhl",
       "topic": "nicknames",
@@ -7146,7 +7146,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which goalie's nickname was \"The Dominator\"?",
+      "prompt": "Which goalie is known as “The Dominator”?",
       "options": [
         {
           "id": "p0",
@@ -7166,7 +7166,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Dominik Hašek.",
+      "explanation": "Dominik Hašek is known as “The Dominator.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7177,7 +7177,7 @@
     },
     {
       "id": "nhl-pack1-22",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-22",
       "league": "nhl",
       "topic": "nicknames",
@@ -7185,7 +7185,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Flower\"?",
+      "prompt": "Which player is known as “The Flower”?",
       "options": [
         {
           "id": "p0",
@@ -7205,7 +7205,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Guy Lafleur.",
+      "explanation": "Guy Lafleur is known as “The Flower.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7216,7 +7216,7 @@
     },
     {
       "id": "nhl-pack1-23",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-23",
       "league": "nhl",
       "topic": "nicknames",
@@ -7224,7 +7224,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname was \"The Russian Rocket\"?",
+      "prompt": "Which player is known as “The Russian Rocket”?",
       "options": [
         {
           "id": "p0",
@@ -7244,7 +7244,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Pavel Bure.",
+      "explanation": "Pavel Bure is known as “The Russian Rocket.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7255,7 +7255,7 @@
     },
     {
       "id": "nhl-pack1-24",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-24",
       "league": "nhl",
       "topic": "nicknames",
@@ -7263,7 +7263,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname is \"Sid the Kid\"?",
+      "prompt": "Which player is known as “Sid the Kid”?",
       "options": [
         {
           "id": "p0",
@@ -7283,7 +7283,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Sidney Crosby.",
+      "explanation": "Sidney Crosby is known as “Sid the Kid.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7294,7 +7294,7 @@
     },
     {
       "id": "nhl-pack1-25",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-25",
       "league": "nhl",
       "topic": "nicknames",
@@ -7302,7 +7302,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Whose nickname is \"The Great 8\"?",
+      "prompt": "Which player is known as “The Great 8”?",
       "options": [
         {
           "id": "p0",
@@ -7322,7 +7322,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Alex Ovechkin.",
+      "explanation": "Alex Ovechkin is known as “The Great 8.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7333,7 +7333,7 @@
     },
     {
       "id": "nhl-pack1-26",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-26",
       "league": "nhl",
       "topic": "nicknames",
@@ -7341,7 +7341,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Which enforcer's nickname was \"The Hammer\"?",
+      "prompt": "Which enforcer is known as “The Hammer”?",
       "options": [
         {
           "id": "p0",
@@ -7361,7 +7361,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Dave Schultz.",
+      "explanation": "Dave Schultz is known as “The Hammer.”",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_ice_hockey_nicknames",
         "credit": "Hockey nicknames"
@@ -7372,7 +7372,7 @@
     },
     {
       "id": "nhl-pack1-27",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-27",
       "league": "nhl",
       "topic": "history",
@@ -7380,7 +7380,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Bobby Orr's famous \"flying\" goal won the 1970 Stanley Cup against which team?",
+      "prompt": "Bobby Orr’s famous “flying” goal won the 1970 Stanley Cup against which team?",
       "options": [
         {
           "id": "p0",
@@ -7400,7 +7400,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is St. Louis Blues.",
+      "explanation": "Orr’s goal against the St. Louis Blues won the 1970 Stanley Cup.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Bobby_Orr",
         "credit": "Bobby Orr"
@@ -7411,7 +7411,7 @@
     },
     {
       "id": "nhl-pack1-28",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-28",
       "league": "nhl",
       "topic": "history",
@@ -7419,7 +7419,7 @@
       "template": "trivia",
       "difficulty": "medium",
       "difficultyStatus": "uncalibrated",
-      "prompt": "Who is the Conn Smythe Trophy awarded to?",
+      "prompt": "Which player receives the Conn Smythe Trophy?",
       "options": [
         {
           "id": "p0",
@@ -7439,7 +7439,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is the MVP of the playoffs.",
+      "explanation": "The Conn Smythe Trophy is awarded to the most valuable player of the playoffs.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Conn_Smythe_Trophy",
         "credit": "Conn Smythe Trophy"
@@ -7450,7 +7450,7 @@
     },
     {
       "id": "nhl-pack1-29",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-29",
       "league": "nhl",
       "season": "2025–26",
@@ -7480,7 +7480,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Carolina Hurricanes (4–2 over Vegas).",
+      "explanation": "The Carolina Hurricanes defeated the Vegas Golden Knights four games to two in the 2026 Stanley Cup Final.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/List_of_Stanley_Cup_champions",
         "credit": "Stanley Cup champions"
@@ -7491,7 +7491,7 @@
     },
     {
       "id": "nhl-pack1-30",
-      "revision": 1,
+      "revision": 2,
       "factFamily": "nhl-pack1-30",
       "league": "nhl",
       "season": "2025–26",
@@ -7521,7 +7521,7 @@
         }
       ],
       "correctOptionId": "p0",
-      "explanation": "The answer is Jordan Staal.",
+      "explanation": "Jordan Staal won the 2026 Conn Smythe Trophy.",
       "source": {
         "url": "https://en.wikipedia.org/wiki/Conn_Smythe_Trophy",
         "credit": "Conn Smythe Trophy"
@@ -8560,6 +8560,2070 @@
       "verification": "league-source-checked",
       "publicationStatus": "prototype-only",
       "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-jordan-shrug",
+      "revision": 2,
+      "factFamily": "nba-expansion-jordan-shrug",
+      "league": "nba",
+      "season": "1991–92",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Against which team did Michael Jordan hit six first-half three-pointers and give his famous shrug in the 1992 NBA Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Portland Trail Blazers"
+        },
+        {
+          "id": "p1",
+          "label": "Phoenix Suns"
+        },
+        {
+          "id": "p2",
+          "label": "Utah Jazz"
+        },
+        {
+          "id": "p3",
+          "label": "Seattle SuperSonics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Jordan’s hot shooting came in Game 1 against Portland.",
+      "source": {
+        "url": "https://www.nba.com/news/history-top-moments-michael-jordan-shrug-1992",
+        "credit": "NBA · Jordan’s shrug"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-miller-eight-points",
+      "revision": 1,
+      "factFamily": "nba-expansion-miller-eight-points",
+      "league": "nba",
+      "season": "1994–95",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who stunned the Knicks by scoring eight points in nine seconds during the 1995 playoffs?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Reggie Miller"
+        },
+        {
+          "id": "p1",
+          "label": "Mark Jackson"
+        },
+        {
+          "id": "p2",
+          "label": "Byron Scott"
+        },
+        {
+          "id": "p3",
+          "label": "Rik Smits"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Miller’s late burst won Game 1 for Indiana.",
+      "source": {
+        "url": "https://www.nba.com/pacers/eight-points-about-8-points-9-seconds",
+        "credit": "Indiana Pacers · Eight points in nine seconds"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-fisher-point-four",
+      "revision": 1,
+      "factFamily": "nba-expansion-fisher-point-four",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Laker beat the Spurs with only 0.4 seconds left in a 2004 playoff game?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Derek Fisher"
+        },
+        {
+          "id": "p1",
+          "label": "Kobe Bryant"
+        },
+        {
+          "id": "p2",
+          "label": "Gary Payton"
+        },
+        {
+          "id": "p3",
+          "label": "Devean George"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Fisher’s turnaround jumper won Game 5 of the Western Conference semifinals.",
+      "source": {
+        "url": "https://www.nba.com/news/nba-flashback-podcast-derek-fisher",
+        "credit": "NBA · Derek Fisher buzzer-beater"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-prince-chasedown",
+      "revision": 1,
+      "factFamily": "nba-expansion-prince-chasedown",
+      "league": "nba",
+      "season": "2003–04",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who chased down Reggie Miller to block a layup in the 2004 Eastern Conference finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tayshaun Prince"
+        },
+        {
+          "id": "p1",
+          "label": "Richard Hamilton"
+        },
+        {
+          "id": "p2",
+          "label": "Chauncey Billups"
+        },
+        {
+          "id": "p3",
+          "label": "Rasheed Wallace"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Prince’s recovery helped Detroit hold on in Game 2.",
+      "source": {
+        "url": "https://www.nba.com/watch/video/next-man-up-tayshaun-prince-chasedown-block-reggie-miller",
+        "credit": "NBA · Tayshaun Prince’s block"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-wallace-dpoy",
+      "revision": 2,
+      "factFamily": "nba-expansion-wallace-dpoy",
+      "league": "nba",
+      "season": "2001–02",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA Defensive Player of the Year award in 2001–02?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Ben Wallace"
+        },
+        {
+          "id": "p1",
+          "label": "Dikembe Mutombo"
+        },
+        {
+          "id": "p2",
+          "label": "Kevin Garnett"
+        },
+        {
+          "id": "p3",
+          "label": "Tim Duncan"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Wallace won the award with Detroit.",
+      "source": {
+        "url": "https://www.nba.com/news/history-defensive-player-of-the-year-winners",
+        "credit": "NBA · Defensive Player of the Year winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-duncan-rookie",
+      "revision": 2,
+      "factFamily": "nba-expansion-duncan-rookie",
+      "league": "nba",
+      "season": "1997–98",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA Rookie of the Year award in 1997–98?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tim Duncan"
+        },
+        {
+          "id": "p1",
+          "label": "Keith Van Horn"
+        },
+        {
+          "id": "p2",
+          "label": "Tracy McGrady"
+        },
+        {
+          "id": "p3",
+          "label": "Chauncey Billups"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Duncan won the award with San Antonio.",
+      "source": {
+        "url": "https://www.nba.com/news/history-rookie-of-the-year-winners",
+        "credit": "NBA · Rookie of the Year winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-ginobili-sixth",
+      "revision": 2,
+      "factFamily": "nba-expansion-ginobili-sixth",
+      "league": "nba",
+      "season": "2007–08",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which Spurs player won the Sixth Man of the Year award in 2007–08?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Manu Ginóbili"
+        },
+        {
+          "id": "p1",
+          "label": "Brent Barry"
+        },
+        {
+          "id": "p2",
+          "label": "Michael Finley"
+        },
+        {
+          "id": "p3",
+          "label": "Ime Udoka"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Ginóbili won the award as a reserve for San Antonio.",
+      "source": {
+        "url": "https://www.nba.com/news/history-sixth-man-of-the-year-winners",
+        "credit": "NBA · Sixth Man of the Year winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-giannis-improved",
+      "revision": 2,
+      "factFamily": "nba-expansion-giannis-improved",
+      "league": "nba",
+      "season": "2016–17",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the NBA Most Improved Player award in 2016–17?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Giannis Antetokounmpo"
+        },
+        {
+          "id": "p1",
+          "label": "Nikola Jokić"
+        },
+        {
+          "id": "p2",
+          "label": "Rudy Gobert"
+        },
+        {
+          "id": "p3",
+          "label": "Gordon Hayward"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Antetokounmpo won the award with Milwaukee.",
+      "source": {
+        "url": "https://www.nba.com/news/history-most-improved-award-winners",
+        "credit": "NBA · Most Improved Player winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-rockets-sweep",
+      "revision": 1,
+      "factFamily": "nba-expansion-rockets-sweep",
+      "league": "nba",
+      "season": "1994–95",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team swept Shaquille O’Neal’s Orlando Magic in the 1995 NBA Finals?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Houston Rockets"
+        },
+        {
+          "id": "p1",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p2",
+          "label": "Utah Jazz"
+        },
+        {
+          "id": "p3",
+          "label": "Seattle SuperSonics"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Houston completed back-to-back championships.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-review-1994-95",
+        "credit": "NBA · 1994–95 season review"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-heat-first-lebron-title",
+      "revision": 1,
+      "factFamily": "nba-expansion-heat-first-lebron-title",
+      "league": "nba",
+      "season": "2011–12",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Oklahoma City to win the 2012 NBA championship?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Miami Heat"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Celtics"
+        },
+        {
+          "id": "p2",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Lakers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Miami won the Finals in five games.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-review-2011-12",
+        "credit": "NBA · 2011–12 season review"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-spurs-rematch",
+      "revision": 1,
+      "factFamily": "nba-expansion-spurs-rematch",
+      "league": "nba",
+      "season": "2013–14",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Miami in the 2014 Finals rematch?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "San Antonio Spurs"
+        },
+        {
+          "id": "p1",
+          "label": "Oklahoma City Thunder"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Clippers"
+        },
+        {
+          "id": "p3",
+          "label": "Portland Trail Blazers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "San Antonio won the title in five games.",
+      "source": {
+        "url": "https://www.nba.com/news/history-season-review-2013-14",
+        "credit": "NBA · 2013–14 season review"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nba-expansion-nuggets-first-title",
+      "revision": 1,
+      "factFamily": "nba-expansion-nuggets-first-title",
+      "league": "nba",
+      "season": "2022–23",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won its first NBA title by beating Miami in 2023?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Denver Nuggets"
+        },
+        {
+          "id": "p1",
+          "label": "Phoenix Suns"
+        },
+        {
+          "id": "p2",
+          "label": "Memphis Grizzlies"
+        },
+        {
+          "id": "p3",
+          "label": "Los Angeles Clippers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Denver closed out the series in Game 5.",
+      "source": {
+        "url": "https://www.nba.com/playoffs/2023/the-finals/news",
+        "credit": "NBA · 2023 Finals coverage"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-music-city-lateral",
+      "revision": 1,
+      "factFamily": "nfl-expansion-music-city-lateral",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who took Frank Wycheck’s lateral to the end zone in the Music City Miracle?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Kevin Dyson"
+        },
+        {
+          "id": "p1",
+          "label": "Derrick Mason"
+        },
+        {
+          "id": "p2",
+          "label": "Eddie George"
+        },
+        {
+          "id": "p3",
+          "label": "Yancey Thigpen"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Dyson’s return knocked Buffalo out of the playoffs.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/detail.html?slug=plays-4",
+        "credit": "NFL · Music City Miracle"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-jones-tackle",
+      "revision": 1,
+      "factFamily": "nfl-teams-1999",
+      "league": "nfl",
+      "season": "1999",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who tackled Kevin Dyson one yard short on the final play of Super Bowl XXXIV?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Mike Jones"
+        },
+        {
+          "id": "p1",
+          "label": "London Fletcher"
+        },
+        {
+          "id": "p2",
+          "label": "Todd Lyght"
+        },
+        {
+          "id": "p3",
+          "label": "Dexter McCleon"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Jones’s tackle sealed the Rams’ championship.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/detail.html?slug=plays-11",
+        "credit": "NFL · The Tackle"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-beast-quake",
+      "revision": 2,
+      "factFamily": "nfl-expansion-beast-quake",
+      "league": "nfl",
+      "season": "2010",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Against which team did Marshawn Lynch make his famous “Beast Quake” touchdown run?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New Orleans Saints"
+        },
+        {
+          "id": "p1",
+          "label": "Chicago Bears"
+        },
+        {
+          "id": "p2",
+          "label": "Green Bay Packers"
+        },
+        {
+          "id": "p3",
+          "label": "Atlanta Falcons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Lynch’s 67-yard run helped Seattle win the wild-card game.",
+      "source": {
+        "url": "https://www.nfl.com/100/originals/100-greatest/detail.html?slug=plays-13",
+        "credit": "NFL · Beast Quake"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-harrison-return",
+      "revision": 1,
+      "factFamily": "nfl-expansion-harrison-return",
+      "league": "nfl",
+      "season": "2008",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who returned an interception 100 yards for a touchdown just before halftime of Super Bowl XLIII?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "James Harrison"
+        },
+        {
+          "id": "p1",
+          "label": "Troy Polamalu"
+        },
+        {
+          "id": "p2",
+          "label": "James Farrior"
+        },
+        {
+          "id": "p3",
+          "label": "Lawrence Timmons"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Harrison’s return put Pittsburgh ahead of Arizona at the break.",
+      "source": {
+        "url": "https://www.nfl.com/news/steelers-harrison-goes-the-distance-for-super-bowl-record-int-r-09000d5d80e8364c",
+        "credit": "NFL · Harrison’s interception return"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-smith-comeback",
+      "revision": 2,
+      "factFamily": "nfl-expansion-smith-comeback",
+      "league": "nfl",
+      "season": "2020",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the 2020 AP Comeback Player of the Year award after returning from a devastating leg injury?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Alex Smith"
+        },
+        {
+          "id": "p1",
+          "label": "Ben Roethlisberger"
+        },
+        {
+          "id": "p2",
+          "label": "Cam Newton"
+        },
+        {
+          "id": "p3",
+          "label": "Matthew Stafford"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Smith returned as Washington’s quarterback.",
+      "source": {
+        "url": "https://www.nfl.com/news/washington-qb-alex-smith-wins-ap-comeback-player-of-the-year",
+        "credit": "NFL · Alex Smith’s comeback award"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-watt-payton",
+      "revision": 1,
+      "factFamily": "nfl-expansion-watt-payton",
+      "league": "nfl",
+      "season": "2017",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the 2017 Walter Payton NFL Man of the Year award after his Hurricane Harvey relief efforts?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "J.J. Watt"
+        },
+        {
+          "id": "p1",
+          "label": "Greg Olsen"
+        },
+        {
+          "id": "p2",
+          "label": "Benjamin Watson"
+        },
+        {
+          "id": "p3",
+          "label": "Julius Peppers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Watt was honored for his work in Houston.",
+      "source": {
+        "url": "https://www.nfl.com/honors/man-of-the-year/winners",
+        "credit": "NFL · Walter Payton award winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-griffin-rookie",
+      "revision": 2,
+      "factFamily": "nfl-expansion-griffin-rookie",
+      "league": "nfl",
+      "season": "2012",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AP Offensive Rookie of the Year award for the 2012 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Robert Griffin III"
+        },
+        {
+          "id": "p1",
+          "label": "Andrew Luck"
+        },
+        {
+          "id": "p2",
+          "label": "Russell Wilson"
+        },
+        {
+          "id": "p3",
+          "label": "Alfred Morris"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Griffin won the award with Washington.",
+      "source": {
+        "url": "https://www.nfl.com/news/robert-griffin-iii-wins-offensive-rookie-of-the-year-0ap1000000134287",
+        "credit": "NFL · Robert Griffin III’s rookie award"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-kupp-offense",
+      "revision": 2,
+      "factFamily": "nfl-expansion-kupp-offense",
+      "league": "nfl",
+      "season": "2021",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which receiver won the AP Offensive Player of the Year award for the 2021 season?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Cooper Kupp"
+        },
+        {
+          "id": "p1",
+          "label": "Davante Adams"
+        },
+        {
+          "id": "p2",
+          "label": "Justin Jefferson"
+        },
+        {
+          "id": "p3",
+          "label": "Deebo Samuel"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Kupp won the award with the Los Angeles Rams.",
+      "source": {
+        "url": "https://www.nfl.com/news/rams-wr-cooper-kupp-named-2021-ap-nfl-offensive-player-of-the-year",
+        "credit": "NFL · Cooper Kupp’s offensive award"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-jets-guarantee",
+      "revision": 1,
+      "factFamily": "nfl-expansion-jets-guarantee",
+      "league": "nfl",
+      "season": "1968",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which AFL team backed Joe Namath’s guarantee by beating Baltimore in Super Bowl III?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New York Jets"
+        },
+        {
+          "id": "p1",
+          "label": "Oakland Raiders"
+        },
+        {
+          "id": "p2",
+          "label": "Kansas City Chiefs"
+        },
+        {
+          "id": "p3",
+          "label": "San Diego Chargers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The Jets won 16–7 in January 1969, following the 1968 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/super-bowl-memories-from-max-mcgee-to-mario-manningham-0ap2000000319387",
+        "credit": "NFL · Super Bowl III retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-washington-williams",
+      "revision": 2,
+      "factFamily": "nfl-expansion-washington-williams",
+      "league": "nfl",
+      "season": "1987",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team won Super Bowl XXII with Doug Williams at quarterback?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Washington Redskins"
+        },
+        {
+          "id": "p1",
+          "label": "New York Giants"
+        },
+        {
+          "id": "p2",
+          "label": "San Francisco 49ers"
+        },
+        {
+          "id": "p3",
+          "label": "Chicago Bears"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Washington beat Denver in January 1988, following the 1987 NFL season.",
+      "source": {
+        "url": "https://www.nfl.com/news/super-bowl-memories-from-max-mcgee-to-mario-manningham-0ap2000000319387",
+        "credit": "NFL · Super Bowl XXII retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-ravens-blackout",
+      "revision": 1,
+      "factFamily": "nfl-expansion-ravens-blackout",
+      "league": "nfl",
+      "season": "2012",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team held off San Francisco in the Super Bowl interrupted by a power outage?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Baltimore Ravens"
+        },
+        {
+          "id": "p1",
+          "label": "New England Patriots"
+        },
+        {
+          "id": "p2",
+          "label": "Pittsburgh Steelers"
+        },
+        {
+          "id": "p3",
+          "label": "Denver Broncos"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Baltimore won Super Bowl XLVII in February 2013, following the 2012 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/ravens-defeat-49ers-in-super-bowl-xlvii-0ap1000000135344",
+        "credit": "NFL · Super Bowl XLVII recap"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nfl-expansion-seahawks-first-title",
+      "revision": 1,
+      "factFamily": "nfl-expansion-seahawks-first-title",
+      "league": "nfl",
+      "season": "2013",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Peyton Manning’s Broncos 43–8 to win its first Super Bowl?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Seattle Seahawks"
+        },
+        {
+          "id": "p1",
+          "label": "San Francisco 49ers"
+        },
+        {
+          "id": "p2",
+          "label": "Carolina Panthers"
+        },
+        {
+          "id": "p3",
+          "label": "Arizona Cardinals"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Seattle won Super Bowl XLVIII in February 2014, following the 2013 season.",
+      "source": {
+        "url": "https://www.nfl.com/news/seahawks-crush-broncos-for-first-super-bowl-win-0ap2000000322949",
+        "credit": "NFL · Super Bowl XLVIII recap"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-mazeroski-game-seven",
+      "revision": 1,
+      "factFamily": "mlb-expansion-mazeroski-game-seven",
+      "league": "mlb",
+      "season": "1960",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who ended the 1960 World Series with a walk-off homer in Game 7?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Bill Mazeroski"
+        },
+        {
+          "id": "p1",
+          "label": "Roberto Clemente"
+        },
+        {
+          "id": "p2",
+          "label": "Dick Groat"
+        },
+        {
+          "id": "p3",
+          "label": "Rocky Nelson"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Mazeroski’s home run gave Pittsburgh the championship.",
+      "source": {
+        "url": "https://www.mlb.com/news/bill-mazeroski-s-1960-world-series-winning-walk-off-home-run",
+        "credit": "MLB · Mazeroski’s Game 7 home run"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-fisk-fair",
+      "revision": 1,
+      "factFamily": "mlb-expansion-fisk-fair",
+      "league": "mlb",
+      "season": "1975",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which catcher waved his home run fair in Game 6 of the 1975 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carlton Fisk"
+        },
+        {
+          "id": "p1",
+          "label": "Bob Montgomery"
+        },
+        {
+          "id": "p2",
+          "label": "Johnny Bench"
+        },
+        {
+          "id": "p3",
+          "label": "Darrell Porter"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Fisk’s 12th-inning shot for Boston forced a seventh game.",
+      "source": {
+        "url": "https://www.mlb.com/news/carlton-fisk-greatest-moments",
+        "credit": "MLB · Carlton Fisk’s greatest moments"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-halladay-postseason-nohitter",
+      "revision": 1,
+      "factFamily": "mlb-expansion-halladay-postseason-nohitter",
+      "league": "mlb",
+      "season": "2010",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who threw a no-hitter against Cincinnati in his first postseason appearance?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Roy Halladay"
+        },
+        {
+          "id": "p1",
+          "label": "Cliff Lee"
+        },
+        {
+          "id": "p2",
+          "label": "Cole Hamels"
+        },
+        {
+          "id": "p3",
+          "label": "Roy Oswalt"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Halladay did it for Philadelphia in the 2010 NLDS opener.",
+      "source": {
+        "url": "https://www.mlb.com/news/roy-halladay-timeline-of-hall-of-fame-career-c303007616",
+        "credit": "MLB · Roy Halladay’s career timeline"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-edgar-double",
+      "revision": 1,
+      "factFamily": "mlb-expansion-edgar-double",
+      "league": "mlb",
+      "season": "1995",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Whose double scored Ken Griffey Jr. to eliminate the Yankees in the 1995 ALDS?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Edgar Martínez"
+        },
+        {
+          "id": "p1",
+          "label": "Jay Buhner"
+        },
+        {
+          "id": "p2",
+          "label": "Tino Martinez"
+        },
+        {
+          "id": "p3",
+          "label": "Joey Cora"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Martínez’s hit sent Seattle to the ALCS.",
+      "source": {
+        "url": "https://www.mlb.com/news/edgar-martinez-s-the-double-in-1995-alds",
+        "credit": "MLB · Edgar Martínez’s double"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-pedro-cy-young",
+      "revision": 1,
+      "factFamily": "mlb-expansion-pedro-cy-young",
+      "league": "mlb",
+      "season": "1999",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who unanimously won the 1999 American League Cy Young Award?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pedro Martínez"
+        },
+        {
+          "id": "p1",
+          "label": "Mike Mussina"
+        },
+        {
+          "id": "p2",
+          "label": "David Cone"
+        },
+        {
+          "id": "p3",
+          "label": "Bartolo Colón"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Martínez won the award with Boston.",
+      "source": {
+        "url": "https://www.mlb.com/player/pedro-martinez-118377",
+        "credit": "MLB · Pedro Martínez career biography"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-pujols-rookie",
+      "revision": 2,
+      "factFamily": "mlb-expansion-pujols-rookie",
+      "league": "mlb",
+      "season": "2001",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the National League Rookie of the Year award in 2001?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Albert Pujols"
+        },
+        {
+          "id": "p1",
+          "label": "Roy Oswalt"
+        },
+        {
+          "id": "p2",
+          "label": "Jimmy Rollins"
+        },
+        {
+          "id": "p3",
+          "label": "Adam Dunn"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Pujols won unanimously with St. Louis.",
+      "source": {
+        "url": "https://www.mlb.com/stories/albert-pujols-career-timeline",
+        "credit": "MLB · Albert Pujols career timeline"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-bumgarner-series-mvp",
+      "revision": 2,
+      "factFamily": "mlb-expansion-bumgarner-series-mvp",
+      "league": "mlb",
+      "season": "2014",
+      "scope": "postseason",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the 2014 World Series MVP award after pitching five shutout innings in relief in Game 7?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Madison Bumgarner"
+        },
+        {
+          "id": "p1",
+          "label": "Pablo Sandoval"
+        },
+        {
+          "id": "p2",
+          "label": "Hunter Pence"
+        },
+        {
+          "id": "p3",
+          "label": "Buster Posey"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Bumgarner helped San Francisco finish off Kansas City.",
+      "source": {
+        "url": "https://www.mlb.com/awards/2014",
+        "credit": "MLB · 2014 award winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-francona-manager",
+      "revision": 2,
+      "factFamily": "mlb-expansion-francona-manager",
+      "league": "mlb",
+      "season": "2013",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the AL Manager of the Year award in his first season managing Cleveland in 2013?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Terry Francona"
+        },
+        {
+          "id": "p1",
+          "label": "John Farrell"
+        },
+        {
+          "id": "p2",
+          "label": "Bob Melvin"
+        },
+        {
+          "id": "p3",
+          "label": "Joe Maddon"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Francona guided Cleveland to an AL Wild Card berth.",
+      "source": {
+        "url": "https://www.mlb.com/news/2013-bbwaa-managers-of-the-year-announced/c-63879932",
+        "credit": "MLB · 2013 Managers of the Year"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-mets-comeback-title",
+      "revision": 1,
+      "factFamily": "mlb-expansion-mets-comeback-title",
+      "league": "mlb",
+      "season": "1986",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Boston in Game 7 to win the 1986 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "New York Mets"
+        },
+        {
+          "id": "p1",
+          "label": "St. Louis Cardinals"
+        },
+        {
+          "id": "p2",
+          "label": "San Francisco Giants"
+        },
+        {
+          "id": "p3",
+          "label": "Houston Astros"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "The Mets won the deciding game 8–5.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/1986",
+        "credit": "MLB · 1986 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-reds-sweep",
+      "revision": 1,
+      "factFamily": "mlb-expansion-reds-sweep",
+      "league": "mlb",
+      "season": "1990",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team swept Oakland in the 1990 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Cincinnati Reds"
+        },
+        {
+          "id": "p1",
+          "label": "Pittsburgh Pirates"
+        },
+        {
+          "id": "p2",
+          "label": "Los Angeles Dodgers"
+        },
+        {
+          "id": "p3",
+          "label": "New York Mets"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Cincinnati won all four games.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/1990",
+        "credit": "MLB · 1990 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-giants-san-francisco-title",
+      "revision": 1,
+      "factFamily": "mlb-expansion-giants-san-francisco-title",
+      "league": "mlb",
+      "season": "2010",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Texas to win the 2010 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "San Francisco Giants"
+        },
+        {
+          "id": "p1",
+          "label": "Philadelphia Phillies"
+        },
+        {
+          "id": "p2",
+          "label": "Atlanta Braves"
+        },
+        {
+          "id": "p3",
+          "label": "Cincinnati Reds"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "San Francisco won the series in five games.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2010",
+        "credit": "MLB · 2010 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "mlb-expansion-braves-2021-title",
+      "revision": 1,
+      "factFamily": "mlb-expansion-braves-2021-title",
+      "league": "mlb",
+      "season": "2021",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Houston in the 2021 World Series?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Atlanta Braves"
+        },
+        {
+          "id": "p1",
+          "label": "Los Angeles Dodgers"
+        },
+        {
+          "id": "p2",
+          "label": "San Francisco Giants"
+        },
+        {
+          "id": "p3",
+          "label": "Milwaukee Brewers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Atlanta closed out the series in Game 6.",
+      "source": {
+        "url": "https://www.mlb.com/postseason/history/2021",
+        "credit": "MLB · 2021 postseason history"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-matteau-double-ot",
+      "revision": 1,
+      "factFamily": "nhl-expansion-matteau-double-ot",
+      "league": "nhl",
+      "season": "1993–94",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored in double overtime against New Jersey to send the Rangers to the 1994 Stanley Cup Final?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Stéphane Matteau"
+        },
+        {
+          "id": "p1",
+          "label": "Alex Kovalev"
+        },
+        {
+          "id": "p2",
+          "label": "Adam Graves"
+        },
+        {
+          "id": "p3",
+          "label": "Esa Tikkanen"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Matteau’s Game 7 winner ended the conference final.",
+      "source": {
+        "url": "https://www.nhl.com/news/rangers-1994-game-7-conference-final-victory-over-devils-still-unforge-289611024",
+        "credit": "NHL · Rangers–Devils Game 7 retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-mccarty-clincher",
+      "revision": 1,
+      "factFamily": "nhl-expansion-mccarty-clincher",
+      "league": "nhl",
+      "season": "1996–97",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored Detroit’s Stanley Cup-winning goal on a solo rush in Game 4 against Philadelphia in 1997?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Darren McCarty"
+        },
+        {
+          "id": "p1",
+          "label": "Kirk Maltby"
+        },
+        {
+          "id": "p2",
+          "label": "Joe Kocur"
+        },
+        {
+          "id": "p3",
+          "label": "Doug Brown"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "McCarty’s goal helped finish Detroit’s sweep.",
+      "source": {
+        "url": "https://www.nhl.com/news/this-date-in-nhl-history-june-7-280871200",
+        "credit": "NHL · Detroit’s 1997 Cup clincher"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-holtby-save",
+      "revision": 1,
+      "factFamily": "nhl-expansion-capitals-title",
+      "league": "nhl",
+      "season": "2017–18",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who stretched across the crease to deny Alex Tuch in Game 2 of the 2018 Stanley Cup Final?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Braden Holtby"
+        },
+        {
+          "id": "p1",
+          "label": "Philipp Grubauer"
+        },
+        {
+          "id": "p2",
+          "label": "Marc-André Fleury"
+        },
+        {
+          "id": "p3",
+          "label": "Malcolm Subban"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Holtby’s save protected Washington’s lead against Vegas.",
+      "source": {
+        "url": "https://www.nhl.com/news/save-of-the-decade-holtby-game-2-2018-stanley-cup-final-313881530",
+        "credit": "NHL · Holtby’s save"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-bolland-seventeen-seconds",
+      "revision": 1,
+      "factFamily": "nhl-expansion-bolland-seventeen-seconds",
+      "league": "nhl",
+      "season": "2012–13",
+      "scope": "postseason",
+      "metric": "playoff-moments",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who scored Chicago’s Cup-winning goal 17 seconds after Bryan Bickell tied Game 6 against Boston in 2013?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Dave Bolland"
+        },
+        {
+          "id": "p1",
+          "label": "Patrick Sharp"
+        },
+        {
+          "id": "p2",
+          "label": "Andrew Shaw"
+        },
+        {
+          "id": "p3",
+          "label": "Marian Hossa"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Bolland completed Chicago’s late comeback.",
+      "source": {
+        "url": "https://records.nhl.com/playoff-summary/stanley-cup-winner?season=20122013",
+        "credit": "NHL Records · 2012–13 Stanley Cup winner"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "playoff-moments",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-thomas-vezina",
+      "revision": 1,
+      "factFamily": "nhl-expansion-thomas-vezina",
+      "league": "nhl",
+      "season": "2010–11",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie won the Vezina Trophy for 2010–11?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Tim Thomas"
+        },
+        {
+          "id": "p1",
+          "label": "Roberto Luongo"
+        },
+        {
+          "id": "p2",
+          "label": "Pekka Rinne"
+        },
+        {
+          "id": "p3",
+          "label": "Carey Price"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Thomas won the award with Boston.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-vezina-trophy-winners-complete-list-287773436",
+        "credit": "NHL · Vezina Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-lidstrom-norris",
+      "revision": 1,
+      "factFamily": "nhl-expansion-lidstrom-norris",
+      "league": "nhl",
+      "season": "2006–07",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which defenseman won the Norris Trophy for 2006–07?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Nicklas Lidström"
+        },
+        {
+          "id": "p1",
+          "label": "Scott Niedermayer"
+        },
+        {
+          "id": "p2",
+          "label": "Chris Pronger"
+        },
+        {
+          "id": "p3",
+          "label": "Sergei Zubov"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Lidström won the award with Detroit.",
+      "source": {
+        "url": "https://www.nhl.com/news/topic/nhl-awards/nhl-james-norris-memorial-trophy-winners-complete-list-287778852",
+        "credit": "NHL · Norris Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-bergeron-selke",
+      "revision": 1,
+      "factFamily": "nhl-expansion-bergeron-selke",
+      "league": "nhl",
+      "season": "2011–12",
+      "scope": "regular-season",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Who won the Selke Trophy as the NHL’s best defensive forward in 2011–12?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Patrice Bergeron"
+        },
+        {
+          "id": "p1",
+          "label": "Pavel Datsyuk"
+        },
+        {
+          "id": "p2",
+          "label": "David Backes"
+        },
+        {
+          "id": "p3",
+          "label": "Ryan Kesler"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Bergeron won the award with Boston.",
+      "source": {
+        "url": "https://www.nhl.com/news/topic/playoffs/nhl-frank-j-selke-trophy-winners-complete-list-287904026",
+        "credit": "NHL · Selke Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-giguere-conn-smythe",
+      "revision": 1,
+      "factFamily": "nhl-expansion-giguere-conn-smythe",
+      "league": "nhl",
+      "season": "2002–03",
+      "scope": "postseason",
+      "metric": "awards",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which goalie won the Conn Smythe Trophy in 2003?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Jean-Sébastien Giguère"
+        },
+        {
+          "id": "p1",
+          "label": "Martin Brodeur"
+        },
+        {
+          "id": "p2",
+          "label": "Patrick Lalime"
+        },
+        {
+          "id": "p3",
+          "label": "Manny Fernandez"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Giguère earned playoff MVP honors with Anaheim.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-conn-smythe-trophy-winners-complete-list-287709808",
+        "credit": "NHL · Conn Smythe Trophy winners"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "awards",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-penguins-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-penguins-first-title",
+      "league": "nhl",
+      "season": "1990–91",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Minnesota to win its first Stanley Cup in 1991?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Pittsburgh Penguins"
+        },
+        {
+          "id": "p1",
+          "label": "Boston Bruins"
+        },
+        {
+          "id": "p2",
+          "label": "Washington Capitals"
+        },
+        {
+          "id": "p3",
+          "label": "New York Rangers"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Pittsburgh won the Final in six games.",
+      "source": {
+        "url": "https://www.nhl.com/news/nhl-stanley-cup-champions-1990-1999-287977078",
+        "credit": "NHL · 1990s Stanley Cup champions"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-hurricanes-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-hurricanes-first-title",
+      "league": "nhl",
+      "season": "2005–06",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Edmonton in Game 7 to win the 2006 Stanley Cup?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Carolina Hurricanes"
+        },
+        {
+          "id": "p1",
+          "label": "Buffalo Sabres"
+        },
+        {
+          "id": "p2",
+          "label": "Ottawa Senators"
+        },
+        {
+          "id": "p3",
+          "label": "New Jersey Devils"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Carolina won its first Stanley Cup.",
+      "source": {
+        "url": "https://records.nhl.com/playoff-summary/stanley-cup-winner?season=20052006",
+        "credit": "NHL Records · 2005–06 Stanley Cup winner"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-ducks-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-ducks-first-title",
+      "league": "nhl",
+      "season": "2006–07",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Ottawa in the 2007 Stanley Cup Final?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Anaheim Ducks"
+        },
+        {
+          "id": "p1",
+          "label": "Detroit Red Wings"
+        },
+        {
+          "id": "p2",
+          "label": "San Jose Sharks"
+        },
+        {
+          "id": "p3",
+          "label": "Vancouver Canucks"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Anaheim won the Final in five games.",
+      "source": {
+        "url": "https://www.nhl.com/news/edmonton-has-chance-to-end-canadas-stanley-cup-drought",
+        "credit": "NHL · Canadian finalists retrospective"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
+      "dailyEligible": false
+    },
+    {
+      "id": "nhl-expansion-capitals-first-title",
+      "revision": 1,
+      "factFamily": "nhl-expansion-capitals-title",
+      "league": "nhl",
+      "season": "2017–18",
+      "scope": "postseason",
+      "metric": "teams",
+      "unit": "trivia",
+      "template": "trivia",
+      "difficulty": "medium",
+      "difficultyStatus": "uncalibrated",
+      "prompt": "Which team beat Vegas to win its first Stanley Cup in 2018?",
+      "options": [
+        {
+          "id": "p0",
+          "label": "Washington Capitals"
+        },
+        {
+          "id": "p1",
+          "label": "Tampa Bay Lightning"
+        },
+        {
+          "id": "p2",
+          "label": "Pittsburgh Penguins"
+        },
+        {
+          "id": "p3",
+          "label": "Boston Bruins"
+        }
+      ],
+      "correctOptionId": "p0",
+      "explanation": "Washington won the Final in five games.",
+      "source": {
+        "url": "https://www.nhl.com/capitals/history/2018-stanley-cup",
+        "credit": "Washington Capitals · 2018 championship"
+      },
+      "checkedAt": "2026-11-05",
+      "verification": "league-source-checked",
+      "publicationStatus": "prototype-only",
+      "topic": "teams",
       "dailyEligible": false
     }
   ]

@@ -56,16 +56,16 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
   for (const name of ['NFL', 'MLB', 'NHL']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
   await page.getByText('Customize topics and years', { exact: true }).click();
   for (const name of ['history', 'nicknames', 'awards', 'teams']) await page.getByRole('checkbox', { name, exact: true }).uncheck();
-  await page.getByLabel('From season year').fill('1979');
-  await page.getByLabel('Through season year').fill('2020');
-  await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1979–2020');
+  await page.getByLabel('From season year').fill('1991');
+  await page.getByLabel('Through season year').fill('2015');
+  await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1991–2015');
   await expect(page.getByText(/questions? (you haven't seen )?match/)).toBeVisible();
   const repeat = page.getByRole('checkbox', { name: 'Allow previously included facts for this round' });
   if (await repeat.isVisible()) await repeat.check(); // Today's shared quiz may reserve one of these facts.
   await page.getByRole('button', { name: 'Start practice', exact: true }).click();
   await expect(page.getByText(/NBA · .*Question 1 of 5/)).toBeVisible();
   await page.reload();
-  await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1979–2020');
+  await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1991–2015');
   for (let i = 0; i < 5; i++) {
     await expect(page.getByText(new RegExp(`Question ${i + 1} of 5$`))).toBeVisible();
     await expect(page.getByRole('radio').first()).toBeEnabled();
@@ -77,12 +77,12 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
   await expect(page.locator('.score')).toBeVisible();
   await page.getByRole('button', { name: 'Play another round' }).click();
   await expect(page.getByRole('heading', { name: 'Choose your practice' })).toBeVisible();
-  await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1979–2020');
+  await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1991–2015');
   await expect(page.getByRole('button', { name: 'Start practice', exact: true })).toBeDisabled();
   await expect(repeat).not.toBeChecked();
   await repeat.check();
   const started = page.waitForResponse(r => r.url().endsWith('/practice') && r.request().method() === 'POST');
   await page.getByRole('button', { name: 'Start practice', exact: true }).click();
-  expect((await started).request().postDataJSON()).toMatchObject({ leagues: ['nba'], topics: ['playoff-moments'], fromYear: 1979, throughYear: 2020, allowRepeats: true });
+  expect((await started).request().postDataJSON()).toMatchObject({ leagues: ['nba'], topics: ['playoff-moments'], fromYear: 1991, throughYear: 2015, allowRepeats: true });
   await expect(page.getByText(/NBA · .*Question 1 of 5/)).toBeVisible();
 });

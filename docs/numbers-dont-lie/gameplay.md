@@ -1,4 +1,4 @@
-# Numbers Don't Lie: playable beta
+# Numbers Don't Lie gameplay
 
 The fourth home card opens `/numbers-dont-lie`. The old hosted preview redirects here. The Angular app no longer ships the prototype question bank or its answer keys.
 
@@ -6,15 +6,15 @@ The API supplies a shared five-question daily round (Eastern date) and custom pr
 
 `X-Anon-Id` identifies the browser using the existing anonymous-player interceptor. Round reads and writes require that same ID; this is browser identity, not account authentication. Clearing browser storage loses access. Existing prototype progress is not imported. Practice links expire after 30 days; expired rows are not yet automatically deleted.
 
-Deployment applies the `PersistNumbersBetaPlay` Postgres migration through the existing initializer. SQLite's development schema version is now 5. No new hosting service or environment variable is required.
+The database initializer applies the Postgres migration that creates `NumbersPlays`. SQLite's development schema version is now 5. No new hosting service or environment variable is required.
 
 ## Content scope
 
-The beta launched with 88 questions, 22 per league, comprising six stats, five awards, six championship teams and five season clues. The embedded `Data/numbers-beta.json` extends the original 56-question prototype bank with 32 source-checked historical questions. Each league/topic combination now has enough distinct facts for a five-question practice round without year bounds. Narrow year ranges can still exhaust the bank.
+The game launched with 88 questions, 22 per league, comprising six stats, five awards, six championship teams and five season clues. The embedded `Data/numbers-questions.json` extends the original 56-question prototype bank with 32 source-checked historical questions. Each league/topic combination now has enough distinct facts for a five-question practice round without year bounds. Narrow year ranges can still exhaust the bank.
 
 The original prototype catalogue remains a design fixture. The server bank retains source attribution and prototype review status, using the established selection algorithm with `requireApproved: false`. Daily snapshots freeze selected questions, opaque question IDs and shuffled opaque option IDs on first access. Existing saved rounds do not change when the bank expands. The new historical facts were checked on October 25, 2026 against the linked NBA/NHL histories, team championship histories, MLB postseason histories, Baseball Almanac MVP records and EDSFootball AP MVP records. NFL championship clues use the season year and explain the following calendar year's Super Bowl date.
 
-The approved-content queue from the previous PR remains separate and disabled by default. This beta does not claim that bank has met the production approval, breadth or repeat-window requirements. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
+The approved-content queue from the previous PR remains separate and disabled by default. Connecting approved queued content, enlarging the bank, repeat avoidance across practice rounds, cumulative stats and archive browsing remain follow-up work. Individual round scores, explanations and spoiler-free result sharing are available now.
 
 ### Pack 1: records, nicknames and history
 
@@ -27,7 +27,13 @@ The November 2026 pack adds 120 questions, 30 per league, in two new topics. `hi
 
 ### Playoff Moments
 
-Practice now has six Playoff Moments questions per league. They replace the Stats topic and use the starting year of the season for year filters. Former Seasons prompts about awards and records were rewritten and moved into Awards and History. The duplicate Wilt Chamberlain 100-point prompt and the NHL expansion-year question were removed. The bank now has 214 questions, with 120 eligible for Daily before recheck dates. Previously saved rounds still use their original questions.
+The first Playoff Moments pack introduced six questions per league. They replace the Stats topic and use the starting year of the season for year filters. Former Seasons prompts about awards and records were rewritten and moved into Awards and History. The duplicate Wilt Chamberlain 100-point prompt and the NHL expansion-year question were removed. That change brought the bank to 214 questions, with 120 eligible for Daily before recheck dates. Previously saved rounds still use their original questions.
+
+### Awards, Teams and Playoff Moments expansion
+
+The November 5 expansion adds 48 Practice questions, four per league in each of Awards, Teams and Playoff Moments. The bank now has 262 questions, including ten Playoff Moments per league. Awards include rookie, defensive, reserve, comeback, managerial and postseason honors. Teams questions use championship opponents or recognizable title runs as clues. Each addition has four alternatives, a short explanation and an official league or team source checked on November 5, 2026. The new questions retain the bank’s prototype review status and are Practice-only.
+
+Related championship and playoff facts share a fact family. The six-question NBA playoff window used by replay tests is now 1991–2015, preserving coverage of exhaustion, explicit repeats, saved filters and start retries as the bank grows.
 
 ## Streaks
 
@@ -41,7 +47,7 @@ The October 26 content pass revised 48 of the 88 slots without increasing the ba
 - Twelve championship questions now include the Finals, World Series or Super Bowl opponent. Their explanations add the series result or clarify the NFL season/calendar-year distinction. The named opponent is removed from the choices so it cannot serve as an obviously impossible distractor.
 - Two repeated Tom Brady MVP questions become Troy Polamalu and Aaron Donald Defensive Player of the Year questions, with team sources and defenders as distractors. Ten other award explanations lose generic filler.
 
-For newly created beta rounds, selection first favors topics used least often, then numerical/trivia templates used least often, with the seeded ordering breaking ties. This operates within each league's eligible pool, preserving league balance, selected topics, year bounds and fact-family exclusions. It does not guarantee every style when filters restrict the pool, or prevent repeats between separate practice rounds. The approved queue retains its existing selection behavior.
+For rounds drawn from the embedded catalogue, selection first favors topics used least often, then numerical/trivia templates used least often, with the seeded ordering breaking ties. This operates within each league's eligible pool, preserving league balance, selected topics, year bounds and fact-family exclusions. It does not guarantee every style when filters restrict the pool, or prevent repeats between separate practice rounds. The approved queue retains its existing selection behavior.
 
 Existing saved daily/practice snapshots keep their original wording and answers. After deployment, start a new practice round to test this pass; the next newly generated daily round uses it too. No migration is needed.
 

@@ -8,6 +8,6 @@ Whole rounds issued to the same anonymous player reserve their fact families for
 
 If a balanced fresh round is unavailable, the UI offers wider filters or an explicit, per-round repeat opt-in. Opted-in rounds prefer fresh eligible families before repeats; filters are never relaxed. Retrying a saved start receipt returns that round before evaluating exhaustion. Two distinct starts issued concurrently may still reserve overlapping families; this is not a global reservation lock.
 
-The bank grows from 88 to 96 questions with eight distinct historical facts: two per league, spanning milestones, a perfect season, expansion, and non-MVP awards. Each new entry includes its primary source, check date, and an explanation. Difficulty remains uncalibrated, and the catalogue retains its beta publication status. This small expansion does not promise endless fresh play under narrow filters.
+The bank grows from 88 to 96 questions with eight distinct historical facts: two per league, spanning milestones, a perfect season, expansion, and non-MVP awards. Each new entry includes its primary source, check date, and an explanation. Difficulty ratings remain uncalibrated. This small expansion does not promise endless fresh play under narrow filters.
 
 Regression coverage includes successive fresh rounds, explicit exhausted replay, ownership, expiry, empty-year coverage, filter restoration, stale coverage responses, lost start responses, and browser round trips between daily and practice.

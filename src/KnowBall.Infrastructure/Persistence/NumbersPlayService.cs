@@ -17,7 +17,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
     public static readonly string[] Topics = ["history", "nicknames", "awards", "teams", "playoff-moments"];
 
     private static readonly Lazy<string> Content = new(() => {
-        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
+        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-questions.json")!;
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     });
@@ -195,7 +195,7 @@ public sealed class NumbersPlayService(TriviaDbContext db, TimeProvider clock)
             // gameplay IDs so neither the current question nor subsequent moves disclose it.
             nodes[i]["id"] = Guid.NewGuid().ToString("N");
             var options = nodes[i]["options"]!.AsArray().Select(o => o!.DeepClone()).ToArray();
-            // Opaque option IDs prevent the beta catalogue's original p0 convention leaking answers.
+            // Opaque option IDs keep catalogue IDs from hinting at the correct answer.
             var correct = nodes[i]["correctOptionId"]!.GetValue<string>();
             foreach (var option in options) {
                 var old = option["id"]!.GetValue<string>();

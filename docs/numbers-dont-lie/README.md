@@ -1,12 +1,12 @@
 # Numbers Don't Lie
 
-The fourth game: five multiple-choice questions on stats, awards, champions and seasons across the NBA, NFL, MLB
-and NHL, as a shared daily round or a filtered practice round. It plays from a 96-question bank
-(24 per league) embedded in `src/KnowBall.Infrastructure/Data/numbers-beta.json`.
+The game serves five multiple-choice questions per round across the NBA, NFL, MLB and NHL. Players can join the shared
+daily round or filter a practice round by league, topic and year. The 262-question bank is embedded in
+`src/KnowBall.Infrastructure/Data/numbers-questions.json`.
 
 | Note | Covers |
 | --- | --- |
-| [live-beta.md](live-beta.md) | How the game plays, what the server stores and the editorial standard for questions |
+| [gameplay.md](gameplay.md) | How the game plays, what the server stores and the editorial standard for questions |
 | [practice-replay.md](practice-replay.md) | Practice filters, 30-day repeat avoidance and the explicit repeat opt-in |
 | [catalogue-preflight.md](catalogue-preflight.md) | Offline validation of a question catalogue (`--validate-numbers`) |
 | [content-storage.md](content-storage.md) | Approved catalogues and immutable staged quizzes |

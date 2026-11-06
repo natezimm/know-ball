@@ -3,21 +3,21 @@ using KnowBall.Infrastructure.Persistence;
 
 namespace KnowBall.UnitTests;
 
-public class NumbersBetaCatalogueTests
+public class NumbersCatalogueTests
 {
     [Fact]
     public void Embedded_bank_supports_every_league_and_topic_combination()
     {
-        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
+        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-questions.json")!;
         using var reader = new StreamReader(stream);
         using var catalogue = QuizCatalogue.Read(reader.ReadToEnd());
         var questions = catalogue.RootElement.GetProperty("questions").EnumerateArray().ToArray();
-        Assert.Equal(214, questions.Length);
+        Assert.Equal(262, questions.Length);
         // The bank links record variants and playoff plays to related facts.
-        Assert.Equal(214 - 17, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
+        Assert.Equal(262 - 19, questions.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
         Assert.All(questions, q => Assert.Contains(q.GetProperty("topic").GetString(), NumbersPlayService.Topics));
         foreach (var league in QuizCatalogue.Leagues)
-            Assert.Equal(6, questions.Count(q => q.GetProperty("league").GetString() == league &&
+            Assert.Equal(10, questions.Count(q => q.GetProperty("league").GetString() == league &&
                 q.GetProperty("topic").GetString() == "playoff-moments"));
 
         // All nonempty live filter combinations must produce a full round with no year bounds.
@@ -27,7 +27,7 @@ public class NumbersBetaCatalogueTests
             var leagues = QuizCatalogue.Leagues.Where((_, i) => (leaguesMask & (1 << i)) != 0).ToArray();
             var topics = NumbersPlayService.Topics.Where((_, i) => (topicsMask & (1 << i)) != 0).ToArray();
             var filters = new QuizFilters(leagues, topics);
-            var round = QuizSelection.Select(catalogue.RootElement, filters, "beta-coverage", requireApproved: false, preferVariety: true);
+            var round = QuizSelection.Select(catalogue.RootElement, filters, "catalogue-coverage", requireApproved: false, preferVariety: true);
             Assert.Equal(5, round.Length);
             Assert.Equal(5, round.Select(q => q.GetProperty("factFamily").GetString()).Distinct().Count());
             Assert.All(round, q => {
@@ -38,7 +38,7 @@ public class NumbersBetaCatalogueTests
             var counts = leagues.Select(l => round.Count(q => q.GetProperty("league").GetString() == l)).ToArray();
             Assert.True(counts.Max() - counts.Min() <= 1);
             Assert.Equal(round.Select(q => q.GetRawText()),
-                QuizSelection.Select(catalogue.RootElement, filters, "beta-coverage", requireApproved: false, preferVariety: true).Select(q => q.GetRawText()));
+                QuizSelection.Select(catalogue.RootElement, filters, "catalogue-coverage", requireApproved: false, preferVariety: true).Select(q => q.GetRawText()));
         }
     }
 
@@ -91,7 +91,7 @@ public class NumbersBetaCatalogueTests
 
     private static System.Text.Json.JsonDocument Bank()
     {
-        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-beta.json")!;
+        using var stream = typeof(NumbersPlayService).Assembly.GetManifestResourceStream("KnowBall.Infrastructure.Data.numbers-questions.json")!;
         using var reader = new StreamReader(stream);
         return QuizCatalogue.Read(reader.ReadToEnd());
     }
