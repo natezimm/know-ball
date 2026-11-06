@@ -238,14 +238,11 @@ def restore(bundle):
     manifest = validate_bundle(bundle)
     prefix = "knowball-restore-" + DRILL_ID
     network, db, site = prefix + "-net", prefix + "-db", prefix + "-site"
+    photos_volume = prefix + "-photos"
     # All created resources have fresh names. No production compose commands or volumes are used here.
     with tempfile.TemporaryDirectory(prefix=prefix) as temp:
         temp = Path(temp)
         extract_photos(bundle / "photos.tar.gz", temp)
-        os.chmod(temp, 0o755)
-        for path in (temp / "photos").rglob("*"):
-            os.chmod(path, 0o755 if path.is_dir() else 0o644)
-        os.chmod(temp / "photos", 0o755)
         password = uuid.uuid4().hex
         try:
             # A separate bridge keeps the drill apart from production while supporting
@@ -276,9 +273,17 @@ def restore(bundle):
             for url in urls:
                 if not re.fullmatch(r"/photos/[0-9a-f]{32}\.(jpg|png)", url) or not (temp / url.lstrip("/")).is_file() or (temp / url.lstrip("/")).stat().st_size == 0:
                     raise RuntimeError("Restored database references a missing or invalid photo")
+            # Keep the host staging directory private. Give only the image's app user
+            # access to the copied photos in a disposable Docker volume.
+            run(["docker", "volume", "create", photos_volume])
+            run(["docker", "run", "--rm", "--network", "none", "--user", "0:0",
+                 "--entrypoint", "/bin/sh", "-v", f"{temp / 'photos'}:/restore:ro",
+                 "-v", f"{photos_volume}:/data/photos", manifest["image"], "-ec",
+                 'cp -R /restore/. /data/photos/ && chmod -R u=rwX,go= /data/photos'
+                 ' && chown -R "$APP_UID:$APP_UID" /data/photos'])
             run(["docker", "run", "-d", "--name", site, "--network", network, "-p", "127.0.0.1::8080",
                  "-e", f"ConnectionStrings__Trivia=Host={db};Database=know_ball;Username=knowball;Password={password}",
-                 "-e", "Database__ApplyMigrationsOnStartup=false", "-v", f"{temp / 'photos'}:/data/photos:ro", manifest["image"]])
+                 "-e", "Database__ApplyMigrationsOnStartup=false", "-v", f"{photos_volume}:/data/photos:ro", manifest["image"]])
             port = run(["docker", "port", site, "8080/tcp"]).stdout.decode().strip().rsplit(":", 1)[1]
             base = "http://127.0.0.1:" + port
             wait_for_health(base)
@@ -299,6 +304,7 @@ def restore(bundle):
                     "productionModified": False}
         finally:
             run(["docker", "rm", "-fv", site, db], check=False)
+            run(["docker", "volume", "rm", photos_volume], check=False)
             run(["docker", "network", "rm", network], check=False)
 
 
