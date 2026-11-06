@@ -397,6 +397,8 @@ def _draw_prompts(draw: ImageDraw.ImageDraw, prompts: dict, width: int) -> None:
     r = max(6, width // 120)
     if prompts.get("box"):
         draw.rectangle(prompts["box"], outline=(255, 220, 0), width=max(2, r // 3))
+    for extra in prompts.get("extra") or []:
+        _draw_prompts(draw, extra, width)
     for x, y, label in prompts.get("points", []):
         if label:
             draw.ellipse([x - r, y - r, x + r, y + r], fill=(0, 220, 0), outline=(0, 0, 0), width=2)
@@ -446,6 +448,12 @@ def cmd_run(args) -> None:
         else:
             sam_model = sam_model or Sam2(args.sam_model, args.device)
             sam, score = sam_model.mask(photo, prompts)
+            # Extra objects (a sign, a ball held away from the body) get their own SAM pass and are merged in,
+            # because piling their clicks onto the player's makes SAM jump to the bigger or plainer object.
+            for extra in prompts.get("extra") or []:
+                part, part_score = sam_model.mask(photo, extra)
+                sam |= part
+                score = min(score, part_score)
         Image.fromarray((sam * 255).astype(np.uint8)).save(folder / "sam.png")
 
         edge = None
@@ -458,7 +466,8 @@ def cmd_run(args) -> None:
         band = max(2, round(args.band * scale))
         smooth = round(args.smooth * scale)
         alpha = combine(sam, edge, band)
-        mask, cleanup = clean(alpha, sam, prompts.get("points", []), args.threshold, args.speck, args.hole, smooth)
+        clicks = prompts.get("points", []) + [p for e in prompts.get("extra") or [] for p in e.get("points", [])]
+        mask, cleanup = clean(alpha, sam, clicks, args.threshold, args.speck, args.hole, smooth)
         traced = save_outputs(folder, photo, mask, ["--turdsize", str(round(20 * scale * scale)),
                                                     "--alphamax", "1.0", "--opttolerance", "0.2"])
         save_overlay(folder, photo, mask, sam, prompts)

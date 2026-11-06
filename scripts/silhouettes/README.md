@@ -46,6 +46,9 @@ python cutout.py compare pilot.json --out $OUT --old ~/Downloads/whos-that
 
 - `pick` saves clicks into `pilot.json`: left click on the player (and the ball), right click on what to leave
   out. You can also type points from `grid.jpg` by hand as `[x, y, 1]` or `[x, y, 0]`, or give a `box`.
+- Something the player holds that SAM treats as a separate object (Wilt's "100" sign) goes in
+  `"extra": [{"box": [x0, y0, x1, y1], "points": []}]` inside `prompts`. Each extra gets its own SAM pass and is
+  merged into the player's mask; adding its clicks to the player's list instead makes SAM jump to it.
 - With no points, `run` seeds prompts from the old cut-out (its box, points deep inside it, points far outside
   it). That is a fair first test of the tools; real use should click.
 - Each `<key>/` gets `sam.png` (SAM's mask), `edge.png` (BiRefNet's), `mask.png`, `cutout.png` (source pixels
