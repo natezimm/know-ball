@@ -137,7 +137,7 @@ sequenceDiagram
     A->>A: Evaluate against the secret (team, conference, division, position, height, age, number)
     A->>D: Update only if the stored guesses are unchanged (compare-and-swap)
     Note over A,D: A concurrent guess from another tab makes the<br/>update miss, and the guess is evaluated again.
-    A-->>W: Feedback; the answer only if won or out of guesses
+    A-->>W: Feedback, plus the answer once won or out of guesses
   end
 ```
 
