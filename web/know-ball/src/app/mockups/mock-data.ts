@@ -7,7 +7,7 @@ export const MOCK_GAMES: MockGame[] = [
   { path: 'themes', name: 'Themes' },
   { path: 'stat-quiz', name: 'Stat Quiz' },
   { path: 'geo-sports', name: 'Geo Sports' },
-  { path: 'sportle', name: 'Sportle' },
+  { path: 'back-of-the-card', name: 'Back of the Card' },
   { path: 'sound-it-out', name: 'Sound It Out' },
   { path: 'goat', name: "Who's the GOAT?" },
 ];
