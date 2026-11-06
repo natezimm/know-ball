@@ -45,6 +45,10 @@ try {
   await page.getByRole('button', { name:'Start practice' }).click();
   assert.match(await page.locator('#error').textContent(), /Choose at least one/);
   await page.getByRole('checkbox', { name:'NHL', exact:true }).check();
+  const tamperedLeague = page.getByRole('checkbox', { name:'NBA', exact:true });
+  await tamperedLeague.evaluate(input => { input.value = '<img src=x onerror=alert(1)>'; });
+  await tamperedLeague.check();
+  assert.equal(await page.locator('#selection').textContent(), 'Five questions · NHL');
   await page.reload();
   await page.getByRole('button', { name:'Practice', exact:true }).click();
   assert.equal(await page.locator('input[name="league"]:checked').count(), 1);
