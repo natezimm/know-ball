@@ -2,10 +2,10 @@ import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { useMemoryStorage } from './memory-storage';
-import { Spordle, shareResult } from './spordle';
+import { LetterJacket, shareResult } from './letter-jacket';
 
 describe('Letter Jacket page', () => {
-  let fixture: ComponentFixture<Spordle>;
+  let fixture: ComponentFixture<LetterJacket>;
   let http: HttpTestingController;
   let el: HTMLElement;
 
@@ -19,10 +19,10 @@ describe('Letter Jacket page', () => {
   beforeEach(async () => {
     useMemoryStorage();
     TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting()] });
-    fixture = TestBed.createComponent(Spordle);
+    fixture = TestBed.createComponent(LetterJacket);
     http = TestBed.inject(HttpTestingController);
     el = fixture.nativeElement;
-    http.expectOne('/api/spordle/games').flush({ gameId: 'g1', wordLength: 5, maxAttempts: 6 });
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g1', wordLength: 5, maxAttempts: 6 });
     await fixture.whenStable();
   });
 
@@ -58,18 +58,18 @@ describe('Letter Jacket page', () => {
 
     'blit'.split('').forEach((letter) => press(letter));
     expect(press('Enter', stats).defaultPrevented).toBe(false);
-    http.expectNone('/api/spordle/games/g1/guesses');
+    http.expectNone('/api/letter-jacket/games/g1/guesses');
 
     press('z');
     expect(press('Enter', stats).defaultPrevented).toBe(true);
-    http.expectOne('/api/spordle/games/g1/guesses').flush({ valid: false });
+    http.expectOne('/api/letter-jacket/games/g1/guesses').flush({ valid: false });
   });
 
   it('starts a new game when the word length changes', async () => {
     const six = el.querySelector<HTMLButtonElement>('[aria-label="6 letters"]')!;
     six.click();
 
-    const request = http.expectOne('/api/spordle/games');
+    const request = http.expectOne('/api/letter-jacket/games');
     expect(request.request.body).toEqual({ wordLength: 6 });
     request.flush({ gameId: 'g2', wordLength: 6, maxAttempts: 6 });
     await fixture.whenStable();

@@ -6,8 +6,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Games\Spordle\Data\sports-words.json" />
-    <EmbeddedResource Include="Games\Spordle\Data\guess-words.txt" />
+    <EmbeddedResource Include="Games\LetterJacket\Data\sports-words.json" />
+    <EmbeddedResource Include="Games\LetterJacket\Data\guess-words.txt" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="KnowBall.UnitTests" />

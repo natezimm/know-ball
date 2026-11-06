@@ -88,7 +88,7 @@ flowchart LR
 ```
 
 - `KnowBall.Domain` holds plain entities (`League`, `Team`, `Player`, `PlayerTeamStint`, `Puzzle`, `UserResult`,
-  `SpordleSession`, `NumbersPlay` and others) with no dependencies.
+  `LetterJacketSession`, `NumbersPlay` and others) with no dependencies.
 - `KnowBall.Application` holds the rules: `GameService` and `PuzzleScheduler` (the shared daily-game engine),
   one folder per game, the import services and player matching. It reaches the database only through
   `ITriviaDb`, a narrow slice of the EF Core context, and the data sources through interfaces such as
@@ -100,7 +100,7 @@ flowchart LR
 
 A daily game plugs into the engine by implementing `IGame` (`Games/GameModels.cs`): generate a puzzle, evaluate
 a guess, unlock clues after misses and reveal the answer. Scouting Report and Career Path are the two
-implementations; Letter Jacket (`Spordle` in the code) and Numbers Don't Lie have their own services because their rounds are not
+implementations; Letter Jacket and Numbers Don't Lie have their own services because their rounds are not
 "guess the player".
 
 ## 3. Signature sequence: a daily puzzle and a guess

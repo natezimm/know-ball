@@ -193,15 +193,15 @@ echo "$SEARCH" | grep -q 'Joki' && result PASS "GET /api/players/search?q=jokic 
 echo "$LATEST" | grep -q '"status":"Succeeded"' && result PASS "GET /api/import-runs/latest reports Succeeded" || result FAIL "latest import run endpoint"
 [ -n "$SUMMARY_JSON" ] && result INFO "data summary: $SUMMARY_JSON"
 
-# Spordle: a new game must not carry its answer, and a nonsense word must be refused.
-GAME="$(curl -fs -X POST -H 'Content-Type: application/json' -d '{"wordLength":5}' http://localhost:5080/api/spordle/games || true)"
+# Letter Jacket: a new game must not carry its answer, and a nonsense word must be refused.
+GAME="$(curl -fs -X POST -H 'Content-Type: application/json' -d '{"wordLength":5}' http://localhost:5080/api/letter-jacket/games || true)"
 GAME_ID="$(echo "$GAME" | grep -o '"gameId":"[^"]*"' | cut -d'"' -f4)"
-BAD_GUESS="$(curl -fs -X POST -H 'Content-Type: application/json' -d '{"word":"zzzzz"}' "http://localhost:5080/api/spordle/games/$GAME_ID/guesses" || true)"
-echo "spordle game: $GAME"; echo "spordle guess: $BAD_GUESS"
+BAD_GUESS="$(curl -fs -X POST -H 'Content-Type: application/json' -d '{"word":"zzzzz"}' "http://localhost:5080/api/letter-jacket/games/$GAME_ID/guesses" || true)"
+echo "letter jacket game: $GAME"; echo "letter jacket guess: $BAD_GUESS"
 if [ -n "$GAME_ID" ] && ! echo "$GAME" | grep -qi 'answer' && echo "$BAD_GUESS" | grep -q '"valid":false'; then
-  result PASS "Spordle: a game starts without its answer and refuses a nonsense word"
+  result PASS "Letter Jacket: a game starts without its answer and refuses a nonsense word"
 else
-  result FAIL "Spordle endpoints"
+  result FAIL "Letter Jacket endpoints"
 fi
 
 # The daily games: today's puzzle must come without its answer, and the retired admin API must refuse

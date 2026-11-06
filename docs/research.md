@@ -177,7 +177,7 @@ Built 2026-10-13.
 
 - **Answers**: 555 sports words written by hand in 26 categories: 152 of four letters, 207 of five and 196 of six.
   The categories double as the game's category clue, so they are deliberately broad ("Golf", "NFL team",
-  "Scores, results & standings"). File: `src/KnowBall.Application/Games/Spordle/Data/sports-words.json`.
+  "Scores, results & standings"). File: `src/KnowBall.Application/Games/LetterJacket/Data/sports-words.json`.
 - **Allowed guesses**: the 40,389 words of four to six letters from the `word-list` npm package, version 4.1.0
   (MIT licence), the same dictionary Nerdle validates against. Copied from Nerdle's installed copy into
   `guess-words.txt` beside the answers.

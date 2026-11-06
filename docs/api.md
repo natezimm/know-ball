@@ -25,15 +25,15 @@ different player returns 409.
 
 ## Letter Jacket
 
-The word game was called Spordle until November 2026. The API, its settings and the code keep that name, and
-`/spordle` in the browser redirects to `/letter-jacket`.
+The word game was called Spordle until November 2026. `/spordle` in the browser redirects to `/letter-jacket`, and
+stats saved in the browser under the old name carry over. The old `/api/spordle` endpoints are gone.
 
 | Endpoint | Purpose |
 | --- | --- |
-| `POST /api/spordle/games` | Start a round (`wordLength` 4, 5 or 6) |
-| `GET /api/spordle/games/{id}` | A saved round, for resuming after a reload |
-| `POST /api/spordle/games/{id}/guesses` | `{ "word": "pitch", "requestId": "<uuid>" }` |
-| `POST /api/spordle/games/{id}/hint` | A category or letter hint |
+| `POST /api/letter-jacket/games` | Start a round (`wordLength` 4, 5 or 6) |
+| `GET /api/letter-jacket/games/{id}` | A saved round, for resuming after a reload |
+| `POST /api/letter-jacket/games/{id}/guesses` | `{ "word": "pitch", "requestId": "<uuid>" }` |
+| `POST /api/letter-jacket/games/{id}/hint` | A category or letter hint |
 
 Rounds are stored in the database, so attempts and hints survive API restarts. A guess that is not a real word
 is reported as invalid and costs nothing. Retrying the same word with the same `requestId` returns its original
@@ -70,7 +70,7 @@ draws only questions marked daily-eligible. See
 Every request to the site, pages and files included, is limited per address by `RateLimits:RequestsPerMinute`
 (300; 0 turns it off; `/health` is exempt). A cold page load makes about a dozen requests. Guesses have stricter
 limits on top: `Games:GuessesPerMinute` (60, also covering practice rounds and Numbers Don't Lie),
-`Spordle:GuessesPerMinute` (20, shared by guesses and hints) and `Spordle:GamesPerMinute` (30). IPv6 addresses
+`LetterJacket:GuessesPerMinute` (20, shared by guesses and hints) and `LetterJacket:GamesPerMinute` (30). IPv6 addresses
 count by their /64. A visitor over a limit gets `429` with `Retry-After` in seconds.
 
 Behind nginx the address comes from `X-Forwarded-For`, trusted only from loopback and the networks in

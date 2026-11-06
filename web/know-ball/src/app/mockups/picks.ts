@@ -1,10 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { MOCK_GAMES } from './mock-data';
 
-const STORAGE_KEY = 'spordle.mockup-picks.v2';
-// v1 keyed the player-guessing game as "spordle"; that path now belongs to the word game.
-const LEGACY_KEY = 'spordle.mockup-picks';
-const RENAMED: Record<string, string> = { spordle: 'scouting-report', 'word-game': 'spordle' };
+const STORAGE_KEY = 'knowball.mockup-picks';
 
 /** Which design options have been starred, per game. Kept in localStorage so a reload doesn't lose them. */
 @Injectable({ providedIn: 'root' })
@@ -40,10 +37,7 @@ export class MockupPicks {
 
 function load(): Record<string, string[]> {
   try {
-    const current = localStorage.getItem(STORAGE_KEY);
-    if (current) return JSON.parse(current);
-    const legacy: Record<string, string[]> = JSON.parse(localStorage.getItem(LEGACY_KEY) ?? '{}');
-    return Object.fromEntries(Object.entries(legacy).map(([game, letters]) => [RENAMED[game] ?? game, letters]));
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
   } catch {
     return {};
   }

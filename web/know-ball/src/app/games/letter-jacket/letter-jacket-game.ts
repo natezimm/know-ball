@@ -2,16 +2,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LetterStatus, mergeKeyboardStatuses } from './scoring';
-import { GuessResult, HintType, SavedGame, SpordleApi } from './spordle-api';
-import { DEFAULT_WORD_LENGTH, WordLength, isWordLength, recordGame } from './spordle-stats';
+import { GuessResult, HintType, SavedGame, LetterJacketApi } from './letter-jacket-api';
+import { DEFAULT_WORD_LENGTH, WordLength, isWordLength, recordGame } from './letter-jacket-stats';
+import { KEYS, adoptOldKeys } from './saved-keys';
 
 export const MAX_ATTEMPTS = 6;
 /** Tiles flip one after another; these match the grid's CSS animation. */
 export const FLIP_STAGGER_MS = 300;
 export const FLIP_DURATION_MS = 500;
 
-const LENGTH_KEY = 'knowball.spordle.wordLength';
-const ROUND_KEY = 'knowball.spordle.round';
+const LENGTH_KEY = KEYS.wordLength;
+const ROUND_KEY = KEYS.round;
 
 interface SavedRound {
   gameId: string;
@@ -43,12 +44,12 @@ export interface GameResult {
 }
 
 /**
- * One Spordle game at a time. The server holds the answer and scores each guess; this keeps
+ * One LetterJacket game at a time. The server holds the answer and scores each guess; this keeps
  * what the player sees: guesses so far, the row being typed, keyboard colours and hints.
  */
 @Injectable()
-export class SpordleGame {
-  private readonly api = inject(SpordleApi);
+export class LetterJacketGame {
+  private readonly api = inject(LetterJacketApi);
   private timers: ReturnType<typeof setTimeout>[] = [];
   private request?: Subscription;
   private hintRequest?: Subscription;
@@ -87,6 +88,7 @@ export class SpordleGame {
   resume(): void {
     let saved: SavedRound | null = null;
     try {
+      adoptOldKeys();
       const value = JSON.parse(localStorage.getItem(ROUND_KEY) ?? 'null');
       if (typeof value?.gameId === 'string' && Number.isFinite(value.startedAt)) saved = value;
     } catch { /* Missing or damaged storage starts a fresh round. */ }
@@ -391,6 +393,7 @@ function revealTime(wordLength: number): number {
 
 function readStoredLength(): WordLength {
   try {
+    adoptOldKeys();
     const stored = Number(localStorage.getItem(LENGTH_KEY));
     return isWordLength(stored) ? stored : DEFAULT_WORD_LENGTH;
   } catch {

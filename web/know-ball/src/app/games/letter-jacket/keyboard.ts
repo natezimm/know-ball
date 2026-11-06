@@ -5,7 +5,7 @@ const ROWS = [[...'qwertyuiop'], [...'asdfghjkl'], ['Enter', ...'zxcvbnm', 'Back
 
 /** On-screen keyboard. Keys take the colour of the best result seen for that letter. */
 @Component({
-  selector: 'app-spordle-keyboard',
+  selector: 'app-letter-jacket-keyboard',
   template: `
     <div class="keyboard" role="group" aria-label="Keyboard">
       @for (row of rows; track $index) {
@@ -46,7 +46,7 @@ const ROWS = [[...'qwertyuiop'], [...'asdfghjkl'], ['Enter', ...'zxcvbnm', 'Back
     .key.absent { background: var(--miss); border-color: var(--miss-line); color: var(--miss-ink); }
   `,
 })
-export class SpordleKeyboard {
+export class LetterJacketKeyboard {
   readonly statuses = input<Readonly<Record<string, LetterStatus>>>({});
   /** A letter, "Enter" or "Backspace". */
   readonly pressed = output<string>();

@@ -37,22 +37,22 @@ export interface HintResult {
 }
 
 @Injectable({ providedIn: 'root' })
-export class SpordleApi {
+export class LetterJacketApi {
   private readonly http = inject(HttpClient);
 
   startGame(wordLength: number): Observable<StartedGame> {
-    return this.http.post<StartedGame>('/api/spordle/games', { wordLength });
+    return this.http.post<StartedGame>('/api/letter-jacket/games', { wordLength });
   }
 
   getGame(gameId: string): Observable<SavedGame> {
-    return this.http.get<SavedGame>(`/api/spordle/games/${encodeURIComponent(gameId)}`);
+    return this.http.get<SavedGame>(`/api/letter-jacket/games/${encodeURIComponent(gameId)}`);
   }
 
   submitGuess(gameId: string, word: string, requestId: string): Observable<GuessResult> {
-    return this.http.post<GuessResult>(`/api/spordle/games/${encodeURIComponent(gameId)}/guesses`, { word, requestId });
+    return this.http.post<GuessResult>(`/api/letter-jacket/games/${encodeURIComponent(gameId)}/guesses`, { word, requestId });
   }
 
   requestHint(gameId: string, type: HintType): Observable<HintResult> {
-    return this.http.post<HintResult>(`/api/spordle/games/${encodeURIComponent(gameId)}/hint`, { type });
+    return this.http.post<HintResult>(`/api/letter-jacket/games/${encodeURIComponent(gameId)}/hint`, { type });
   }
 }

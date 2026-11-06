@@ -1,13 +1,13 @@
 using System.Reflection;
 using System.Text.Json;
 
-namespace KnowBall.Application.Games.Spordle;
+namespace KnowBall.Application.Games.LetterJacket;
 
 /// <summary>
-/// The words Spordle can use: hand-picked sports answers grouped by category, plus a general
+/// The words LetterJacket can use: hand-picked sports answers grouped by category, plus a general
 /// English dictionary of guesses that are accepted but never chosen as the answer.
 /// </summary>
-public sealed class SpordleWordBank
+public sealed class LetterJacketWordBank
 {
     public const int DefaultLength = 5;
     public static readonly IReadOnlyList<int> SupportedLengths = [4, 5, 6];
@@ -18,7 +18,7 @@ public sealed class SpordleWordBank
 
     /// <param name="answersByCategory">Category name to a space-separated list of answers.</param>
     /// <param name="dictionary">Extra words that count as valid guesses.</param>
-    public SpordleWordBank(IReadOnlyDictionary<string, string> answersByCategory, IEnumerable<string> dictionary)
+    public LetterJacketWordBank(IReadOnlyDictionary<string, string> answersByCategory, IEnumerable<string> dictionary)
     {
         foreach (var (category, words) in answersByCategory)
         {
@@ -40,7 +40,7 @@ public sealed class SpordleWordBank
     }
 
     /// <summary>The lists shipped with the app: sports-words.json and guess-words.txt.</summary>
-    public static SpordleWordBank LoadEmbedded()
+    public static LetterJacketWordBank LoadEmbedded()
     {
         using var answers = OpenResource("sports-words.json");
         var byCategory = JsonSerializer.Deserialize<Dictionary<string, string>>(answers)
@@ -50,7 +50,7 @@ public sealed class SpordleWordBank
         using var reader = new StreamReader(OpenResource("guess-words.txt"));
         var dictionary = reader.ReadToEnd().Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        return new SpordleWordBank(byCategory, dictionary);
+        return new LetterJacketWordBank(byCategory, dictionary);
     }
 
     public static int NormalizeLength(int? requested) =>

@@ -41,7 +41,7 @@ Sources__Bref__Directory="$HISTORY" Sources__Wikidata__Endpoint="http://127.0.0.
 export ASPNETCORE_URLS="http://127.0.0.1:${E2E_PORT:-5180}"
 export ASPNETCORE_WEBROOT="$SITE"
 export Games__GuessesPerMinute=10000
-export Spordle__GuessesPerMinute=10000
-export Spordle__GamesPerMinute=10000
+export LetterJacket__GuessesPerMinute=10000
+export LetterJacket__GamesPerMinute=10000
 export RateLimits__RequestsPerMinute=0
 exec dotnet "$ROOT/src/KnowBall.Api/bin/Release/$TFM/KnowBall.Api.dll"

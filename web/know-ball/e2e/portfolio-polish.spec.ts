@@ -102,7 +102,7 @@ for (const action of ['4 letters', 'New game']) {
     await page.getByRole('button', { name: action, exact: true }).click();
     await confirm.getByRole('button', { name: 'Start new word' }).click();
     await expect(page.locator('.status')).toHaveText('Guess 1 of 6');
-    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('knowball.spordle.stats')!).byLength['5'])).toMatchObject({ totalGames: 1, wins: 0 });
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('knowball.letter-jacket.stats')!).byLength['5'])).toMatchObject({ totalGames: 1, wins: 0 });
   });
 }
 
@@ -110,7 +110,7 @@ for (const endpoint of ['guesses', 'hint']) {
   test(`an expired Letter Jacket ${endpoint} offers recovery without recording a loss`, async ({ page }) => {
     await page.goto('/letter-jacket');
     await expect(page.locator('.status')).toHaveText('Guess 1 of 6');
-    await page.route(`**/api/spordle/games/*/${endpoint}`, (route) => route.fulfill({ status: 404, json: { error: 'Game not found or expired' } }));
+    await page.route(`**/api/letter-jacket/games/*/${endpoint}`, (route) => route.fulfill({ status: 404, json: { error: 'Game not found or expired' } }));
     if (endpoint === 'guesses') {
       await page.keyboard.type('about');
       await page.keyboard.press('Enter');

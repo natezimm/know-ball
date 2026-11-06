@@ -1,3 +1,4 @@
+import { KEYS, adoptOldKeys } from './saved-keys';
 export const WORD_LENGTHS = [4, 5, 6] as const;
 export type WordLength = (typeof WORD_LENGTHS)[number];
 export const DEFAULT_WORD_LENGTH: WordLength = 5;
@@ -19,7 +20,7 @@ interface StoredStats {
   byLength: Record<string, LengthStats>;
 }
 
-const STORAGE_KEY = 'knowball.spordle.stats';
+const STORAGE_KEY = KEYS.stats;
 
 const emptyStats = (): LengthStats => ({
   totalGames: 0,
@@ -39,6 +40,7 @@ const emptyAll = (): StoredStats => ({
 export const isWordLength = (value: unknown): value is WordLength => WORD_LENGTHS.includes(value as WordLength);
 
 function loadAll(): StoredStats {
+  adoptOldKeys();
   const all = emptyAll();
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');

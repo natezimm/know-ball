@@ -4,7 +4,7 @@ import { EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { NumbersDontLie, questionLabel, shareText } from './numbers-dont-lie';
-import { useMemoryStorage } from '../spordle/memory-storage';
+import { useMemoryStorage } from '../letter-jacket/memory-storage';
 import { easternDate } from '../../core/games';
 
 const ROOT = '/api/numbers-dont-lie';

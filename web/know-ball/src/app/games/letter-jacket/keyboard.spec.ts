@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { SpordleKeyboard } from './keyboard';
+import { LetterJacketKeyboard } from './keyboard';
 
-describe('SpordleKeyboard', () => {
+describe('LetterJacketKeyboard', () => {
   async function render() {
-    const fixture = TestBed.createComponent(SpordleKeyboard);
+    const fixture = TestBed.createComponent(LetterJacketKeyboard);
     fixture.componentRef.setInput('statuses', { e: 'correct', u: 'present', z: 'absent' });
     await fixture.whenStable();
     const keys = [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('.key')];

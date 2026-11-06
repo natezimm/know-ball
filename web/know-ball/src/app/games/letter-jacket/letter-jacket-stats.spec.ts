@@ -1,7 +1,7 @@
 import { useMemoryStorage } from './memory-storage';
-import { formatTime, getStats, recordGame, resetStats } from './spordle-stats';
+import { formatTime, getStats, recordGame, resetStats } from './letter-jacket-stats';
 
-describe('spordle stats', () => {
+describe('letter-jacket stats', () => {
   beforeEach(() => useMemoryStorage());
 
   it('starts empty', () => {
@@ -32,7 +32,7 @@ describe('spordle stats', () => {
   });
 
   it('reads stats saved before the guess chart existed', () => {
-    localStorage.setItem('knowball.spordle.stats', JSON.stringify({ version: 1, byLength: { '5': { totalGames: 3, wins: 2 } } }));
+    localStorage.setItem('knowball.letter-jacket.stats', JSON.stringify({ version: 1, byLength: { '5': { totalGames: 3, wins: 2 } } }));
     expect(getStats(5).distribution).toEqual([0, 0, 0, 0, 0, 0]);
     recordGame(5, { won: true, guesses: 2, timeMs: null });
     expect(getStats(5)).toMatchObject({ totalGames: 4, wins: 3, distribution: [0, 1, 0, 0, 0, 0] });
@@ -70,7 +70,7 @@ describe('spordle stats', () => {
   });
 
   it('survives unreadable saved data', () => {
-    localStorage.setItem('knowball.spordle.stats', '{not json');
+    localStorage.setItem('knowball.letter-jacket.stats', '{not json');
     expect(getStats(5).totalGames).toBe(0);
   });
 

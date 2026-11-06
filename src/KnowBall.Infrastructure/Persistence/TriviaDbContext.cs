@@ -19,7 +19,7 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
     public DbSet<Puzzle> Puzzles => Set<Puzzle>();
     public DbSet<UserResult> UserResults => Set<UserResult>();
     public DbSet<ImportRun> ImportRuns => Set<ImportRun>();
-    public DbSet<SpordleSession> SpordleSessions => Set<SpordleSession>();
+    public DbSet<LetterJacketSession> LetterJacketSessions => Set<LetterJacketSession>();
 
     public void ClearTracked() => ChangeTracker.Clear();
 
@@ -44,7 +44,7 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
             e.HasIndex(x => x.Date).IsUnique();
             e.HasOne<NumbersCatalogue>().WithMany().HasForeignKey(x => x.CatalogueId).OnDelete(DeleteBehavior.Restrict);
         });
-        b.Entity<SpordleSession>(e =>
+        b.Entity<LetterJacketSession>(e =>
         {
             e.Property(x => x.Answer).HasMaxLength(6);
             e.Property(x => x.Category).HasMaxLength(128);

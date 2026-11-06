@@ -8,9 +8,9 @@ using KnowBall.Infrastructure.Persistence;
 
 namespace KnowBall.IntegrationTests;
 
-/// <summary>The Spordle endpoints as the Angular app calls them.</summary>
+/// <summary>The LetterJacket endpoints as the Angular app calls them.</summary>
 [Collection(ApiCollection.Name)]
-public sealed class SpordleApiTests(ApiFactory factory)
+public sealed class LetterJacketApiTests(ApiFactory factory)
 {
     // Real words that are not sports answers, so a game played with them is always lost.
     private static readonly string[] WrongGuesses = ["about", "other", "which", "their", "there", "would"];
@@ -19,15 +19,15 @@ public sealed class SpordleApiTests(ApiFactory factory)
 
     private async Task<string> StartGameAsync(int wordLength = 5)
     {
-        var response = await _client.PostAsJsonAsync("/api/spordle/games", new { wordLength });
+        var response = await _client.PostAsJsonAsync("/api/letter-jacket/games", new { wordLength });
         return (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("gameId").GetString()!;
     }
 
     private Task<HttpResponseMessage> GuessAsync(string gameId, string word) =>
-        _client.PostAsJsonAsync($"/api/spordle/games/{gameId}/guesses", new { word });
+        _client.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/guesses", new { word });
 
     private Task<HttpResponseMessage> HintAsync(string gameId, string type) =>
-        _client.PostAsJsonAsync($"/api/spordle/games/{gameId}/hint", new { type });
+        _client.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/hint", new { type });
 
     [Fact]
     public async Task Resume_endpoint_returns_the_board_and_only_reveals_a_finished_answer()
@@ -35,7 +35,7 @@ public sealed class SpordleApiTests(ApiFactory factory)
         var gameId = await StartGameAsync();
         (await GuessAsync(gameId, "about")).EnsureSuccessStatusCode();
         var hint = await (await HintAsync(gameId, "letter")).Content.ReadFromJsonAsync<JsonElement>();
-        var response = await _client.GetAsync($"/api/spordle/games/{gameId}");
+        var response = await _client.GetAsync($"/api/letter-jacket/games/{gameId}");
         response.EnsureSuccessStatusCode();
         var state = await response.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal(gameId, state.GetProperty("gameId").GetString());
@@ -47,18 +47,18 @@ public sealed class SpordleApiTests(ApiFactory factory)
         Assert.All(guess.GetProperty("score").EnumerateArray(), s => Assert.Contains(s.GetString(), new[] { "correct", "present", "absent" }));
         Assert.Equal(hint.GetRawText(), state.GetProperty("letterHint").GetRawText());
         foreach (var word in WrongGuesses.Skip(1)) (await GuessAsync(gameId, word)).EnsureSuccessStatusCode();
-        var finished = await _client.GetFromJsonAsync<JsonElement>($"/api/spordle/games/{gameId}");
+        var finished = await _client.GetFromJsonAsync<JsonElement>($"/api/letter-jacket/games/{gameId}");
         Assert.True(finished.GetProperty("complete").GetBoolean());
         Assert.False(finished.GetProperty("won").GetBoolean());
         Assert.Equal(6, finished.GetProperty("guesses").GetArrayLength());
         Assert.Equal(5, finished.GetProperty("answer").GetString()!.Length);
-        Assert.Equal(HttpStatusCode.NotFound, (await _client.GetAsync("/api/spordle/games/nope")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await _client.GetAsync("/api/letter-jacket/games/nope")).StatusCode);
     }
 
     [Fact]
     public async Task Starting_a_game_returns_only_an_id_length_and_attempt_limit()
     {
-        var response = await _client.PostAsJsonAsync("/api/spordle/games", new { wordLength = 4 });
+        var response = await _client.PostAsJsonAsync("/api/letter-jacket/games", new { wordLength = 4 });
         var body = await response.Content.ReadFromJsonAsync<JsonElement>();
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -70,7 +70,7 @@ public sealed class SpordleApiTests(ApiFactory factory)
     [Fact]
     public async Task A_game_can_start_without_a_request_body()
     {
-        var response = await _client.PostAsync("/api/spordle/games", content: null);
+        var response = await _client.PostAsync("/api/letter-jacket/games", content: null);
         var body = await response.Content.ReadFromJsonAsync<JsonElement>();
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -153,12 +153,12 @@ public sealed class SpordleApiTests(ApiFactory factory)
         using (var firstHost = factory.WithWebHostBuilder(_ => { }))
         {
             using var client = firstHost.CreateClient();
-            var started = await client.PostAsJsonAsync("/api/spordle/games", new { wordLength = 5 });
+            var started = await client.PostAsJsonAsync("/api/letter-jacket/games", new { wordLength = 5 });
             gameId = (await started.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("gameId").GetString()!;
-            var guess = await client.PostAsJsonAsync($"/api/spordle/games/{gameId}/guesses", new { word = "about", requestId });
+            var guess = await client.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/guesses", new { word = "about", requestId });
             guess.EnsureSuccessStatusCode();
             firstResponse = await guess.Content.ReadAsStringAsync();
-            var hint = await client.PostAsJsonAsync($"/api/spordle/games/{gameId}/hint", new { type = "letter" });
+            var hint = await client.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/hint", new { type = "letter" });
             hint.EnsureSuccessStatusCode();
             letter = await hint.Content.ReadAsStringAsync();
         }
@@ -166,22 +166,22 @@ public sealed class SpordleApiTests(ApiFactory factory)
         // A fresh host and service provider reading only the shared database.
         using var restarted = factory.WithWebHostBuilder(_ => { });
         using var resumed = restarted.CreateClient();
-        var replay = await resumed.PostAsJsonAsync($"/api/spordle/games/{gameId}/guesses", new { word = "about", requestId });
+        var replay = await resumed.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/guesses", new { word = "about", requestId });
         replay.EnsureSuccessStatusCode();
         Assert.Equal(firstResponse, await replay.Content.ReadAsStringAsync());
-        var hintAgain = await resumed.PostAsJsonAsync($"/api/spordle/games/{gameId}/hint", new { type = "letter" });
+        var hintAgain = await resumed.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/hint", new { type = "letter" });
         hintAgain.EnsureSuccessStatusCode();
         Assert.Equal(letter, await hintAgain.Content.ReadAsStringAsync());
         for (var i = 1; i < WrongGuesses.Length; i++)
         {
-            var response = await resumed.PostAsJsonAsync($"/api/spordle/games/{gameId}/guesses", new { word = WrongGuesses[i] });
+            var response = await resumed.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/guesses", new { word = WrongGuesses[i] });
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadFromJsonAsync<JsonElement>();
             Assert.Equal(5 - i, body.GetProperty("attemptsRemaining").GetInt32());
             Assert.Equal(i == 5, body.TryGetProperty("answer", out _));
         }
         Assert.Equal(HttpStatusCode.Conflict,
-            (await resumed.PostAsJsonAsync($"/api/spordle/games/{gameId}/guesses", new { word = "other" })).StatusCode);
+            (await resumed.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/guesses", new { word = "other" })).StatusCode);
     }
 
     [Fact]
@@ -192,7 +192,7 @@ public sealed class SpordleApiTests(ApiFactory factory)
         using var a = hostA.CreateClient();
         using var b = hostB.CreateClient();
         var gameId = await StartGameAsync();
-        var uri = $"/api/spordle/games/{gameId}/guesses";
+        var uri = $"/api/letter-jacket/games/{gameId}/guesses";
         var requestId = Guid.NewGuid();
         var duplicate = await Task.WhenAll(
             a.PostAsJsonAsync(uri, new { word = "about", requestId }),
@@ -216,8 +216,8 @@ public sealed class SpordleApiTests(ApiFactory factory)
         Assert.Equal([3, 4], remaining.Order());
 
         var hints = await Task.WhenAll(
-            a.PostAsJsonAsync($"/api/spordle/games/{gameId}/hint", new { type = "letter" }),
-            b.PostAsJsonAsync($"/api/spordle/games/{gameId}/hint", new { type = "letter" }));
+            a.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/hint", new { type = "letter" }),
+            b.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/hint", new { type = "letter" }));
         Assert.All(hints, h => h.EnsureSuccessStatusCode());
         Assert.Equal(await hints[0].Content.ReadAsStringAsync(), await hints[1].Content.ReadAsStringAsync());
         var last = await Task.WhenAll(Enumerable.Range(0, 6).Select(i =>
@@ -226,7 +226,7 @@ public sealed class SpordleApiTests(ApiFactory factory)
         Assert.Equal(3, last.Count(r => r.StatusCode == HttpStatusCode.Conflict));
         await using var scope = factory.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<TriviaDbContext>();
-        var session = await db.SpordleSessions.SingleAsync(s => s.Id == Guid.Parse(gameId));
+        var session = await db.LetterJacketSessions.SingleAsync(s => s.Id == Guid.Parse(gameId));
         Assert.Equal(6, session.Attempts);
         Assert.True(session.Complete);
     }
@@ -237,26 +237,26 @@ public sealed class SpordleApiTests(ApiFactory factory)
         var gameId = await StartGameAsync();
         await using var scope = factory.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<TriviaDbContext>();
-        var session = await db.SpordleSessions.SingleAsync(s => s.Id == Guid.Parse(gameId));
+        var session = await db.LetterJacketSessions.SingleAsync(s => s.Id == Guid.Parse(gameId));
         session.ExpiresAtUtc = DateTime.UtcNow.AddHours(-1);
         await db.SaveChangesAsync();
         Assert.Equal(HttpStatusCode.NotFound, (await GuessAsync(gameId, "about")).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await HintAsync(gameId, "letter")).StatusCode);
         await StartGameAsync();
-        Assert.False(await db.SpordleSessions.AnyAsync(s => s.Id == Guid.Parse(gameId)));
+        Assert.False(await db.LetterJacketSessions.AnyAsync(s => s.Id == Guid.Parse(gameId)));
     }
 
     [Fact]
     public async Task Guessing_too_fast_is_rate_limited()
     {
-        using var limited = factory.WithWebHostBuilder(b => b.UseSetting("Spordle:GuessesPerMinute", "2"));
+        using var limited = factory.WithWebHostBuilder(b => b.UseSetting("LetterJacket:GuessesPerMinute", "2"));
         var client = limited.CreateClient();
-        var start = await client.PostAsJsonAsync("/api/spordle/games", new { wordLength = 5 });
+        var start = await client.PostAsJsonAsync("/api/letter-jacket/games", new { wordLength = 5 });
         var gameId = (await start.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("gameId").GetString();
 
         var statuses = new List<HttpStatusCode>();
         for (var i = 0; i < 3; i++)
-            statuses.Add((await client.PostAsJsonAsync($"/api/spordle/games/{gameId}/guesses", new { word = "zzzzz" })).StatusCode);
+            statuses.Add((await client.PostAsJsonAsync($"/api/letter-jacket/games/{gameId}/guesses", new { word = "zzzzz" })).StatusCode);
 
         Assert.Equal([HttpStatusCode.OK, HttpStatusCode.OK, HttpStatusCode.TooManyRequests], statuses);
     }

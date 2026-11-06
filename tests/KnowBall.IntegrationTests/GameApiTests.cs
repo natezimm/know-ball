@@ -62,7 +62,7 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
     {
         var client = NewPlayer();
 
-        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/spordle/daily")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/letter-jacket/daily")).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/players/daily")).StatusCode);
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/players/search?q=curry")).StatusCode);
     }

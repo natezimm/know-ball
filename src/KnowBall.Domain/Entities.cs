@@ -153,9 +153,8 @@ public enum GameType
     /// value is stored as text; the name is not shown anywhere.</summary>
     Sportle = 6,
     SoundItOut = 7,
-    /// <summary>The word game, shown to players as Letter Jacket (Spordle until November 2026). The value is stored
-    /// as text, so the code name stays. Value 1 had this name before an earlier rename.</summary>
-    Spordle = 8,
+    /// <summary>The word game, called Spordle until November 2026. No stored rows use this value.</summary>
+    LetterJacket = 8,
 }
 
 public enum PuzzleStatus
