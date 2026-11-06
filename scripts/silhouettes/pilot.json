@@ -13,7 +13,31 @@
       "license": "CC BY-SA 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
       "keep": "Both arms and hands; the chalk cloud is not part of the player.",
-      "prompts": { "box": null, "points": [] }
+      "prompts": {
+        "box": null,
+        "points": [
+          [852, 1183, 1],
+          [847, 1459, 1],
+          [775, 1754, 1],
+          [760, 2071, 1],
+          [852, 2071, 1],
+          [755, 2285, 1],
+          [847, 2254, 1],
+          [571, 1357, 1],
+          [408, 1408, 1],
+          [326, 1459, 1],
+          [1020, 1285, 1],
+          [1224, 1306, 1],
+          [1367, 1326, 1],
+          [775, 357, 0],
+          [816, 1020, 0],
+          [1173, 1714, 0],
+          [296, 1275, 0],
+          [928, 1571, 0],
+          [153, 1887, 0],
+          [428, 969, 0]
+        ]
+      }
     },
     {
       "key": "dirk-fadeaway-2008",
@@ -25,7 +49,38 @@
       "license": "CC BY-SA 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
       "keep": "Shooting arm, ball and the raised leg; leave out the defenders. The right shoe is cut off by the frame, so do not invent it.",
-      "prompts": { "box": null, "points": [] }
+      "prompts": {
+        "box": null,
+        "points": [
+          [1611, 956, 1],
+          [1638, 603, 1],
+          [1690, 537, 1],
+          [1546, 681, 1],
+          [1179, 838, 1],
+          [1376, 1048, 1],
+          [1703, 838, 1],
+          [1808, 1114, 1],
+          [1507, 1310, 1],
+          [1245, 1965, 1],
+          [943, 2031, 1],
+          [891, 2555, 1],
+          [904, 2686, 1],
+          [1284, 2555, 1],
+          [1271, 2777, 1],
+          [590, 1310, 0],
+          [1035, 393, 0],
+          [852, 786, 0],
+          [563, 1900, 0],
+          [197, 2777, 0],
+          [917, 1533, 0],
+          [1022, 2358, 0],
+          [1488, 1530, 1],
+          [1158, 1716, 1],
+          [1426, 1798, 1],
+          [1034, 1860, 1],
+          [868, 2501, 1]
+        ]
+      }
     },
     {
       "key": "dr-j-dunk-1981",
@@ -37,7 +92,32 @@
       "license": "CC BY 2.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
       "keep": "The ball cocked behind his head; leave out the defender.",
-      "prompts": { "box": null, "points": [] }
+      "prompts": {
+        "box": null,
+        "points": [
+          [610, 575, 1],
+          [650, 690, 1],
+          [660, 820, 1],
+          [740, 550, 1],
+          [710, 515, 1],
+          [580, 575, 1],
+          [660, 560, 1],
+          [560, 880, 1],
+          [560, 1000, 1],
+          [575, 1130, 1],
+          [720, 1020, 1],
+          [735, 1080, 1],
+          [770, 1190, 1],
+          [870, 810, 0],
+          [840, 920, 0],
+          [830, 1060, 0],
+          [755, 790, 0],
+          [800, 1300, 0],
+          [180, 300, 0],
+          [190, 400, 0],
+          [600, 480, 0]
+        ]
+      }
     },
     {
       "key": "kobe-rim-2005",
@@ -49,7 +129,33 @@
       "license": "Public domain in the U.S. (federal government work)",
       "licenseUrl": "https://commons.wikimedia.org/wiki/File:Kobe_Bryant_dunk.jpg",
       "keep": "Raised arms, crossed legs and the ball; leave out the rim, net and other players.",
-      "prompts": { "box": null, "points": [] }
+      "prompts": {
+        "box": null,
+        "points": [
+          [1362, 1087, 1],
+          [1140, 917, 1],
+          [1120, 1048, 1],
+          [1415, 1009, 1],
+          [1376, 891, 1],
+          [1153, 1310, 1],
+          [1376, 1310, 1],
+          [1166, 1336, 1],
+          [1218, 1638, 1],
+          [1179, 1873, 1],
+          [1258, 1991, 1],
+          [1415, 2096, 1],
+          [1402, 1991, 1],
+          [1074, 812, 0],
+          [1186, 858, 0],
+          [1310, 550, 0],
+          [1572, 681, 0],
+          [563, 1808, 0],
+          [524, 1572, 0],
+          [852, 1611, 0],
+          [105, 1834, 0],
+          [1572, 1900, 0]
+        ]
+      }
     },
     {
       "key": "wilt-100-1962",
@@ -61,7 +167,30 @@
       "license": "Public domain in the U.S. (copyright not renewed); released crop only",
       "licenseUrl": "https://commons.wikimedia.org/wiki/File:Wilt_Chamberlain_100_Point_Game_1962.jpg",
       "keep": "Wilt and the paper sign he holds, in one outline.",
-      "prompts": { "box": null, "points": [] }
+      "prompts": {
+        "box": null,
+        "points": [
+          [850, 590, 1],
+          [708, 153, 1],
+          [944, 2006, 1],
+          [236, 1298, 1],
+          [1298, 1475, 1],
+          [1652, 1475, 1],
+          [1298, 2301, 1],
+          [354, 2183, 1],
+          [1652, 1180, 1],
+          [1947, 826, 1],
+          [118, 590, 0],
+          [1180, 354, 0],
+          [1947, 531, 0],
+          [1342, 583, 1],
+          [1342, 1060, 1],
+          [1943, 1236, 1],
+          [1589, 742, 1],
+          [1943, 2384, 0],
+          [1996, 1536, 0]
+        ]
+      }
     }
   ]
 }
