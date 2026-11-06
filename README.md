@@ -163,7 +163,7 @@ docs/                         architecture, ADRs, API and importer reference, ar
   queue that is already built, and stats, streaks and an archive like the other games
   ([current scope](docs/numbers-dont-lie/README.md)).
 - **A daily Letter Jacket** on the shared engine, keeping today's open-ended rounds as practice.
-- **More games** shown as "On deck" on the home page: Geo Sports, Back of the Card, Sound It Out and Who's the GOAT?
+- **More games**, each designed in the mockups lab before it is built.
 - **Accounts**, by linking an account to a browser's anonymous id, so progress can follow a player across devices.
 
 ## Data and images
