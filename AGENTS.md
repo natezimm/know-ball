@@ -94,8 +94,7 @@ rather than raw values or unstyled controls.
   README.
 - **Retired features stay retired.** The photo game (Who's That Sportsman?) was removed; its database values,
   such as `GameType.Silhouette` and the `photos` volume, are kept for compatibility. Do not reuse them.
-- **Names are our own.** The word game was called Spordle until November 2026; it is Letter Jacket everywhere now.
-  Only the `/spordle` page redirect, the browser-key carry-over in `saved-keys.ts`, the old migrations and
-  `docs/archive/` still name it. Never name another game Know Ball resembles in copy, share text,
+- **Names are our own.** The word game is Letter Jacket everywhere: copy, URLs, API, settings, code and data.
+  Never bring back an earlier name for a renamed game. Never name another game Know Ball resembles in copy, share text,
   code or docs, keep share text to Know Ball's own marks, and check a new game name for existing games and
   trademarks first ([docs/research.md](docs/research.md#naming-the-games)).

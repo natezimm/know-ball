@@ -153,7 +153,7 @@ public enum GameType
     /// value is stored as text; the name is not shown anywhere.</summary>
     Sportle = 6,
     SoundItOut = 7,
-    /// <summary>The word game, called Spordle until November 2026. No stored rows use this value.</summary>
+    /// <summary>The word game. No stored rows use this value.</summary>
     LetterJacket = 8,
 }
 

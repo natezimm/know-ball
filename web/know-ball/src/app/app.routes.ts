@@ -28,8 +28,6 @@ export const routes: Routes = [
     data: { description: 'Letter Jacket: six guesses to find a sports word of 4, 5 or 6 letters.' } satisfies PageMetaData,
     loadComponent: () => import('./games/letter-jacket/letter-jacket').then((m) => m.LetterJacket),
   },
-  // The word game was called Spordle until November 2026; old links and shares still land on it.
-  { path: 'spordle', redirectTo: 'letter-jacket' },
   {
     path: 'scouting-report',
     title: 'Scouting Report — Know Ball',

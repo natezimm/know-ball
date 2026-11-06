@@ -490,7 +490,7 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.ToTable("Puzzles");
                 });
 
-            modelBuilder.Entity("KnowBall.Domain.SpordleSession", b =>
+            modelBuilder.Entity("KnowBall.Domain.LetterJacketSession", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -533,7 +533,7 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ExpiresAtUtc");
 
-                    b.ToTable("SpordleSessions");
+                    b.ToTable("LetterJacketSessions");
                 });
 
             modelBuilder.Entity("KnowBall.Domain.Team", b =>

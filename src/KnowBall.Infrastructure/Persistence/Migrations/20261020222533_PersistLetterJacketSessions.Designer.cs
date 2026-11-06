@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KnowBall.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TriviaDbContext))]
-    [Migration("20261106142359_RenameSpordleToLetterJacket")]
-    partial class RenameSpordleToLetterJacket
+    [Migration("20261020222533_PersistLetterJacketSessions")]
+    partial class PersistLetterJacketSessions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.14")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -139,157 +139,6 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Leagues");
-                });
-
-            modelBuilder.Entity("KnowBall.Domain.LetterJacketSession", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)");
-
-                    b.Property<int>("Attempts")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<bool>("Complete")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ExpiresAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("GuessesJson")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("LetterHintPosition")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Revision")
-                        .IsConcurrencyToken()
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SolvedPositions")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExpiresAtUtc");
-
-                    b.ToTable("LetterJacketSessions");
-                });
-
-            modelBuilder.Entity("KnowBall.Domain.NumbersCatalogue", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<string>("ContentJson")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("ImportedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NumbersCatalogues");
-                });
-
-            modelBuilder.Entity("KnowBall.Domain.NumbersPlay", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AnswersJson")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly?>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<DateTimeOffset?>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Filters")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Owner")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Revision")
-                        .IsConcurrencyToken()
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SecretJson")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("StartKey")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExpiresAt");
-
-                    b.HasIndex("Owner", "StartKey")
-                        .IsUnique();
-
-                    b.ToTable("NumbersPlays");
-                });
-
-            modelBuilder.Entity("KnowBall.Domain.NumbersQuiz", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AlgorithmVersion")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
-                    b.Property<string>("CatalogueId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<string>("QuestionsJson")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatalogueId");
-
-                    b.HasIndex("Date")
-                        .IsUnique();
-
-                    b.ToTable("NumbersQuizzes");
                 });
 
             modelBuilder.Entity("KnowBall.Domain.Player", b =>
@@ -587,6 +436,52 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.ToTable("Puzzles");
                 });
 
+            modelBuilder.Entity("KnowBall.Domain.LetterJacketSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<bool>("Complete")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GuessesJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("LetterHintPosition")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SolvedPositions")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAtUtc");
+
+                    b.ToTable("LetterJacketSessions");
+                });
+
             modelBuilder.Entity("KnowBall.Domain.Team", b =>
                 {
                     b.Property<int>("Id")
@@ -713,15 +608,6 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("KnowBall.Domain.NumbersQuiz", b =>
-                {
-                    b.HasOne("KnowBall.Domain.NumbersCatalogue", null)
-                        .WithMany()
-                        .HasForeignKey("CatalogueId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("KnowBall.Domain.Player", b =>

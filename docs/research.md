@@ -203,7 +203,7 @@ from those two, and from each other, as possible: Scoreboard, Chalk Talk, Back P
 
 ## Naming the site
 
-"Spordle" became the name of the word game on 2026-10-13, so the site needed its own name. **Decided 2026-10-13: Know
+On 2026-10-13 the project's working name went to the word game, so the site needed its own name. **Decided 2026-10-13: Know
 Ball.** The shortlist below was checked 10-13 by searching for existing sports trivia products and by DNS lookup. A search finding
 nothing is not proof a name is free, and "no record" means the registry returned no such domain.
 
@@ -234,7 +234,7 @@ lives on a path of the Know Ball domain.
 
 | Name | For | Existing game or app | Trademark records | Result |
 | --- | --- | --- | --- | --- |
-| Spordle | The word game, until November 2026 | Sits beside "Sportle" and "Sportsdle" sports games, and its "-dle" ending beside WORDLE, a New York Times mark | Not searched | Renamed |
+| The word game's first name | The word game, until November 2026 | A "-dle" name beside the "Sportle" and "Sportsdle" sports games, and beside WORDLE, a New York Times mark | Not searched | Renamed |
 | Sportle | Working name of the stat-line game | "Sportle Games" on the App Store; "Sportle vs Sportsdle" comparison pages | Not searched | Retired |
 | Letter Jacket | The word game | None found | None found for games | **Chosen** |
 | Box Score | The word game | Many stat sites and apps use the phrase | Several BOX SCORE and BOXSCORE filings, including Boxscore Gaming LLC and Box Score Sports | Ruled out |

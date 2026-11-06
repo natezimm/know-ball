@@ -183,9 +183,3 @@ function scoreOf(answer: string, guess: string): Status[] {
   });
   return score;
 }
-
-test('old Spordle links land on Letter Jacket', async ({ page }) => {
-  await page.goto('/spordle');
-  await expect(page).toHaveURL(/\/letter-jacket$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Letter Jacket');
-});

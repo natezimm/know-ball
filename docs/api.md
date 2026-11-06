@@ -25,9 +25,6 @@ different player returns 409.
 
 ## Letter Jacket
 
-The word game was called Spordle until November 2026. `/spordle` in the browser redirects to `/letter-jacket`, and
-stats saved in the browser under the old name carry over. The old `/api/spordle` endpoints are gone.
-
 | Endpoint | Purpose |
 | --- | --- |
 | `POST /api/letter-jacket/games` | Start a round (`wordLength` 4, 5 or 6) |

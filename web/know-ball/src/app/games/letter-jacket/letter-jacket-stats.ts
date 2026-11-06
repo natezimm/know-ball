@@ -1,4 +1,4 @@
-import { KEYS, adoptOldKeys } from './saved-keys';
+import { KEYS } from './saved-keys';
 export const WORD_LENGTHS = [4, 5, 6] as const;
 export type WordLength = (typeof WORD_LENGTHS)[number];
 export const DEFAULT_WORD_LENGTH: WordLength = 5;
@@ -40,7 +40,6 @@ const emptyAll = (): StoredStats => ({
 export const isWordLength = (value: unknown): value is WordLength => WORD_LENGTHS.includes(value as WordLength);
 
 function loadAll(): StoredStats {
-  adoptOldKeys();
   const all = emptyAll();
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');

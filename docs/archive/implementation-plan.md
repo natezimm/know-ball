@@ -15,8 +15,8 @@ Deployment, Docker/Postgres checks and Playwright gameplay are implemented and p
 real-device validation still need evidence. Section 8 is the single launch checklist.
 Data-source research retains its dated findings in [research.md](../research.md).
 
-**Names changed on 2026-10-13.** "Spordle" is now the word game (renamed Letter Jacket in November 2026). The player-guessing game that the
-build plan calls Spordle is now **Scouting Report**. The site itself is now called **Know Ball**, and on 2026-10-14 the code
+**Names changed on 2026-10-13.** The word game is now **Letter Jacket** (its final name, from November 2026). The
+player-guessing game in the original build plan is now **Scouting Report**. The site itself is now called **Know Ball**, and on 2026-10-14 the code
 was renamed to match (`SportsTrivia` became `KnowBall`).
 
 ## 1. Where things stand
@@ -25,7 +25,7 @@ Updated 2026-10-17. **The version 1 code is written and the site is deployed**, 
 incomplete. Current evidence and remaining gates are in [section 8](#8-whats-left).
 
 - **Playable**: Scouting Report and Career Path have daily puzzles, practice, archives, stats and share cards.
-  Spordle is a random play-anytime word game with browser-local stats; it has no daily puzzle or archive.
+  Letter Jacket is a random play-anytime word game with browser-local stats; it has no daily puzzle or archive.
 - **Deferred**: Who's That Sportsman? was removed after the cutout quality review. It is not a launch gate.
   Any return needs a new content-quality approach; see [future games](future-games.md).
 - **Production data loaded**: the first VM import on 2026-10-16 recorded 5,416 history players, 99 team
@@ -41,7 +41,7 @@ incomplete. Current evidence and remaining gates are in [section 8](#8-whats-lef
   app: cream card stock, navy ink, red and mustard trim; Rokkitt for text, Alfa Slab One for headings and tiles,
   Yellowtail for script wordmarks. The fonts are bundled. The palette and roles are in
   `web/know-ball/src/styles.css`.
-- **Version 1 is three games**: Spordle, Scouting Report and Career Path. A fourth game may replace
+- **Version 1 is three games**: Letter Jacket, Scouting Report and Career Path. A fourth game may replace
   Who's That. Numbers Don't Lie is now the proposed fourth-game direction, subject to its data and
   prototype gates. Other game designs remain unscheduled.
 
@@ -57,7 +57,7 @@ incomplete. Current evidence and remaining gates are in [section 8](#8-whats-lef
 | Sportle | B, Trading card back | Needs season stats plus three written hints per puzzle, generated from templates with an admin override. |
 | Sound It Out | B, Letter bank | Hand-made puzzles (would need a new authoring area and image storage). No typing, so no autocomplete. |
 | Who's the GOAT? | B, 100-point budget | Needs career totals, awards and championships for an all-time pool of players; saved rankings on the server for the site-wide average. |
-| Spordle (new) | Built like Nerdle, not from the mockups: 4, 5 or 6 letters, on-screen keyboard, a category clue and a letter hint | Needs no player stats: 555 hand-picked sports words in 26 categories, plus a general dictionary for guesses. Play-anytime random words, so it does not use the daily engine. The three mockup options at `/mockups/spordle` are superseded. |
+| Letter Jacket (new) | Built like Nerdle, not from the mockups: 4, 5 or 6 letters, on-screen keyboard, a category clue and a letter hint | Needs no player stats: 555 hand-picked sports words in 26 categories, plus a general dictionary for guesses. Play-anytime random words, so it does not use the daily engine. The three earlier word game mockups are superseded. |
 
 The big shift from the original plan: three of the eight picks need **historical** data, and two need
 **hand-made content**. Historical data is handled in Milestone 0; hand-made content is deferred.
@@ -170,13 +170,13 @@ Scouting Report itself:
 **Gate:** Scouting Report is playable end to end on a phone, a reload restores the game, and an integration test proves
 the answer is absent from every response before the game ends.
 
-### Milestone 1b: Spordle, the word game (done 2026-10-13)
+### Milestone 1b: Letter Jacket, the word game (done 2026-10-13)
 
 Built to match Nerdle (`nerdle.nathanzimmerman.com`) with sports words and Know Ball's look.
 
 - **Play**: a random word each game, six guesses, word length switchable between 4, 5 and 6. "New game" at any
   time; abandoning a game after a scored guess counts as a loss, with a confirmation first.
-- **Server owns the answer**: `POST /api/spordle/games` returns only an id; `.../guesses` returns per-letter
+- **Server owns the answer**: `POST /api/letter-jacket/games` returns only an id; `.../guesses` returns per-letter
   scores and reveals the word once the game is over; `.../hint` returns the category or one unsolved letter.
   A word outside the dictionary is refused without using a guess.
 - **Hints**: the category is free to ask; the letter hint is drawn once per game from positions not yet solved
@@ -187,12 +187,12 @@ Built to match Nerdle (`nerdle.nathanzimmerman.com`) with sports words and Know 
   writes from multiple API instances; guess request IDs replay stored results without another attempt.
 - **Limits**: rounds expire after six idle hours. New rounds and the nightly importer purge expired rows.
   Guesses and hints are limited to 20 a minute per address, new games to 30.
-- **Code**: `src/KnowBall.Application/Games/Spordle`, `src/KnowBall.Api/Endpoints/SpordleEndpoints.cs`,
-  `web/know-ball/src/app/games/spordle`.
+- **Code**: `src/KnowBall.Application/Games/LetterJacket`, `src/KnowBall.Api/Endpoints/LetterJacketEndpoints.cs`,
+  `web/know-ball/src/app/games/letter-jacket`.
 
 Not built, and worth deciding later:
 
-- A **daily** Spordle that is the same word for everyone, with a share grid. That fits the shared engine from
+- A **daily** Letter Jacket that is the same word for everyone, with a share grid. That fits the shared engine from
   Milestone 1; the current game would become its practice mode.
 - Stats on the server, which need accounts (Phase 2).
 
@@ -280,7 +280,7 @@ Each has a default so work isn't blocked; say so if you'd choose differently.
 | Making cut-outs | Done by hand before upload (Preview's "Copy Subject" on a Mac); automatic background removal later if it becomes a chore |
 | Career Path jersey hint | Dropped for lack of data; position, draft and college hints instead |
 | Nightly source | ESPN's unofficial feed, trying its second host on failure; keep existing data if both fail. No balldontlie fallback is implemented |
-| Spordle | Play-anytime like Nerdle; daily mode is a proposed post-launch increment, not implemented |
+| Letter Jacket | Play-anytime like Nerdle; daily mode is a proposed post-launch increment, not implemented |
 | Hosting | A GCP VM, nginx, GHCR image and SSH deployment from CI; see deploy/README.md |
 | Champions by season | Not entered for version 1; it comes with Who's the GOAT? and Sportle, which need it |
 | A different theme per game | No. One theme for the site; each game gets its own trim colour, like cards from one set |
@@ -289,7 +289,7 @@ Each has a default so work isn't blocked; say so if you'd choose differently.
 ## 7. Inputs and deferred decisions
 
 Launch evidence is tracked only in section 8; future game ideas are in [future games](future-games.md). Hosting is already chosen; no API key is
-needed for the current sources. Renaming Sportle (one letter from Spordle) is a deferred Phase 3 decision.
+needed for the current sources. Renaming Sportle (one letter from the word game's first name) is a deferred Phase 3 decision.
 
 ## 8. What's left
 
@@ -335,7 +335,7 @@ no production data or saved packs are deleted. See [future games](future-games.m
 | [ ] | **Real-phone gameplay — Milestones 1 and 4** | Record device/browser and date for iOS Safari and Android Chrome: play each available game, use player search/on-screen keyboard, reload/resume, finish and share; check scrolling and dialogs. |
 | [ ] | **Installed PWA — Milestone 4** | On iOS and Android, install from the browser, launch from the home screen and verify an updated deployment reaches the installed copy. Record versions/commit and results. Shell caching does not provide offline gameplay; APIs remain network-only. |
 
-**Release rule:** complete production operations and real-device/PWA checks for Spordle, Scouting Report and
+**Release rule:** complete production operations and real-device/PWA checks for Letter Jacket, Scouting Report and
 Career Path. A fourth game and photo content are not release requirements. Desktop Chromium tests do not
 close the real-phone or installed-PWA gates.
 
@@ -347,7 +347,7 @@ close the real-phone or installed-PWA gates.
 
 ### After launch (proposed, not scheduled)
 
-- Daily Spordle on the shared engine, keeping the current random game as practice; define daily progress,
+- Daily Letter Jacket on the shared engine, keeping the current random game as practice; define daily progress,
   stats and sharing before implementation.
 - Use replay/return-play evidence to prioritize improvements and the next game (no fourth game is selected). The Phase 2/3 catalog remains unscheduled.
 - Consider a third roster source only if both ESPN hosts prove insufficient.
