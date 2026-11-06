@@ -178,3 +178,20 @@ something the older app reads, restore the latest daily backup from before that 
 the image it was taken with.
 The deploy job only has a registry login while it runs, so before a manual `docker compose pull`, log in with
 a GitHub token that can read packages: `docker login ghcr.io -u natezimm`.
+
+### Browse the database
+
+Postgres publishes no port, so reach it over SSH. For a quick query, run `psql` in the container from `~/know-ball`:
+
+```sh
+docker compose exec db psql -U knowball -d know_ball
+```
+
+Table and column names are quoted CamelCase, as in `select * from "Players" limit 5;`.
+
+For a desktop client such as DBeaver or pgAdmin, connect to the database container's address, `172.31.250.2`
+(the compose file fixes the network to `172.31.250.0/24`; check with
+`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' knowball-db-1`), port 5432, through
+the client's SSH tunnel option, using the VM's address and your SSH user and key. The database is `know_ball`,
+the user `knowball` and the password `KNOWBALL_DB_PASSWORD` from `.env`. Disconnect when you are done: an open
+transaction can hold a lock that a deploy's migration waits for.
