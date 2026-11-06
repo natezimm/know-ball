@@ -16,7 +16,7 @@ public interface ITriviaDb
     DbSet<Puzzle> Puzzles { get; }
     DbSet<UserResult> UserResults { get; }
     DbSet<ImportRun> ImportRuns { get; }
-    DbSet<SpordleSession> SpordleSessions { get; }
+    DbSet<LetterJacketSession> LetterJacketSessions { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

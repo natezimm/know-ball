@@ -1,3 +1,4 @@
+import { KEYS } from './saved-keys';
 export const WORD_LENGTHS = [4, 5, 6] as const;
 export type WordLength = (typeof WORD_LENGTHS)[number];
 export const DEFAULT_WORD_LENGTH: WordLength = 5;
@@ -19,7 +20,7 @@ interface StoredStats {
   byLength: Record<string, LengthStats>;
 }
 
-const STORAGE_KEY = 'knowball.spordle.stats';
+const STORAGE_KEY = KEYS.stats;
 
 const emptyStats = (): LengthStats => ({
   totalGames: 0,

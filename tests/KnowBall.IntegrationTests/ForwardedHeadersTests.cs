@@ -16,17 +16,17 @@ public sealed class ForwardedHeadersTests(ApiFactory factory)
 {
     private const string ProxyNetwork = "172.31.250.0/24";
 
-    /// <summary>A server whose requests all arrive from <paramref name="remote"/>, limited to two Spordle games a minute.</summary>
+    /// <summary>A server whose requests all arrive from <paramref name="remote"/>, limited to two LetterJacket games a minute.</summary>
     private HttpClient ClientFrom(string remote) =>
         factory.WithWebHostBuilder(builder => builder
                 .UseSetting("ForwardedHeaders:KnownNetworks:0", ProxyNetwork)
-                .UseSetting("Spordle:GamesPerMinute", "2")
+                .UseSetting("LetterJacket:GamesPerMinute", "2")
                 .ConfigureServices(services => services.AddSingleton<IStartupFilter>(new RemoteAddress(remote))))
             .CreateClient();
 
     private static async Task<HttpStatusCode> StartGameAsync(HttpClient client, string forwardedFor)
     {
-        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/spordle/games")
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/letter-jacket/games")
         {
             Content = JsonContent.Create(new { wordLength = 5 }),
         };

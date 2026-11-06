@@ -142,7 +142,7 @@ nflverse covers more than any of these, for free, so none is needed.
 | --- | --- |
 | Awards (MVP, Offensive and Defensive Player of the Year, Super Bowl MVP) | Hand lists; MVP is about 70 rows |
 | All-Pro and Pro Bowl counts for undrafted players and anyone drafted before 1980 | Not available; affects GOAT and popularity for older players |
-| Season stats before 1999 | Not available; Stat Quiz and Sportle start at 1999 |
+| Season stats before 1999 | Not available; Stat Quiz and Back of the Card start at 1999 |
 | Ids for players before 1974 | Match on name plus birth date |
 | Super Bowl winners before the 1999 season | Hand list, 33 rows |
 | Stadium coordinates | Hand list, 30 stadiums |
@@ -156,8 +156,8 @@ nflverse covers more than any of these, for free, so none is needed.
 | Career Path | Yes, back to 1920 | None |
 | Stat Quiz | Yes, from 1999 | Question templates per stat family (passing, rushing, receiving, defence) |
 | Geo Sports | After the stadium list is entered; hometowns from Wikidata | None |
-| Sportle | Yes, from 1999 | A different stat line per position group |
-| Sound It Out, Spordle | No player stats needed | None |
+| Back of the Card | Yes, from 1999 | A different stat line per position group |
+| Sound It Out, Letter Jacket | No player stats needed | None |
 | Who's the GOAT? | Partly | Comparing a quarterback with a linebacker needs a position-neutral number. Approximate Value is the only one available, and only for players drafted since 1980. Likely a per-position ranking instead |
 
 ## Images
@@ -171,13 +171,13 @@ nflverse covers more than any of these, for free, so none is needed.
 - For curated Who's That photos, track each file's license and attribution in the catalog above; the selected
   LeBron and Dirk sources have explicit adaptation licenses. Other image sources have separate terms.
 
-## Spordle word lists
+## Letter Jacket word lists
 
 Built 2026-10-13.
 
 - **Answers**: 555 sports words written by hand in 26 categories: 152 of four letters, 207 of five and 196 of six.
   The categories double as the game's category clue, so they are deliberately broad ("Golf", "NFL team",
-  "Scores, results & standings"). File: `src/KnowBall.Application/Games/Spordle/Data/sports-words.json`.
+  "Scores, results & standings"). File: `src/KnowBall.Application/Games/LetterJacket/Data/sports-words.json`.
 - **Allowed guesses**: the 40,389 words of four to six letters from the `word-list` npm package, version 4.1.0
   (MIT licence), the same dictionary Nerdle validates against. Copied from Nerdle's installed copy into
   `guess-words.txt` beside the answers.
@@ -203,7 +203,7 @@ from those two, and from each other, as possible: Scoreboard, Chalk Talk, Back P
 
 ## Naming the site
 
-"Spordle" became the name of the word game on 2026-10-13, so the site needed its own name. **Decided 2026-10-13: Know
+On 2026-10-13 the project's working name went to the word game, so the site needed its own name. **Decided 2026-10-13: Know
 Ball.** The shortlist below was checked 10-13 by searching for existing sports trivia products and by DNS lookup. A search finding
 nothing is not proof a name is free, and "no record" means the registry returned no such domain.
 
@@ -224,6 +224,30 @@ Ruled out because the name is in use for sports trivia:
 - **Ball IQ**: a soccer trivia site at balliq.app, and the subtitle of an NBA app.
 - **Film Room**: "The Film Room: NFL Trivia".
 - **Heat Check**: a 2026 sports trivia show from Whistle.
+
+## Naming the games
+
+Checked 2026-11-06 by web search for existing games and apps, and for US trademark records on public trademark
+mirrors (Justia, Markinton), which index USPTO filings. This is a practical check, not legal advice; a short review
+with a lawyer is worth it before any paid or ad-supported launch. Domains were not checked this time: each game
+lives on a path of the Know Ball domain.
+
+| Name | For | Existing game or app | Trademark records | Result |
+| --- | --- | --- | --- | --- |
+| The word game's first name | The word game, until November 2026 | A "-dle" name beside the "Sportle" and "Sportsdle" sports games, and beside WORDLE, a New York Times mark | Not searched | Renamed |
+| Sportle | Working name of the stat-line game | "Sportle Games" on the App Store; "Sportle vs Sportsdle" comparison pages | Not searched | Retired |
+| Letter Jacket | The word game | None found | None found for games | **Chosen** |
+| Box Score | The word game | Many stat sites and apps use the phrase | Several BOX SCORE and BOXSCORE filings, including Boxscore Gaming LLC and Box Score Sports | Ruled out |
+| Letterman | The word game | An old LaunchBox game entry | LETTERMAN (serial 76227266), and the name is David Letterman's | Ruled out |
+| Back of the Card | The stat-line game (planned) | None found | Not searched yet; search again before it ships | Working name |
+
+Rules that came out of this, for every game:
+
+- Never name the game a Know Ball game resembles in its name, copy, share text or code.
+- A genre or rule set is free to use; a specific game's name, colour scheme, layout or share grid is not. Letter
+  Jacket shares with its own dot marks (filled, half, empty), not coloured squares.
+- League names and logos stay out of game names and the site icon; the footer says Know Ball is not affiliated with
+  or endorsed by the NBA, NFL, MLB or NHL.
 
 ## Findings while building version 1
 

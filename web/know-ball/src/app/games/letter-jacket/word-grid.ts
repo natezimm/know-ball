@@ -1,5 +1,5 @@
 import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
-import { Attempt, LetterHint, MAX_ATTEMPTS } from './spordle-game';
+import { Attempt, LetterHint, MAX_ATTEMPTS } from './letter-jacket-game';
 
 interface Tile {
   letter: string;
@@ -14,7 +14,7 @@ interface Row {
 
 /** The six rows of tiles. Scored rows flip one tile at a time to show their colours. */
 @Component({
-  selector: 'app-spordle-grid',
+  selector: 'app-letter-jacket-grid',
   template: `
     <div class="grid" [style.--cols]="wordLength()">
       @for (row of rows(); track $index) {
@@ -67,7 +67,7 @@ interface Row {
     }
   `,
 })
-export class SpordleGrid {
+export class LetterJacketGrid {
   readonly attempts = input.required<Attempt[]>();
   readonly currentGuess = input.required<string>();
   readonly wordLength = input.required<number>();

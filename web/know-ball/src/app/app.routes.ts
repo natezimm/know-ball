@@ -23,10 +23,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
   },
   {
-    path: 'spordle',
-    title: 'Spordle — Know Ball',
-    data: { description: 'Spordle: six guesses to find a sports word of 4, 5 or 6 letters.' } satisfies PageMetaData,
-    loadComponent: () => import('./games/spordle/spordle').then((m) => m.Spordle),
+    path: 'letter-jacket',
+    title: 'Letter Jacket — Know Ball',
+    data: { description: 'Letter Jacket: six guesses to find a sports word of 4, 5 or 6 letters.' } satisfies PageMetaData,
+    loadComponent: () => import('./games/letter-jacket/letter-jacket').then((m) => m.LetterJacket),
   },
   {
     path: 'scouting-report',

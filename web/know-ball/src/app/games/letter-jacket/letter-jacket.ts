@@ -2,27 +2,38 @@ import { Component, ElementRef, computed, effect, inject, signal, viewChild, Cha
 import { shareText } from '../../core/share';
 import { NextGame } from '../../shared/next-game/next-game';
 import { Tilt } from '../../shared/tilt/tilt';
-import { SpordleKeyboard } from './keyboard';
-import { HintType } from './spordle-api';
-import { MAX_ATTEMPTS, SpordleGame } from './spordle-game';
-import { WORD_LENGTHS, WordLength, formatTime, getStats, resetStats } from './spordle-stats';
-import { SpordleGrid } from './word-grid';
+import { LetterJacketKeyboard } from './keyboard';
+import { HintType } from './letter-jacket-api';
+import { Attempt, MAX_ATTEMPTS, LetterJacketGame } from './letter-jacket-game';
+import { LetterStatus } from './scoring';
+import { WORD_LENGTHS, WordLength, formatTime, getStats, resetStats } from './letter-jacket-stats';
+import { LetterJacketGrid } from './word-grid';
 
 const MESSAGE_MS = 3000;
 
+/** Know Ball's own share marks: a filled dot for a letter in its spot, half for elsewhere, empty for a miss. */
+export const SHARE_MARKS: Record<LetterStatus, string> = { correct: '●', present: '◐', absent: '○' };
+
+/** The text a finished game shares: a headline, one row of marks per guess, and the link. */
+export function shareResult(attempts: readonly Attempt[], won: boolean, wordLength: number): string {
+  const rows = attempts.map((a) => a.score.map((s) => SHARE_MARKS[s]).join(' '));
+  return [`Know Ball · Letter Jacket ${won ? attempts.length : 'X'}/${MAX_ATTEMPTS} (${wordLength} letters)`, ...rows,
+    'https://knowball.nathanzimmerman.com/letter-jacket'].join('\n');
+}
+
 /**
- * Spordle: guess the sports word in six tries. Plays like Nerdle (random word per game,
- * 4, 5 or 6 letters, category and letter hints, stats per word length) in Know Ball's look.
+ * Letter Jacket: guess the sports word in six tries. A random word per
+ * game, 4, 5 or 6 letters, category and letter hints, and stats per word length, in Know Ball's look.
  */
 @Component({
-  selector: 'app-spordle',
-  imports: [NextGame, SpordleGrid, SpordleKeyboard, Tilt],
-  providers: [SpordleGame],
+  selector: 'app-letter-jacket',
+  imports: [NextGame, LetterJacketGrid, LetterJacketKeyboard, Tilt],
+  providers: [LetterJacketGame],
   host: { '(window:keydown)': 'onKeydown($event)' },
   template: `
-    <section class="spordle" aria-label="Spordle game">
+    <section class="letter-jacket" aria-label="Letter Jacket game">
       <header class="top kb-game-top">
-        <h1 class="kb-wordmark">Spordle</h1>
+        <h1 class="kb-wordmark">Letter Jacket</h1>
         <div class="kb-icons">
           <button type="button" class="kb-icon" aria-label="How to play" title="How to play" (mousedown)="$event.preventDefault()" (click)="open(helpDialog)">?</button>
           <button type="button" class="kb-icon" aria-label="Stats" title="Stats" (mousedown)="$event.preventDefault()" (click)="openStats()">
@@ -92,12 +103,12 @@ const MESSAGE_MS = 3000;
           <div class="kb-result-next">
             <button type="button" class="kb-btn primary" (mousedown)="$event.preventDefault()" (click)="share()">{{ shareLabel() }}</button>
             <button type="button" class="kb-btn" (mousedown)="$event.preventDefault()" (click)="requestNewGame()">Play again</button>
-            <app-next-game current="spordle" />
+            <app-next-game current="letter-jacket" />
           </div>
         </div>
       } @else {
-        <div class="hints" role="group" aria-labelledby="spordle-hints">
-          <span id="spordle-hints" class="kb-label">Hints</span>
+        <div class="hints" role="group" aria-labelledby="letter-jacket-hints">
+          <span id="letter-jacket-hints" class="kb-label">Hints</span>
           <button
             type="button"
             class="btn hint"
@@ -125,7 +136,7 @@ const MESSAGE_MS = 3000;
         </div>
       }
 
-      <app-spordle-grid
+      <app-letter-jacket-grid
         class="board"
         [style.--cols]="game.wordLength()"
         [attempts]="game.attempts()"
@@ -136,16 +147,16 @@ const MESSAGE_MS = 3000;
         [shake]="shaking()"
       />
 
-      <app-spordle-keyboard [statuses]="game.letterStatuses()" (pressed)="game.press($event)" />
+      <app-letter-jacket-keyboard [statuses]="game.letterStatuses()" (pressed)="game.press($event)" />
 
       @if (!game.result() && game.message(); as message) {
         <p class="kb-toast" role="status">{{ message }}</p>
       }
     </section>
 
-    <dialog #helpDialog class="kb-dialog" aria-labelledby="spordle-help-title" (click)="closeOnBackdrop($event)">
+    <dialog #helpDialog class="kb-dialog" aria-labelledby="letter-jacket-help-title" (click)="closeOnBackdrop($event)">
       <div class="kb-dialog-head">
-        <h2 id="spordle-help-title">How to play</h2>
+        <h2 id="letter-jacket-help-title">How to play</h2>
         <button type="button" class="kb-close" aria-label="Close" (click)="helpDialog.close()">×</button>
       </div>
       <div class="help">
@@ -161,9 +172,9 @@ const MESSAGE_MS = 3000;
       </div>
     </dialog>
 
-    <dialog #confirmDialog class="kb-dialog" aria-labelledby="spordle-confirm-title" (click)="closeOnBackdrop($event)" (close)="pendingLength.set(null)">
+    <dialog #confirmDialog class="kb-dialog" aria-labelledby="letter-jacket-confirm-title" (click)="closeOnBackdrop($event)" (close)="pendingLength.set(null)">
       <div class="kb-dialog-head">
-        <h2 id="spordle-confirm-title">Start a new word?</h2>
+        <h2 id="letter-jacket-confirm-title">Start a new word?</h2>
         <button type="button" class="kb-close" aria-label="Close" (click)="confirmDialog.close()">×</button>
       </div>
       <p>This game counts as a loss in your stats if you leave it now.</p>
@@ -173,9 +184,9 @@ const MESSAGE_MS = 3000;
       </div>
     </dialog>
 
-    <dialog #hintDialog class="kb-dialog" aria-labelledby="spordle-hint-title" (click)="closeOnBackdrop($event)">
+    <dialog #hintDialog class="kb-dialog" aria-labelledby="letter-jacket-hint-title" (click)="closeOnBackdrop($event)">
       <div class="kb-dialog-head">
-        <h2 id="spordle-hint-title">{{ hintType() === 'category' ? 'Category clue' : 'Letter hint' }}</h2>
+        <h2 id="letter-jacket-hint-title">{{ hintType() === 'category' ? 'Category clue' : 'Letter hint' }}</h2>
         <button type="button" class="kb-close" aria-label="Close hint" (click)="hintDialog.close()">×</button>
       </div>
       <p class="muted">
@@ -211,9 +222,9 @@ const MESSAGE_MS = 3000;
       </button>
     </dialog>
 
-    <dialog #statsDialog class="kb-dialog" aria-labelledby="spordle-stats-title" (click)="closeOnBackdrop($event)" (close)="resetting.set(false)">
+    <dialog #statsDialog class="kb-dialog" aria-labelledby="letter-jacket-stats-title" (click)="closeOnBackdrop($event)" (close)="resetting.set(false)">
       <div class="kb-dialog-head">
-        <h2 id="spordle-stats-title">Statistics <small>{{ game.wordLength() }}-letter words</small></h2>
+        <h2 id="letter-jacket-stats-title">Statistics <small>{{ game.wordLength() }}-letter words</small></h2>
         <button type="button" class="kb-close" aria-label="Close statistics" (click)="statsDialog.close()">×</button>
       </div>
       <dl class="stats">
@@ -248,7 +259,7 @@ const MESSAGE_MS = 3000;
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; margin: 0 0 -44px; }
-    .spordle { max-width: 480px; margin: 0 auto; display: grid; gap: 12px; --trim: var(--red); }
+    .letter-jacket { max-width: 480px; margin: 0 auto; display: grid; gap: 12px; --trim: var(--red); }
 
     .hints { display: flex; align-items: center; gap: 8px; min-height: 34px; }
     .toolbar { flex-wrap: wrap; }
@@ -327,8 +338,8 @@ const MESSAGE_MS = 3000;
     }
   `,
 })
-export class Spordle {
-  protected readonly game = inject(SpordleGame);
+export class LetterJacket {
+  protected readonly game = inject(LetterJacketGame);
   protected readonly lengths = WORD_LENGTHS;
   protected readonly formatTime = formatTime;
 
@@ -423,10 +434,7 @@ export class Spordle {
   protected async share(): Promise<void> {
     const result = this.game.result();
     if (!result) return;
-    const rows = this.game.attempts().map((a) => a.score.map((s) => (s === 'correct' ? '🟩' : s === 'present' ? '🟨' : '⬜')).join(''));
-    const text = [`Know Ball · Spordle ${result.won ? result.guesses : 'X'}/6 (${this.game.wordLength()} letters)`, ...rows,
-      'https://knowball.nathanzimmerman.com/spordle'].join('\n');
-    const outcome = await shareText(text);
+    const outcome = await shareText(shareResult(this.game.attempts(), result.won, this.game.wordLength()));
     this.shareLabel.set(outcome === 'copied' ? 'Copied' : outcome === 'failed' ? 'Could not copy' : 'Share');
     if (outcome !== 'shared') setTimeout(() => this.shareLabel.set('Share'), 2500);
   }

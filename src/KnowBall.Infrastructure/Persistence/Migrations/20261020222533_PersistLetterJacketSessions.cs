@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KnowBall.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class PersistSpordleSessions : Migration
+    public partial class PersistLetterJacketSessions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "SpordleSessions",
+                name: "LetterJacketSessions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -28,12 +28,12 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpordleSessions", x => x.Id);
+                    table.PrimaryKey("PK_LetterJacketSessions", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SpordleSessions_ExpiresAtUtc",
-                table: "SpordleSessions",
+                name: "IX_LetterJacketSessions_ExpiresAtUtc",
+                table: "LetterJacketSessions",
                 column: "ExpiresAtUtc");
         }
 
@@ -41,7 +41,7 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SpordleSessions");
+                name: "LetterJacketSessions");
         }
     }
 }

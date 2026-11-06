@@ -44,7 +44,7 @@ for (const width of [390, 1280]) {
   test(`game titles clear the banner at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.route('**/api/**', (route) => route.fulfill({ status: 404, json: { error: missing } }));
-    for (const slug of ['scouting-report', 'career-path', 'spordle']) {
+    for (const slug of ['scouting-report', 'career-path', 'letter-jacket']) {
       await page.goto(`/${slug}`);
       await page.evaluate(() => document.fonts.ready);
       const banner = await page.locator('app-root > header').boundingBox();
@@ -63,6 +63,6 @@ test('old photo-game and admin bookmarks return to the four-game home page', asy
   for (const path of ['/whos-that', '/whos-that/puzzle/1', '/admin']) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole('list', { name: 'Games' }).getByRole('heading', { level: 2 })).toHaveText(['Spordle', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
+    await expect(page.getByRole('list', { name: 'Games' }).getByRole('heading', { level: 2 })).toHaveText(['Letter Jacket', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
   }
 });

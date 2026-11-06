@@ -2,8 +2,8 @@ import { easternDate, nextEasternMidnight, nextGame } from './games';
 
 describe('games', () => {
   it('goes on to the next game and wraps round', () => {
-    expect(nextGame('spordle').slug).toBe('scouting-report');
-    expect(nextGame('numbers-dont-lie').slug).toBe('spordle');
+    expect(nextGame('letter-jacket').slug).toBe('scouting-report');
+    expect(nextGame('numbers-dont-lie').slug).toBe('letter-jacket');
   });
 
   it('finds the next midnight in New York in winter and summer', () => {

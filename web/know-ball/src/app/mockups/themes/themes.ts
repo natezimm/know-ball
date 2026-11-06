@@ -33,7 +33,7 @@ const FONTS = [
   'Yellowtail',
 ];
 
-/** One game, nine looks: the same Spordle screen in every candidate theme. */
+/** One game, nine looks: the same Letter Jacket screen in every candidate theme. */
 @Component({
   selector: 'app-themes-mock',
   imports: [
@@ -53,7 +53,7 @@ const FONTS = [
     <section class="mk-game">
       <h2>Themes <span class="mk-chip">Whole site</span></h2>
       <p class="mk-sub">
-        The same Spordle screen, three guesses into a game, in nine different looks. Trading Card (I) was chosen
+        The same Letter Jacket screen, three guesses into a game, in nine different looks. Trading Card (I) was chosen
         and is now the app's theme; A is the look it replaced. B and C follow boringcashcow.com and your sudoku.
         The preview pulls its fonts from Google Fonts.
       </p>
@@ -152,7 +152,7 @@ const FONTS = [
           letter="I"
           name="Trading Card (chosen)"
           bare
-          plus="Warm and nostalgic; Scouting Report, Sportle and the silhouette game could each be a card."
+          plus="Warm and nostalgic; Scouting Report, Back of the Card and the other games could each be a card."
           minus="Heavy borders eat screen width on phones, and the retro look skews toward baseball."
         >
           <app-theme-trading-card />

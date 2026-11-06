@@ -220,7 +220,7 @@ a numeric value remaining unchanged does not make an enum rename a safe data mig
 
 Additive Postgres migration and EF snapshot, plus a SQLite schema-version bump, follow the repository's
 existing policy. Older local SQLite files need a documented rebuild; production data is migrated in place.
-Avoid changing player-game rows, Spordle sessions or stored photo-game history.
+Avoid changing player-game rows, Letter Jacket sessions or stored photo-game history.
 
 ### Daily generation and content correction
 
@@ -384,7 +384,7 @@ Integration tests run against SQLite and Postgres:
 - Practice start retries create one round; mismatched retry payloads conflict; ownership is enforced.
 - Practice excludes today's/queued daily fact families, never changes the daily set and never enters
   daily statistics, streaks, perfect counts or archives. Retention deletes practice data only.
-- Existing player-game and Spordle API contracts continue to pass.
+- Existing player-game and Letter Jacket API contracts continue to pass.
 
 Browser coverage should play mixed correct/incorrect and perfect quizzes, reload at each state, drop
 a committed response and retry it, use two tabs, navigate an archive, share a result and exercise

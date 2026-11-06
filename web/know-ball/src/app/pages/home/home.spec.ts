@@ -40,9 +40,9 @@ describe('Home', () => {
       entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 2, maxGuesses: 6 }),
     ]);
 
-    expect([...el.querySelectorAll('.grid h2')].map((h) => h.textContent)).toEqual(['Spordle', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
+    expect([...el.querySelectorAll('.grid h2')].map((h) => h.textContent)).toEqual(['Letter Jacket', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
     expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', "Play today's quiz"]);
-    expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/scouting-report', '/career-path', '/numbers-dont-lie']);
+    expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/letter-jacket', '/scouting-report', '/career-path', '/numbers-dont-lie']);
     expect(el.querySelector('h1')?.textContent).toContain('Four ways');
     expect(el.querySelector('.badge.done')?.textContent?.trim()).toBe('Solved in 2');
     // A daily won today turns foil; the others stay plain card stock.
@@ -76,7 +76,7 @@ describe('Home', () => {
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
     expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', "Play today's quiz"]);
-    expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/spordle', '/numbers-dont-lie']);
+    expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/letter-jacket', '/numbers-dont-lie']);
 
     TestBed.inject(HttpTestingController).expectOne('/api/me/today').flush([
       entry({}), entry({ game: 'career-path', available: false, number: null }),

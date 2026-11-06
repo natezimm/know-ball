@@ -15,10 +15,10 @@ public sealed record ApiError(string Error);
 /// </summary>
 public static class RateLimits
 {
-    /// <summary><c>Spordle:GamesPerMinute</c>, default 30.</summary>
-    public const string SpordleStart = "spordle-start";
-    /// <summary><c>Spordle:GuessesPerMinute</c>, default 20; shared by guesses and hints.</summary>
-    public const string SpordlePlay = "spordle-play";
+    /// <summary><c>LetterJacket:GamesPerMinute</c>, default 30.</summary>
+    public const string LetterJacketStart = "letter-jacket-start";
+    /// <summary><c>LetterJacket:GuessesPerMinute</c>, default 20; shared by guesses and hints.</summary>
+    public const string LetterJacketPlay = "letter-jacket-play";
     /// <summary><c>Games:GuessesPerMinute</c>, default 60; guesses and practice rounds in the daily games.</summary>
     public const string GamePlay = "game-play";
 
@@ -52,8 +52,8 @@ public static class RateLimits
                     ClientKey(http),
                     _ => new FixedWindowRateLimiterOptions { PermitLimit = limit, Window = TimeSpan.FromMinutes(1) });
             });
-            options.AddPolicy(SpordleStart, http => PerMinute(http, "Spordle:GamesPerMinute", 30));
-            options.AddPolicy(SpordlePlay, http => PerMinute(http, "Spordle:GuessesPerMinute", 20));
+            options.AddPolicy(LetterJacketStart, http => PerMinute(http, "LetterJacket:GamesPerMinute", 30));
+            options.AddPolicy(LetterJacketPlay, http => PerMinute(http, "LetterJacket:GuessesPerMinute", 20));
             options.AddPolicy(GamePlay, http => PerMinute(http, "Games:GuessesPerMinute", 60));
         });
 

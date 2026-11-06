@@ -16,12 +16,12 @@ stays with your browser.
 | Scouting Report | Career Path |
 | --- | --- |
 | ![Scouting Report with three graded guesses](docs/screenshots/scouting-report.png) | ![Career Path showing a player's teams and unlocked hints](docs/screenshots/career-path.png) |
-| **Spordle** | **Numbers Don't Lie** |
-| ![Spordle mid-game with the on-screen keyboard](docs/screenshots/spordle.png) | ![Numbers Don't Lie question with its explanation](docs/screenshots/numbers-dont-lie.png) |
+| **Letter Jacket** | **Numbers Don't Lie** |
+| ![Letter Jacket mid-game with the on-screen keyboard](docs/screenshots/letter-jacket.png) | ![Numbers Don't Lie question with its explanation](docs/screenshots/numbers-dont-lie.png) |
 
 ## What it does
 
-- **Spordle**: find a sports word of 4, 5 or 6 letters in six tries, with category and letter hints. Play as many
+- **Letter Jacket**: find a sports word of 4, 5 or 6 letters in six tries, with category and letter hints. Play as many
   rounds as you like; there is no daily word.
 - **Scouting Report**: guess today's NBA player in eight tries; each guess is graded on team, conference,
   division, position, height, age and jersey number.
@@ -29,7 +29,7 @@ stays with your browser.
 - **Numbers Don't Lie**: five multiple-choice questions on records, nicknames, famous numbers and history across the
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.
 - Scouting Report and Career Path have practice rounds, an archive of past dailies, stats and streaks, and a
-  spoiler-free share card. Spordle keeps stats and streaks per word length. Numbers Don't Lie has a daily round,
+  spoiler-free share card. Letter Jacket keeps stats and streaks per word length. Numbers Don't Lie has a daily round,
   filtered practice with a Playoff Moments topic and a share card; it has no archive or stats yet.
 - Installable as a phone app (PWA), and built for phones first.
 
@@ -162,7 +162,7 @@ docs/                         architecture, ADRs, API and importer reference, ar
 - **Numbers Don't Lie** has 96 questions so far. Next: a larger reviewed question bank on the approved-content
   queue that is already built, and stats, streaks and an archive like the other games
   ([current scope](docs/numbers-dont-lie/README.md)).
-- **A daily Spordle** on the shared engine, keeping today's open-ended rounds as practice.
+- **A daily Letter Jacket** on the shared engine, keeping today's open-ended rounds as practice.
 - **More games**, each designed in the mockups lab before it is built.
 - **Accounts**, by linking an account to a browser's anonymous id, so progress can follow a player across devices.
 
@@ -170,7 +170,8 @@ docs/                         architecture, ADRs, API and importer reference, ar
 
 Player data comes from the Basketball-Reference mirror, Wikidata and ESPN's public feed; headshots and logos are
 the NBA's, linked from its CDN and never stored. That is fine for a personal project and would need revisiting for
-anything commercial. Details in [docs/research.md](docs/research.md).
+anything commercial. Know Ball is not affiliated with or endorsed by the NBA, NFL, MLB or NHL. Details in
+[docs/research.md](docs/research.md).
 
 ## License
 

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KnowBall.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TriviaDbContext))]
-    [Migration("20261020222533_PersistSpordleSessions")]
-    partial class PersistSpordleSessions
+    [Migration("20261020222533_PersistLetterJacketSessions")]
+    partial class PersistLetterJacketSessions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -436,7 +436,7 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.ToTable("Puzzles");
                 });
 
-            modelBuilder.Entity("KnowBall.Domain.SpordleSession", b =>
+            modelBuilder.Entity("KnowBall.Domain.LetterJacketSession", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -479,7 +479,7 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ExpiresAtUtc");
 
-                    b.ToTable("SpordleSessions");
+                    b.ToTable("LetterJacketSessions");
                 });
 
             modelBuilder.Entity("KnowBall.Domain.Team", b =>

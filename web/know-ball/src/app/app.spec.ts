@@ -13,5 +13,6 @@ describe('App', () => {
     expect(el.querySelector('.footer a[href="https://www.nathanzimmerman.com/"]')?.textContent).toBe('Nathan Zimmerman');
     expect(el.querySelector('.footer a[href="https://github.com/natezimm/know-ball"]')).not.toBeNull();
     expect([...el.querySelectorAll('.footer nav a')].map((a) => a.textContent)).toEqual(['GitHub']);
+    expect(el.querySelector('.footer .disclaimer')?.textContent).toBe('Not affiliated with or endorsed by the NBA, NFL, MLB or NHL.');
   });
 });

@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { Attempt, LetterHint } from './spordle-game';
-import { SpordleGrid } from './word-grid';
+import { Attempt, LetterHint } from './letter-jacket-game';
+import { LetterJacketGrid } from './word-grid';
 
-describe('SpordleGrid', () => {
+describe('LetterJacketGrid', () => {
   async function render(inputs: { attempts?: Attempt[]; currentGuess?: string; wordLength?: number; active?: boolean; hint?: LetterHint | null }) {
-    const fixture = TestBed.createComponent(SpordleGrid);
+    const fixture = TestBed.createComponent(LetterJacketGrid);
     fixture.componentRef.setInput('attempts', inputs.attempts ?? []);
     fixture.componentRef.setInput('currentGuess', inputs.currentGuess ?? '');
     fixture.componentRef.setInput('wordLength', inputs.wordLength ?? 5);

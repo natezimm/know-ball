@@ -7,11 +7,11 @@ type Status = 'correct' | 'present' | 'absent';
 
 /** The answer list the server draws from, by category. */
 const bank: Record<string, string> = JSON.parse(
-  readFileSync(resolve(repoRoot, 'src/KnowBall.Application/Games/Spordle/Data/sports-words.json'), 'utf8'),
+  readFileSync(resolve(repoRoot, 'src/KnowBall.Application/Games/LetterJacket/Data/sports-words.json'), 'utf8'),
 );
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/spordle');
+  await page.goto('/letter-jacket');
   await expect(page.getByRole('status').filter({ hasText: 'Guess 1 of 6' })).toBeVisible();
 });
 
@@ -76,7 +76,7 @@ test('a made-up word costs nothing, six misses lose, and play again starts fresh
 });
 
 test('a guess saved before its response was lost shows at once, and the next word is a new guess', async ({ page }) => {
-  await page.route('**/api/spordle/games/*/guesses', async (route) => {
+  await page.route('**/api/letter-jacket/games/*/guesses', async (route) => {
     const committed = await route.fetch();
     expect(committed.ok()).toBe(true);
     expect((await committed.json()).attemptsRemaining).toBe(5);
@@ -98,7 +98,7 @@ test('a guess saved before its response was lost shows at once, and the next wor
 
 test('retrying a guess that never reached the server reuses its request ID and scores it once', async ({ page }) => {
   let requestId = '';
-  await page.route('**/api/spordle/games/*/guesses', async (route) => {
+  await page.route('**/api/letter-jacket/games/*/guesses', async (route) => {
     requestId = route.request().postDataJSON().requestId;
     await route.abort('failed');
   }, { times: 1 });
@@ -117,7 +117,7 @@ test('retrying a guess that never reached the server reuses its request ID and s
 test('reload restores a committed guess after its response was lost, plus hints and typed input', async ({ page }) => {
   const category = await revealHint(page, 'Category', 'Reveal category');
   const letter = await revealHint(page, 'Letter', 'Reveal letter');
-  await page.route('**/api/spordle/games/*/guesses', async route => {
+  await page.route('**/api/letter-jacket/games/*/guesses', async route => {
     const committed = await route.fetch();
     expect(committed.ok()).toBe(true);
     await route.abort('failed');
@@ -171,7 +171,7 @@ async function submit(page: Page, word: string): Promise<Status[]> {
   return body.score;
 }
 
-/** Wordle scoring, as the server does it: repeated letters are only marked present while unmatched. */
+/** The scoring the server uses: repeated letters are only marked present while unmatched. */
 function scoreOf(answer: string, guess: string): Status[] {
   const score: Status[] = [...guess].map((c, i) => (c === answer[i] ? 'correct' : 'absent'));
   const unmatched = new Map<string, number>();

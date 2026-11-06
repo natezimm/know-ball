@@ -83,7 +83,7 @@ if (app.Environment.IsDevelopment())
 
 var api = app.MapGroup("/api");
 api.MapData();
-api.MapSpordle();
+api.MapLetterJacket();
 api.MapGames();
 api.MapNumbers();
 

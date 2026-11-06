@@ -22,7 +22,7 @@ describe('page meta', () => {
       providers: [
         provideRouter([
           { path: '', component: Blank },
-          { path: 'spordle', component: Blank, data: { description: 'Find the word.' } satisfies PageMetaData },
+          { path: 'letter-jacket', component: Blank, data: { description: 'Find the word.' } satisfies PageMetaData },
           { path: 'career-path/puzzle/:id', component: Blank, data: { noindex: true } satisfies PageMetaData },
           {
             path: 'mockups',
@@ -40,15 +40,15 @@ describe('page meta', () => {
   const meta = (name: string) => document.head.querySelector<HTMLMetaElement>(`meta[name="${name}"]`)?.content;
 
   it('files each page under its own public address, without query or fragment', async () => {
-    await router.navigateByUrl('/spordle?practice=1#board');
+    await router.navigateByUrl('/letter-jacket?practice=1#board');
 
-    expect(canonical()).toBe('https://knowball.nathanzimmerman.com/spordle');
+    expect(canonical()).toBe('https://knowball.nathanzimmerman.com/letter-jacket');
     expect(meta('description')).toBe('Find the word.');
     expect(meta('robots')).toBeUndefined();
   });
 
   it("uses the home page's description where a route has none", async () => {
-    await router.navigateByUrl('/spordle');
+    await router.navigateByUrl('/letter-jacket');
     await router.navigateByUrl('/');
 
     expect(canonical()).toBe('https://knowball.nathanzimmerman.com/');
@@ -63,8 +63,8 @@ describe('page meta', () => {
     await router.navigateByUrl('/mockups/themes');
     expect(meta('robots')).toBe('noindex');
 
-    await router.navigateByUrl('/spordle');
+    await router.navigateByUrl('/letter-jacket');
     expect(meta('robots')).toBeUndefined();
-    expect(canonical()).toBe('https://knowball.nathanzimmerman.com/spordle');
+    expect(canonical()).toBe('https://knowball.nathanzimmerman.com/letter-jacket');
   });
 });

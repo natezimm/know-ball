@@ -1,7 +1,7 @@
 import { HttpClient, provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { useMemoryStorage } from '../games/spordle/memory-storage';
+import { useMemoryStorage } from '../games/letter-jacket/memory-storage';
 import { ANON_HEADER, anonId, anonIdInterceptor } from './anon-id';
 
 describe('anonymous player id', () => {

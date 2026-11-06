@@ -15,7 +15,7 @@ const KEY_MARKS: Record<string, Mark> = {
 };
 
 /**
- * The Spordle screen, three guesses into a game whose answer is BLITZ, with layout only.
+ * The Letter Jacket screen, three guesses into a game whose answer is BLITZ, with layout only.
  * Every colour, font and shape comes from the theme wrapped around it (see ./skins), which
  * styles the `ts-` classes below. The styles are global on purpose so the skins can reach in.
  */
@@ -30,7 +30,7 @@ const KEY_MARKS: Record<string, Mark> = {
       </header>
       <div class="ts-main">
         <div class="ts-top">
-          <h4 class="ts-title">Spordle</h4>
+          <h4 class="ts-title">Letter Jacket</h4>
           <div class="ts-actions"><span class="ts-btn">New game</span><span class="ts-btn">Stats</span></div>
         </div>
         <div class="ts-toolbar">

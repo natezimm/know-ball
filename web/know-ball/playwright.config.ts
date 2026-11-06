@@ -7,7 +7,7 @@ const port = Number(process.env['E2E_PORT'] ?? 5180);
  * started by e2e/serve.sh on a fresh SQLite database with offline test data.
  *
  *   npm run e2e                       # build the app, start the site, run every test
- *   npx playwright test e2e/spordle   # one file, once the app is built
+ *   npx playwright test e2e/letter-jacket   # one file, once the app is built
  */
 export default defineConfig({
   testDir: 'e2e',

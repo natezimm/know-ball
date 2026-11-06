@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using KnowBall.Application.Games;
 using KnowBall.Application.Games.CareerPath;
 using KnowBall.Application.Games.ScoutingReport;
-using KnowBall.Application.Games.Spordle;
+using KnowBall.Application.Games.LetterJacket;
 using KnowBall.Application.Import;
 using KnowBall.Application.Players;
 
@@ -17,8 +17,8 @@ public static class DependencyInjection
         services.AddScoped<HistoryImportService>();
         services.AddScoped<CrosswalkImportService>();
         services.AddScoped<PlayerSearchService>();
-        services.AddSingleton(_ => SpordleWordBank.LoadEmbedded());
-        services.AddScoped<SpordleGameService>();
+        services.AddSingleton(_ => LetterJacketWordBank.LoadEmbedded());
+        services.AddScoped<LetterJacketGameService>();
 
         // The daily games, in the order the home page shows them.
         services.AddScoped<ScoutingReportGame>();

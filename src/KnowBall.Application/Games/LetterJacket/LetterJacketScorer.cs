@@ -1,4 +1,4 @@
-namespace KnowBall.Application.Games.Spordle;
+namespace KnowBall.Application.Games.LetterJacket;
 
 public enum LetterStatus
 {
@@ -7,7 +7,7 @@ public enum LetterStatus
     Correct,
 }
 
-public static class SpordleScorer
+public static class LetterJacketScorer
 {
     /// <summary>
     /// Scores a guess against the answer, one status per letter. A repeated letter is only

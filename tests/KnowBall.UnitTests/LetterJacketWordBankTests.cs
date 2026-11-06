@@ -1,10 +1,10 @@
-using KnowBall.Application.Games.Spordle;
+using KnowBall.Application.Games.LetterJacket;
 
 namespace KnowBall.UnitTests;
 
-public class SpordleWordBankTests
+public class LetterJacketWordBankTests
 {
-    private static readonly SpordleWordBank Bank = SpordleWordBank.LoadEmbedded();
+    private static readonly LetterJacketWordBank Bank = LetterJacketWordBank.LoadEmbedded();
 
     [Theory]
     [InlineData(4)]
@@ -26,7 +26,7 @@ public class SpordleWordBankTests
     [Fact]
     public void Every_shipped_answer_has_a_category_and_is_an_allowed_guess()
     {
-        foreach (var word in SpordleWordBank.SupportedLengths.SelectMany(Bank.Answers))
+        foreach (var word in LetterJacketWordBank.SupportedLengths.SelectMany(Bank.Answers))
         {
             Assert.False(string.IsNullOrWhiteSpace(Bank.CategoryOf(word)), word);
             Assert.True(Bank.IsAllowedGuess(word), word);
@@ -56,17 +56,17 @@ public class SpordleWordBankTests
     [InlineData(7, 5)]
     public void Unsupported_lengths_fall_back_to_five(int? requested, int expected)
     {
-        Assert.Equal(expected, SpordleWordBank.NormalizeLength(requested));
+        Assert.Equal(expected, LetterJacketWordBank.NormalizeLength(requested));
     }
 
     [Fact]
     public void A_word_listed_twice_or_of_the_wrong_shape_is_rejected()
     {
-        Assert.Throws<ArgumentException>(() => new SpordleWordBank(
+        Assert.Throws<ArgumentException>(() => new LetterJacketWordBank(
             new Dictionary<string, string> { ["Golf"] = "putt", ["Baseball"] = "putt" }, []));
-        Assert.Throws<ArgumentException>(() => new SpordleWordBank(
+        Assert.Throws<ArgumentException>(() => new LetterJacketWordBank(
             new Dictionary<string, string> { ["Golf"] = "tee" }, []));
-        Assert.Throws<ArgumentException>(() => new SpordleWordBank(
+        Assert.Throws<ArgumentException>(() => new LetterJacketWordBank(
             new Dictionary<string, string> { ["Golf"] = "Putt" }, []));
     }
 }

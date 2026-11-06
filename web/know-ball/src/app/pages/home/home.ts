@@ -52,7 +52,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
     <section class="hero">
       <p class="kicker">Daily sports trivia</p>
       <h1>{{ countWord() }} ways to prove you <span class="script">know ball.</span></h1>
-      <p class="lede">A new puzzle in every daily game at midnight Eastern, and Spordle whenever you want it.</p>
+      <p class="lede">A new puzzle in every daily game at midnight Eastern, and Letter Jacket whenever you want it.</p>
     </section>
 
     <ul class="grid" aria-label="Games">
@@ -69,7 +69,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
                 @switch (card.icon) {
                   @case ('tile') {
                     <rect x="3.5" y="3.5" width="17" height="17" rx="2" fill="var(--mustard)" stroke="var(--cream)" />
-                    <path d="M14.8 8.3c-.6-.8-1.6-1.2-2.8-1.2-1.7 0-2.9.9-2.9 2.2 0 3 6 1.6 6 4.6 0 1.4-1.3 2.4-3.1 2.4-1.3 0-2.4-.5-3-1.4" stroke="var(--navy)" stroke-width="2.2" />
+                    <path d="M9.5 7v10h5.5" stroke="var(--navy)" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="miter" />
                   }
                   @case ('clipboard') {
                     <rect x="5" y="4.5" width="14" height="16.5" rx="1.5" />
@@ -167,7 +167,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
 export class Home {
   /** The four games, in the order the home page shows them. */
   private readonly games: GameCard[] = [
-    { name: 'Spordle', kind: 'Word game', link: '/spordle', icon: 'tile', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
+    { name: 'Letter Jacket', kind: 'Word game', link: '/letter-jacket', icon: 'tile', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
       name: 'Scouting Report', kind: 'Daily', link: '/scouting-report', daily: 'scouting-report', icon: 'clipboard', trim: 'var(--teal)',
       blurb: 'Guess the player in 8 tries with team, position, height, age and number clues.',

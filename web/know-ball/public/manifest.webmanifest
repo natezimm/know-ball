@@ -1,7 +1,7 @@
 {
   "name": "Know Ball",
   "short_name": "Know Ball",
-  "description": "Daily sports trivia: Spordle, Scouting Report, Career Path and Who's That Sportsman?",
+  "description": "Daily sports trivia: Letter Jacket, Scouting Report, Career Path and Numbers Don't Lie",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

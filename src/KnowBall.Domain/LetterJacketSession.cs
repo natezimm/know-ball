@@ -1,7 +1,7 @@
 namespace KnowBall.Domain;
 
 /// <summary>Server-only round state. Never serialize this entity in an API response.</summary>
-public sealed class SpordleSession
+public sealed class LetterJacketSession
 {
     public Guid Id { get; set; }
     public string Answer { get; set; } = "";

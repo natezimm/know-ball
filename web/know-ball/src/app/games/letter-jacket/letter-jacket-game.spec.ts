@@ -2,22 +2,22 @@ import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { useMemoryStorage } from './memory-storage';
-import { GuessResult } from './spordle-api';
-import { SpordleGame } from './spordle-game';
-import { getStats } from './spordle-stats';
+import { GuessResult } from './letter-jacket-api';
+import { LetterJacketGame } from './letter-jacket-game';
+import { getStats } from './letter-jacket-stats';
 
-describe('SpordleGame', () => {
-  let game: SpordleGame;
+describe('LetterJacketGame', () => {
+  let game: LetterJacketGame;
   let http: HttpTestingController;
 
-  const GUESSES = '/api/spordle/games/g1/guesses';
-  const HINT = '/api/spordle/games/g1/hint';
+  const GUESSES = '/api/letter-jacket/games/g1/guesses';
+  const HINT = '/api/letter-jacket/games/g1/hint';
 
   beforeEach(() => {
     useMemoryStorage();
     vi.useFakeTimers();
-    TestBed.configureTestingModule({ providers: [SpordleGame, provideHttpClient(withXhr()), provideHttpClientTesting()] });
-    game = TestBed.inject(SpordleGame);
+    TestBed.configureTestingModule({ providers: [LetterJacketGame, provideHttpClient(withXhr()), provideHttpClientTesting()] });
+    game = TestBed.inject(LetterJacketGame);
     http = TestBed.inject(HttpTestingController);
   });
 
@@ -28,7 +28,7 @@ describe('SpordleGame', () => {
 
   function startGame(gameId = 'g1'): void {
     game.start();
-    const request = http.expectOne('/api/spordle/games');
+    const request = http.expectOne('/api/letter-jacket/games');
     request.flush({ gameId, wordLength: request.request.body.wordLength, maxAttempts: 6 });
   }
 
@@ -53,7 +53,7 @@ describe('SpordleGame', () => {
   };
 
   function reopen(): void {
-    game = TestBed.runInInjectionContext(() => new SpordleGame());
+    game = TestBed.runInInjectionContext(() => new LetterJacketGame());
     game.resume();
   }
 
@@ -70,8 +70,8 @@ describe('SpordleGame', () => {
     http.expectOne(HINT).flush({ category: 'Football' });
     type('bl');
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush(saved);
-    http.expectNone('/api/spordle/games');
+    http.expectOne('/api/letter-jacket/games/g1').flush(saved);
+    http.expectNone('/api/letter-jacket/games');
     expect(game.status()).toBe('playing');
     expect(game.attempts()).toEqual([{ word: 'punts', score: miss.score }]);
     expect(game.letterStatuses()['s']).toBe('correct');
@@ -88,9 +88,9 @@ describe('SpordleGame', () => {
     const request = http.expectOne(GUESSES);
     const requestId = request.request.body.requestId;
     request.error(new ProgressEvent('error'));
-    http.expectOne('/api/spordle/games/g1').error(new ProgressEvent('error')); // still offline
+    http.expectOne('/api/letter-jacket/games/g1').error(new ProgressEvent('error')); // still offline
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush({ ...saved,
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved,
       guesses: [{ ...saved.guesses[0], requestId }],
     });
     expect(game.attempts()).toHaveLength(1);
@@ -105,9 +105,9 @@ describe('SpordleGame', () => {
     const request = http.expectOne(GUESSES);
     const requestId = request.request.body.requestId;
     request.error(new ProgressEvent('error'));
-    http.expectOne('/api/spordle/games/g1').error(new ProgressEvent('error')); // still offline
+    http.expectOne('/api/letter-jacket/games/g1').error(new ProgressEvent('error')); // still offline
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush({ ...saved, guesses: [], letterHint: null });
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved, guesses: [], letterHint: null });
     game.press('Enter');
     const retry = http.expectOne(GUESSES);
     expect(retry.request.body.requestId).toBe(requestId);
@@ -153,13 +153,13 @@ describe('SpordleGame', () => {
     const completed = { ...saved, complete: true, won: true, answer: 'blitz',
       guesses: [{ requestId: 'win', word: 'blitz', score: Array(5).fill('correct') }] };
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush(completed);
+    http.expectOne('/api/letter-jacket/games/g1').flush(completed);
     expect(game.status()).toBe('complete');
     expect(game.result()).toMatchObject({ won: true, answer: 'blitz', guesses: 1 });
     const time = game.result()!.timeMs;
     vi.advanceTimersByTime(10_000);
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush(completed);
+    http.expectOne('/api/letter-jacket/games/g1').flush(completed);
     expect(game.result()!.timeMs).toBe(time);
     expect(getStats(5)).toMatchObject({ totalGames: 1, wins: 1, currentStreak: 1 });
   });
@@ -168,14 +168,14 @@ describe('SpordleGame', () => {
     startGame();
     guess('punts', miss);
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush(null, { status: 500, statusText: 'Server Error' });
+    http.expectOne('/api/letter-jacket/games/g1').flush(null, { status: 500, statusText: 'Server Error' });
     expect(game.status()).toBe('error');
-    expect(localStorage.getItem('knowball.spordle.round')).not.toBeNull();
-    http.expectNone('/api/spordle/games');
+    expect(localStorage.getItem('knowball.letter-jacket.round')).not.toBeNull();
+    http.expectNone('/api/letter-jacket/games');
     reopen();
-    http.expectOne('/api/spordle/games/g1').flush(null, { status: 404, statusText: 'Not Found' });
+    http.expectOne('/api/letter-jacket/games/g1').flush(null, { status: 404, statusText: 'Not Found' });
     expect(game.status()).toBe('expired');
-    expect(localStorage.getItem('knowball.spordle.round')).toBeNull();
+    expect(localStorage.getItem('knowball.letter-jacket.round')).toBeNull();
     expect(getStats(5).totalGames).toBe(0);
   });
 
@@ -183,7 +183,7 @@ describe('SpordleGame', () => {
     game.start();
     expect(game.status()).toBe('loading');
 
-    const request = http.expectOne('/api/spordle/games');
+    const request = http.expectOne('/api/letter-jacket/games');
     expect(request.request.body).toEqual({ wordLength: 5 });
     request.flush({ gameId: 'g1', wordLength: 5, maxAttempts: 6 });
 
@@ -193,10 +193,10 @@ describe('SpordleGame', () => {
 
   it('remembers the chosen word length for next time', () => {
     game.start(6);
-    http.expectOne('/api/spordle/games').flush({ gameId: 'g1', wordLength: 6, maxAttempts: 6 });
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g1', wordLength: 6, maxAttempts: 6 });
 
     expect(game.wordLength()).toBe(6);
-    expect(localStorage.getItem('knowball.spordle.wordLength')).toBe('6');
+    expect(localStorage.getItem('knowball.letter-jacket.wordLength')).toBe('6');
   });
 
   for (const action of ['guess', 'hint']) {
@@ -215,7 +215,7 @@ describe('SpordleGame', () => {
       expect(game.hintLoading()).toBe(false);
       expect(getStats(game.wordLength()).totalGames).toBe(0);
       game.newGame();
-      http.expectOne('/api/spordle/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
+      http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
       expect(game.status()).toBe('playing');
       expect(game.attempts()).toHaveLength(0);
       expect(getStats(game.wordLength()).totalGames).toBe(0);
@@ -224,7 +224,7 @@ describe('SpordleGame', () => {
 
   it('reports a game that cannot start', () => {
     game.start();
-    http.expectOne('/api/spordle/games').flush(null, { status: 500, statusText: 'Server Error' });
+    http.expectOne('/api/letter-jacket/games').flush(null, { status: 500, statusText: 'Server Error' });
 
     expect(game.status()).toBe('error');
     expect(game.message()).toContain('Failed to start');
@@ -342,7 +342,7 @@ describe('SpordleGame', () => {
     expect(id).toMatch(/^[0-9a-f-]{36}$/);
     first.error(new ProgressEvent('error'));
     // The guess may have been saved, so the board is reloaded; this one was not.
-    http.expectOne('/api/spordle/games/g1').flush({ ...saved, guesses: [], letterHint: null });
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved, guesses: [], letterHint: null });
     expect(game.status()).toBe('playing');
     expect(game.currentGuess()).toBe('punts');
     expect(game.message()).toBe('Error checking the word. Please try again.');
@@ -369,7 +369,7 @@ describe('SpordleGame', () => {
     const requestId = lost.request.body.requestId;
     lost.error(new ProgressEvent('error'));
     expect(game.busy()).toBe(true); // no new word until the board is known
-    http.expectOne('/api/spordle/games/g1').flush({ ...saved, letterHint: null,
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved, letterHint: null,
       guesses: [{ requestId, word: 'punts', score: miss.score }] });
 
     expect(game.attempts()).toEqual([{ word: 'punts', score: miss.score }]);
@@ -393,7 +393,7 @@ describe('SpordleGame', () => {
     // The server has three guesses: one from here, one from another tab, and this one.
     http.expectOne(GUESSES).flush({ ...miss, attemptsRemaining: 3 });
     const words = ['punts', 'goals', 'blitz'];
-    http.expectOne('/api/spordle/games/g1').flush({ ...saved, letterHint: null,
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved, letterHint: null,
       guesses: words.map((word, i) => ({ requestId: `r${i}`, word, score: miss.score })) });
     vi.runAllTimers();
 
@@ -409,7 +409,7 @@ describe('SpordleGame', () => {
     game.press('Enter');
     http.expectOne(GUESSES).flush({ error: 'Game is already complete' }, { status: 409, statusText: 'Conflict' });
     const won = { requestId: 'other', word: 'blitz', score: Array(5).fill('correct') };
-    http.expectOne('/api/spordle/games/g1').flush({ ...saved, complete: true, won: true, answer: 'blitz',
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved, complete: true, won: true, answer: 'blitz',
       guesses: [saved.guesses[0], won] });
 
     expect(game.status()).toBe('complete');
@@ -421,12 +421,12 @@ describe('SpordleGame', () => {
   it('counts an abandoned game as a loss, but not an untouched one', () => {
     startGame();
     game.newGame();
-    http.expectOne('/api/spordle/games').flush({ gameId: 'g1', wordLength: 5, maxAttempts: 6 });
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g1', wordLength: 5, maxAttempts: 6 });
     expect(getStats(5).totalGames).toBe(0);
 
     guess('punts', miss);
     game.newGame(4);
-    http.expectOne('/api/spordle/games').flush({ gameId: 'g2', wordLength: 4, maxAttempts: 6 });
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g2', wordLength: 4, maxAttempts: 6 });
 
     expect(getStats(5)).toMatchObject({ totalGames: 1, wins: 0 });
     expect(game.wordLength()).toBe(4);
@@ -469,7 +469,7 @@ describe('SpordleGame', () => {
     http.expectOne(HINT).flush({ category: 'Football' });
 
     game.newGame();
-    http.expectOne('/api/spordle/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
 
     expect(game.categoryHint()).toBeNull();
   });
