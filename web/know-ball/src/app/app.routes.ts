@@ -23,11 +23,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
   },
   {
-    path: 'spordle',
-    title: 'Spordle — Know Ball',
-    data: { description: 'Spordle: six guesses to find a sports word of 4, 5 or 6 letters.' } satisfies PageMetaData,
+    path: 'letter-jacket',
+    title: 'Letter Jacket — Know Ball',
+    data: { description: 'Letter Jacket: six guesses to find a sports word of 4, 5 or 6 letters.' } satisfies PageMetaData,
     loadComponent: () => import('./games/spordle/spordle').then((m) => m.Spordle),
   },
+  // The word game was called Spordle until November 2026; old links and shares still land on it.
+  { path: 'spordle', redirectTo: 'letter-jacket' },
   {
     path: 'scouting-report',
     title: 'Scouting Report — Know Ball',

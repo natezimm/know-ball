@@ -87,8 +87,8 @@ test('unaccented searches find accented player names in both daily games', async
 });
 
 for (const action of ['4 letters', 'New game']) {
-  test(`Spordle confirms abandonment before ${action} and records the loss only when accepted`, async ({ page }) => {
-    await page.goto('/spordle');
+  test(`Letter Jacket confirms abandonment before ${action} and records the loss only when accepted`, async ({ page }) => {
+    await page.goto('/letter-jacket');
     await expect(page.locator('.status')).toHaveText('Guess 1 of 6');
     await page.keyboard.type('about');
     await page.keyboard.press('Enter');
@@ -107,8 +107,8 @@ for (const action of ['4 letters', 'New game']) {
 }
 
 for (const endpoint of ['guesses', 'hint']) {
-  test(`an expired Spordle ${endpoint} offers recovery without recording a loss`, async ({ page }) => {
-    await page.goto('/spordle');
+  test(`an expired Letter Jacket ${endpoint} offers recovery without recording a loss`, async ({ page }) => {
+    await page.goto('/letter-jacket');
     await expect(page.locator('.status')).toHaveText('Guess 1 of 6');
     await page.route(`**/api/spordle/games/*/${endpoint}`, (route) => route.fulfill({ status: 404, json: { error: 'Game not found or expired' } }));
     if (endpoint === 'guesses') {

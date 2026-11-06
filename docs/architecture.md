@@ -100,7 +100,7 @@ flowchart LR
 
 A daily game plugs into the engine by implementing `IGame` (`Games/GameModels.cs`): generate a puzzle, evaluate
 a guess, unlock clues after misses and reveal the answer. Scouting Report and Career Path are the two
-implementations; Spordle and Numbers Don't Lie have their own services because their rounds are not
+implementations; Letter Jacket (`Spordle` in the code) and Numbers Don't Lie have their own services because their rounds are not
 "guess the player".
 
 ## 3. Signature sequence: a daily puzzle and a guess

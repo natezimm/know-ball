@@ -149,9 +149,12 @@ public enum GameType
     CareerPath = 3,
     StatQuiz = 4,
     GeoSports = 5,
+    /// <summary>Working name of the planned stat-line game, now called Back of the Card. Kept because the
+    /// value is stored as text; the name is not shown anywhere.</summary>
     Sportle = 6,
     SoundItOut = 7,
-    /// <summary>The Wordle-style word game. (Value 1 was called Spordle before the rename.)</summary>
+    /// <summary>The word game, shown to players as Letter Jacket (Spordle until November 2026). The value is stored
+    /// as text, so the code name stays. Value 1 had this name before an earlier rename.</summary>
     Spordle = 8,
 }
 

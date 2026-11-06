@@ -12,7 +12,7 @@ a personal project does not need yet.
 
 The browser makes up a random id on its first visit, keeps it in `localStorage` and sends it as `X-Anon-Id`
 (`web/know-ball/src/app/core/anon-id.ts`). The API keys player-game results and Numbers Don't Lie plays by it.
-Spordle rounds are not tied to it: a round is reached by its random round id, which the browser keeps, and expires
+Letter Jacket rounds are not tied to it: a round is reached by its random round id, which the browser keeps, and expires
 after six idle hours.
 
 ## Consequences

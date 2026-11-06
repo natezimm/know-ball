@@ -15,7 +15,7 @@ Deployment, Docker/Postgres checks and Playwright gameplay are implemented and p
 real-device validation still need evidence. Section 8 is the single launch checklist.
 Data-source research retains its dated findings in [research.md](../research.md).
 
-**Names changed on 2026-10-13.** "Spordle" is now the Wordle-style word game. The player-guessing game that the
+**Names changed on 2026-10-13.** "Spordle" is now the word game (renamed Letter Jacket in November 2026). The player-guessing game that the
 build plan calls Spordle is now **Scouting Report**. The site itself is now called **Know Ball**, and on 2026-10-14 the code
 was renamed to match (`SportsTrivia` became `KnowBall`).
 

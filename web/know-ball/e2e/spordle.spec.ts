@@ -11,7 +11,7 @@ const bank: Record<string, string> = JSON.parse(
 );
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/spordle');
+  await page.goto('/letter-jacket');
   await expect(page.getByRole('status').filter({ hasText: 'Guess 1 of 6' })).toBeVisible();
 });
 
@@ -171,7 +171,7 @@ async function submit(page: Page, word: string): Promise<Status[]> {
   return body.score;
 }
 
-/** Wordle scoring, as the server does it: repeated letters are only marked present while unmatched. */
+/** The scoring the server uses: repeated letters are only marked present while unmatched. */
 function scoreOf(answer: string, guess: string): Status[] {
   const score: Status[] = [...guess].map((c, i) => (c === answer[i] ? 'correct' : 'absent'));
   const unmatched = new Map<string, number>();
@@ -183,3 +183,9 @@ function scoreOf(answer: string, guess: string): Status[] {
   });
   return score;
 }
+
+test('old Spordle links land on Letter Jacket', async ({ page }) => {
+  await page.goto('/spordle');
+  await expect(page).toHaveURL(/\/letter-jacket$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Letter Jacket');
+});

@@ -2,9 +2,9 @@ import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { useMemoryStorage } from './memory-storage';
-import { Spordle } from './spordle';
+import { Spordle, shareResult } from './spordle';
 
-describe('Spordle page', () => {
+describe('Letter Jacket page', () => {
   let fixture: ComponentFixture<Spordle>;
   let http: HttpTestingController;
   let el: HTMLElement;
@@ -29,7 +29,7 @@ describe('Spordle page', () => {
   afterEach(() => http.verify());
 
   it('starts a game and shows the board, keyboard and hint buttons', () => {
-    expect(el.querySelector('h1')?.textContent).toBe('Spordle');
+    expect(el.querySelector('h1')?.textContent).toBe('Letter Jacket');
     expect(el.querySelectorAll('.row').length).toBe(6);
     expect(el.querySelectorAll('.key').length).toBe(28);
     expect(el.querySelector('.status')?.textContent).toBe('Guess 1 of 6');
@@ -76,5 +76,27 @@ describe('Spordle page', () => {
 
     expect(el.querySelectorAll('.row.active .tile').length).toBe(6);
     expect(six.getAttribute('aria-pressed')).toBe('true');
+  });
+});
+
+describe('Letter Jacket share text', () => {
+  it('uses Know Ball marks rather than coloured squares', () => {
+    const text = shareResult([
+      { word: 'blitz', score: ['correct', 'present', 'absent', 'absent', 'correct'] },
+      { word: 'bunts', score: ['correct', 'correct', 'correct', 'correct', 'correct'] },
+    ], true, 5);
+
+    expect(text).toBe([
+      'Know Ball · Letter Jacket 2/6 (5 letters)',
+      '● ◐ ○ ○ ●',
+      '● ● ● ● ●',
+      'https://knowball.nathanzimmerman.com/letter-jacket',
+    ].join('\n'));
+    expect(text).not.toMatch(/[\u{1F7E9}\u{1F7E8}\u2B1C]/u);
+  });
+
+  it('marks a loss with an X', () => {
+    const miss = { word: 'bunts', score: Array(5).fill('absent') };
+    expect(shareResult(Array(6).fill(miss), false, 5).split('\n')[0]).toBe('Know Ball · Letter Jacket X/6 (5 letters)');
   });
 });

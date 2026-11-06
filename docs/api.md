@@ -23,7 +23,10 @@ A puzzle's answer is attached to the response only once the game is won or lost.
 that was already recorded returns the original result instead of spending another guess; the same id with a
 different player returns 409.
 
-## Spordle
+## Letter Jacket
+
+The word game was called Spordle until November 2026. The API, its settings and the code keep that name, and
+`/spordle` in the browser redirects to `/letter-jacket`.
 
 | Endpoint | Purpose |
 | --- | --- |

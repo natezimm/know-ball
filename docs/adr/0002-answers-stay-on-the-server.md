@@ -11,7 +11,7 @@ including fields the page does not show, is public.
 
 Each `Puzzle` stores what a player may see (`PayloadJson`) separately from what they may not (`SecretJson`).
 Guesses are evaluated on the server against the secret. `GameService.BuildState` attaches the answer only when
-the result is won or lost, and a daily puzzle cannot be fetched before its Eastern date. Spordle keeps its word
+the result is won or lost, and a daily puzzle cannot be fetched before its Eastern date. Letter Jacket keeps its word
 in the session row and Numbers Don't Lie returns a solution only for questions already answered, with opaque
 question and option ids.
 

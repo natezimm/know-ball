@@ -39,7 +39,7 @@ or enabling the full game. The remaining candidates are unscheduled alternatives
 | --- | --- |
 | Numbers Don't Lie (formerly Stat Quiz) | Four-sport source proof, unambiguous reviewed questions, an enjoyable short daily quiz and sustainable content supply |
 | Geo Sports | Arena/birthplace coordinates, map interaction on phones and a useful scoring model |
-| Sportle | Distinct identity from Spordle, season-stat clues and automated content quality |
+| Sportle (now Back of the Card) | Distinct identity from Spordle (now Letter Jacket), season-stat clues and automated content quality |
 | Sound It Out | A sustainable licensed image collection and new authoring tools |
 | Who's the GOAT? | Career/award/championship data, clear rules and an engaging ranking loop |
 

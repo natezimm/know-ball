@@ -22,6 +22,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <nav aria-label="Project">
         <a href="https://github.com/natezimm/know-ball">GitHub</a>
       </nav>
+      <p class="disclaimer">Not affiliated with or endorsed by the NBA, NFL, MLB or NHL.</p>
     </footer>
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -55,6 +56,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     .footer nav { flex-wrap: wrap; }
     .footer nav a { color: var(--muted); font-size: 12px; white-space: normal; }
     .footer a:hover { color: var(--navy); }
+    .disclaimer { flex-basis: 100%; margin: 0; font-size: 12px; }
     @media (max-width: 480px) {
       .bar { padding: 10px 14px; gap: 8px; }
       .brand { font-size: 16px; gap: 7px; }

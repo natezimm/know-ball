@@ -11,7 +11,7 @@ guess. Two open tabs can also guess at the same moment and overwrite each other'
 
 Guess requests carry an optional client-generated `requestId`. The server records it with the guess; a retry with
 the same id does not guess again, and the same id with a different guess returns 409. What a retry returns
-differs by game: Spordle returns the original guess's result, and the player games return the round's current
+differs by game: Letter Jacket returns the original guess's result, and the player games return the round's current
 state, which includes that guess. For the player
 games, a guess is saved with a compare-and-swap: the update applies only if the stored guess list is unchanged
 since it was read, otherwise the guess is evaluated again on the fresh state (`GameService.GuessAsync`). New

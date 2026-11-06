@@ -9,11 +9,11 @@ const chartX = (i: number): number => 30 + i * (274 / (PPG.length - 1));
 const chartY = (ppg: number): number => 132 - (ppg - 18) * 7.5;
 
 @Component({
-  selector: 'app-sportle-mock',
+  selector: 'app-back-of-the-card-mock',
   imports: [MockOption],
   template: `
     <section class="mk-game">
-      <h2>Sportle <span class="mk-chip">Phase 3</span></h2>
+      <h2>Back of the Card <span class="mk-chip">Phase 3</span></h2>
       <p class="mk-sub">
         Guess the player from season-by-season numbers with the giveaways hidden. Each miss reveals more: teams first,
         then awards, then position.
@@ -21,10 +21,10 @@ const chartY = (ppg: number): number => 132 - (ppg - 18) * 7.5;
 
       <div class="mk-row">
         <app-mock-option
-          game="sportle"
+          game="back-of-the-card"
           letter="A"
           name="Stat table"
-          bar="Sportle #12"
+          bar="Back of the Card #12"
           plus="Reads like a Basketball-Reference page, which stat fans already know how to scan."
           minus="A wide table on a narrow screen: long careers scroll, and it is the driest of the three."
         >
@@ -53,10 +53,10 @@ const chartY = (ppg: number): number => 132 - (ppg - 18) * 7.5;
         </app-mock-option>
 
         <app-mock-option
-          game="sportle"
+          game="back-of-the-card"
           letter="B"
           name="Trading card back"
-          bar="Sportle #12"
+          bar="Back of the Card #12"
           plus="A strong visual identity of its own, and written hints add personality beyond the numbers."
           minus="Each puzzle needs a few hint lines written or generated, on top of the stats."
         >
@@ -84,10 +84,10 @@ const chartY = (ppg: number): number => 132 - (ppg - 18) * 7.5;
         </app-mock-option>
 
         <app-mock-option
-          game="sportle"
+          game="back-of-the-card"
           letter="C"
           name="Career arc"
-          bar="Sportle #12"
+          bar="Back of the Card #12"
           plus="Shows the shape of a career at a glance; the most original look, and it reuses the charts planned for GOAT."
           minus="One stat at a time, so there is less to go on per screen; needs a charting library."
         >
@@ -161,7 +161,7 @@ const chartY = (ppg: number): number => 132 - (ppg - 18) * 7.5;
     .season span { margin-left: auto; color: var(--muted); font-size: 12px; }
   `,
 })
-export class SportleMock {
+export class BackOfTheCardMock {
   protected readonly rows = [
     { season: '07–08', team: 'SEA', gp: 80, pts: '20.3', reb: '4.4', ast: '2.4', award: 'ROY' },
     { season: '09–10', team: 'OKC', gp: 82, pts: '30.1', reb: '7.6', ast: '2.8', award: 'All-NBA' },

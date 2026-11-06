@@ -4,15 +4,26 @@ import { NextGame } from '../../shared/next-game/next-game';
 import { Tilt } from '../../shared/tilt/tilt';
 import { SpordleKeyboard } from './keyboard';
 import { HintType } from './spordle-api';
-import { MAX_ATTEMPTS, SpordleGame } from './spordle-game';
+import { Attempt, MAX_ATTEMPTS, SpordleGame } from './spordle-game';
+import { LetterStatus } from './scoring';
 import { WORD_LENGTHS, WordLength, formatTime, getStats, resetStats } from './spordle-stats';
 import { SpordleGrid } from './word-grid';
 
 const MESSAGE_MS = 3000;
 
+/** Know Ball's own share marks: a filled dot for a letter in its spot, half for elsewhere, empty for a miss. */
+export const SHARE_MARKS: Record<LetterStatus, string> = { correct: '●', present: '◐', absent: '○' };
+
+/** The text a finished game shares: a headline, one row of marks per guess, and the link. */
+export function shareResult(attempts: readonly Attempt[], won: boolean, wordLength: number): string {
+  const rows = attempts.map((a) => a.score.map((s) => SHARE_MARKS[s]).join(' '));
+  return [`Know Ball · Letter Jacket ${won ? attempts.length : 'X'}/${MAX_ATTEMPTS} (${wordLength} letters)`, ...rows,
+    'https://knowball.nathanzimmerman.com/letter-jacket'].join('\n');
+}
+
 /**
- * Spordle: guess the sports word in six tries. Plays like Nerdle (random word per game,
- * 4, 5 or 6 letters, category and letter hints, stats per word length) in Know Ball's look.
+ * Letter Jacket (called Spordle in the code): guess the sports word in six tries. A random word per
+ * game, 4, 5 or 6 letters, category and letter hints, and stats per word length, in Know Ball's look.
  */
 @Component({
   selector: 'app-spordle',
@@ -20,9 +31,9 @@ const MESSAGE_MS = 3000;
   providers: [SpordleGame],
   host: { '(window:keydown)': 'onKeydown($event)' },
   template: `
-    <section class="spordle" aria-label="Spordle game">
+    <section class="spordle" aria-label="Letter Jacket game">
       <header class="top kb-game-top">
-        <h1 class="kb-wordmark">Spordle</h1>
+        <h1 class="kb-wordmark">Letter Jacket</h1>
         <div class="kb-icons">
           <button type="button" class="kb-icon" aria-label="How to play" title="How to play" (mousedown)="$event.preventDefault()" (click)="open(helpDialog)">?</button>
           <button type="button" class="kb-icon" aria-label="Stats" title="Stats" (mousedown)="$event.preventDefault()" (click)="openStats()">
@@ -92,7 +103,7 @@ const MESSAGE_MS = 3000;
           <div class="kb-result-next">
             <button type="button" class="kb-btn primary" (mousedown)="$event.preventDefault()" (click)="share()">{{ shareLabel() }}</button>
             <button type="button" class="kb-btn" (mousedown)="$event.preventDefault()" (click)="requestNewGame()">Play again</button>
-            <app-next-game current="spordle" />
+            <app-next-game current="letter-jacket" />
           </div>
         </div>
       } @else {
@@ -423,10 +434,7 @@ export class Spordle {
   protected async share(): Promise<void> {
     const result = this.game.result();
     if (!result) return;
-    const rows = this.game.attempts().map((a) => a.score.map((s) => (s === 'correct' ? '🟩' : s === 'present' ? '🟨' : '⬜')).join(''));
-    const text = [`Know Ball · Spordle ${result.won ? result.guesses : 'X'}/6 (${this.game.wordLength()} letters)`, ...rows,
-      'https://knowball.nathanzimmerman.com/spordle'].join('\n');
-    const outcome = await shareText(text);
+    const outcome = await shareText(shareResult(this.game.attempts(), result.won, this.game.wordLength()));
     this.shareLabel.set(outcome === 'copied' ? 'Copied' : outcome === 'failed' ? 'Could not copy' : 'Share');
     if (outcome !== 'shared') setTimeout(() => this.shareLabel.set('Share'), 2500);
   }
