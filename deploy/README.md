@@ -189,9 +189,12 @@ docker compose exec db psql -U knowball -d know_ball
 
 Table and column names are quoted CamelCase, as in `select * from "Players" limit 5;`.
 
-For a desktop client such as DBeaver or pgAdmin, connect to the database container's address, `172.31.250.2`
-(the compose file fixes the network to `172.31.250.0/24`; check with
-`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' knowball-db-1`), port 5432, through
-the client's SSH tunnel option, using the VM's address and your SSH user and key. The database is `know_ball`,
+For a desktop client such as DBeaver or pgAdmin, find the database container's address on the VM:
+
+```sh
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' knowball-db-1
+```
+
+Then connect the client to that address on port 5432 through its SSH tunnel option, using the VM's address and your SSH user and key. The database is `know_ball`,
 the user `knowball` and the password `KNOWBALL_DB_PASSWORD` from `.env`. Disconnect when you are done: an open
 transaction can hold a lock that a deploy's migration waits for.
