@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "batchId": "silhouette-pilot-five",
+  "about": "The five photos from the October 2026 photo-game pilot. Coordinates are in pixels of the unchanged Commons original. Points with label 1 are on the player (and ball); label 0 marks things to leave out, such as defenders or the rim.",
+  "photos": [
+    {
+      "key": "lebron-chalk-2008",
+      "player": "LeBron James",
+      "commonsFile": "LeBron_James'_pregame_ritual.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:LeBron_James%27_pregame_ritual.jpg",
+      "sha256": "5314d7bb7621e8549bb01091162abeb9c3dcc3c57d499d95aa3b063996079fb4",
+      "credit": "Keith Allison, LeBron James' pregame ritual (AAAA0584); crop: TonyTheTiger; cut-out and silhouette: Know Ball.",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "keep": "Both arms and hands; the chalk cloud is not part of the player.",
+      "prompts": { "box": null, "points": [] }
+    },
+    {
+      "key": "dirk-fadeaway-2008",
+      "player": "Dirk Nowitzki",
+      "commonsFile": "NowitzkiWizards1.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:NowitzkiWizards1.jpg",
+      "sha256": "bca811fa8a893e6fa514ab2f0c08dc8e50ae5bead8b842177016fae0598adf88",
+      "credit": "Keith Allison, Dirk Nowitzki; cut-out and silhouette: Know Ball.",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "keep": "Shooting arm, ball and the raised leg; leave out the defenders. The right shoe is cut off by the frame, so do not invent it.",
+      "prompts": { "box": null, "points": [] }
+    },
+    {
+      "key": "dr-j-dunk-1981",
+      "player": "Julius Erving",
+      "commonsFile": "JuliusErvingSlamDunk1981.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:JuliusErvingSlamDunk1981.jpg",
+      "sha256": "1e803c3c67cd08b548bb79109b9fbb103dda22d690132f7f3d92d9e09b6086ef",
+      "credit": "Jim Accordino; color correction: JoeJohnson2; cut-out and silhouette: Know Ball.",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "keep": "The ball cocked behind his head; leave out the defender.",
+      "prompts": { "box": null, "points": [] }
+    },
+    {
+      "key": "kobe-rim-2005",
+      "player": "Kobe Bryant",
+      "commonsFile": "Kobe_Bryant_dunk.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kobe_Bryant_dunk.jpg",
+      "sha256": "ba2316149575583e661fcbb68df9d7323a94f5dff72b4f4384fa83ba04242e5e",
+      "credit": "Cpl. Megan L. Stiner / U.S. Marine Corps; cut-out and silhouette: Know Ball.",
+      "license": "Public domain in the U.S. (federal government work)",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Kobe_Bryant_dunk.jpg",
+      "keep": "Raised arms, crossed legs and the ball; leave out the rim, net and other players.",
+      "prompts": { "box": null, "points": [] }
+    },
+    {
+      "key": "wilt-100-1962",
+      "player": "Wilt Chamberlain",
+      "commonsFile": "Wilt_Chamberlain_100_Point_Game_1962.jpg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wilt_Chamberlain_100_Point_Game_1962.jpg",
+      "sha256": "73511e2cf4587747be3306180f59f5d859341f83ee974851d12223c7b99a0287",
+      "credit": "Paul Vathis / Associated Press; crop, cleanup and prior blur: Hyperba21; cut-out and silhouette: Know Ball.",
+      "license": "Public domain in the U.S. (copyright not renewed); released crop only",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Wilt_Chamberlain_100_Point_Game_1962.jpg",
+      "keep": "Wilt and the paper sign he holds, in one outline.",
+      "prompts": { "box": null, "points": [] }
+    }
+  ]
+}

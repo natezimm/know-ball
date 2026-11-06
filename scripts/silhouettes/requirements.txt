@@ -1,0 +1,9 @@
+# Research tooling for scripts/silhouettes; not part of the site or its Docker image.
+numpy>=2.0
+pillow>=11.0
+opencv-python-headless>=4.10
+torch>=2.6
+torchvision>=0.21
+transformers>=4.56
+rembg[cpu]>=2.0.66
+matplotlib>=3.9  # only for the interactive `pick` command
