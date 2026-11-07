@@ -1,6 +1,6 @@
 # Know Ball
 
-Sports trivia: two daily guess-the-player games, a daily sports trivia quiz and an unlimited word game, with new
+Sports trivia: three daily guess-the-player games, a daily sports trivia quiz and an unlimited word game, with new
 dailies at midnight Eastern. Angular front end, ASP.NET Core API and PostgreSQL, fed by a nightly import of every NBA player
 since 1947.
 
@@ -26,9 +26,11 @@ stays with your browser.
 - **Scouting Report**: guess today's NBA player in eight tries; each guess is graded on team, conference,
   division, position, height, age and jersey number.
 - **Career Path**: name the player from every team they played for, in order; each miss unlocks a hint.
+- **Back of the Card**: name the player from every season's stats on the back of their card; each miss uncovers
+  their teams, then position and height, then award stamps, then draft and college.
 - **Numbers Don't Lie**: five multiple-choice questions on records, nicknames, famous numbers and history across the
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.
-- Scouting Report and Career Path have practice rounds, an archive of past dailies, stats and streaks, and a
+- The three player games have practice rounds, an archive of past dailies, stats and streaks, and a
   spoiler-free share card. Letter Jacket keeps stats and streaks per word length. Numbers Don't Lie has a daily round,
   filtered practice with a Playoff Moments topic and a share card; it has no archive or stats yet.
 - Installable as a phone app (PWA), and built for phones first.

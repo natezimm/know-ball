@@ -4,9 +4,9 @@ All endpoints live under `/api` in `src/KnowBall.Api/Endpoints/`. The game endpo
 the browser makes up an id on its first visit (`web/know-ball/src/app/core/anon-id.ts`) and sends it on every call.
 It identifies a browser, not an account. Errors the API reports itself have the shape `{ "error": "..." }`.
 
-## Player games (Scouting Report, Career Path)
+## Player games (Scouting Report, Career Path, Back of the Card)
 
-`{game}` is `scouting-report` or `career-path`.
+`{game}` is `scouting-report`, `career-path` or `back-of-the-card`.
 
 | Endpoint | Purpose |
 | --- | --- |

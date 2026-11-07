@@ -1,6 +1,6 @@
 import { expect, test } from './support';
 
-test('fourth game opens and saves daily feedback across reloads', async ({ page }) => {
+test('the quiz opens and saves daily feedback across reloads', async ({ page }) => {
   // Keep the answered radio visible briefly after Next, reproducing the CI race.
   await page.route('**/api/numbers-dont-lie/quizzes/*/continue', async route => {
     const response = await route.fetch();
@@ -9,7 +9,7 @@ test('fourth game opens and saves daily feedback across reloads', async ({ page 
   });
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
-  await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(4);
+  await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(5);
   await page.getByRole('link',{name:"Numbers Don't Lie: Play today's quiz"}).click();
   await expect(page.getByRole('heading',{name:"Numbers Don't Lie",exact:true})).toBeVisible();
   for(let i=0;i<5;i++) {

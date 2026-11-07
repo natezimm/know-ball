@@ -9,7 +9,7 @@ interface GameCard {
   /** What kind of game it is, in a word or two, above its name. */
   kind: string;
   /** Which badge sits in the navy circle; drawn as inline SVG so it is centred whatever the font. */
-  icon: 'tile' | 'clipboard' | 'jersey' | 'chart';
+  icon: 'tile' | 'clipboard' | 'jersey' | 'card' | 'chart';
   /** The play label for a game without a tracked daily puzzle. */
   play?: string;
   /** The colour of this game's card border. One theme for the site, one trim per game. */
@@ -43,7 +43,7 @@ export function cardStatus(
   }
 }
 
-const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
+const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
 
 @Component({
   selector: 'app-home',
@@ -79,6 +79,11 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
                   @case ('jersey') {
                     <path d="M9 3.5c.5 1.4 1.6 2.2 3 2.2s2.5-.8 3-2.2l5 2.3-1.8 4.4-2.2-.9V20.5H8V9.3l-2.2.9L4 5.8z" />
                     <path d="M10.2 11h3.6l-2.4 6" stroke-width="2" />
+                  }
+                  @case ('card') {
+                    <rect x="4.5" y="3" width="15" height="18" rx="1.5" />
+                    <path d="M7.5 6.5h9" stroke="var(--mustard)" stroke-width="2.4" />
+                    <path d="M7.5 11h2M11.5 11h5M7.5 14h2M11.5 14h5M7.5 17h2M11.5 17h3.5" />
                   }
                   @case ('chart') {
                     <path d="M4 20.5h16" />
@@ -165,7 +170,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four'];
   `,
 })
 export class Home {
-  /** The four games, in the order the home page shows them. */
+  /** The five games, in the order the home page shows them. */
   private readonly games: GameCard[] = [
     { name: 'Letter Jacket', kind: 'Word game', link: '/letter-jacket', icon: 'tile', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
@@ -175,6 +180,10 @@ export class Home {
     {
       name: 'Career Path', kind: 'Daily', link: '/career-path', daily: 'career-path', icon: 'jersey', trim: 'var(--mustard)',
       blurb: 'Every team they played for, in order. Who is it?',
+    },
+    {
+      name: 'Back of the Card', kind: 'Daily', link: '/back-of-the-card', daily: 'back-of-the-card', icon: 'card', trim: 'var(--gold)',
+      blurb: "Every season's stats from a player's card, with the name blacked out. Who is it?",
     },
     { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz",
       blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },
@@ -193,7 +202,7 @@ export class Home {
       streak: stats.find((s) => s.game === card.daily)?.currentStreak ?? 0,
     }));
   });
-  protected readonly countWord = computed(() => this.today() === undefined ? 'Four' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Four');
+  protected readonly countWord = computed(() => this.today() === undefined ? 'Five' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Five');
 
   constructor() {
     // If the API is down the cards still link to the games, which report the problem themselves.

@@ -165,6 +165,39 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Back_of_the_card_uncovers_one_part_per_miss_and_names_him_only_at_the_end()
+    {
+        var client = NewPlayer();
+        var daily = await Json(await client.GetAsync("/api/back-of-the-card/daily"));
+        var puzzleId = daily.GetProperty("puzzleId").GetInt32();
+        var answer = await AnswerOf(puzzleId);
+
+        Assert.Equal(("back-of-the-card", 8), (daily.GetProperty("game").GetString(), daily.GetProperty("maxGuesses").GetInt32()));
+        var seasons = daily.GetProperty("payload").GetProperty("seasons");
+        Assert.True(seasons.GetArrayLength() >= 5);
+        Assert.Equal(seasons.GetArrayLength(), daily.GetProperty("payload").GetProperty("career").GetProperty("seasons").GetInt32());
+        var clues = daily.GetProperty("clues");
+        Assert.All(clues.GetProperty("steps").EnumerateArray(), step => Assert.False(step.GetProperty("open").GetBoolean()));
+        Assert.False(clues.TryGetProperty("teams", out _));
+        AssertHidden(daily, answer);
+
+        // A wrong guess opens the clubs, one per printed season, and still keeps the name back.
+        var wrongId = await Db(db => db.Players.AsNoTracking().Where(p => p.Id != answer.Id).OrderBy(p => p.Id).Select(p => p.Id).FirstAsync());
+        var missed = await Json(await client.PostAsJsonAsync($"/api/back-of-the-card/{puzzleId}/guess", new { playerId = wrongId }));
+        Assert.Equal(seasons.GetArrayLength(), missed.GetProperty("clues").GetProperty("teams").GetArrayLength());
+        Assert.False(missed.GetProperty("clues").TryGetProperty("stamps", out _));
+        AssertHidden(missed, answer);
+
+        var won = await Json(await client.PostAsJsonAsync($"/api/back-of-the-card/{puzzleId}/guess", new { playerId = answer.Id }));
+        Assert.Equal("won", won.GetProperty("status").GetString());
+        Assert.Equal(answer.FullName, won.GetProperty("answer").GetProperty("name").GetString());
+        Assert.True(won.GetProperty("clues").TryGetProperty("drafted", out _));
+
+        var archive = await Json(await client.GetAsync("/api/back-of-the-card/archive"));
+        Assert.Equal((puzzleId, "won"), (archive[0].GetProperty("puzzleId").GetInt32(), archive[0].GetProperty("status").GetString()));
+    }
+
+    [Fact]
     public async Task A_practice_round_is_a_fresh_puzzle_outside_the_calendar()
     {
         var client = NewPlayer();
@@ -191,7 +224,7 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
     {
         Assert.Equal(HttpStatusCode.NotFound, (await NewPlayer().GetAsync(path)).StatusCode);
         var today = await Json(await NewPlayer().GetAsync("/api/me/today"));
-        Assert.Equal(["scouting-report", "career-path"], today.EnumerateArray().Select(t => t.GetProperty("game").GetString()));
+        Assert.Equal(["scouting-report", "career-path", "back-of-the-card"], today.EnumerateArray().Select(t => t.GetProperty("game").GetString()));
     }
 
     [Fact]

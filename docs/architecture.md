@@ -99,8 +99,8 @@ flowchart LR
 - `KnowBall.Api` and `KnowBall.Importer` are thin hosts that wire the layers together.
 
 A daily game plugs into the engine by implementing `IGame` (`Games/GameModels.cs`): generate a puzzle, evaluate
-a guess, unlock clues after misses and reveal the answer. Scouting Report and Career Path are the two
-implementations; Letter Jacket and Numbers Don't Lie have their own services because their rounds are not
+a guess, unlock clues after misses and reveal the answer. Scouting Report, Career Path and Back of the
+Card are the implementations; Letter Jacket and Numbers Don't Lie have their own services because their rounds are not
 "guess the player".
 
 ## 3. Signature sequence: a daily puzzle and a guess

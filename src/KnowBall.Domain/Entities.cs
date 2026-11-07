@@ -149,12 +149,13 @@ public enum GameType
     CareerPath = 3,
     StatQuiz = 4,
     GeoSports = 5,
-    /// <summary>Working name of the planned stat-line game, now called Back of the Card. Kept because the
-    /// value is stored as text; the name is not shown anywhere.</summary>
+    /// <summary>Retired working name of the stat-line game. No stored rows use it; the game is <see cref="BackOfTheCard"/>.</summary>
     Sportle = 6,
     SoundItOut = 7,
     /// <summary>The word game. No stored rows use this value.</summary>
     LetterJacket = 8,
+    /// <summary>Guess the player from the stat lines on the back of their trading card.</summary>
+    BackOfTheCard = 9,
 }
 
 public enum PuzzleStatus
