@@ -3,6 +3,7 @@ import { PageMetaData } from './core/page-meta';
 
 const scoutingReport = () => import('./games/scouting-report/scouting-report').then((m) => m.ScoutingReport);
 const careerPath = () => import('./games/career-path/career-path').then((m) => m.CareerPath);
+const backOfTheCard = () => import('./games/back-of-the-card/back-of-the-card').then((m) => m.BackOfTheCard);
 
 // A game's bare address is today's puzzle; "/puzzle/:puzzleId" is one from the archive or a practice round.
 // Search engines index each game's bare address and skip archive puzzles and the design lab (core/page-meta.ts).
@@ -46,6 +47,15 @@ export const routes: Routes = [
     loadComponent: careerPath,
   },
   { path: 'career-path/puzzle/:puzzleId', title: 'Career Path — Know Ball', data: archive, loadComponent: careerPath },
+  {
+    path: 'back-of-the-card',
+    title: 'Back of the Card — Know Ball',
+    data: {
+      description: "Back of the Card: every season's stats from a player's card, name blacked out. Who is it? A new puzzle every day.",
+    } satisfies PageMetaData,
+    loadComponent: backOfTheCard,
+  },
+  { path: 'back-of-the-card/puzzle/:puzzleId', title: 'Back of the Card — Know Ball', data: archive, loadComponent: backOfTheCard },
   {
     path: 'mockups',
     title: 'Mockups — Know Ball',

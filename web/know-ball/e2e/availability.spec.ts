@@ -14,7 +14,7 @@ test('daily cards wait for availability and explain a day without a puzzle', asy
     await route.fulfill({ json: today });
   });
   await page.goto('/');
-  await expect(page.getByText('Checking today…', { exact: true })).toHaveCount(2);
+  await expect(page.getByText('Checking today…', { exact: true })).toHaveCount(3);
   await expect(page.getByRole('link', { name: /^Career Path/ })).toHaveCount(0);
   release();
   await expect(page.getByText('No puzzle today', { exact: true })).toBeVisible();
@@ -44,7 +44,7 @@ for (const width of [390, 1280]) {
   test(`game titles clear the banner at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.route('**/api/**', (route) => route.fulfill({ status: 404, json: { error: missing } }));
-    for (const slug of ['scouting-report', 'career-path', 'letter-jacket']) {
+    for (const slug of ['scouting-report', 'career-path', 'back-of-the-card', 'letter-jacket']) {
       await page.goto(`/${slug}`);
       await page.evaluate(() => document.fonts.ready);
       const banner = await page.locator('app-root > header').boundingBox();
@@ -58,11 +58,11 @@ for (const width of [390, 1280]) {
   });
 }
 
-test('old photo-game and admin bookmarks return to the four-game home page', async ({ page }) => {
+test('old photo-game and admin bookmarks return to the home page', async ({ page }) => {
   await page.route('**/api/me/today', (route) => route.fulfill({ json: today }));
   for (const path of ['/whos-that', '/whos-that/puzzle/1', '/admin']) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole('list', { name: 'Games' }).getByRole('heading', { level: 2 })).toHaveText(['Letter Jacket', 'Scouting Report', 'Career Path', "Numbers Don't Lie"]);
+    await expect(page.getByRole('list', { name: 'Games' }).getByRole('heading', { level: 2 })).toHaveText(['Letter Jacket', 'Scouting Report', 'Career Path', 'Back of the Card', "Numbers Don't Lie"]);
   }
 });

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { BackOfTheCardMock } from './games/back-of-the-card';
 import { GeoSportsMock } from './games/geo-sports';
 import { GoatMock } from './games/goat';
 import { SoundItOutMock } from './games/sound-it-out';
@@ -17,8 +16,9 @@ export const MOCKUP_ROUTES: Routes = [
       { path: 'themes', component: ThemesMock },
       { path: 'stat-quiz', component: StatQuizMock },
       { path: 'geo-sports', component: GeoSportsMock },
-      { path: 'back-of-the-card', component: BackOfTheCardMock },
-      { path: 'sportle', pathMatch: 'full', redirectTo: 'back-of-the-card' },
+      // Built: the sketches left the gallery, and their old addresses open the game.
+      { path: 'back-of-the-card', redirectTo: '/back-of-the-card' },
+      { path: 'sportle', redirectTo: '/back-of-the-card' },
       { path: 'sound-it-out', component: SoundItOutMock },
       { path: 'goat', component: GoatMock },
     ],

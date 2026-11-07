@@ -1,8 +1,8 @@
 import { expect, guessPlayer, learnDaily, players, test } from './support';
 
-for (const game of ['scouting-report', 'career-path'] as const) {
+for (const game of ['scouting-report', 'career-path', 'back-of-the-card'] as const) {
   test(`${game} offers practice from the archive before completion and preserves the daily board`, async ({ page, request }) => {
-    const { wrong } = await learnDaily(request, game, await players(request, game === 'career-path'));
+    const { wrong } = await learnDaily(request, game, await players(request, game !== 'scouting-report'));
     await page.goto('/' + game);
     await expect(page.locator('.meta')).toContainText('No. 1');
     await page.getByRole('button', { name: 'Past puzzles' }).click();

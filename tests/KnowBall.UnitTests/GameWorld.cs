@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Time.Testing;
 using KnowBall.Application.Games;
+using KnowBall.Application.Games.BackOfTheCard;
 using KnowBall.Application.Games.CareerPath;
 using KnowBall.Application.Games.ScoutingReport;
 using KnowBall.Application.Text;
@@ -52,8 +53,52 @@ public sealed class GameWorld : IDisposable
         AddPlayer("Same Road", null, "G", 75, "1985-05-05", null, 30, [("OKC", 2010, 2012), ("GSW", 2013, 2014), ("MIA", 2015, 2016)], active: false, country: "France");
         AddPlayer("Other Road", null, "C", 84, "1980-01-01", null, 40, [("DEN", 2001, 2004), ("NYK", 2005, 2008), ("MIA", 2009, 2010)], active: false);
         AddPlayer("One Stop", null, "G", 73, "1975-01-01", null, 80, [("BOS", 1996, 2008)], active: false);
+
+        // Season lines for the card game. Durant's 2019 season was split by a trade, so its combined row has no team.
+        AddSeasons("Kevin Durant",
+            (2007, "SEA", 80, 20.3, 4.4, 2.4), (2008, "OKC", 74, 25.3, 6.5, 2.8), (2013, "OKC", 81, 32.0, 7.4, 5.5),
+            (2016, "GSW", 62, 25.1, 8.3, 4.8), (2019, null, 60, 26.0, 7.0, 5.0), (2020, "MIA", 70, 27.0, 7.1, 5.6));
+        Players["Kevin Durant"].SeasonStats.AddRange(
+        [
+            new PlayerSeasonStat { Season = 2019, Team = Teams["GSW"], IsSeasonTotal = false, Games = 30, PointsPerGame = 25.0 },
+            new PlayerSeasonStat { Season = 2019, Team = Teams["MIA"], IsSeasonTotal = false, Games = 30, PointsPerGame = 27.0 },
+        ]);
+        Players["Kevin Durant"].Awards.AddRange(
+        [
+            new Award { Season = 2007, Type = "ROY" },
+            new Award { Season = 2013, Type = "MVP" },
+            new Award { Season = 2013, Type = "AllStar" },
+            new Award { Season = 2016, Type = "AllStar" },
+            new Award { Season = 2016, Type = "AllNBA1" },
+        ]);
+        AddSeasons("Nikola Jokić",
+            (2015, "DEN", 80, 10.0, 7.0, 2.4), (2016, "DEN", 73, 16.7, 9.8, 4.9), (2017, "DEN", 75, 18.5, 10.7, 6.1),
+            (2018, "DEN", 80, 20.1, 10.8, 7.3), (2019, "DEN", 73, 19.9, 9.7, 7.0));
+        AddSeasons("One Stop",
+            (1996, "BOS", 82, 12.0, 3.0, 5.0), (1997, "BOS", 82, 14.0, 3.1, 6.0), (1998, "BOS", 50, 15.0, 3.2, 6.5),
+            (1999, "BOS", 82, 16.0, 3.3, 7.0), (2000, "BOS", 82, 13.0, 3.0, 6.0));
+        // Too few seasons to make a card.
+        AddSeasons("Same Road", (2010, "OKC", 60, 8.0, 2.0, 3.0), (2013, "GSW", 50, 9.0, 2.0, 3.0), (2015, "MIA", 40, 7.0, 2.0, 2.0));
+
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();
+    }
+
+    private void AddSeasons(string name, params (int Season, string? Team, int Games, double Points, double Rebounds, double Assists)[] lines)
+    {
+        foreach (var (season, team, games, points, rebounds, assists) in lines)
+        {
+            Players[name].SeasonStats.Add(new PlayerSeasonStat
+            {
+                Season = season,
+                Team = team is null ? null : Teams[team],
+                IsSeasonTotal = true,
+                Games = games,
+                PointsPerGame = points,
+                ReboundsPerGame = rebounds,
+                AssistsPerGame = assists,
+            });
+        }
     }
 
     private void AddPlayer(
@@ -99,7 +144,7 @@ public sealed class GameWorld : IDisposable
     {
         var ctx = Db.NewContext();
         var calendar = new PuzzleCalendar(Clock);
-        var registry = new GameRegistry([new ScoutingReportGame(ctx), new CareerPathGame(ctx)]);
+        var registry = new GameRegistry([new ScoutingReportGame(ctx), new CareerPathGame(ctx), new BackOfTheCardGame(ctx)]);
         var scheduler = new PuzzleScheduler(ctx, calendar, Clock, NullLogger<PuzzleScheduler>.Instance) { Random = new Random(seed) };
         var service = new GameService(ctx, registry, scheduler, calendar, Clock);
         return new Engine(ctx, registry, scheduler, service, calendar);

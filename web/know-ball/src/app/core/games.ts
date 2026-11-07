@@ -1,8 +1,9 @@
-/** The four games in the order the site presents them: the home page, and the "next game" button after a result. */
+/** The five games in the order the site presents them: the home page, and the "next game" button after a result. */
 export const GAMES = [
   { slug: 'letter-jacket', name: 'Letter Jacket' },
   { slug: 'scouting-report', name: 'Scouting Report' },
   { slug: 'career-path', name: 'Career Path' },
+  { slug: 'back-of-the-card', name: 'Back of the Card' },
   { slug: 'numbers-dont-lie', name: "Numbers Don't Lie" },
 ] as const;
 
