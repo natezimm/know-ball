@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export type GameSlug = 'scouting-report' | 'career-path' | 'back-of-the-card';
-/** The leagues a game can have an edition in. NBA is every game's first; Scouting Report and Career Path also have an NFL one. */
+/** The leagues a game can have an edition in. NBA is every game's first; Scouting Report, Career Path and Back of the Card also have an NFL one. */
 export type League = 'nba' | 'nfl';
 export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL' };
 export type PlayStatus = 'playing' | 'won' | 'lost';

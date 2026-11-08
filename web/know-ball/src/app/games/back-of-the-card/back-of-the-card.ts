@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
-import { GameState } from '../../core/game-api';
+import { GameState, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
 import { Avatar } from '../../shared/avatar/avatar';
@@ -27,6 +27,29 @@ interface CardPayload {
   career: CardCareer;
 }
 
+/** A football card's stat column after games, and the decimals it prints with. */
+export interface CardColumn {
+  label: string;
+  decimals: number;
+}
+
+/** A football card: columns that suit the player's position, and season totals. */
+export interface FootballCardPayload {
+  columns: CardColumn[];
+  seasons: { season: number; games: number; values: number[] }[];
+  career: { seasons: number; games: number; values: number[] };
+}
+
+/** The card as printed: column headings after Year, Club and G, then each season's cells and the career line's. */
+export interface CardTable {
+  headings: string[];
+  seasons: { season: number; label: string; games: number; cells: string[] }[];
+  career: { seasons: number; games: number; cells: string[] };
+}
+
+/** Stamps for making a team, printed in teal; the rest are individual awards, in red. */
+const TEAM_STAMPS = new Set(['All-Star', 'All-NBA', 'All-Pro', 'All-Pro 2nd', 'Pro Bowl']);
+
 /** What the misses have uncovered so far. A part that is still covered is left out. */
 export interface CardClues {
   steps: { label: string; open: boolean }[];
@@ -46,21 +69,52 @@ export function seasonLabel(season: number): string {
   return `${two(season)}–${two(season + 1)}`;
 }
 
+/** 5097 with no decimals → "5,097"; 66 with one → "66.0". */
+function figure(value: number, decimals: number): string {
+  return value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+/** Either kind of card as rows of printed cells. A football season goes by its own year: 2023, not 23–24. */
+export function cardTable(payload: CardPayload | FootballCardPayload): CardTable {
+  if ('columns' in payload) {
+    const cells = (values: number[]) => values.map((v, i) => figure(v, payload.columns[i]?.decimals ?? 0));
+    return {
+      headings: payload.columns.map((c) => c.label),
+      seasons: payload.seasons.map((s) => ({ season: s.season, label: String(s.season), games: s.games, cells: cells(s.values) })),
+      career: { seasons: payload.career.seasons, games: payload.career.games, cells: cells(payload.career.values) },
+    };
+  }
+  const cells = (s: { points: number; rebounds: number; assists: number }) => [s.points, s.rebounds, s.assists].map((v) => v.toFixed(1));
+  return {
+    headings: ['Pts', 'Reb', 'Ast'],
+    seasons: payload.seasons.map((s) => ({ season: s.season, label: seasonLabel(s.season), games: s.games, cells: cells(s) })),
+    career: { seasons: payload.career.seasons, games: payload.career.games, cells: cells(payload.career) },
+  };
+}
+
 /** Back of the Card: a player's season lines with the name blacked out. Five guesses; each of the first four misses uncovers more of the card. */
 @Component({
   selector: 'app-back-of-the-card',
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [shareRows]="rows()">
+    <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [leagues]="['nba', 'nfl']" [shareRows]="rows()">
       <div help>
-        <p>This is the back of one player's card: every season he played, with his name blacked out. Name him in five guesses.</p>
+        <p>This is the back of one {{ leagueName() }} player's card: every season he played, with his name blacked out. Name him in five guesses.</p>
         <p>The answer can be a current player or a retired one.</p>
         <p>
           Each wrong guess uncovers the next part of the card: first his team each season, then his position and height,
           then the awards stamped on his best seasons, then his draft and college. Your last guess sees the whole card.
         </p>
-        <p>Stats are per game: games played, points, rebounds and assists.</p>
+        @if (football()) {
+          <p>
+            Stats are season totals: games played, then the numbers his position is known by. Passing for quarterbacks, rushing
+            for running backs, receiving for receivers and tight ends, and tackles, sacks, interceptions and forced fumbles for
+            defenders. Every answer's career began in 1999 or later.
+          </p>
+        } @else {
+          <p>Stats are per game: games played, points, rebounds and assists.</p>
+        }
       </div>
 
       @if (state()?.answer && answerLine()) {
@@ -90,12 +144,15 @@ export function seasonLabel(season: number): string {
 
           <table>
             <thead>
-              <tr><th scope="col">Year</th><th scope="col">Club</th><th scope="col">G</th><th scope="col">Pts</th><th scope="col">Reb</th><th scope="col">Ast</th></tr>
+              <tr>
+                <th scope="col">Year</th><th scope="col">Club</th><th scope="col">G</th>
+                @for (heading of table()?.headings ?? []; track $index) { <th scope="col">{{ heading }}</th> }
+              </tr>
             </thead>
             <tbody>
-              @for (line of s.payload.seasons; track line.season; let i = $index) {
+              @for (line of table()?.seasons ?? []; track line.season; let i = $index) {
                 <tr>
-                  <td>{{ label(line.season) }}</td>
+                  <td>{{ line.label }}</td>
                   <td class="club">
                     @if (clues()?.teams?.[i]; as team) {
                       <b [class.fresh]="fresh(0)">{{ team }}</b>
@@ -103,26 +160,24 @@ export function seasonLabel(season: number): string {
                       <i class="redact" aria-label="Hidden">▒▒▒</i>
                     }
                     @if (clues()?.stamps?.[i]; as stamp) {
-                      <em class="stamp" [class.top]="stamp !== 'All-Star' && stamp !== 'All-NBA'" [class.fresh]="fresh(2)">{{ stamp }}</em>
+                      <em class="stamp" [class.top]="!teamStamps.has(stamp)" [class.fresh]="fresh(2)">{{ stamp }}</em>
                     }
                   </td>
                   <td>{{ line.games }}</td>
-                  <td>{{ line.points.toFixed(1) }}</td>
-                  <td>{{ line.rebounds.toFixed(1) }}</td>
-                  <td>{{ line.assists.toFixed(1) }}</td>
+                  @for (cell of line.cells; track $index) { <td>{{ cell }}</td> }
                 </tr>
               }
             </tbody>
-            <tfoot>
-              <tr>
-                <th scope="row">Career</th>
-                <td>{{ s.payload.career.seasons }} {{ s.payload.career.seasons === 1 ? 'yr' : 'yrs' }}</td>
-                <td>{{ s.payload.career.games.toLocaleString('en-US') }}</td>
-                <td>{{ s.payload.career.points.toFixed(1) }}</td>
-                <td>{{ s.payload.career.rebounds.toFixed(1) }}</td>
-                <td>{{ s.payload.career.assists.toFixed(1) }}</td>
-              </tr>
-            </tfoot>
+            @if (table(); as t) {
+              <tfoot>
+                <tr>
+                  <th scope="row">Career</th>
+                  <td>{{ t.career.seasons }} {{ t.career.seasons === 1 ? 'yr' : 'yrs' }}</td>
+                  <td>{{ t.career.games.toLocaleString('en-US') }}</td>
+                  @for (cell of t.career.cells; track $index) { <td>{{ cell }}</td> }
+                </tr>
+              </tfoot>
+            }
           </table>
 
           @if (clues()?.origin; as origin) {
@@ -227,11 +282,19 @@ export function seasonLabel(season: number): string {
 export class BackOfTheCard {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
+  /** From the route's data: "nfl" on the NFL edition's address. */
+  readonly league = input<League>();
 
   private readonly store = inject(GameStore);
 
-  protected readonly label = seasonLabel;
-  protected readonly state = computed(() => this.store.state() as GameState<CardPayload, CardClues> | null);
+  protected readonly teamStamps = TEAM_STAMPS;
+  protected readonly football = computed(() => this.store.league() === 'nfl');
+  protected readonly leagueName = computed(() => (this.football() ? 'NFL' : 'NBA'));
+  protected readonly state = computed(() => this.store.state() as GameState<CardPayload | FootballCardPayload, CardClues> | null);
+  protected readonly table = computed(() => {
+    const payload = this.state()?.payload;
+    return payload ? cardTable(payload) : null;
+  });
   protected readonly clues = computed(() => this.state()?.clues ?? null);
   protected readonly openCount = computed(() => (this.clues()?.steps ?? []).filter((step) => step.open).length);
   protected readonly misses = computed(() => (this.state()?.guesses ?? []).filter((g) => !g.correct).reverse());
@@ -247,7 +310,7 @@ export class BackOfTheCard {
   protected readonly rows = computed(() => [(this.state()?.guesses ?? []).map((g) => (g.correct ? '🟩' : '🟥')).join('')]);
 
   constructor() {
-    loadFromRoute(this.store, 'back-of-the-card', this.puzzleId);
+    loadFromRoute(this.store, 'back-of-the-card', this.puzzleId, this.league);
     effect(() => {
       const s = this.state();
       if (s && untracked(this.loaded)?.puzzleId !== s.puzzleId) {
