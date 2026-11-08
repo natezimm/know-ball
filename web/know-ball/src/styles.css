@@ -102,6 +102,11 @@ a { color: inherit; }
 /* The title row every game shares: script wordmark on the left, round icon buttons on the right. */
 .kb-game-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .kb-game-top .kb-wordmark { font-size: clamp(30px, 9.4vw, 46px); }
+/* On the narrowest phones the longest title (Back of the Card) needs a little room back from the icons. */
+@media (max-width: 340px) {
+  .kb-game-top .kb-icons { gap: 4px; }
+  .kb-game-top .kb-icon { width: 33px; height: 33px; }
+}
 .kb-icons { display: flex; gap: 6px; }
 .kb-icon {
   width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border: 2px solid var(--line); border-radius: 50%;

@@ -172,7 +172,7 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         var puzzleId = daily.GetProperty("puzzleId").GetInt32();
         var answer = await AnswerOf(puzzleId);
 
-        Assert.Equal(("back-of-the-card", 8), (daily.GetProperty("game").GetString(), daily.GetProperty("maxGuesses").GetInt32()));
+        Assert.Equal(("back-of-the-card", 5), (daily.GetProperty("game").GetString(), daily.GetProperty("maxGuesses").GetInt32()));
         var seasons = daily.GetProperty("payload").GetProperty("seasons");
         Assert.True(seasons.GetArrayLength() >= 5);
         Assert.Equal(seasons.GetArrayLength(), daily.GetProperty("payload").GetProperty("career").GetProperty("seasons").GetInt32());

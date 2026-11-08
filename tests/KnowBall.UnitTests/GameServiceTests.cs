@@ -280,7 +280,7 @@ public class GameServiceTests : IDisposable
         Assert.Equal(["scouting-report", "career-path", "back-of-the-card"], today.Select(t => t.Game));
         Assert.Equal((true, 1, GameStatus.Playing, 1, 8), (today[0].Available, today[0].Number, today[0].Status, today[0].Guesses, today[0].MaxGuesses));
         Assert.Equal((true, GameStatus.New), (today[1].Available, today[1].Status));
-        Assert.Equal((true, GameStatus.New, 8), (today[2].Available, today[2].Status, today[2].MaxGuesses));
+        Assert.Equal((true, GameStatus.New, 5), (today[2].Available, today[2].Status, today[2].MaxGuesses));
     }
 
     public void Dispose() => _world.Dispose();

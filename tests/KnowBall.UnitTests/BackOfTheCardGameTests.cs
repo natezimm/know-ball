@@ -119,23 +119,24 @@ public class BackOfTheCardGameTests : IDisposable
     }
 
     [Fact]
-    public async Task Eight_misses_lose_and_reveal_the_answer()
+    public async Task Five_misses_lose_and_reveal_the_answer()
     {
         var state = await PuzzleFor("Nikola Jokić");
-        string[] wrong = ["Kevin Durant", "Jayson Tatum", "Jalen Brunson", "Jaylen Brown", "Same Road", "Other Road", "One Stop"];
+        string[] wrong = ["Kevin Durant", "Jayson Tatum", "Jalen Brunson", "Jaylen Brown"];
         foreach (var name in wrong) state = await Guess(state.PuzzleId, name);
         Assert.Equal(GameStatus.Playing, state.Status);
+        Assert.All(OpenSteps(state), Assert.True);
 
-        // The eighth guess has to be someone new; the engine refuses a repeat.
-        using (var engine = _world.NewEngine())
-        {
-            var extra = new Player { League = await engine.Db.Leagues.FirstAsync(), FullName = "Extra Man", FirstName = "Extra", LastName = "Man", NormalizedName = "extra man", ExternalId = "extra-man" };
-            engine.Db.Players.Add(extra);
-            await engine.Db.SaveChangesAsync();
-            var lost = (await engine.Service.GuessAsync(Slug, state.PuzzleId, extra.Id, Me, default)).Result!;
-            Assert.Equal(GameStatus.Lost, lost.Status);
-            Assert.Equal("Nikola Jokić", lost.Answer!["name"]!.GetValue<string>());
-        }
+        var lost = await Guess(state.PuzzleId, "Same Road");
+        Assert.Equal(GameStatus.Lost, lost.Status);
+        Assert.Equal("Nikola Jokić", lost.Answer!["name"]!.GetValue<string>());
+    }
+
+    [Fact]
+    public void Every_miss_but_the_last_uncovers_something()
+    {
+        var game = new BackOfTheCardGame(null!);
+        Assert.Equal(BackOfTheCardGame.Steps.Count + 1, game.MaxGuesses);
     }
 
     [Fact]

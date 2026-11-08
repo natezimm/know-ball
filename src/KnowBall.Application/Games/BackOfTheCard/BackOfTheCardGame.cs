@@ -31,8 +31,9 @@ public sealed record CardSecret(
 
 /// <summary>
 /// The back of a player's trading card with the name blacked out: every season's games, points,
-/// rebounds and assists. Eight guesses; each miss uncovers more of the card: the clubs, then
-/// position and height, then award stamps, then the draft line and college.
+/// rebounds and assists. Five guesses; each of the first four misses uncovers more of the card: the
+/// clubs, then position and height, then award stamps, then the draft line and college, so the last
+/// guess is made with the whole card showing.
 /// </summary>
 public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
 {
@@ -53,7 +54,8 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
     public GameType Type => GameType.BackOfTheCard;
     public string Slug => GameSlug;
     public string Name => "Back of the Card";
-    public int MaxGuesses => 8;
+    /// <summary>One guess per step and a last one with the whole card open, so no miss is wasted.</summary>
+    public int MaxGuesses => Steps.Count + 1;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
 
