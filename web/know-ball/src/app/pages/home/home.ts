@@ -120,9 +120,19 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
     }
     .lede { color: var(--muted); font-size: 20px; margin: 18px 0 0; }
 
+    /* Three across on a wide screen, with a short last row centred under the full one rather than left behind. */
     .grid {
       list-style: none; margin: 0; padding: 0;
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 22px 18px;
+    }
+    .grid > .card { flex: 0 0 calc((100% - 36px) / 3); }
+    /* Two across on a tablet. With an odd number of games the first card runs the full width, so no card sits alone. */
+    @media (max-width: 760px) {
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid > .card:first-child:nth-last-child(odd) { grid-column: 1 / -1; min-height: 0; }
+    }
+    @media (max-width: 500px) {
+      .grid { grid-template-columns: minmax(0, 1fr); }
     }
     /* Each game is a card from the same set: trim colour outside, then a cream gap and a navy line. */
     .card {
