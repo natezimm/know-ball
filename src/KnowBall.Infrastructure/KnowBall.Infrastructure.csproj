@@ -12,6 +12,7 @@
     <EmbeddedResource Include="Data\nba-teams.json" />
     <EmbeddedResource Include="Data\numbers-questions.json" />
     <EmbeddedResource Include="Data\nba-team-history.json" />
+    <EmbeddedResource Include="Data\nfl-teams.json" />
     <None Update="Data\nba-sample-players.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>

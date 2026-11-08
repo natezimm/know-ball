@@ -54,8 +54,8 @@ jobs:
           Import__MaxAttempts: "1"
         run: |
           IMPORTER=src/KnowBall.Importer/bin/Release/net10.0/KnowBall.Importer.dll
-          dotnet $IMPORTER --once --source seed --no-history
-          dotnet $IMPORTER --once --source seed --no-history | tee second.txt
+          dotnet $IMPORTER --once --source seed --no-history --leagues nba
+          dotnet $IMPORTER --once --source seed --no-history --leagues nba | tee second.txt
           grep -q "0 new, 0 updated, 0 deactivated, 0 team changes" second.txt
 
   web:

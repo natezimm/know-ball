@@ -56,7 +56,7 @@ fi
 curl -fs "$BASE/" | grep -qi '<app-root' && pass "GET / serves the Angular app" || fail "GET / does not serve the Angular app"
 
 # The importer runs from the same image; seed data keeps this offline and quick.
-IMPORT="$(compose run --rm -T importer --once --source seed --no-history 2>&1)"
+IMPORT="$(compose run --rm -T importer --once --source seed --no-history --leagues nba 2>&1)"
 echo "$IMPORT" | tail -5
 if echo "$IMPORT" | grep -q "Succeeded"; then pass "importer loaded seed data"; else fail "importer"; fi
 echo "$IMPORT" | grep -q "Queued .* Scouting Report puzzles" && pass "importer queued puzzles" || fail "importer queued no puzzles"

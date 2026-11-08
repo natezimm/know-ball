@@ -13,18 +13,26 @@ public interface IHistorySource
 
 /// <param name="IdSource">Namespace of the player ids, e.g. "bref".</param>
 /// <param name="LatestSeason">Start year of the newest season in the data.</param>
+/// <param name="KeepSeasonLines">
+/// False for a record that only says which team a player was on each season (the NFL rosters): the
+/// lines still build the stops of a career, but no stat rows are stored for them.
+/// </param>
 public sealed record HistorySnapshot(
     string LeagueCode,
     string IdSource,
     int LatestSeason,
     IReadOnlyList<HistoryTeam> Teams,
-    IReadOnlyList<HistoryPlayer> Players);
+    IReadOnlyList<HistoryPlayer> Players,
+    bool KeepSeasonLines = true);
 
 /// <param name="Key">What season rows call the team.</param>
 /// <param name="ActiveTo">Last season under this name; null while it still plays.</param>
 /// <param name="FranchiseKey">Key of the team this one became; null for a current team.</param>
 public sealed record HistoryTeam(string Key, SourceTeam Team, int? ActiveFrom, int? ActiveTo, string? FranchiseKey);
 
+/// <param name="JerseyNumber">The number last worn, when the record has it.</param>
+/// <param name="HeadshotUrl">A link to the player's photo, when the record has one.</param>
+/// <param name="Popularity">A fame score the source worked out itself; null to score the career from its season lines and awards.</param>
 public sealed record HistoryPlayer(
     string ExternalId,
     string FirstName,
@@ -40,7 +48,10 @@ public sealed record HistoryPlayer(
     int? DraftYear,
     int? DraftNumber,
     IReadOnlyList<HistorySeason> Seasons,
-    IReadOnlyList<HistoryAward> Awards);
+    IReadOnlyList<HistoryAward> Awards,
+    string? JerseyNumber = null,
+    string? HeadshotUrl = null,
+    double? Popularity = null);
 
 /// <summary>
 /// One line of a player's record, in the order played. A season split between teams has one

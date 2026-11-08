@@ -135,7 +135,7 @@ API="src/KnowBall.Api/bin/Release/$TriviaTfm/KnowBall.Api.dll"
 
 section "Import: live ESPN rosters"
 LIVE_OK=0
-if Import__MaxAttempts=2 Import__RetryDelaySeconds=5 dotnet "$IMPORTER" --once --source espn --no-history; then
+if Import__MaxAttempts=2 Import__RetryDelaySeconds=5 dotnet "$IMPORTER" --once --source espn --no-history --leagues nba; then
   result PASS "live import from ESPN"
   LIVE_OK=1
 else
@@ -144,7 +144,7 @@ fi
 
 if [ "$LIVE_OK" = "0" ]; then
   section "Import: seed data"
-  if dotnet "$IMPORTER" --once --source seed --no-history; then
+  if dotnet "$IMPORTER" --once --source seed --no-history --leagues nba; then
     result PASS "seed import"
   else
     result FAIL "seed import"
@@ -153,7 +153,7 @@ fi
 
 SOURCE="seed"; [ "$LIVE_OK" = "1" ] && SOURCE="espn"
 section "Import: second run must be a no-op"
-SECOND="$(Import__MaxAttempts=1 dotnet "$IMPORTER" --once --source "$SOURCE" --no-history 2>&1)"
+SECOND="$(Import__MaxAttempts=1 dotnet "$IMPORTER" --once --source "$SOURCE" --no-history --leagues nba 2>&1)"
 echo "$SECOND"
 if echo "$SECOND" | grep -q "Succeeded: .* 0 new, 0 updated, 0 deactivated, 0 team changes"; then
   result PASS "re-running the import changes nothing (idempotent)"
@@ -163,7 +163,7 @@ fi
 
 section "Nightly worker"
 WORKER_LOG="$ROOT/artifacts/worker.log"
-Import__Source="$SOURCE" Import__RunOnStartup=true dotnet "$IMPORTER" > "$WORKER_LOG" 2>&1 &
+Import__Leagues=nba Import__Source="$SOURCE" Import__RunOnStartup=true dotnet "$IMPORTER" > "$WORKER_LOG" 2>&1 &
 WORKER_PID=$!
 for _ in $(seq 1 90); do
   grep -q "Next import at" "$WORKER_LOG" 2>/dev/null && break

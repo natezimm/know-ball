@@ -36,6 +36,7 @@ public static class DependencyInjection
         services.Configure<EspnOptions>(config.GetSection("Sources:Espn"));
         services.Configure<BrefOptions>(config.GetSection("Sources:Bref"));
         services.Configure<WikidataOptions>(config.GetSection("Sources:Wikidata"));
+        services.Configure<NflverseOptions>(config.GetSection("Sources:Nflverse"));
 
         services.AddHttpClient<NbaStatsPlayerSource>((sp, http) =>
         {
@@ -59,11 +60,19 @@ public static class DependencyInjection
         services.AddHttpClient<WikidataCrosswalkSource>((sp, http) =>
             http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<WikidataOptions>>().Value.TimeoutSeconds));
 
+        services.AddHttpClient<NflverseHistorySource>((sp, http) =>
+            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds));
+        services.AddHttpClient<NflverseRosterSource>((sp, http) =>
+            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds));
+
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<EspnRosterSource>());
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NbaStatsPlayerSource>());
         services.AddScoped<IPlayerSource, SeedFilePlayerSource>();
+        services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NflverseRosterSource>());
         services.AddScoped<PlayerSourceResolver>();
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<BrefCsvSource>());
+        services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<NflverseHistorySource>());
+        services.AddScoped<HistorySourceResolver>();
         services.AddScoped<ICrosswalkSource>(sp => sp.GetRequiredService<WikidataCrosswalkSource>());
 
         return services;
@@ -77,4 +86,11 @@ public sealed class PlayerSourceResolver(IEnumerable<IPlayerSource> sources)
     public IPlayerSource Get(string name) =>
         sources.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
         ?? throw new ArgumentException($"Unknown source '{name}'. Known sources: {string.Join(", ", Names)}");
+}
+
+public sealed class HistorySourceResolver(IEnumerable<IHistorySource> sources)
+{
+    public IHistorySource Get(string name) =>
+        sources.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+        ?? throw new ArgumentException($"Unknown history source '{name}'. Known sources: {string.Join(", ", sources.Select(s => s.Name))}");
 }

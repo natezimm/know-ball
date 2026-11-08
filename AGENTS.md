@@ -22,7 +22,7 @@ Run from the repository root unless a line says otherwise.
 | Web production build, in `web/know-ball` | `npm run build` |
 | Browser tests, in `web/know-ball` | `npm run e2e` (builds first; needs the .NET SDK; `npx playwright install chromium` once) |
 | Postgres for local runs | `docker compose up -d db` |
-| Load data offline | `dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history` |
+| Load data offline | `dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history --leagues nba` |
 | API on port 5080 | `dotnet run --project src/KnowBall.Api` |
 | Web dev server on port 4200, in `web/know-ball` | `npm start` (proxies `/api` to 5080) |
 | Whole site in Docker on port 8080 | `docker compose --profile site up -d --build` |

@@ -220,6 +220,55 @@ public class HistoryImportServiceTests : IDisposable
         Assert.Equal(1, await ctx.Players.CountAsync());
     }
 
+    private static HistoryPlayer Footballer(string id, string last, string? jersey = "12", double? popularity = 55) => new(
+        id, "Sam", last, "QB", 76, 225, new DateOnly(1990, 1, 1), "Michigan", 2018, 2025, false, 2018, 5,
+        [new HistorySeason(2018, "OKC", true, null, null, null, null, null), new HistorySeason(2025, "GSW", true, null, null, null, null, null)],
+        [], jersey, $"https://example.test/{id}.png", popularity);
+
+    [Fact]
+    public async Task A_record_without_season_lines_builds_stops_but_stores_no_stats_and_keeps_its_own_fame_score()
+    {
+        var run = await Import(new HistorySnapshot("nba", "bref", 2025, Teams, [Footballer("qb01", "Quarter")], KeepSeasonLines: false));
+
+        Assert.Equal(ImportStatus.Succeeded, run.Status);
+        var qb = await Load("Sam Quarter");
+        Assert.Equal("OKC 2018-2018 (1), GSW 2025-now (1)", Path(qb));
+        Assert.Empty(qb.SeasonStats);
+        Assert.Equal(55, qb.Popularity);
+        Assert.Equal(("12", "https://example.test/qb01.png"), (qb.JerseyNumber, qb.HeadshotUrl));
+    }
+
+    [Fact]
+    public async Task The_record_fills_a_missing_jersey_number_but_never_replaces_the_rosters()
+    {
+        await Import(new HistorySnapshot("nba", "bref", 2025, Teams, [Footballer("qb01", "Quarter", jersey: null)], KeepSeasonLines: false));
+        Assert.Null((await Load("Sam Quarter")).JerseyNumber);
+
+        await Import(new HistorySnapshot("nba", "bref", 2025, Teams, [Footballer("qb01", "Quarter", jersey: "12")], KeepSeasonLines: false));
+        Assert.Equal("12", (await Load("Sam Quarter")).JerseyNumber);
+
+        await Import(new HistorySnapshot("nba", "bref", 2025, Teams, [Footballer("qb01", "Quarter", jersey: "7")], KeepSeasonLines: false));
+        Assert.Equal("12", (await Load("Sam Quarter")).JerseyNumber);
+    }
+
+    [Fact]
+    public async Task A_league_bigger_than_one_batch_is_saved_in_full_and_a_second_load_changes_nothing()
+    {
+        var players = Enumerable.Range(1, HistoryImportService.BatchSize * 2 + 7)
+            .Select(i => Footballer($"p{i:0000}", $"Player{i:0000}"))
+            .ToList();
+        var snapshot = new HistorySnapshot("nba", "bref", 2025, Teams, players, KeepSeasonLines: false);
+
+        var first = await Import(snapshot);
+        Assert.Equal((ImportStatus.Succeeded, players.Count), (first.Status, first.PlayersInserted));
+        var second = await Import(snapshot);
+        Assert.Equal((0, 0), (second.PlayersInserted, second.PlayersUpdated));
+
+        await using var ctx = _db.NewContext();
+        Assert.Equal(players.Count, await ctx.Players.CountAsync());
+        Assert.Equal(players.Count * 2, await ctx.PlayerTeamStints.CountAsync());
+    }
+
     public void Dispose() => _db.Dispose();
 
     private sealed class FakeHistory(HistorySnapshot snapshot) : IHistorySource

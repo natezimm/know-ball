@@ -22,4 +22,7 @@ public interface ITriviaDb
 
     /// <summary>Stops tracking every entity, discarding unsaved changes.</summary>
     void ClearTracked();
+
+    /// <summary>Stops tracking these saved players and their stints, ids, season lines and awards, so a big import does not hold them all.</summary>
+    void Detach(IEnumerable<Player> players);
 }

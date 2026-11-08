@@ -13,6 +13,75 @@ internal static class CsvReader
         return Parse(text);
     }
 
+    /// <summary>
+    /// Reads a file with a header row one record at a time, so a large file never sits in memory whole.
+    /// The caller keeps only the rows, or the parts of rows, it needs.
+    /// </summary>
+    public static async IAsyncEnumerable<CsvRow> StreamAsync(Stream stream, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken ct = default)
+    {
+        using var reader = new StreamReader(stream, Encoding.UTF8);
+        Dictionary<string, int>? columns = null;
+        var record = new List<string>();
+        var field = new StringBuilder();
+        var quoted = false;
+        // Inside quotes, a quote either closes the field or is the first of a doubled pair; the next character says which.
+        var quoteSeen = false;
+        var buffer = new char[16 * 1024];
+
+        int read;
+        while ((read = await reader.ReadAsync(buffer.AsMemory(), ct)) > 0)
+        {
+            for (var i = 0; i < read; i++)
+            {
+                var c = buffer[i];
+                if (quoteSeen)
+                {
+                    quoteSeen = false;
+                    if (c == '"') { field.Append('"'); continue; }
+                    quoted = false; // the quote closed the field; read c as an ordinary character below
+                }
+                else if (quoted)
+                {
+                    if (c == '"') quoteSeen = true;
+                    else field.Append(c);
+                    continue;
+                }
+
+                switch (c)
+                {
+                    case '"': quoted = true; break;
+                    case ',': record.Add(field.ToString()); field.Clear(); break;
+                    case '\r': break;
+                    case '\n':
+                        record.Add(field.ToString());
+                        field.Clear();
+                        if (Emit(ref columns, record) is { } row) yield return row;
+                        record = [];
+                        break;
+                    default: field.Append(c); break;
+                }
+            }
+        }
+
+        if (field.Length > 0 || record.Count > 0)
+        {
+            record.Add(field.ToString());
+            if (Emit(ref columns, record) is { } row) yield return row;
+        }
+    }
+
+    /// <summary>The first record becomes the header; later ones become rows, skipping blank lines.</summary>
+    private static CsvRow? Emit(ref Dictionary<string, int>? columns, List<string> record)
+    {
+        if (columns is null)
+        {
+            columns = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            for (var i = 0; i < record.Count; i++) columns.TryAdd(record[i].Trim().TrimStart('\uFEFF'), i);
+            return null;
+        }
+        return record.Count == 1 && record[0].Length == 0 ? null : new CsvRow(columns, record);
+    }
+
     public static List<CsvRow> Parse(string text)
     {
         var records = SplitRecords(text);

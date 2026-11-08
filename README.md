@@ -117,7 +117,7 @@ cd web/know-ball && npm install && npm start           # http://localhost:4200
 ```
 
 No Docker? Set `Database__Provider=Sqlite ConnectionStrings__Trivia="Data Source=$PWD/artifacts/trivia-dev.db"`
-for both the importer and the API. Add `--source seed --no-history` to the importer to load a bundled sample of
+for both the importer and the API. Add `--source seed --no-history --leagues nba` to the importer to load a bundled sample of
 players without the network. Importer options are in [docs/importer.md](docs/importer.md) and endpoints in
 [docs/api.md](docs/api.md).
 

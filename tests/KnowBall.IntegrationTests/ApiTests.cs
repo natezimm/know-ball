@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using KnowBall.Application.Import;
 using KnowBall.Infrastructure;
+using KnowBall.Infrastructure.Sources;
 
 namespace KnowBall.IntegrationTests;
 
@@ -43,7 +44,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
             if (_historyLoaded) return;
             await using var scope = Services.CreateAsyncScope();
             var history = await scope.ServiceProvider.GetRequiredService<HistoryImportService>()
-                .RunAsync(scope.ServiceProvider.GetRequiredService<IHistorySource>());
+                .RunAsync(scope.ServiceProvider.GetRequiredService<HistorySourceResolver>().Get(BrefCsvSource.SourceName));
             Assert.Equal(KnowBall.Domain.ImportStatus.Succeeded, history.Status);
 
             var roster = await scope.ServiceProvider.GetRequiredService<PlayerImportService>()

@@ -13,6 +13,13 @@ namespace KnowBall.Application.Import;
 /// </summary>
 public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogger<HistoryImportService> logger)
 {
+    /// <summary>
+    /// Players are saved and let go in batches of this many, so a league with tens of thousands of
+    /// players fits in a small server's memory. A run that fails part way keeps the batches already
+    /// saved; the next run picks up from there, since every step is repeatable.
+    /// </summary>
+    public const int BatchSize = 500;
+
     public async Task<ImportRun> RunAsync(IHistorySource source, CancellationToken cancellationToken = default)
     {
         var run = new ImportRun { Source = source.Name, StartedAt = clock.GetUtcNow(), Status = ImportStatus.Running };
@@ -75,26 +82,32 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
         run.TeamsUpserted = snapshot.Teams.Count;
 
         // ---- Players -----------------------------------------------------------------------
-        var existing = league.Id == 0
-            ? []
-            : await db.Players
+        List<Player> existing = [];
+        if (league.Id != 0)
+        {
+            var query = db.Players
                 .Where(p => p.LeagueId == league.Id)
                 .Include(p => p.CurrentTeam)
                 .Include(p => p.Stints)
                 .Include(p => p.ExternalIds)
-                .Include(p => p.SeasonStats)
-                .Include(p => p.Awards)
-                .AsSplitQuery()
-                .ToListAsync(ct);
+                .AsSplitQuery();
+            // A record without season lines never touches stat rows or awards, so they are not loaded.
+            if (snapshot.KeepSeasonLines) query = query.Include(p => p.SeasonStats).Include(p => p.Awards);
+            existing = await query.ToListAsync(ct);
+        }
 
         var matcher = new PlayerMatcher(snapshot.IdSource, existing);
         var seen = new HashSet<string>();
+        var done = new HashSet<Player>(ReferenceEqualityComparer.Instance);
+        var batch = new List<Player>(BatchSize);
         foreach (var hp in snapshot.Players)
         {
             if (!seen.Add(hp.ExternalId)) continue;
 
             var fullName = $"{hp.FirstName} {hp.LastName}".Trim();
             var player = matcher.Find(hp.ExternalId, fullName, hp.BirthDate);
+            // Two records for one person: the first one stands (and may already be saved and let go).
+            if (player is not null && done.Contains(player)) continue;
             var isNew = player is null;
             if (player is null)
             {
@@ -114,11 +127,11 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
                 player.CurrentTeam = teams[spans[^1].TeamKey];
             }
 
-            changed |= SyncSeasons(player, hp, teams);
+            if (snapshot.KeepSeasonLines) changed |= SyncSeasons(player, hp, teams);
             changed |= SyncAwards(player, hp);
             changed |= SyncStints(player, spans, teams, snapshot.LatestSeason);
 
-            var popularity = PopularityCalculator.FromCareer(Summarise(hp, player.IsActive, snapshot.LatestSeason));
+            var popularity = hp.Popularity ?? PopularityCalculator.FromCareer(Summarise(hp, player.IsActive, snapshot.LatestSeason));
             if (player.Popularity != popularity)
             {
                 player.Popularity = popularity;
@@ -135,6 +148,15 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
             {
                 player.UpdatedAt = now;
                 run.PlayersUpdated++;
+            }
+
+            done.Add(player);
+            batch.Add(player);
+            if (batch.Count >= BatchSize)
+            {
+                await db.SaveChangesAsync(ct);
+                db.Detach(batch);
+                batch.Clear();
             }
         }
     }
@@ -163,6 +185,9 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
         Set(p.DraftYear, hp.DraftYear ?? p.DraftYear, v => p.DraftYear = v);
         Set(p.DraftNumber, hp.DraftNumber ?? p.DraftNumber, v => p.DraftNumber = v);
         Set(p.IsHallOfFame, hp.HallOfFame, v => p.IsHallOfFame = v);
+        // The nightly roster owns the number a current player wears; the record only fills a gap.
+        Set(p.JerseyNumber, p.JerseyNumber ?? hp.JerseyNumber, v => p.JerseyNumber = v);
+        Set(p.HeadshotUrl, hp.HeadshotUrl ?? p.HeadshotUrl, v => p.HeadshotUrl = v);
         return changed;
     }
 

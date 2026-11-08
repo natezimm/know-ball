@@ -35,7 +35,7 @@ HISTORY="$ROOT/tests/fixtures/bref"
 # Career Path needs the history, read here from the fixtures. Wikidata is pointed at a closed port,
 # so that step fails at once and the import stays offline.
 Sources__Bref__Directory="$HISTORY" Sources__Wikidata__Endpoint="http://127.0.0.1:9/sparql" \
-  dotnet "$ROOT/src/KnowBall.Importer/bin/Release/$TFM/KnowBall.Importer.dll" --once --source seed --history
+  dotnet "$ROOT/src/KnowBall.Importer/bin/Release/$TFM/KnowBall.Importer.dll" --once --source seed --history --leagues nba
 
 # The tests play many rounds from one address, so the per-address limits are raised.
 export ASPNETCORE_URLS="http://127.0.0.1:${E2E_PORT:-5180}"
