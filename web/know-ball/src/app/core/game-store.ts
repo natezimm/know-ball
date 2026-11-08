@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { GameApi, GameSlug, GameState } from './game-api';
+import { GameApi, GameSlug, GameState, League } from './game-api';
 
 export type LoadPhase = 'loading' | 'ready' | 'unavailable' | 'error';
 
@@ -17,6 +17,8 @@ export class GameStore {
   private pendingGuess?: { puzzleId: number; playerId: number; requestId: string };
 
   readonly game = signal<GameSlug>('scouting-report');
+  /** The edition on screen. A past or practice puzzle sets it from the puzzle itself. */
+  readonly league = signal<League>('nba');
   readonly state = signal<GameState | null>(null);
   readonly phase = signal<LoadPhase>('loading');
   /** A guess or a new practice round is on its way to the server. */
@@ -36,8 +38,8 @@ export class GameStore {
     inject(DestroyRef).onDestroy(() => this.request?.unsubscribe());
   }
 
-  /** Loads today's puzzle, or a past or practice one when an id is given. */
-  load(game: GameSlug, puzzleId?: number): void {
+  /** Loads today's puzzle in a league, or a past or practice one when an id is given. */
+  load(game: GameSlug, puzzleId?: number, league: League = 'nba'): void {
     // A practice round arrives with its puzzle already in hand; moving to its address needs no second fetch.
     const current = this.state();
     if (puzzleId !== undefined && this.phase() === 'ready' && current?.game === game && current.puzzleId === puzzleId) {
@@ -46,14 +48,15 @@ export class GameStore {
     }
 
     this.game.set(game);
+    this.league.set(league);
     this.requestedId = puzzleId;
-    this.fetch(puzzleId === undefined ? this.api.daily(game) : this.api.puzzle(game, puzzleId));
+    this.fetch(puzzleId === undefined ? this.api.daily(game, league) : this.api.puzzle(game, puzzleId));
   }
 
   /** Asks again for the puzzle that failed to load. */
   retry(): void {
     const id = this.requestedId;
-    this.fetch(id === undefined ? this.api.daily(this.game()) : this.api.puzzle(this.game(), id));
+    this.fetch(id === undefined ? this.api.daily(this.game(), this.league()) : this.api.puzzle(this.game(), id));
   }
 
   /** Starts a practice round. Emits its puzzle id so the page can move to its address. */
@@ -61,7 +64,7 @@ export class GameStore {
     if (this.busy()) return;
     this.busy.set(true);
     this.request?.unsubscribe();
-    this.request = this.api.practice(this.game()).subscribe({
+    this.request = this.api.practice(this.game(), this.league()).subscribe({
       next: (state) => {
         this.busy.set(false);
         this.accept(state);
@@ -122,6 +125,7 @@ export class GameStore {
 
   private accept(state: GameState): void {
     this.state.set(state);
+    this.league.set(state.league ?? 'nba');
     this.phase.set('ready');
   }
 }

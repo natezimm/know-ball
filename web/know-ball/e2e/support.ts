@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 export type Game = 'scouting-report' | 'career-path' | 'back-of-the-card';
+export type League = 'nba' | 'nfl';
 
 export interface Player {
   id: number;
@@ -42,7 +43,7 @@ export { expect };
 export async function asPlayer(request: APIRequestContext, anon = `e2e-${randomUUID()}`) {
   const headers = { 'X-Anon-Id': anon };
   return {
-    daily: async (game: Game): Promise<State> => ok(await request.get(`/api/${game}/daily`, { headers })),
+    daily: async (game: Game, league: League = 'nba'): Promise<State> => ok(await request.get(`/api/${game}/daily`, { headers, params: { league } })),
     guess: async (game: Game, puzzleId: number, playerId: number): Promise<State> =>
       ok(await request.post(`/api/${game}/${puzzleId}/guess`, { headers, data: { playerId } })),
   };
@@ -61,19 +62,31 @@ export async function players(request: APIRequestContext, includeInactive: boole
   return [...found.values()];
 }
 
+/** The made-up NFL players e2e/serve.sh writes with nfl-fixtures.mjs, as the guess box finds them. */
+export async function nflPlayers(request: APIRequestContext): Promise<Player[]> {
+  const csv = readFileSync(resolve(repoRoot, 'artifacts/e2e/nflverse/players/players.csv'), 'utf8').trim().split('\n').slice(1);
+  const found: Player[] = [];
+  for (const name of csv.map((line) => line.split(',')[1])) {
+    const rows: Player[] = await ok(await request.get('/api/players/search', { params: { q: name, league: 'nfl', includeInactive: true, limit: 3 } }));
+    const match = rows.find((r) => r.fullName === name);
+    if (match) found.push({ id: match.id, fullName: match.fullName });
+  }
+  return found;
+}
+
 /**
  * Today's answer and enough players known to be wrong to lose with, found by playing the daily
  * through the API as throwaway players. The game itself then decides what is right or wrong, so
  * a test never depends on which puzzle the seed data produced.
  */
-export async function learnDaily(request: APIRequestContext, game: Game, pool: Player[]) {
+export async function learnDaily(request: APIRequestContext, game: Game, pool: Player[], league: League = 'nba') {
   let answer: Player | undefined;
   const wrong: Player[] = [];
   const tried = new Set<number>();
 
   for (let round = 0; round < 10; round++) {
     const api = await asPlayer(request);
-    let state = await api.daily(game);
+    let state = await api.daily(game, league);
     if (answer && wrong.length >= state.maxGuesses) return { answer, wrong, maxGuesses: state.maxGuesses };
 
     for (const player of pool) {

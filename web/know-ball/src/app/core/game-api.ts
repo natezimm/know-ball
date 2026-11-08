@@ -3,6 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export type GameSlug = 'scouting-report' | 'career-path' | 'back-of-the-card';
+/** The leagues a game can have an edition in. NBA is every game's first; Scouting Report and Career Path also have an NFL one. */
+export type League = 'nba' | 'nfl';
+export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL' };
 export type PlayStatus = 'playing' | 'won' | 'lost';
 /** As shown in lists: a puzzle not yet started is "new". */
 export type ResultStatus = PlayStatus | 'new';
@@ -18,6 +21,7 @@ export interface GuessRecord<TFeedback = unknown> {
 /** A puzzle with this player's progress. `answer` stays null until the game is over. */
 export interface GameState<TPayload = unknown, TClues = unknown, TFeedback = unknown, TAnswer = PuzzleAnswer> {
   game: GameSlug;
+  league: League;
   puzzleId: number;
   number: number | null;
   /** ISO date; null for practice rounds. */
@@ -49,6 +53,7 @@ export interface ArchiveEntry {
 
 export interface GameStats {
   game: GameSlug;
+  league: League;
   name: string;
   maxGuesses: number;
   played: number;
@@ -61,6 +66,7 @@ export interface GameStats {
 
 export interface TodayEntry {
   game: GameSlug;
+  league: League;
   name: string;
   available: boolean;
   number: number | null;
@@ -73,8 +79,8 @@ export interface TodayEntry {
 export class GameApi {
   private readonly http = inject(HttpClient);
 
-  daily(game: GameSlug): Observable<GameState> {
-    return this.http.get<GameState>(`/api/${game}/daily`);
+  daily(game: GameSlug, league: League = 'nba'): Observable<GameState> {
+    return this.http.get<GameState>(`/api/${game}/daily${leagueQuery(league)}`);
   }
 
   puzzle(game: GameSlug, puzzleId: number): Observable<GameState> {
@@ -85,12 +91,12 @@ export class GameApi {
     return this.http.post<GameState>(`/api/${game}/${puzzleId}/guess`, { playerId, requestId });
   }
 
-  practice(game: GameSlug): Observable<GameState> {
-    return this.http.post<GameState>(`/api/${game}/practice`, null);
+  practice(game: GameSlug, league: League = 'nba'): Observable<GameState> {
+    return this.http.post<GameState>(`/api/${game}/practice${leagueQuery(league)}`, null);
   }
 
-  archive(game: GameSlug): Observable<ArchiveEntry[]> {
-    return this.http.get<ArchiveEntry[]>(`/api/${game}/archive`);
+  archive(game: GameSlug, league: League = 'nba'): Observable<ArchiveEntry[]> {
+    return this.http.get<ArchiveEntry[]>(`/api/${game}/archive${leagueQuery(league)}`);
   }
 
   stats(): Observable<GameStats[]> {
@@ -100,4 +106,14 @@ export class GameApi {
   today(): Observable<TodayEntry[]> {
     return this.http.get<TodayEntry[]>('/api/me/today');
   }
+}
+
+/** NBA is the default edition, so its addresses carry no league. */
+function leagueQuery(league: League): string {
+  return league === 'nba' ? '' : `?league=${league}`;
+}
+
+/** The address of a game's daily in a league: "/career-path" or "/career-path/nfl". */
+export function dailyLink(game: GameSlug, league: League | undefined): string[] {
+  return league && league !== 'nba' ? ['/', game, league] : ['/', game];
 }

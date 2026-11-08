@@ -31,11 +31,18 @@ export Database__Provider=Sqlite
 export ConnectionStrings__Trivia="Data Source=$WORK/trivia.db"
 
 HISTORY="$ROOT/tests/fixtures/bref"
+NFL="$WORK/nflverse"
+
+# Both editions of Scouting Report and Career Path are live, as on the site.
+export Games__Leagues=nba,nfl
 
 # Career Path needs the history, read here from the fixtures. Wikidata is pointed at a closed port,
-# so that step fails at once and the import stays offline.
+# so that step fails at once and the import stays offline. The NFL league is a made-up one written
+# in the nflverse layout by nfl-fixtures.mjs, read from disk with seasonal rosters only.
+NFL_FIRST_SEASON="$(node "$WEB/e2e/nfl-fixtures.mjs" "$NFL")"
 Sources__Bref__Directory="$HISTORY" Sources__Wikidata__Endpoint="http://127.0.0.1:9/sparql" \
-  dotnet "$ROOT/src/KnowBall.Importer/bin/Release/$TFM/KnowBall.Importer.dll" --once --source seed --history --leagues nba
+  Sources__Nflverse__Directory="$NFL" Sources__Nflverse__FirstSeason="$NFL_FIRST_SEASON" Sources__Nflverse__WeeklyFromSeason=3000 \
+  dotnet "$ROOT/src/KnowBall.Importer/bin/Release/$TFM/KnowBall.Importer.dll" --once --source seed --history --leagues nba,nfl
 
 # The tests play many rounds from one address, so the per-address limits are raised.
 export ASPNETCORE_URLS="http://127.0.0.1:${E2E_PORT:-5180}"

@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { gameState, guess } from '../../core/testing';
-import { ScoutingFeedback, ScoutingReport, shareRows } from './scouting-report';
+import { ScoutingFeedback, ScoutingReport, shareRows, shortDivision } from './scouting-report';
 
 const feedback = (overrides: Partial<ScoutingFeedback> = {}): ScoutingFeedback => ({
   team: { value: 'NYK', state: 'miss', label: 'Knicks' },
@@ -111,5 +111,14 @@ describe('Scouting Report', () => {
     ]);
 
     expect(rows).toEqual(['⬜🟩🟩🟨⬜🟨⬜', '🟩🟩🟩🟩⬜🟨⬜']);
+  });
+});
+
+describe('shortDivision', () => {
+  it('fits a division in a cell', () => {
+    expect(shortDivision('Atlantic')).toBe('ATL');
+    expect(shortDivision('AFC West')).toBe('W');
+    expect(shortDivision('NFC North')).toBe('N');
+    expect(shortDivision('Somewhere')).toBe('Somewhere');
   });
 });

@@ -156,6 +156,32 @@ describe('GameShell', () => {
     expect(bars[1].style.width).toBe('50%');
   });
 
+  it('switches between leagues and keeps stats, archive and the guess box to the one on screen', async () => {
+    // The host passes no leagues, so it has no switch.
+    expect(el.querySelector('nav.leagues')).toBeNull();
+    store.load('scouting-report', undefined, 'nfl');
+    expect(http.expectOne('/api/scouting-report/daily').cancelled).toBe(true);
+    http.expectOne('/api/scouting-report/daily?league=nfl').flush(gameState({ league: 'nfl', puzzleId: 70 }));
+    await fixture.whenStable();
+
+    el.querySelector<HTMLButtonElement>('[aria-label="Statistics"]')!.click();
+    http.expectOne('/api/me/stats').flush([
+      { game: 'scouting-report', league: 'nba', name: 'Scouting Report', maxGuesses: 8, played: 4, wins: 3, currentStreak: 2, bestStreak: 3, distribution: [0, 1, 2, 0, 0, 0, 0, 0] },
+      { game: 'scouting-report', league: 'nfl', name: 'Scouting Report', maxGuesses: 8, played: 1, wins: 1, currentStreak: 1, bestStreak: 1, distribution: [1, 0, 0, 0, 0, 0, 0, 0] },
+    ]);
+    await fixture.whenStable();
+    expect([...el.querySelectorAll('.stats dd')].map((d) => d.textContent)).toEqual(['1', '100%', '1', '1']);
+
+    el.querySelector<HTMLButtonElement>('[aria-label="Past puzzles"]')!.click();
+    http.expectOne('/api/scouting-report/archive?league=nfl').flush([]);
+    await fixture.whenStable();
+
+    (el.querySelector('input') as HTMLInputElement).value = 'pa';
+    el.querySelector('input')!.dispatchEvent(new Event('input'));
+    await new Promise((r) => setTimeout(r, 250));
+    http.expectOne((r) => r.url === '/api/players/search' && r.params.get('league') === 'nfl').flush([]);
+  });
+
   it('links every archive row to its explicit puzzle id, including the first row', async () => {
     await flushDaily();
     el.querySelector<HTMLButtonElement>('[aria-label="Past puzzles"]')!.click();
