@@ -4,6 +4,7 @@ import { GameSlug, GameState, GuessRecord } from './game-api';
 export function gameState(overrides: Partial<GameState> = {}): GameState {
   return {
     game: 'scouting-report' as GameSlug,
+    league: 'nba',
     puzzleId: 7,
     number: 12,
     date: '2026-10-13',

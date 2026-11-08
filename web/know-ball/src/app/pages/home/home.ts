@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GameApi, GameSlug, GameStats, TodayEntry } from '../../core/game-api';
+import { GameApi, GameSlug, GameStats, League, TodayEntry } from '../../core/game-api';
 import { Tilt } from '../../shared/tilt/tilt';
 
 interface GameCard {
@@ -57,7 +57,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
 
     <ul class="grid" aria-label="Games">
       @for (card of cards(); track card.name; let i = $index) {
-        <li class="card" kbTilt [style.--trim]="card.trim" [class.off]="!card.status.open" [class.kb-foil]="card.status.foil">
+        <li class="card" kbTilt [style.--trim]="card.trim" [class.off]="!card.status.open && !card.nfl?.open" [class.kb-foil]="card.status.foil">
           <i class="kb-shine" [class.gold]="card.status.foil === 'gold'" aria-hidden="true"></i>
           <div class="top">
             <span class="no">{{ card.kind }}</span>
@@ -98,11 +98,18 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
           <h2>{{ card.name }}</h2>
           <p>{{ card.blurb }}</p>
           @if (card.status.open) {
-            <a class="badge play" [class.done]="card.status.done" [routerLink]="card.link" [attr.aria-label]="card.name + ': ' + card.status.label">
-              {{ card.status.label }}
+            <a class="badge play" [class.done]="card.status.done" [routerLink]="card.link" [attr.aria-label]="card.name + (card.nfl ? ' NBA' : '') + ': ' + card.status.label">
+              {{ card.nfl ? 'NBA · ' : '' }}{{ card.status.label }}
             </a>
           } @else {
-            <span class="badge">{{ card.status.label }}</span>
+            <span class="badge">{{ card.nfl ? 'NBA · ' : '' }}{{ card.status.label }}</span>
+          }
+          @if (card.nfl; as nfl) {
+            @if (nfl.open) {
+              <a class="badge play edition" [class.done]="nfl.done" [routerLink]="card.link + '/nfl'" [attr.aria-label]="card.name + ' NFL: ' + nfl.label">NFL · {{ nfl.label }}</a>
+            } @else {
+              <span class="badge edition">NFL · {{ nfl.label }}</span>
+            }
           }
           <span class="set-no" aria-hidden="true">No. {{ i + 1 }}</span>
         </li>
@@ -157,6 +164,9 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
       font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
     }
     .badge.play { background: var(--accent); color: var(--accent-ink); text-decoration: none; }
+    /* A game with an NFL edition shows a second badge under the first, with a link of its own above the card's. */
+    .badge.edition { margin-top: 4px; position: relative; z-index: 4; }
+    .badge.play.edition::after { content: none; }
     .badge.done { background: var(--ok); color: var(--ok-ink); }
     /* Stretch the link over the whole card so the card itself is the tap target. */
     .badge.play::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: 4px; }
@@ -206,11 +216,22 @@ export class Home {
   protected readonly cards = computed(() => {
     const today = this.today();
     const stats = this.stats();
-    return this.games.map((card) => ({
-      ...card,
-      status: cardStatus(card, today?.find((t) => t.game === card.daily), today === undefined ? null : today !== null),
-      streak: stats.find((s) => s.game === card.daily)?.currentStreak ?? 0,
-    }));
+    const loaded = today === undefined ? null : today !== null;
+    const find = <T extends { game: GameSlug; league?: League }>(rows: T[] | null | undefined, game: GameSlug | undefined, league: League) =>
+      rows?.find((r) => r.game === game && (r.league ?? 'nba') === league);
+    return this.games.map((card) => {
+      const status = cardStatus(card, find(today, card.daily, 'nba'), loaded);
+      // The NFL edition shows only once the API lists it for today.
+      const nflEntry = find(today, card.daily, 'nfl');
+      const nfl = nflEntry ? cardStatus(card, nflEntry, loaded) : null;
+      return {
+        ...card,
+        // Foil once every edition is solved; gold only if each took one guess.
+        status: nfl ? { ...status, foil: status.foil && nfl.foil ? (status.foil === 'gold' && nfl.foil === 'gold' ? 'gold' : 'holo') : undefined } as typeof status : status,
+        nfl,
+        streak: Math.max(find(stats, card.daily, 'nba')?.currentStreak ?? 0, find(stats, card.daily, 'nfl')?.currentStreak ?? 0),
+      };
+    });
   });
   protected readonly countWord = computed(() => this.today() === undefined ? 'Five' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Five');
 

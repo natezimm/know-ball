@@ -92,5 +92,8 @@ describe('Career Path', () => {
     expect(stopYears({ from: 1998, to: 2004 })).toBe('1998–2004');
     expect(stopYears({ from: 2025, to: null })).toBe('2025–');
     expect(stopYears({ from: 2025 })).toBe('2025–');
+    // An NFL season is filed under its own year, so a single season is one year.
+    expect(stopYears({ from: 2023, to: 2023 })).toBe('2023');
+    expect(stopYears({ from: 2005, to: 2008 })).toBe('2005–08');
   });
 });

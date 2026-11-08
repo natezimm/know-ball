@@ -7,6 +7,7 @@ import { Home, cardStatus } from './home';
 
 const entry = (overrides: Partial<TodayEntry>): TodayEntry => ({
   game: 'scouting-report',
+  league: 'nba',
   name: 'Scouting Report',
   available: true,
   number: 12,
@@ -85,6 +86,21 @@ describe('Home', () => {
     await fixture.whenStable();
     expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'No puzzle today', 'Play No. 12', "Play today's quiz"]);
     expect(el.querySelector('a[href="/career-path"]')).toBeNull();
+  });
+
+  it('shows an NFL badge with its own link once the NFL edition is live', async () => {
+    const el = await render([
+      entry({ status: 'won', guesses: 1 }),
+      entry({ league: 'nfl', number: 2 }),
+      entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 1 }),
+      entry({ game: 'career-path', name: 'Career Path', league: 'nfl', status: 'won', guesses: 1 }),
+      entry({ game: 'back-of-the-card' }),
+    ]);
+
+    expect(badges(el)).toEqual(['Play anytime', 'NBA · Solved in 1 guess', 'NFL · Play No. 2', 'NBA · Solved in 1 guess', 'NFL · Solved in 1 guess', 'Play No. 12', "Play today's quiz"]);
+    expect([...el.querySelectorAll('a.badge.edition')].map((a) => a.getAttribute('href'))).toEqual(['/scouting-report/nfl', '/career-path/nfl']);
+    // Foil only once both editions are solved.
+    expect([...el.querySelectorAll('.card.kb-foil h2')].map((h) => h.textContent)).toEqual(['Career Path']);
   });
 
   it('words each state of a card', () => {

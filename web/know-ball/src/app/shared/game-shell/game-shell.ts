@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ArchiveEntry, GameApi, GameState, GameStats } from '../../core/game-api';
+import { ArchiveEntry, GameApi, GameState, GameStats, LEAGUE_NAMES, League, dailyLink } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { shareHeadline, shareText } from '../../core/share';
 import { Avatar } from '../avatar/avatar';
@@ -37,6 +37,14 @@ const NOTICE_MS = 3500;
           </button>
         </div>
       </header>
+
+      @if (leagues().length > 1) {
+        <nav class="leagues" aria-label="League">
+          @for (l of leagues(); track l) {
+            <a [routerLink]="dailyLink(store.game(), l)" [class.on]="store.league() === l" [attr.aria-current]="store.league() === l ? 'page' : null">{{ leagueNames[l] }}</a>
+          }
+        </nav>
+      }
 
       @switch (store.phase()) {
         @case ('loading') {
@@ -79,7 +87,7 @@ const NOTICE_MS = 3500;
               <app-player-search
                 label="Guess a player"
                 [placeholder]="'Guess ' + (s.guesses.length + 1) + ' of ' + s.maxGuesses + ': type a name'"
-                [includeInactive]="includeInactive()" [puzzleId]="s.puzzleId"
+                [includeInactive]="includeInactive()" [puzzleId]="s.puzzleId" [league]="s.league ?? 'nba'"
                 [disabled]="store.busy()"
                 (selected)="store.guess($event.id)"
               />
@@ -88,7 +96,7 @@ const NOTICE_MS = 3500;
 
           @if (s.practice && !store.over()) {
             <nav class="modes" aria-label="Game mode">
-              <a class="kb-btn" [routerLink]="['/', s.game]" [attr.aria-disabled]="store.busy()" (click)="store.busy() && $event.preventDefault()">Today's puzzle</a>
+              <a class="kb-btn" [routerLink]="dailyLink(s.game, s.league)" [attr.aria-disabled]="store.busy()" (click)="store.busy() && $event.preventDefault()">Today's puzzle</a>
             </nav>
           }
 
@@ -107,11 +115,11 @@ const NOTICE_MS = 3500;
                   <button type="button" class="kb-btn" [disabled]="store.busy()" (click)="startPractice()">Practice round</button>
                 }
                 @if (!s.nextPuzzleAt) {
-                  <a class="kb-btn" [routerLink]="['/', s.game]">Today's puzzle</a>
+                  <a class="kb-btn" [routerLink]="dailyLink(s.game, s.league)">Today's puzzle</a>
                 }
                 <app-next-game [current]="s.game" />
                 @if (s.nextPuzzleAt) {
-                  <span class="count kb-result-count">Next puzzle in <app-countdown [until]="s.nextPuzzleAt" (done)="store.load(s.game)" /></span>
+                  <span class="count kb-result-count">Next puzzle in <app-countdown [until]="s.nextPuzzleAt" (done)="store.load(s.game, undefined, s.league)" /></span>
                 }
               </div>
             </div>
@@ -202,6 +210,14 @@ const NOTICE_MS = 3500;
     .game { max-width: 520px; min-height: calc(100dvh - 120px); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
     .modes { display: flex; }
+    /* NBA or NFL: two tabs under the title, the edition on screen filled in. */
+    .leagues { display: flex; gap: 6px; }
+    .leagues a {
+      padding: 3px 14px; border: 2px solid var(--navy); border-radius: 999px; color: var(--navy); text-decoration: none;
+      font-size: 14px; font-weight: 700; letter-spacing: .08em;
+    }
+    .leagues a:hover { background: var(--surface-2); }
+    .leagues a.on { background: var(--navy); color: var(--cream); }
     .practice { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 10px 12px; border: 2px dashed var(--navy); border-radius: 4px; }
     .practice span { color: var(--muted); font-size: 15px; line-height: 1.3; }
 
@@ -264,6 +280,8 @@ export class GameShell {
   readonly includeInactive = input(false, { transform: booleanAttribute });
   /** Whether a practice round can follow the daily. */
   readonly practice = input(false, { transform: booleanAttribute });
+  /** The leagues this game has an edition in; with more than one, a switch sits under the title. */
+  readonly leagues = input<League[]>(['nba']);
   /** The emoji rows under the headline when the result is shared. */
   readonly shareRows = input<string[]>([]);
 
@@ -271,6 +289,8 @@ export class GameShell {
   protected readonly archive = signal<ArchiveEntry[] | null>(null);
   protected readonly dialogError = signal('');
   protected readonly shareLabel = signal('Share');
+  protected readonly leagueNames = LEAGUE_NAMES;
+  protected readonly dailyLink = dailyLink;
 
   /** One dot per allowed guess: a miss, the winning guess, or still to come. */
   protected readonly dots = computed(() => {
@@ -314,7 +334,8 @@ export class GameShell {
 
   protected async share(state: GameState): Promise<void> {
     const won = state.status === 'won';
-    const text = [shareHeadline(this.name(), state.practice ? null : state.number, state.guesses.length, state.maxGuesses, won), ...this.shareRows()].join('\n');
+    const name = state.league && state.league !== 'nba' ? `${this.name()} ${LEAGUE_NAMES[state.league]}` : this.name();
+    const text = [shareHeadline(name, state.practice ? null : state.number, state.guesses.length, state.maxGuesses, won), ...this.shareRows()].join('\n');
     const outcome = await shareText(text);
     this.shareLabel.set(outcome === 'copied' ? 'Copied' : outcome === 'failed' ? 'Could not copy' : 'Share');
     if (outcome !== 'shared') setTimeout(() => this.shareLabel.set('Share'), 2500);
@@ -325,7 +346,7 @@ export class GameShell {
     this.dialogError.set('');
     this.open(this.statsDialog().nativeElement);
     this.api.stats().subscribe({
-      next: (all) => this.stats.set(all.find((s) => s.game === this.store.game()) ?? null),
+      next: (all) => this.stats.set(all.find((s) => s.game === this.store.game() && (s.league ?? 'nba') === this.store.league()) ?? null),
       error: () => this.dialogError.set('Your statistics could not be loaded.'),
     });
   }
@@ -334,7 +355,7 @@ export class GameShell {
     this.archive.set(null);
     this.dialogError.set('');
     this.open(this.archiveDialog().nativeElement);
-    this.api.archive(this.store.game()).subscribe({
+    this.api.archive(this.store.game(), this.store.league()).subscribe({
       next: (entries) => this.archive.set(entries),
       error: () => this.dialogError.set('The archive could not be loaded.'),
     });

@@ -27,6 +27,24 @@ describe('GameStore', () => {
     expect(store.over()).toBe(false);
   });
 
+  it("loads a league's daily and keeps practice and retries in that league", () => {
+    store.load('career-path', undefined, 'nfl');
+    expect(store.league()).toBe('nfl');
+    http.expectOne('/api/career-path/daily?league=nfl').flush('boom', { status: 500, statusText: 'Server Error' });
+    store.retry();
+    http.expectOne('/api/career-path/daily?league=nfl').flush(gameState({ game: 'career-path', league: 'nfl' }));
+
+    store.practice(() => {});
+    http.expectOne({ method: 'POST', url: '/api/career-path/practice?league=nfl' }).flush(gameState({ game: 'career-path', league: 'nfl', practice: true }));
+    expect(store.state()?.practice).toBe(true);
+  });
+
+  it('takes the league of a past puzzle from the puzzle', () => {
+    store.load('scouting-report', 41);
+    http.expectOne('/api/scouting-report/puzzles/41').flush(gameState({ puzzleId: 41, league: 'nfl' }));
+    expect(store.league()).toBe('nfl');
+  });
+
   it('loads a past puzzle by id', () => {
     store.load('scouting-report', 41);
 
