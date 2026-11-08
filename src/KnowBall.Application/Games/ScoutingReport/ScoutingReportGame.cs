@@ -16,19 +16,21 @@ public sealed record ScoutingProfile(
     DateOnly? BirthDate,
     string? Number);
 
+/// <param name="League">The league's code; null in puzzles made before the NFL edition, which were all NBA.</param>
 /// <param name="FormerTeams">
 /// Abbreviations of the teams the answer used to play for, as those franchises are known today (a SuperSonics spell
 /// counts as the Thunder). Null in puzzles made before former teams were scored, which keeps their results unchanged.
 /// </param>
 public sealed record ScoutingSecret(
     int PlayerId, string Name, string? HeadshotUrl, ScoutingProfile Profile, DateOnly AsOf, IReadOnlyList<string>? FormerTeams = null,
-    IReadOnlyDictionary<int, ScoutingProfile>? Roster = null);
+    IReadOnlyDictionary<int, ScoutingProfile>? Roster = null, string? League = null);
 
 public sealed record ScoutingFeedback(Clue Team, Clue Conference, Clue Division, Clue Position, Clue Height, Clue Age, Clue Number);
 
 /// <summary>
 /// Guess the current player in eight tries. Every guess is compared with the answer on team,
-/// conference, division, position, height, age and jersey number.
+/// conference, division, position, height, age and jersey number. NBA and NFL editions; in the NFL
+/// the conference is AFC or NFC and a position is close when it is in the same unit.
 /// </summary>
 public sealed class ScoutingReportGame(ITriviaDb db) : IGame
 {
@@ -43,6 +45,10 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
     public int MaxGuesses => 8;
     public bool IsGenerated => true;
     public bool IncludesRetired => false;
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+
+    /// <summary>Kickers, punters and long snappers are never the answer, however long their careers.</summary>
+    public static readonly string[] NeverAnswers = ["K", "P", "LS"];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -50,6 +56,7 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
         var pool = await db.Players.AsNoTracking()
             .Where(p => p.LeagueId == context.League.Id && p.IsActive && p.CurrentTeamId != null
                         && p.BirthDate != null && p.HeightInches != null && p.Position != null && p.JerseyNumber != null)
+            .Where(p => !NeverAnswers.Contains(p.Position!))
             .OrderByDescending(p => p.Popularity).ThenBy(p => p.Id)
             .Take(PoolSize)
             .Select(p => new { p.Id, p.Popularity })
@@ -69,7 +76,8 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
         var rosterPlayers = await db.Players.AsNoTracking().Include(p => p.CurrentTeam)
             .Where(p => p.LeagueId == context.League.Id && p.IsActive).ToListAsync(cancellationToken);
         var roster = rosterPlayers.ToDictionary(p => p.Id, p => ProfileOf(p));
-        var secret = new ScoutingSecret(answer.Id, answer.FullName, answer.HeadshotUrl, ProfileOf(answer), context.AsOf, FormerTeamsOf(answer), roster);
+        var secret = new ScoutingSecret(answer.Id, answer.FullName, answer.HeadshotUrl, ProfileOf(answer), context.AsOf, FormerTeamsOf(answer), roster,
+            context.League.Code);
         return new GeneratedPuzzle(answer.Id, "{}", GameJson.Write(secret));
     }
 
@@ -82,7 +90,7 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
 
         var profile = guess.Id == secret.PlayerId ? secret.Profile
             : secret.Roster is { } roster && roster.TryGetValue(guess.Id, out var saved) ? saved : ProfileOf(guess, team);
-        var feedback = Compare(profile, secret.Profile, secret.AsOf, secret.FormerTeams);
+        var feedback = Compare(profile, secret.Profile, secret.AsOf, secret.FormerTeams, secret.League);
         return new GuessEvaluation(guess.Id == secret.PlayerId, GameJson.Node(feedback));
     }
 
@@ -106,11 +114,14 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
         };
     }
 
-    public static ScoutingFeedback Compare(ScoutingProfile guess, ScoutingProfile answer, DateOnly asOf, IReadOnlyList<string>? formerTeams = null) => new(
+    public static ScoutingFeedback Compare(
+        ScoutingProfile guess, ScoutingProfile answer, DateOnly asOf, IReadOnlyList<string>? formerTeams = null, string? league = null) => new(
         Team: AttributeComparer.Team(guess.Team, answer.Team, formerTeams, guess.TeamName, guess.TeamLogo),
         Conference: AttributeComparer.Exact(guess.Conference, answer.Conference),
         Division: AttributeComparer.Exact(guess.Division, answer.Division),
-        Position: AttributeComparer.Position(guess.Position, answer.Position),
+        Position: league == LeagueCodes.Nfl
+            ? AttributeComparer.FootballPosition(guess.Position, answer.Position)
+            : AttributeComparer.Position(guess.Position, answer.Position),
         Height: AttributeComparer.Height(guess.HeightInches, answer.HeightInches),
         Age: AttributeComparer.Age(guess.BirthDate, answer.BirthDate, asOf),
         Number: AttributeComparer.Number(guess.Number, answer.Number));

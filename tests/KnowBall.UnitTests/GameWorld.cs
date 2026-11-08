@@ -23,6 +23,7 @@ public sealed class GameWorld : IDisposable
     public TestDb Db { get; } = new();
     public FakeTimeProvider Clock { get; } = new(Start);
     public League League { get; }
+    public League Nfl { get; }
     public Dictionary<string, Team> Teams { get; } = [];
     public Dictionary<string, Player> Players { get; } = [];
 
@@ -80,6 +81,33 @@ public sealed class GameWorld : IDisposable
         // Too few seasons to make a card.
         AddSeasons("Same Road", (2010, "OKC", 60, 8.0, 2.0, 3.0), (2013, "GSW", 50, 9.0, 2.0, 3.0), (2015, "MIA", 40, 7.0, 2.0, 2.0));
 
+        // A small NFL: two divisions in each conference, and the Raiders' Oakland years filed under Las Vegas.
+        Nfl = new League { Code = "nfl", Name = "NFL", Sport = "Football" };
+        ctx.Leagues.Add(Nfl);
+        Team F(string abbr, string city, string name, string conference, string division) =>
+            Teams["nfl-" + abbr] = new Team { League = Nfl, ExternalId = abbr, Abbreviation = abbr, City = city, Name = name, Conference = conference, Division = division };
+        F("KC", "Kansas City", "Chiefs", "AFC", "AFC West");
+        F("LV", "Las Vegas", "Raiders", "AFC", "AFC West");
+        F("BUF", "Buffalo", "Bills", "AFC", "AFC East");
+        F("NE", "New England", "Patriots", "AFC", "AFC East");
+        F("PHI", "Philadelphia", "Eagles", "NFC", "NFC East");
+        F("GB", "Green Bay", "Packers", "NFC", "NFC North");
+        Teams["nfl-OAK"] = new Team { League = Nfl, ExternalId = "OAK", Abbreviation = "OAK", City = "Oakland", Name = "Raiders", Franchise = Teams["nfl-LV"], ActiveFrom = 1995, ActiveTo = 2019 };
+        ctx.Teams.AddRange(Teams.Values.Where(t => t.League == Nfl));
+
+        AddPlayer("Pat Thrower", "nfl-KC", "QB", 74, "1995-09-17", "15", 99, [("nfl-KC", 2017, null)], league: Nfl, draft: (2017, 10));
+        AddPlayer("Josh Rifle", "nfl-BUF", "QB", 77, "1996-05-21", "17", 90, [("nfl-BUF", 2018, null)], league: Nfl);
+        AddPlayer("Cee Back", "nfl-PHI", "CB", 72, "1998-01-01", "21", 70, [("nfl-PHI", 2020, null)], league: Nfl);
+        AddPlayer("Sam Safety", "nfl-GB", "S", 73, "1997-02-02", "24", 60, [("nfl-GB", 2019, null)], league: Nfl);
+        AddPlayer("Kenny Kicker", "nfl-NE", "K", 72, "1990-03-03", "3", 100, [("nfl-NE", 2012, null)], league: Nfl);
+        // Career Path: one road from 2005 on, one that starts before the NFL record does, and a kicker's.
+        AddPlayer("Road Warrior", null, "WR", 73, "1983-04-04", null, 80,
+            [("nfl-OAK", 2005, 2008), ("nfl-NE", 2009, 2011), ("nfl-PHI", 2012, 2014)], active: false, league: Nfl, college: "USC", draft: (2005, 7));
+        AddPlayer("Old Timer", null, "WR", 72, "1963-05-05", null, 95,
+            [("nfl-KC", 1985, 1994), ("nfl-GB", 1995, 1999), ("nfl-NE", 2000, 2000)], active: false, league: Nfl);
+        AddPlayer("Boot Leg", null, "K", 71, "1980-06-06", null, 100,
+            [("nfl-KC", 2003, 2006), ("nfl-GB", 2007, 2010), ("nfl-NE", 2011, 2015)], active: false, league: Nfl);
+
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();
     }
@@ -103,12 +131,13 @@ public sealed class GameWorld : IDisposable
 
     private void AddPlayer(
         string name, string? team, string position, int height, string born, string? number, double popularity,
-        (string Team, int Start, int? End)[] stints, bool active = true, string? college = null, string? country = null, (int Year, int Pick)? draft = null)
+        (string Team, int Start, int? End)[] stints, bool active = true, string? college = null, string? country = null, (int Year, int Pick)? draft = null,
+        League? league = null)
     {
         var space = name.IndexOf(' ');
         var player = new Player
         {
-            League = League,
+            League = league ?? League,
             ExternalId = NameNormalizer.Normalize(name).Replace(' ', '-'),
             FirstName = name[..space],
             LastName = name[(space + 1)..],
@@ -140,11 +169,13 @@ public sealed class GameWorld : IDisposable
     public int Id(string name) => Players[name].Id;
 
     /// <summary>The engine over a fresh context, like one web request. <paramref name="seed"/> makes puzzle choice repeatable.</summary>
-    public Engine NewEngine(int seed = 1)
+    /// <param name="leagues">The live editions, as <c>Games:Leagues</c> would set them.</param>
+    public Engine NewEngine(int seed = 1, string leagues = "nba")
     {
         var ctx = Db.NewContext();
         var calendar = new PuzzleCalendar(Clock);
-        var registry = new GameRegistry([new ScoutingReportGame(ctx), new CareerPathGame(ctx), new BackOfTheCardGame(ctx)]);
+        var registry = new GameRegistry([new ScoutingReportGame(ctx), new CareerPathGame(ctx), new BackOfTheCardGame(ctx)],
+            Microsoft.Extensions.Options.Options.Create(new GameLeagueOptions { Leagues = leagues }));
         var scheduler = new PuzzleScheduler(ctx, calendar, Clock, NullLogger<PuzzleScheduler>.Instance) { Random = new Random(seed) };
         var service = new GameService(ctx, registry, scheduler, calendar, Clock);
         return new Engine(ctx, registry, scheduler, service, calendar);

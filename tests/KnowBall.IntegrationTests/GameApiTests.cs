@@ -149,18 +149,18 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(answer.FullName, won.GetProperty("answer").GetProperty("name").GetString());
 
         // The win shows up everywhere this player looks.
-        var stats = (await Json(await client.GetAsync("/api/me/stats"))).EnumerateArray().Single(s => s.GetProperty("game").GetString() == "career-path");
+        var stats = (await Json(await client.GetAsync("/api/me/stats"))).EnumerateArray().Single(s => s.GetProperty("game").GetString() == "career-path" && s.GetProperty("league").GetString() == "nba");
         Assert.Equal((1, 1, 1), (stats.GetProperty("played").GetInt32(), stats.GetProperty("wins").GetInt32(), stats.GetProperty("currentStreak").GetInt32()));
         Assert.Equal(1, stats.GetProperty("distribution")[0].GetInt32());
 
-        var today = (await Json(await client.GetAsync("/api/me/today"))).EnumerateArray().Single(t => t.GetProperty("game").GetString() == "career-path");
+        var today = (await Json(await client.GetAsync("/api/me/today"))).EnumerateArray().Single(t => t.GetProperty("game").GetString() == "career-path" && t.GetProperty("league").GetString() == "nba");
         Assert.Equal(("won", 1), (today.GetProperty("status").GetString(), today.GetProperty("guesses").GetInt32()));
 
         var archive = await Json(await client.GetAsync("/api/career-path/archive"));
         Assert.Equal((puzzleId, "won"), (archive[0].GetProperty("puzzleId").GetInt32(), archive[0].GetProperty("status").GetString()));
 
         // Someone else has not played it.
-        var other = (await Json(await NewPlayer().GetAsync("/api/me/today"))).EnumerateArray().Single(t => t.GetProperty("game").GetString() == "career-path");
+        var other = (await Json(await NewPlayer().GetAsync("/api/me/today"))).EnumerateArray().Single(t => t.GetProperty("game").GetString() == "career-path" && t.GetProperty("league").GetString() == "nba");
         Assert.Equal("new", other.GetProperty("status").GetString());
     }
 
@@ -224,7 +224,9 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
     {
         Assert.Equal(HttpStatusCode.NotFound, (await NewPlayer().GetAsync(path)).StatusCode);
         var today = await Json(await NewPlayer().GetAsync("/api/me/today"));
-        Assert.Equal(["scouting-report", "career-path", "back-of-the-card"], today.EnumerateArray().Select(t => t.GetProperty("game").GetString()));
+        Assert.Equal(
+            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba"],
+            today.EnumerateArray().Select(t => $"{t.GetProperty("game").GetString()} {t.GetProperty("league").GetString()}"));
     }
 
     [Fact]

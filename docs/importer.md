@@ -68,6 +68,7 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | Setting | Default | Meaning |
 | --- | --- | --- |
 | `Import:Leagues` | `nba,nfl` | Leagues to import; `--leagues` sets it for one run |
+| `Games:Leagues` | `nba` | Leagues whose game editions are live; the importer fills a puzzle queue for each (Scouting Report and Career Path have `nfl` editions) |
 | `Import:Source` | `espn` | NBA roster source: `espn` (live), `seed` (bundled sample) or `nba-stats` (stats.nba.com) |
 | `Import:FallbackSource` | empty | NBA source to try if the primary fails |
 | `Import:DailyAt` / `Import:TimeZone` | `04:00` / `America/New_York` | Nightly run time, safe across daylight saving changes |

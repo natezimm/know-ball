@@ -17,11 +17,18 @@ It identifies a browser, not an account. Errors the API reports itself have the 
 | `GET /api/{game}/archive` | Past dailies, newest first, with this player's result on each |
 | `GET /api/me/stats` | Played, win rate, streaks and guess distribution per game, from dailies only |
 | `GET /api/me/today` | Where this player stands on each of today's puzzles, for the home page |
-| `GET /api/players/search?q=&includeInactive=` | Autocomplete for the guess box |
+| `GET /api/players/search?q=&league=&includeInactive=` | Autocomplete for the guess box (`league` defaults to `nba`) |
 
 A puzzle's answer is attached to the response only once the game is won or lost. A guess with a `requestId`
 that was already recorded returns the original result instead of spending another guess; the same id with a
 different player returns 409.
+
+Scouting Report and Career Path also have an NFL edition. `daily`, `practice` and `archive` take `?league=nba` or
+`?league=nfl` (`nba` when left out); each league has its own daily, numbered from one, with its own archive,
+streak and stats. Every puzzle response carries `league`, and so does each entry from `me/stats` and `me/today`.
+A guess at a player from another league is refused with 400, and a league a game has no edition in returns 404.
+The NFL editions are live only when `Games:Leagues` lists `nfl` (default `nba`); the importer reads the same
+setting to decide which queues to fill.
 
 ## Letter Jacket
 

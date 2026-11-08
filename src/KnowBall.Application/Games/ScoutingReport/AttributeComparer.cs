@@ -50,6 +50,32 @@ public static class AttributeComparer
         return new Clue(guess, answer is not null && Roles(guess).Overlaps(Roles(answer)) ? Close : Miss);
     }
 
+    /// <summary>
+    /// Identical is right; the same unit (two defensive backs, two linemen on the same side) is close, so a
+    /// cornerback is close to a safety and an outside linebacker to a middle linebacker.
+    /// </summary>
+    public static Clue FootballPosition(string? guess, string? answer)
+    {
+        if (guess is null) return new Clue(Unknown, Miss);
+        if (string.Equals(guess, answer, StringComparison.OrdinalIgnoreCase)) return new Clue(guess, Ok);
+        return new Clue(guess, answer is not null && FootballUnit(guess) is { } unit && unit == FootballUnit(answer) ? Close : Miss);
+    }
+
+    /// <summary>"FS" → "DB", "OLB" → "LB", "OT" → "OL". Null for a position code this build does not know.</summary>
+    public static string? FootballUnit(string position) => position.ToUpperInvariant() switch
+    {
+        "QB" => "QB",
+        "RB" or "HB" or "FB" => "RB",
+        "WR" => "WR",
+        "TE" => "TE",
+        "T" or "OT" or "G" or "OG" or "C" or "OL" => "OL",
+        "DE" or "DT" or "NT" or "DL" or "EDGE" => "DL",
+        "LB" or "ILB" or "MLB" or "OLB" => "LB",
+        "CB" or "DB" or "S" or "FS" or "SS" or "SAF" => "DB",
+        "K" or "P" or "LS" => "ST",
+        _ => null,
+    };
+
     public static Clue Height(int? guessInches, int? answerInches) =>
         Numeric(guessInches, answerInches, HeightWindow, guessInches is { } h ? FormatHeight(h) : Unknown);
 
