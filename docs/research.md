@@ -239,7 +239,7 @@ lives on a path of the Know Ball domain.
 | Letter Jacket | The word game | None found | None found for games | **Chosen** |
 | Box Score | The word game | Many stat sites and apps use the phrase | Several BOX SCORE and BOXSCORE filings, including Boxscore Gaming LLC and Box Score Sports | Ruled out |
 | Letterman | The word game | An old LaunchBox game entry | LETTERMAN (serial 76227266), and the name is David Letterman's | Ruled out |
-| Back of the Card | The stat-line game (planned) | None found | Not searched yet; search again before it ships | Working name |
+| Back of the Card | The stat-line game | None found (searched again 2026-11-08) | None found for "BACK OF THE CARD"; nearest are unrelated card marks such as BAC-A-CARD and GIVE BACK CARD | **Chosen** |
 
 Rules that came out of this, for every game:
 

@@ -46,7 +46,7 @@ export function seasonLabel(season: number): string {
   return `${two(season)}–${two(season + 1)}`;
 }
 
-/** Back of the Card: a player's season lines with the name blacked out. Eight guesses; each miss uncovers more of the card. */
+/** Back of the Card: a player's season lines with the name blacked out. Five guesses; each of the first four misses uncovers more of the card. */
 @Component({
   selector: 'app-back-of-the-card',
   imports: [Avatar, GameShell],
@@ -54,11 +54,11 @@ export function seasonLabel(season: number): string {
   template: `
     <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [shareRows]="rows()">
       <div help>
-        <p>This is the back of one player's card: every season he played, with his name blacked out. Name him in eight guesses.</p>
+        <p>This is the back of one player's card: every season he played, with his name blacked out. Name him in five guesses.</p>
         <p>The answer can be a current player or a retired one.</p>
         <p>
           Each wrong guess uncovers the next part of the card: first his team each season, then his position and height,
-          then the awards stamped on his best seasons, then his draft and college.
+          then the awards stamped on his best seasons, then his draft and college. Your last guess sees the whole card.
         </p>
         <p>Stats are per game: games played, points, rebounds and assists.</p>
       </div>
@@ -183,7 +183,9 @@ export function seasonLabel(season: number): string {
     thead th:nth-child(-n+2), td:nth-child(-n+2), tfoot th { text-align: left; }
     tbody tr:nth-child(even) td { background: rgb(217 203 166 / .35); }
     tfoot th, tfoot td { border-top: 2px solid var(--navy); font-weight: 700; padding-top: 5px; }
-    .club b { font-weight: 700; }
+    /* A traded season with an award is the widest cell: on a narrow phone its stamp drops under the clubs. */
+    td.club { white-space: normal; }
+    .club b { font-weight: 700; white-space: nowrap; }
     .stamp {
       display: inline-block; margin-left: 6px; transform: rotate(-6deg); padding: 1px 4px 0;
       font: 400 10px/1.3 var(--display); font-style: normal; text-transform: uppercase; letter-spacing: .03em;

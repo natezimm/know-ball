@@ -37,13 +37,16 @@ test('the card prints every season, a miss uncovers the clubs, and the answer wi
   await expect(page.getByRole('combobox', { name: 'Guess a player' })).toHaveCount(0);
 });
 
-test('eight misses uncover the whole card, lose and show the answer', async ({ page }) => {
-  for (const player of wrong.slice(0, 8)) await guessPlayer(page, player.fullName);
+test('four misses uncover the whole card, the fifth loses and shows the answer', async ({ page }) => {
+  for (const player of wrong.slice(0, 4)) await guessPlayer(page, player.fullName);
+  await expect(page.getByRole('list', { name: 'What each miss uncovers' }).locator('li.open')).toHaveCount(4);
+  await expect(page.getByRole('combobox', { name: 'Guess a player' })).toBeVisible();
+  await guessPlayer(page, wrong[4].fullName);
 
   const result = page.locator('.result');
   await expect(result).toContainText('The answer was');
   await expect(result.getByText(answer.fullName, { exact: true })).toBeVisible();
   await expect(page.getByRole('list', { name: 'What each miss uncovers' }).locator('li.open')).toHaveCount(4);
   await expect(page.locator('.back .fact')).not.toHaveClass(/locked/);
-  await expect(page.getByRole('list', { name: 'Wrong guesses, newest first' }).getByRole('listitem')).toHaveCount(8);
+  await expect(page.getByRole('list', { name: 'Wrong guesses, newest first' }).getByRole('listitem')).toHaveCount(5);
 });
