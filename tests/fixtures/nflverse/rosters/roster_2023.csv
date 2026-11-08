@@ -1,0 +1,7 @@
+season,team,position,depth_chart_position,jersey_number,status,full_name,first_name,last_name,birth_date,height,weight,college,gsis_id,headshot_url,football_name,rookie_year,entry_year,draft_number
+2023,KC,QB,QB,15,ACT,Alpha Passer,Alphonse,Passer,1995-09-17,74,225,Texas Tech,00-0000001,,Alpha,2017,2017,1
+2023,ARZ,WR,WR,11,TRD,Bravo Catcher Jr.,Bravo,Catcher,1993-02-01,73,200,Ohio State,00-0000002,,Bravo,2016,2016,
+2023,NYJ,WR,WR,11,ACT,Bravo Catcher Jr.,Bravo,Catcher,1993-02-01,73,200,Ohio State,00-0000002,,Bravo,2016,2016,
+2023,KC,T,T,71,ACT,Delta Backup,Delta,Backup,1990-01-01,78,310,Iowa,00-0000004,,Delta,2023,2023,
+2023,SL,S,S,21,ACT,Foxtrot Oldtimer,Foxtrot,Oldtimer,1988-08-08,72,205,Miami,,,Foxtrot,2010,2010,80
+2023,XYZ,S,S,22,ACT,Unknown Team,Unknown,Team,1991-01-01,72,205,Miami,00-0000009,,Unknown,2010,2010,

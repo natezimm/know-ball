@@ -1,0 +1,9 @@
+season,team,position,depth_chart_position,jersey_number,status,full_name,first_name,last_name,birth_date,height,weight,college,gsis_id,headshot_url,football_name,rookie_year,entry_year,draft_number,week,game_type
+2024,KC,,,15,ACT,Alpha Passer,Alpha,Passer,,,,,00-0000001,,Alpha,,,,1,REG
+2024,KC,,,15,ACT,Alpha Passer,Alpha,Passer,,,,,00-0000001,,Alpha,,,,2,REG
+2024,NYJ,,,11,ACT,Bravo Catcher Jr.,Bravo,Catcher Jr.,,,,,00-0000002,,Bravo,,,,1,REG
+2024,NYJ,,,11,INA,Bravo Catcher Jr.,Bravo,Catcher Jr.,,,,,00-0000002,,Bravo,,,,5,REG
+2024,BUF,,,11,ACT,Bravo Catcher Jr.,Bravo,Catcher Jr.,,,,,00-0000002,,Bravo,,,,6,REG
+2024,NYJ,,,30,DEV,Charlie Squad,Charlie,Squad,,,,,00-0000003,,Charlie,,,,1,REG
+2024,ARI,,,21,ACT,Foxtrot Oldtimer,Foxtrot,Oldtimer,,,,,00-0000006,,Foxtrot,,,,1,REG
+2024,ARI,,,21,RES,Foxtrot Oldtimer,Foxtrot,Oldtimer,,,,,00-0000006,,Foxtrot,,,,2,REG

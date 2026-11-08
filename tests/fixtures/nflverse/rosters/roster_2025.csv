@@ -1,0 +1,7 @@
+season,team,position,depth_chart_position,jersey_number,status,full_name,first_name,last_name,birth_date,height,weight,college,gsis_id,headshot_url,football_name,rookie_year,entry_year,draft_number,week,game_type
+2025,KC,QB,QB,15,ACT,Alpha Passer,Alphonse,Passer,1995-09-17,74,225,Texas Tech,00-0000001,https://static.www.nfl.com/image/upload/alpha2,Alpha,2017,2017,1,10,REG
+2025,BUF,WR,WR,11,RES,Bravo Catcher Jr.,Bravo,Catcher,1993-02-01,73,200,Ohio State,00-0000002,,Bravo,2016,2016,,10,REG
+2025,BUF,RB,RB,2,ACT,Echo Rookie,Echo,Rookie,2002-03-03,70,210,Georgia,00-0000005,,Echo,2025,2025,40,10,REG
+2025,NYJ,CB,CB,30,DEV,Charlie Squad,Charlie,Squad,1999-05-05,70,190,Toledo,00-0000003,,Charlie,2024,2024,,10,REG
+2025,ARI,S,S,21,CUT,Foxtrot Oldtimer,Foxtrot,Oldtimer,1988-08-08,72,205,Miami,00-0000006,,Foxtrot,2010,2010,80,10,REG
+2025,LV,QB,QB,8,ACT,Golf Signing,Golf,Signing,2001-07-07,76,230,Utah,00-0000007,,Golf,2023,2023,,10,REG

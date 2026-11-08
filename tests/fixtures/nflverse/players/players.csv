@@ -1,0 +1,7 @@
+gsis_id,display_name,common_first_name,first_name,last_name,birth_date,position_group,position,height,weight,headshot,college_name,jersey_number,rookie_season,last_season,latest_team,status,draft_year,draft_round,draft_pick,draft_team
+00-0000001,Alpha Passer,Alpha,Alphonse,Passer,1995-09-17,QB,QB,74,225,https://static.www.nfl.com/image/upload/alpha,Texas Tech,15,2017,2025,KC,ACT,2017,1,1,KC
+00-0000002,Bravo Catcher Jr.,Bravo,Bravo,Catcher,1993-02-01,WR,WR,6-1,200,,Ohio State,0,2016,2025,BUF,ACT,,,,
+00-0000003,Charlie Squad,Charlie,Charlie,Squad,1999-05-05,DB,CB,70,190,,Toledo,30,2024,2024,NYJ,DEV,,,,
+00-0000004,Delta Backup,Delta,Delta,Backup,1990-01-01,OL,OT,78,310,,Iowa,71,2023,2023,KC,CUT,,,,
+00-0000005,Echo Rookie,Echo,Echo,Rookie,2002-03-03,RB,RB,70,210,,Georgia,2,2025,2025,BUF,ACT,2025,2,40,BUF
+00-0000006,Foxtrot Oldtimer,Foxtrot,Foxtrot,Oldtimer,1988-08-08,DB,SAF,72,205,,Miami,21,2010,2024,ARI,RET,2010,3,80,ARI

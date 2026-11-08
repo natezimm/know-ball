@@ -55,4 +55,45 @@ public class PopularityCalculatorTests
         Assert.Equal(100, PopularityCalculator.FromCareer(Career(90_000, 30, 9, 30, 9, true, 40)));
         Assert.Equal(0, PopularityCalculator.FromCareer(Career()));
     }
+
+    private static FootballCareer Football(string position = "QB", double? value = null, double fantasy = 0, int proBowls = 0, int allPros = 0,
+        bool hof = false, int seasons = 0, int? pick = null, double? recent = null) =>
+        new(position, value, fantasy, proBowls, allPros, hof, seasons, pick, recent);
+
+    [Fact]
+    public void A_star_quarterback_scores_near_the_top() =>
+        Assert.InRange(PopularityCalculator.FromFootballCareer(Football(value: 150, proBowls: 10, allPros: 3, seasons: 15, pick: 1)), 90, 100);
+
+    [Fact]
+    public void The_same_career_ranks_a_quarterback_over_a_receiver_over_a_defender_over_a_lineman_over_a_kicker()
+    {
+        double Score(string position) => PopularityCalculator.FromFootballCareer(Football(position, value: 80, proBowls: 4, seasons: 10));
+        Assert.True(Score("QB") > Score("WR"));
+        Assert.True(Score("WR") > Score("CB"));
+        Assert.True(Score("CB") > Score("OT"));
+        Assert.True(Score("OT") > Score("K"));
+    }
+
+    [Fact]
+    public void Fantasy_production_stands_in_for_an_undrafted_players_missing_draft_record()
+    {
+        var undrafted = PopularityCalculator.FromFootballCareer(Football("WR", fantasy: 2_000, seasons: 10));
+        var drafted = PopularityCalculator.FromFootballCareer(Football("WR", value: 80, seasons: 10));
+        Assert.Equal(drafted, undrafted);
+    }
+
+    [Fact]
+    public void A_current_player_in_form_outranks_a_forgotten_veteran()
+    {
+        var current = PopularityCalculator.FromFootballCareer(Football("RB", value: 30, seasons: 4, pick: 20, recent: 18));
+        var veteran = PopularityCalculator.FromFootballCareer(Football("RB", value: 50, seasons: 9));
+        Assert.True(current > veteran, $"current {current} vs veteran {veteran}");
+    }
+
+    [Fact]
+    public void A_football_score_stays_between_0_and_100()
+    {
+        Assert.Equal(100, PopularityCalculator.FromFootballCareer(Football(value: 400, fantasy: 9_000, proBowls: 20, allPros: 10, hof: true, seasons: 25, pick: 1, recent: 40)));
+        Assert.Equal(0, PopularityCalculator.FromFootballCareer(Football()));
+    }
 }

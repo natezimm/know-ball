@@ -11,6 +11,27 @@ public sealed record CareerSummary(
     bool HallOfFame,
     double? RecentPointsPerGame);
 
+/// <summary>What an NFL career adds up to, for <see cref="PopularityCalculator.FromFootballCareer"/>.</summary>
+/// <param name="Position">The player's position code, such as QB, WR, OT or CB.</param>
+/// <param name="CareerValue">Weighted career Approximate Value from the draft record; null for undrafted players.</param>
+/// <param name="CareerFantasyPoints">PPR fantasy points over every season with stats, which also covers undrafted players.</param>
+/// <param name="Seasons">Seasons spent on a team's roster.</param>
+/// <param name="DraftPick">Overall pick; null if undrafted.</param>
+/// <param name="RecentPerGame">
+/// Best per-game production of the last two seasons, for current players only: PPR fantasy points, or for a
+/// defender sacks, interceptions and tackles weighted to the same scale.
+/// </param>
+public sealed record FootballCareer(
+    string? Position,
+    double? CareerValue,
+    double CareerFantasyPoints,
+    int ProBowls,
+    int AllPros,
+    bool HallOfFame,
+    int Seasons,
+    int? DraftPick,
+    double? RecentPerGame);
+
 /// <summary>Rough 0-100 "how likely is a casual fan to know this player" score.</summary>
 public static class PopularityCalculator
 {
@@ -65,4 +86,45 @@ public static class PopularityCalculator
 
         return Math.Round(Math.Clamp(score, 0, 100), 1);
     }
+
+    /// <summary>
+    /// The score for an NFL player. The career earns up to 85 (career value or fantasy production, Pro
+    /// Bowls, All-Pro teams, the Hall of Fame, years in the league, draft slot) and current players add up
+    /// to 25 for how they are playing now. Casual fans know quarterbacks and the players who score best, so
+    /// the total is weighted by position: linemen and specialists only rank high as genuine stars.
+    /// </summary>
+    public static double FromFootballCareer(FootballCareer c)
+    {
+        var career = Math.Max(
+            Math.Min((c.CareerValue ?? 0) / 120 * 35, 35),
+            Math.Min(c.CareerFantasyPoints / 3_000 * 35, 35));
+
+        var score = career
+                    + Math.Min(c.ProBowls * 2.5, 20)
+                    + Math.Min(c.AllPros * 3.0, 12)
+                    + (c.HallOfFame ? 10 : 0)
+                    + Math.Min(c.Seasons, 15) * 0.5
+                    + c.DraftPick switch
+                    {
+                        null => 0,
+                        1 => 5,
+                        <= 10 => 3,
+                        <= 32 => 1.5,
+                        _ => 0,
+                    }
+                    + Math.Min((c.RecentPerGame ?? 0) * 1.1, 25);
+
+        return Math.Round(Math.Clamp(score * PositionWeight(c.Position), 0, 100), 1);
+    }
+
+    /// <summary>How much a casual fan notices each position, as a multiplier on the score.</summary>
+    public static double PositionWeight(string? position) => position?.ToUpperInvariant() switch
+    {
+        "QB" => 1.25,
+        "RB" or "WR" or "TE" or "FB" => 1.1,
+        "T" or "OT" or "G" or "OG" or "C" or "OL" => 0.6,
+        "K" or "P" or "LS" => 0.5,
+        null => 0.8,
+        _ => 0.9,
+    };
 }

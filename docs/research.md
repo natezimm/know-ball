@@ -117,6 +117,13 @@ The repo's licence is CC-BY 4.0. Most files were updated on 2026-10-12 or 10-13,
 
 Counts: 2,621 players have 2026 as their last season, and 2,601 of them have a headshot.
 
+Checked again on 2026-11-08 while building the importer: roster rows carry `gsis_id` reliably from about 1990
+(1,255 of 1,585 rows in 1990, all of them by 1995). From 2016 the season roster files list each player once, with
+his last team, so mid-season trades are only in `weekly_rosters/roster_weekly_{year}.csv` (about 15 MB a season).
+Team codes vary between files and eras (`ARZ`/`ARI`, `BLT`/`BAL`, `SL`/`STL`, `LA`/`LAR`, `HOU` for the Oilers
+until 1996); `src/KnowBall.Infrastructure/Data/nfl-teams.json` maps them. `player_stats/player_stats_season.csv`
+stops at 2024; later seasons are in the `stats_player` files.
+
 ### Other NFL sources tested
 
 | Source | Result | How known |

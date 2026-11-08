@@ -50,7 +50,7 @@ with tempfile.TemporaryDirectory(prefix="knowball-ops-smoke-") as directory:
         ops.compose(root, "run", "--rm", "--no-deps", "-T", "--entrypoint", "dotnet",
                     "-v", str(ROOT / "tests/fixtures/bref") + ":/fixtures:ro",
                     "-e", "Sources__Bref__Directory=/fixtures", "-e", "Sources__Wikidata__Endpoint=http://127.0.0.1:9/sparql",
-                    "site", "/app/importer/KnowBall.Importer.dll", "--once", "--source", "seed", "--history")
+                    "site", "/app/importer/KnowBall.Importer.dll", "--once", "--source", "seed", "--history", "--leagues", "nba")
         bundle = ops.backup(root)
         report = ops.restore(bundle)
         assert report["photosVerified"] == 0, report

@@ -23,6 +23,16 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
 
     public void ClearTracked() => ChangeTracker.Clear();
 
+    public void Detach(IEnumerable<Player> players)
+    {
+        foreach (var player in players)
+        {
+            foreach (var child in player.Stints.Cast<object>().Concat(player.ExternalIds).Concat(player.SeasonStats).Concat(player.Awards))
+                Entry(child).State = EntityState.Detached;
+            Entry(player).State = EntityState.Detached;
+        }
+    }
+
     protected override void OnModelCreating(ModelBuilder b)
     {
         b.Entity<NumbersPlay>(e =>

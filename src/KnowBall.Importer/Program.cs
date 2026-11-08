@@ -43,6 +43,7 @@ if (args.Contains("--validate-numbers"))
 //   dotnet run --project src/KnowBall.Importer -- --once             → one run, then exit (0 = the roster import succeeded)
 //   dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history
 //   dotnet run --project src/KnowBall.Importer -- --once --history   → reload the full player history first, due or not
+//   dotnet run --project src/KnowBall.Importer -- --once --leagues nfl → only these leagues (default Import:Leagues, "nba,nfl")
 //   dotnet run --project src/KnowBall.Importer -- --nightly          → what the worker does each night (import, then the
 //                                                                      Numbers queue), once, then exit; run-nightly.sh calls it
 var importNumbers = GetArg(args, "--import-numbers");
@@ -52,11 +53,13 @@ var nightly = args.Contains("--nightly");
 var once = args.Contains("--once") || nightly || importNumbers is not null;
 var forceHistory = args.Contains("--history");
 var sourceArg = GetArg(args, "--source");
+var leaguesArg = GetArg(args, "--leagues");
 var hostArgs = StripOwnArgs(args);
 
 // Content root = the app folder, so appsettings.json is found no matter where it's started from.
 var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings { Args = hostArgs, ContentRootPath = AppContext.BaseDirectory });
 if (sourceArg is not null) builder.Configuration["Import:Source"] = sourceArg;
+if (leaguesArg is not null) builder.Configuration["Import:Leagues"] = leaguesArg;
 if (args.Contains("--no-history")) builder.Configuration["Import:HistoryRefreshDays"] = "0";
 
 builder.Services.AddApplication();
@@ -122,7 +125,7 @@ static string? GetArg(string[] args, string name)
     return null;
 }
 
-// --once, --nightly, --source, --history and --no-history are ours; everything else (e.g. --Import:DailyAt=03:00) goes to configuration.
+// --once, --nightly, --source, --leagues, --history and --no-history are ours; everything else (e.g. --Import:DailyAt=03:00) goes to configuration.
 static string[] StripOwnArgs(string[] args)
 {
     var rest = new List<string>();
@@ -130,8 +133,9 @@ static string[] StripOwnArgs(string[] args)
     {
         if (args[i].StartsWith("--import-numbers=", StringComparison.Ordinal)) continue;
         if (args[i] == "--import-numbers") { i++; continue; }
-        if (args[i] is "--once" or "--nightly" or "--history" or "--no-history" || args[i].StartsWith("--source=", StringComparison.Ordinal)) continue;
-        if (args[i] == "--source") { i++; continue; }
+        if (args[i] is "--once" or "--nightly" or "--history" or "--no-history"
+            || args[i].StartsWith("--source=", StringComparison.Ordinal) || args[i].StartsWith("--leagues=", StringComparison.Ordinal)) continue;
+        if (args[i] is "--source" or "--leagues") { i++; continue; }
         rest.Add(args[i]);
     }
     return rest.ToArray();
