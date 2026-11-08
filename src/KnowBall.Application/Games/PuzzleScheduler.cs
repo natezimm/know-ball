@@ -12,7 +12,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
 {
     /// <summary>A player is not the answer to the same game twice within this many days.</summary>
     public const int NoRepeatDays = 120;
-    public const string DefaultLeague = "nba";
+    public const string DefaultLeague = LeagueCodes.Nba;
 
     /// <summary>Overridable so tests can make generation repeatable.</summary>
     public Random Random { get; init; } = Random.Shared;
@@ -127,7 +127,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
     }
 
     private Task<Puzzle?> FindAsync(IGame game, int leagueId, DateOnly date, CancellationToken ct) =>
-        db.Puzzles.FirstOrDefaultAsync(
+        db.Puzzles.Include(p => p.League).FirstOrDefaultAsync(
             p => p.GameType == game.Type && p.LeagueId == leagueId && p.Date == date && p.Status == PuzzleStatus.Scheduled, ct);
 
     private async Task<DateOnly?> FirstDateAsync(IGame game, int leagueId, CancellationToken ct) =>
@@ -157,6 +157,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
             Status = PuzzleStatus.Scheduled,
             Date = date,
             LeagueId = league.Id,
+            League = league,
             Difficulty = generated.Difficulty,
             PayloadJson = generated.PayloadJson,
             SecretJson = generated.SecretJson,
@@ -186,6 +187,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
             Status = PuzzleStatus.Scheduled,
             Date = date,
             LeagueId = league.Id,
+            League = league,
             Difficulty = stalest.Difficulty,
             PayloadJson = stalest.PayloadJson,
             SecretJson = stalest.SecretJson,

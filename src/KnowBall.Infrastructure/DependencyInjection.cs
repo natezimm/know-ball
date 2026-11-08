@@ -37,6 +37,7 @@ public static class DependencyInjection
         services.Configure<BrefOptions>(config.GetSection("Sources:Bref"));
         services.Configure<WikidataOptions>(config.GetSection("Sources:Wikidata"));
         services.Configure<NflverseOptions>(config.GetSection("Sources:Nflverse"));
+        services.Configure<KnowBall.Application.Games.GameLeagueOptions>(config.GetSection("Games"));
 
         services.AddHttpClient<NbaStatsPlayerSource>((sp, http) =>
         {

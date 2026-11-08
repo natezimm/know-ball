@@ -4,7 +4,10 @@ using KnowBall.Domain;
 
 namespace KnowBall.Application.Games.CareerPath;
 
-/// <summary>One stop on the journey. <see cref="To"/> is the calendar year the last season ended; null if the player is still there.</summary>
+/// <summary>
+/// One stop on the journey. <see cref="To"/> is the year the last season ended (the NBA's season ends the year after
+/// it starts; the NFL's is named for the year it starts); null if the player is still there.
+/// </summary>
 public sealed record CareerStop(string Team, string Abbreviation, string? LogoUrl, int From, int? To, int Seasons);
 
 public sealed record CareerPayload(IReadOnlyList<CareerStop> Stops);
@@ -24,6 +27,7 @@ public sealed record CareerSecret(
 /// <summary>
 /// Every team a player has been on, in order: who is it? Six guesses, and each miss unlocks a
 /// hint (position, draft, college, initials) and says which of the stops the guess shares.
+/// NBA and NFL editions.
 /// </summary>
 public sealed class CareerPathGame(ITriviaDb db) : IGame
 {
@@ -33,6 +37,8 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
     public const int PoolSize = 250;
     /// <summary>Answers played at least one season from this year on, so most stops are teams people know.</summary>
     public const int MinLastSeason = 1990;
+    /// <summary>The NFL record starts in 1990, so only careers that began then or later have every stop.</summary>
+    public const int NflMinFirstSeason = 1990;
 
     private Dictionary<int, LeaguePaths> _paths = [];
 
@@ -44,6 +50,7 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
     public int MaxGuesses => 6;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -59,13 +66,15 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
             .FirstAsync(p => p.Id == answerId, cancellationToken);
 
         var stints = answer.Stints.OrderBy(s => s.Order).ToList();
+        // An NBA season (2003-04) ends the year after it starts; an NFL season is named for the year it starts.
+        var endsNextYear = context.League.Code != LeagueCodes.Nfl;
         var stops = stints
             .Select(s => new CareerStop(
                 s.Team!.FullName,
                 s.Team.Abbreviation,
                 s.Team.LogoUrl,
                 s.StartSeason,
-                s.EndSeason + 1,
+                endsNextYear ? s.EndSeason + 1 : s.EndSeason,
                 s.Seasons > 0 ? s.Seasons : (s.EndSeason ?? context.AsOf.Year) - s.StartSeason + 1))
             .ToList();
 
@@ -180,10 +189,15 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
             .ToDictionary(g => g.Key, g => FranchisePath(g.OrderBy(s => s.Order).Select(s => s.Franchise)));
 
         var eligible = byPlayer.Where(p => p.Value.Length >= MinFranchises).Select(p => p.Key).ToHashSet();
-        var popularity = await db.Players.AsNoTracking()
-            .Where(p => p.LeagueId == leagueId && (p.ToYear == null || p.ToYear >= MinLastSeason))
-            .Select(p => new { p.Id, p.Popularity })
-            .ToListAsync(ct);
+        var football = await db.Leagues.AnyAsync(l => l.Id == leagueId && l.Code == LeagueCodes.Nfl, ct);
+        var candidates = db.Players.AsNoTracking()
+            .Where(p => p.LeagueId == leagueId && (p.ToYear == null || p.ToYear >= MinLastSeason));
+        if (football)
+        {
+            candidates = candidates.Where(p => p.FromYear != null && p.FromYear >= NflMinFirstSeason
+                                               && (p.Position == null || !ScoutingReport.ScoutingReportGame.NeverAnswers.Contains(p.Position)));
+        }
+        var popularity = await candidates.Select(p => new { p.Id, p.Popularity }).ToListAsync(ct);
 
         var pool = popularity
             .Where(p => eligible.Contains(p.Id))

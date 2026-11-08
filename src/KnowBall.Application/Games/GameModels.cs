@@ -21,6 +21,8 @@ public interface IGame
     bool IsGenerated { get; }
     /// <summary>Whether the guess box offers retired players as well as current ones.</summary>
     bool IncludesRetired { get; }
+    /// <summary>The leagues the game has an edition for, by code, the default first. Each has its own daily puzzle.</summary>
+    IReadOnlyList<string> Leagues => [LeagueCodes.Nba];
 
     /// <summary>A new puzzle, or null when no player qualifies.</summary>
     Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken);
@@ -56,6 +58,7 @@ public static class GameStatus
 /// <summary>Everything the client needs to draw a puzzle. <see cref="Answer"/> is null until the game is over.</summary>
 public sealed record GameState(
     string Game,
+    string League,
     int PuzzleId,
     int? Number,
     DateOnly? Date,
@@ -80,10 +83,32 @@ public sealed record GameStats(
     int CurrentStreak,
     int BestStreak,
     /// <summary>Wins by number of guesses: index 0 is a first-guess win.</summary>
-    IReadOnlyList<int> Distribution);
+    IReadOnlyList<int> Distribution,
+    string League = LeagueCodes.Nba);
 
 /// <summary>A game's place on the home page today.</summary>
-public sealed record TodayEntry(string Game, string Name, bool Available, int? Number, string Status, int Guesses, int MaxGuesses);
+public sealed record TodayEntry(string Game, string Name, bool Available, int? Number, string Status, int Guesses, int MaxGuesses, string League = LeagueCodes.Nba);
+
+/// <summary>
+/// The leagues the games come in. An edition only goes live once its league is listed in <c>Games:Leagues</c>,
+/// so a new league's puzzles are not queued or numbered before the site can show them.
+/// </summary>
+public static class LeagueCodes
+{
+    public const string Nba = "nba";
+    public const string Nfl = "nfl";
+}
+
+public sealed class GameLeagueOptions
+{
+    /// <summary>Leagues whose editions are live, comma-separated. The NBA is always live.</summary>
+    public string Leagues { get; set; } = LeagueCodes.Nba;
+
+    public bool IsLive(string league) =>
+        league == LeagueCodes.Nba
+        || Leagues.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Contains(league, StringComparer.OrdinalIgnoreCase);
+}
 
 public enum GameFailure
 {

@@ -156,10 +156,12 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
             await using var scope = scopes.CreateAsyncScope();
             var scheduler = scope.ServiceProvider.GetRequiredService<PuzzleScheduler>();
 
-            foreach (var game in scope.ServiceProvider.GetRequiredService<GameRegistry>().All)
+            var registry = scope.ServiceProvider.GetRequiredService<GameRegistry>();
+            foreach (var game in registry.All)
+            foreach (var league in registry.LeaguesOf(game))
             {
-                var made = await scheduler.FillQueueAsync(game, opts.PuzzleDaysAhead, ct);
-                if (made > 0) logger.LogInformation("Queued {Count} {Game} puzzles", made, game.Name);
+                var made = await scheduler.FillQueueAsync(game, opts.PuzzleDaysAhead, ct, league);
+                if (made > 0) logger.LogInformation("Queued {Count} {Game} puzzles", made, league == LeagueCodes.Nba ? game.Name : $"{game.Name} ({league.ToUpperInvariant()})");
             }
 
             var purged = await scheduler.PurgePracticeAsync(TimeSpan.FromDays(opts.PracticeRetentionDays), ct);

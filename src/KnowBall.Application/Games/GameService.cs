@@ -13,11 +13,13 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
 {
     public const int ArchiveLimit = 120;
 
-    public async Task<GameOutcome<GameState>> GetDailyAsync(string slug, string userKey, CancellationToken ct)
+    /// <param name="league">The edition, such as "nfl"; null for the game's default.</param>
+    public async Task<GameOutcome<GameState>> GetDailyAsync(string slug, string userKey, CancellationToken ct, string? league = null)
     {
         if (games.Find(slug) is not { } game) return UnknownGame<GameState>();
+        if (games.League(game, league) is not { } code) return UnknownLeague<GameState>(game, league);
 
-        var puzzle = await scheduler.GetOrCreateDailyAsync(game, calendar.Today, ct);
+        var puzzle = await scheduler.GetOrCreateDailyAsync(game, calendar.Today, ct, code);
         if (puzzle is null) return GameOutcome<GameState>.NotFound($"There is no {game.Name} puzzle today.");
 
         return GameOutcome<GameState>.Success(BuildState(game, puzzle, await FindResultAsync(puzzle.Id, userKey, ct)));
@@ -31,12 +33,13 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
         return GameOutcome<GameState>.Success(BuildState(game, puzzle, await FindResultAsync(puzzle.Id, userKey, ct)));
     }
 
-    public async Task<GameOutcome<GameState>> StartPracticeAsync(string slug, CancellationToken ct)
+    public async Task<GameOutcome<GameState>> StartPracticeAsync(string slug, CancellationToken ct, string? league = null)
     {
         if (games.Find(slug) is not { } game) return UnknownGame<GameState>();
+        if (games.League(game, league) is not { } code) return UnknownLeague<GameState>(game, league);
         if (!game.IsGenerated) return GameOutcome<GameState>.Invalid($"{game.Name} has no practice mode.");
 
-        var puzzle = await scheduler.CreatePracticeAsync(game, ct);
+        var puzzle = await scheduler.CreatePracticeAsync(game, ct, code);
         return puzzle is null
             ? GameOutcome<GameState>.NotFound($"No {game.Name} puzzle could be made.")
             : GameOutcome<GameState>.Success(BuildState(game, puzzle, null));
@@ -106,13 +109,14 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
     }
 
     /// <summary>Past dailies, newest first, with how this player did on each.</summary>
-    public async Task<GameOutcome<IReadOnlyList<ArchiveEntry>>> GetArchiveAsync(string slug, string userKey, CancellationToken ct)
+    public async Task<GameOutcome<IReadOnlyList<ArchiveEntry>>> GetArchiveAsync(string slug, string userKey, CancellationToken ct, string? league = null)
     {
         if (games.Find(slug) is not { } game) return UnknownGame<IReadOnlyList<ArchiveEntry>>();
+        if (games.League(game, league) is not { } code) return UnknownLeague<IReadOnlyList<ArchiveEntry>>(game, league);
 
         var today = calendar.Today;
         var puzzles = await db.Puzzles.AsNoTracking()
-            .Where(p => p.GameType == game.Type && p.Status == PuzzleStatus.Scheduled && p.Date <= today)
+            .Where(p => p.GameType == game.Type && p.League!.Code == code && p.Status == PuzzleStatus.Scheduled && p.Date <= today)
             .OrderByDescending(p => p.Date)
             .Take(ArchiveLimit)
             .Select(p => new { p.Id, p.Number, p.Date })
@@ -133,12 +137,12 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
         return GameOutcome<IReadOnlyList<ArchiveEntry>>.Success(entries);
     }
 
-    /// <summary>Played, win rate, streaks and guess distribution for each game, from daily puzzles only.</summary>
+    /// <summary>Played, win rate, streaks and guess distribution for each live edition of each game, from daily puzzles only.</summary>
     public async Task<IReadOnlyList<GameStats>> GetStatsAsync(string userKey, CancellationToken ct)
     {
         var finished = (await db.UserResults.AsNoTracking()
                 .Where(r => r.UserKey == userKey && r.Puzzle!.Status == PuzzleStatus.Scheduled && r.Puzzle.Date != null)
-                .Select(r => new { r.Puzzle!.GameType, Date = r.Puzzle.Date!.Value, r.Solved, r.Score, r.CompletedAt })
+                .Select(r => new { r.Puzzle!.GameType, League = r.Puzzle.League!.Code, Date = r.Puzzle.Date!.Value, r.Solved, r.Score, r.CompletedAt })
                 .ToListAsync(ct))
             .Where(r => r.CompletedAt is not null)
             .ToList();
@@ -146,15 +150,16 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
         var today = calendar.Today;
         var stats = new List<GameStats>();
         foreach (var game in games.All)
+        foreach (var league in games.LeaguesOf(game))
         {
-            var mine = finished.Where(r => r.GameType == game.Type).ToList();
+            var mine = finished.Where(r => r.GameType == game.Type && r.League == league).ToList();
             var distribution = new int[game.MaxGuesses];
             foreach (var win in mine.Where(r => r.Solved && r.Score >= 1 && r.Score <= game.MaxGuesses)) distribution[win.Score - 1]++;
 
             var (current, best) = Streaks(mine.Where(r => r.Solved).Select(r => r.Date), today);
             // Yesterday's run survives an unplayed today, but not a completed loss today.
             if (mine.Any(r => r.Date == today && !r.Solved)) current = 0;
-            stats.Add(new GameStats(game.Slug, game.Name, game.MaxGuesses, mine.Count, mine.Count(r => r.Solved), current, best, distribution));
+            stats.Add(new GameStats(game.Slug, game.Name, game.MaxGuesses, mine.Count, mine.Count(r => r.Solved), current, best, distribution, league));
         }
         return stats;
     }
@@ -164,17 +169,18 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
     {
         var entries = new List<TodayEntry>();
         foreach (var game in games.All)
+        foreach (var league in games.LeaguesOf(game))
         {
-            var puzzle = await scheduler.GetOrCreateDailyAsync(game, calendar.Today, ct);
+            var puzzle = await scheduler.GetOrCreateDailyAsync(game, calendar.Today, ct, league);
             if (puzzle is null)
             {
-                entries.Add(new TodayEntry(game.Slug, game.Name, false, null, GameStatus.New, 0, game.MaxGuesses));
+                entries.Add(new TodayEntry(game.Slug, game.Name, false, null, GameStatus.New, 0, game.MaxGuesses, league));
                 continue;
             }
 
             var result = await FindResultAsync(puzzle.Id, userKey, ct);
             entries.Add(new TodayEntry(
-                game.Slug, game.Name, true, puzzle.Number, StatusOf(result), result is null ? 0 : ReadGuesses(result).Count, game.MaxGuesses));
+                game.Slug, game.Name, true, puzzle.Number, StatusOf(result), result is null ? 0 : ReadGuesses(result).Count, game.MaxGuesses, league));
         }
         return entries;
     }
@@ -208,6 +214,7 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
 
         return new GameState(
             Game: game.Slug,
+            League: puzzle.League?.Code ?? LeagueCodes.Nba,
             PuzzleId: puzzle.Id,
             Number: puzzle.Number,
             Date: puzzle.Date,
@@ -237,7 +244,7 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
     /// <summary>A puzzle that may be played now: a practice round, or a daily whose day has come.</summary>
     private async Task<Puzzle?> FindPlayableAsync(IGame game, int puzzleId, CancellationToken ct)
     {
-        var puzzle = await db.Puzzles.AsNoTracking().FirstOrDefaultAsync(p => p.Id == puzzleId && p.GameType == game.Type, ct);
+        var puzzle = await db.Puzzles.AsNoTracking().Include(p => p.League).FirstOrDefaultAsync(p => p.Id == puzzleId && p.GameType == game.Type, ct);
         return puzzle switch
         {
             { Status: PuzzleStatus.Practice } => puzzle,
@@ -247,4 +254,7 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
     }
 
     private static GameOutcome<T> UnknownGame<T>() => GameOutcome<T>.NotFound("Unknown game.");
+
+    private static GameOutcome<T> UnknownLeague<T>(IGame game, string? league) =>
+        GameOutcome<T>.NotFound($"{game.Name} has no {league?.Trim().ToUpperInvariant()} edition.");
 }
