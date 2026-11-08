@@ -14,8 +14,8 @@ public interface IHistorySource
 /// <param name="IdSource">Namespace of the player ids, e.g. "bref".</param>
 /// <param name="LatestSeason">Start year of the newest season in the data.</param>
 /// <param name="KeepSeasonLines">
-/// False for a record that only says which team a player was on each season (the NFL rosters): the
-/// lines still build the stops of a career, but no stat rows are stored for them.
+/// False for a record that only says which team a player was on each season: the lines still build the
+/// stops of a career, but no stat rows or awards are stored or even loaded. A player can also opt out on his own.
 /// </param>
 public sealed record HistorySnapshot(
     string LeagueCode,
@@ -33,6 +33,7 @@ public sealed record HistoryTeam(string Key, SourceTeam Team, int? ActiveFrom, i
 /// <param name="JerseyNumber">The number last worn, when the record has it.</param>
 /// <param name="HeadshotUrl">A link to the player's photo, when the record has one.</param>
 /// <param name="Popularity">A fame score the source worked out itself; null to score the career from its season lines and awards.</param>
+/// <param name="KeepSeasonLines">False when the lines only say which team he was on: they build his stops, but no stat rows are stored.</param>
 public sealed record HistoryPlayer(
     string ExternalId,
     string FirstName,
@@ -51,7 +52,8 @@ public sealed record HistoryPlayer(
     IReadOnlyList<HistoryAward> Awards,
     string? JerseyNumber = null,
     string? HeadshotUrl = null,
-    double? Popularity = null);
+    double? Popularity = null,
+    bool KeepSeasonLines = true);
 
 /// <summary>
 /// One line of a player's record, in the order played. A season split between teams has one
@@ -84,6 +86,16 @@ public static class AwardTypes
     public const string AllLeague = "AllNBA";
     public const string AllDefense = "AllDefense";
     public const string AllRookie = "AllRookie";
+
+    // Football. MVP and DPOY are shared with basketball.
+    public const string OffensivePlayer = "OPOY";
+    public const string OffensiveRookie = "OROY";
+    public const string DefensiveRookie = "DROY";
+    public const string Comeback = "CPOY";
+    public const string SuperBowlMvp = "SBMVP";
+    /// <summary>Followed by 1 or 2 for the AP first or second team.</summary>
+    public const string AllPro = "AllPro";
+    public const string ProBowl = "ProBowl";
 }
 
 /// <summary>Links between data sources, and facts only the linking source has (birthplaces).</summary>

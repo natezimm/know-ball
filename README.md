@@ -170,8 +170,9 @@ docs/                         architecture, ADRs, API and importer reference, ar
 
 ## Data and images
 
-Player data comes from the Basketball-Reference mirror, Wikidata and ESPN's public feed; headshots and logos are
-the NBA's, linked from its CDN and never stored. That is fine for a personal project and would need revisiting for
+Player data comes from the Basketball-Reference mirror, nflverse, Wikidata, ESPN's public feeds and, for NFL
+All-Pro teams and Pro Bowls, Wikipedia (CC BY-SA 4.0); headshots and logos are the leagues', linked from their CDNs
+and never stored. That is fine for a personal project and would need revisiting for
 anything commercial. Know Ball is not affiliated with or endorsed by the NBA, NFL, MLB or NHL. Details in
 [docs/research.md](docs/research.md).
 

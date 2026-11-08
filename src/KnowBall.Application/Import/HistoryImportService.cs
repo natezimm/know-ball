@@ -127,8 +127,8 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
                 player.CurrentTeam = teams[spans[^1].TeamKey];
             }
 
-            if (snapshot.KeepSeasonLines) changed |= SyncSeasons(player, hp, teams);
-            changed |= SyncAwards(player, hp);
+            if (snapshot.KeepSeasonLines && hp.KeepSeasonLines) changed |= SyncSeasons(player, hp, teams);
+            if (snapshot.KeepSeasonLines) changed |= SyncAwards(player, hp);
             changed |= SyncStints(player, spans, teams, snapshot.LatestSeason);
 
             var popularity = hp.Popularity ?? PopularityCalculator.FromCareer(Summarise(hp, player.IsActive, snapshot.LatestSeason));
