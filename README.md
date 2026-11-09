@@ -28,9 +28,11 @@ stays with your browser.
 - **Career Path**: name the NBA or NFL player from every team they played for, in order; each miss unlocks a hint.
 - **Back of the Card**: name the NBA or NFL player from every season's stats on the back of their card; each miss uncovers
   their teams, then position and height, then award stamps, then draft and college.
+- **Team Photo**: a blank team photo of one of the 100 NBA Finals teams since the 1976 merger; name its starting five
+  before your fourth miss. Naming a bench player is free.
 - **Numbers Don't Lie**: five multiple-choice questions on records, nicknames, famous numbers and history across the
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.
-- The three player games have practice rounds, an archive of past dailies, stats and streaks, and a
+- The four player games have practice rounds, an archive of past dailies, stats and streaks, and a
   spoiler-free share card. Letter Jacket keeps stats and streaks per word length. Numbers Don't Lie has a daily round,
   filtered practice with a Playoff Moments topic and a share card; it has no archive or stats yet.
 - Installable as a phone app (PWA), and built for phones first.

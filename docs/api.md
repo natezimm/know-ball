@@ -4,9 +4,9 @@ All endpoints live under `/api` in `src/KnowBall.Api/Endpoints/`. The game endpo
 the browser makes up an id on its first visit (`web/know-ball/src/app/core/anon-id.ts`) and sends it on every call.
 It identifies a browser, not an account. Errors the API reports itself have the shape `{ "error": "..." }`.
 
-## Player games (Scouting Report, Career Path, Back of the Card)
+## Player games (Scouting Report, Career Path, Back of the Card, Team Photo)
 
-`{game}` is `scouting-report`, `career-path` or `back-of-the-card`.
+`{game}` is `scouting-report`, `career-path`, `back-of-the-card` or `team-photo`.
 
 | Endpoint | Purpose |
 | --- | --- |
@@ -33,6 +33,14 @@ the same setting to decide which queues to fill. The site's NFL pages are `/scou
 An NFL Back of the Card payload has `columns` (`label` and `decimals`) for the player's position group (passing,
 rushing, receiving or defence), each season's `games` and `values` as season totals, and a career line of totals;
 seasons are by their own year. The NBA payload keeps `points`, `rebounds` and `assists` per game.
+
+Team Photo has five answers instead of one. Its payload is a Finals team (`team`, `season`, `wins`, `losses`,
+`finals` of `won` or `lost`) and five `slots`, each with a `position`, a `row` (`back` or `front`) and that
+player's games, points, rebounds and assists that season. A guess at a starter is correct with feedback
+`{ "slot": 2 }`; a guess at one of the team's bench players is wrong but sends `"miss": false` and feedback
+`{ "bench": true }`; anyone else is a miss. `maxGuesses` (4) is a limit on misses, not guesses, and the game is
+won once every slot is named. The answer is `{ "slots": [{ "playerId", "name", "headshotUrl" }] }` in slot order.
+In `me/stats` its distribution counts solves by misses (0 to 3), and in `me/today` its `guesses` are misses.
 
 ## Letter Jacket
 

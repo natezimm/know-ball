@@ -76,7 +76,7 @@ test('a small visual viewport keeps the search results above the keyboard', asyn
 });
 
 test('unaccented searches find accented player names in every player game', async ({ page }) => {
-  for (const slug of ['scouting-report', 'career-path', 'back-of-the-card']) {
+  for (const slug of ['scouting-report', 'career-path', 'back-of-the-card', 'team-photo']) {
     await page.goto(`/${slug}`);
     const box = page.getByRole('combobox', { name: 'Guess a player' });
     for (const [query, name] of [['jokic', 'Nikola Jokić'], ['doncic', 'Luka Dončić']]) {

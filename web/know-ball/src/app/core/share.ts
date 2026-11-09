@@ -29,3 +29,9 @@ export function shareHeadline(name: string, number: number | null, guesses: numb
   const which = number === null ? 'practice' : `#${number}`;
   return `Know Ball · ${name} ${which} ${won ? guesses : 'X'}/${max}`;
 }
+
+/** For a game that limits misses: "Team Photo #12 1 miss", "… X" for a loss, "… practice 0 misses". */
+export function missHeadline(name: string, number: number | null, misses: number, max: number, won: boolean): string {
+  const which = number === null ? 'practice' : `#${number}`;
+  return `Know Ball · ${name} ${which} ${won ? `${misses} ${misses === 1 ? 'miss' : 'misses'}` : `X/${max}`}`;
+}

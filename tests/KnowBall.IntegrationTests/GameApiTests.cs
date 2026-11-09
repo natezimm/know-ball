@@ -228,6 +228,9 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         var stats = await Json(await client.GetAsync("/api/me/stats"));
         var photo = stats.EnumerateArray().Single(s => s.GetProperty("game").GetString() == "team-photo");
         Assert.Equal([0, 1, 0, 0], photo.GetProperty("distribution").EnumerateArray().Select(d => d.GetInt32())); // one miss
+        // The home page hears misses, not guesses: seven guesses, one of them a miss.
+        var today = await Json(await client.GetAsync("/api/me/today"));
+        Assert.Equal(1, today.EnumerateArray().Single(t => t.GetProperty("game").GetString() == "team-photo").GetProperty("guesses").GetInt32());
     }
 
     [Fact]

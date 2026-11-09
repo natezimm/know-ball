@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export type GameSlug = 'scouting-report' | 'career-path' | 'back-of-the-card';
+export type GameSlug = 'scouting-report' | 'career-path' | 'back-of-the-card' | 'team-photo';
 /** The leagues a game can have an edition in. NBA is every game's first; Scouting Report, Career Path and Back of the Card also have an NFL one. */
 export type League = 'nba' | 'nfl';
 export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL' };
@@ -16,6 +16,13 @@ export interface GuessRecord<TFeedback = unknown> {
   headshotUrl: string | null;
   correct: boolean;
   feedback: TFeedback | null;
+  /** Only sent as false, for a wrong guess that does not count as a miss (a bench player in Team Photo). */
+  miss?: boolean;
+}
+
+/** Whether a guess used up one of the misses: a wrong guess, unless the game says otherwise. */
+export function isMiss(guess: GuessRecord): boolean {
+  return guess.miss ?? !guess.correct;
 }
 
 /** A puzzle with this player's progress. `answer` stays null until the game is over. */

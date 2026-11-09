@@ -185,8 +185,10 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
             }
 
             var result = await FindResultAsync(puzzle.Id, userKey, ct);
-            entries.Add(new TodayEntry(
-                game.Slug, game.Name, true, puzzle.Number, StatusOf(result), result is null ? 0 : ReadGuesses(result).Count, game.MaxGuesses, league));
+            // A game that limits misses reports misses here, so "2 of 4" means the same thing as its dots.
+            var guesses = result is null ? [] : ReadGuesses(result);
+            var used = game.LimitsMisses ? guesses.Count(g => g.IsMiss) : guesses.Count;
+            entries.Add(new TodayEntry(game.Slug, game.Name, true, puzzle.Number, StatusOf(result), used, game.MaxGuesses, league));
         }
         return entries;
     }

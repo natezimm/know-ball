@@ -4,6 +4,7 @@ import { PageMetaData } from './core/page-meta';
 const scoutingReport = () => import('./games/scouting-report/scouting-report').then((m) => m.ScoutingReport);
 const careerPath = () => import('./games/career-path/career-path').then((m) => m.CareerPath);
 const backOfTheCard = () => import('./games/back-of-the-card/back-of-the-card').then((m) => m.BackOfTheCard);
+const teamPhoto = () => import('./games/team-photo/team-photo').then((m) => m.TeamPhoto);
 
 // A game's bare address is today's puzzle; "/puzzle/:puzzleId" is one from the archive or a practice round.
 // Search engines index each game's bare address and skip archive puzzles and the design lab (core/page-meta.ts).
@@ -83,6 +84,15 @@ export const routes: Routes = [
     loadComponent: backOfTheCard,
   },
   { path: 'back-of-the-card/puzzle/:puzzleId', title: 'Back of the Card — Know Ball', data: archive, loadComponent: backOfTheCard },
+  {
+    path: 'team-photo',
+    title: 'Team Photo — Know Ball',
+    data: {
+      description: 'Team Photo: a blank team photo of an NBA Finals team. Name the starting five before your fourth miss. A new puzzle every day.',
+    } satisfies PageMetaData,
+    loadComponent: teamPhoto,
+  },
+  { path: 'team-photo/puzzle/:puzzleId', title: 'Team Photo — Know Ball', data: archive, loadComponent: teamPhoto },
   {
     path: 'mockups',
     title: 'Mockups — Know Ball',
