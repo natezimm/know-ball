@@ -118,7 +118,9 @@ internal sealed class NflTeams
             var franchise = Current[f.Franchise];
             teams.Add(new HistoryTeam(
                 key,
-                new SourceTeam(key, f.City, f.Name, key, franchise.Conference, franchise.Division),
+                // The Chargers in San Diego or the Raiders in Oakland wore the logo the team wears now; the Oilers did not.
+                new SourceTeam(key, f.City, f.Name, key, franchise.Conference, franchise.Division,
+                    LogoUrl: f.Name == franchise.Name ? franchise.LogoUrl : null),
                 span.From,
                 span.To >= latestSeason ? null : span.To,
                 f.Franchise));
