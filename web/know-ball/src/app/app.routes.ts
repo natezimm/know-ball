@@ -73,6 +73,15 @@ export const routes: Routes = [
     } satisfies PageMetaData,
     loadComponent: backOfTheCard,
   },
+  {
+    path: 'back-of-the-card/nfl',
+    title: 'Back of the Card NFL — Know Ball',
+    data: {
+      league: 'nfl',
+      description: "Back of the Card NFL: every season's totals from an NFL player's card, name blacked out. Who is it? A new puzzle every day.",
+    } satisfies PageMetaData & { league: 'nfl' },
+    loadComponent: backOfTheCard,
+  },
   { path: 'back-of-the-card/puzzle/:puzzleId', title: 'Back of the Card — Know Ball', data: archive, loadComponent: backOfTheCard },
   {
     path: 'mockups',

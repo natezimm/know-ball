@@ -1,5 +1,6 @@
 // Writes a small made-up NFL league in the layout of the nflverse releases, for the browser tests:
-// enough current players to lose a game of Scouting Report and enough well-travelled ones for Career Path.
+// enough current players to lose a game of Scouting Report, enough well-travelled ones for Career Path, and five
+// seasons of stats for Back of the Card.
 // The seasons run up to this year, so the importer reads them as recent whatever the date.
 // Usage: node nfl-fixtures.mjs <out-dir>; prints the first season, for Sources__Nflverse__FirstSeason.
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -9,9 +10,10 @@ const out = process.argv[2];
 if (!out) throw new Error('usage: node nfl-fixtures.mjs <out-dir>');
 
 const year = new Date().getUTCFullYear();
-const seasons = [year - 3, year - 2, year - 1, year];
+const seasons = [year - 4, year - 3, year - 2, year - 1, year];
 
-// Name, position, height, jersey, birth year, then the team each season (one per season, oldest first).
+// Name, position, height, jersey, birth year, then the team each season (one per season, oldest first). Each
+// player starts a season early with his first team, so the paths below keep the stops they had with four seasons.
 const players = [
   ['Rex Launcher', 'QB', 76, '9', 1996, ['KC', 'KC', 'KC', 'KC']],
   ['Milo Gunslinger', 'QB', 75, '12', 1994, ['DEN', 'SEA', 'CHI', 'CHI']],
@@ -30,6 +32,8 @@ const players = [
   ['Lefty Boot', 'K', 72, '3', 1993, ['TB', 'TB', 'TB', 'TB']],
 ];
 
+for (const p of players) p[5].unshift(p[5][0]);
+
 const id = (i) => `00-01${String(i + 1).padStart(5, '0')}`;
 const csv = (rows) => rows.map((r) => r.join(',')).join('\n') + '\n';
 const write = (path, rows) => {
@@ -43,7 +47,7 @@ write('players/players.csv', [
   ...players.map(([name, pos, height, jersey, born, teams], i) => {
     const [first, last] = name.split(' ');
     return [id(i), name, first, first, last, `${born}-03-0${(i % 9) + 1}`, pos, pos, height, 220, '', 'State', jersey,
-      seasons[0], seasons[3], teams[3], 'ACT', '', '', '', ''];
+      seasons[0], seasons.at(-1), teams.at(-1), 'ACT', '', '', '', ''];
   }),
 ]);
 
@@ -62,6 +66,30 @@ for (const [s, season] of seasons.entries()) {
         first, seasons[0], seasons[0], ''];
     }),
   ]);
+}
+
+// Season totals in the nflverse stats layout, by position group; linemen and kickers have none a card prints.
+const statColumns = ['player_id', 'recent_team', 'games', 'completions', 'attempts', 'passing_yards', 'passing_tds', 'passing_interceptions',
+  'carries', 'rushing_yards', 'rushing_tds', 'receptions', 'receiving_yards', 'receiving_tds',
+  'def_tackles_solo', 'def_tackle_assists', 'def_sacks', 'def_interceptions', 'def_fumbles_forced', 'fantasy_points_ppr'];
+const statsFor = (pos, s, i) => {
+  const n = 1 + ((s + i) % 4);
+  switch (pos) {
+    case 'QB': return { completions: 300 + 10 * n, attempts: 480 + 5 * n, passing_yards: 3800 + 150 * n, passing_tds: 22 + n, passing_interceptions: 9 - n };
+    case 'RB': return { carries: 220 + 10 * n, rushing_yards: 1000 + 60 * n, rushing_tds: 7 + n, receptions: 30 + n };
+    case 'WR': case 'TE': return { receptions: 70 + 4 * n, receiving_yards: 900 + 70 * n, receiving_tds: 5 + n };
+    case 'T': case 'C': case 'K': return null;
+    default: return { def_tackles_solo: 40 + 3 * n, def_tackle_assists: 15 + n, def_sacks: n + 0.5, def_interceptions: n % 3, def_fumbles_forced: n % 2 };
+  }
+};
+for (const [s, season] of seasons.entries()) {
+  const rows = players.flatMap(([, pos, , , , teams], i) => {
+    const stats = statsFor(pos, s, i);
+    if (!stats) return [];
+    const row = { player_id: id(i), recent_team: teams[s], games: 17, fantasy_points_ppr: 100, ...stats };
+    return [statColumns.map((c) => row[c] ?? 0)];
+  });
+  write(`stats_player/stats_player_reg_${season}.csv`, [statColumns, ...rows]);
 }
 
 process.stdout.write(`${seasons[0]}\n`);

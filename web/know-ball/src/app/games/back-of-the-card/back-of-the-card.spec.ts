@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { gameState, guess } from '../../core/testing';
-import { BackOfTheCard, CardClues, CardSeason, seasonLabel } from './back-of-the-card';
+import { BackOfTheCard, CardClues, CardSeason, cardTable, seasonLabel } from './back-of-the-card';
 
 const seasons: CardSeason[] = [
   { season: 2007, games: 80, points: 20.3, rebounds: 4.4, assists: 2.4 },
@@ -83,5 +83,26 @@ describe('Back of the Card', () => {
   it('labels a season across the century', () => {
     expect(seasonLabel(1999)).toBe('99–00');
     expect(seasonLabel(2005)).toBe('05–06');
+  });
+});
+
+describe('cardTable', () => {
+  it('prints a football card by year, with its own columns and decimals', () => {
+    const table = cardTable({
+      columns: [{ label: 'Cmp%', decimals: 1 }, { label: 'Yds', decimals: 0 }, { label: 'TD', decimals: 0 }, { label: 'Int', decimals: 0 }],
+      seasons: [{ season: 2018, games: 16, values: [66, 5097, 50, 12] }],
+      career: { seasons: 1, games: 16, values: [66, 5097, 50, 12] },
+    });
+
+    expect(table.headings).toEqual(['Cmp%', 'Yds', 'TD', 'Int']);
+    expect(table.seasons[0]).toEqual({ season: 2018, label: '2018', games: 16, cells: ['66.0', '5,097', '50', '12'] });
+    expect(table.career.cells).toEqual(['66.0', '5,097', '50', '12']);
+  });
+
+  it('prints a basketball card by season, per game', () => {
+    const table = cardTable(payload);
+    expect(table.headings).toEqual(['Pts', 'Reb', 'Ast']);
+    expect(table.seasons.map((s) => s.label)).toEqual(['07–08', '13–14', '19–20']);
+    expect(table.career.cells).toEqual(['26.1', '6.3', '4.3']);
   });
 });

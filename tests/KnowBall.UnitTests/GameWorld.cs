@@ -108,8 +108,37 @@ public sealed class GameWorld : IDisposable
         AddPlayer("Boot Leg", null, "K", 71, "1980-06-06", null, 100,
             [("nfl-KC", 2003, 2006), ("nfl-GB", 2007, 2010), ("nfl-NE", 2011, 2015)], active: false, league: Nfl);
 
+        // Back of the Card: season totals for the careers it can print, and a kicker's and a short career's it cannot.
+        AddFootballSeasons("Pat Thrower", "nfl-KC", (2017, 1, """{"cmp":22,"att":35,"pyd":284,"ptd":0,"int":1}"""),
+            (2018, 16, """{"cmp":383,"att":580,"pyd":5097,"ptd":50,"int":12,"car":60,"ryd":272,"rtd":2}"""),
+            (2019, 14, """{"cmp":319,"att":484,"pyd":4031,"ptd":26,"int":5}"""),
+            (2020, 15, """{"cmp":390,"att":588,"pyd":4740,"ptd":38,"int":6}"""),
+            (2021, 17, "{}"));
+        Players["Pat Thrower"].Awards.Add(new Award { Season = 2018, Type = "MVP" });
+        Players["Pat Thrower"].Awards.Add(new Award { Season = 2018, Type = "AllPro1" });
+        Players["Pat Thrower"].Awards.Add(new Award { Season = 2019, Type = "SBMVP" });
+        Players["Pat Thrower"].Awards.Add(new Award { Season = 2019, Type = "ProBowl" });
+        Players["Pat Thrower"].Awards.Add(new Award { Season = 2020, Type = "ProBowl" });
+        AddFootballSeasons("Road Warrior", "nfl-OAK", (2005, 16, """{"rec":60,"wyd":800,"wtd":5}"""), (2006, 16, """{"rec":70,"wyd":1000,"wtd":8}"""),
+            (2007, 15, """{"rec":65,"wyd":900,"wtd":6}"""), (2008, 16, """{"rec":55,"wyd":700,"wtd":4}"""));
+        AddFootballSeasons("Road Warrior", "nfl-NE", (2009, 12, """{"rec":40,"wyd":500,"wtd":3}"""));
+        AddFootballSeasons("Cee Back", "nfl-PHI", (2020, 16, """{"tkl":60,"dint":3}"""), (2021, 16, """{"tkl":55}"""),
+            (2022, 17, """{"tkl":70,"sk":1.5,"ff":1}"""), (2023, 17, """{"tkl":50,"dint":2}"""));
+        AddFootballSeasons("Kenny Kicker", "nfl-NE", (2012, 16, "{}"), (2013, 16, "{}"), (2014, 16, "{}"), (2015, 16, "{}"), (2016, 16, "{}"));
+
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();
+    }
+
+    private void AddFootballSeasons(string name, string team, params (int Season, int Games, string Stats)[] lines)
+    {
+        foreach (var (season, games, stats) in lines)
+        {
+            Players[name].SeasonStats.Add(new PlayerSeasonStat
+            {
+                Season = season, Team = Teams[team], IsSeasonTotal = true, Games = games, StatsJson = stats,
+            });
+        }
     }
 
     private void AddSeasons(string name, params (int Season, string? Team, int Games, double Points, double Rebounds, double Assists)[] lines)

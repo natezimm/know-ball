@@ -23,12 +23,16 @@ A puzzle's answer is attached to the response only once the game is won or lost.
 that was already recorded returns the original result instead of spending another guess; the same id with a
 different player returns 409.
 
-Scouting Report and Career Path also have an NFL edition. `daily`, `practice` and `archive` take `?league=nba` or
+Scouting Report, Career Path and Back of the Card also have an NFL edition. `daily`, `practice` and `archive` take `?league=nba` or
 `?league=nfl` (`nba` when left out); each league has its own daily, numbered from one, with its own archive,
 streak and stats. Every puzzle response carries `league`, and so does each entry from `me/stats` and `me/today`.
 A guess at a player from another league is refused with 400, and a league a game has no edition in returns 404.
 The NFL editions are live only when `Games:Leagues` lists `nfl` (`nba,nfl` in appsettings); the importer reads
-the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl` and `/career-path/nfl`.
+the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl`, `/career-path/nfl` and `/back-of-the-card/nfl`.
+
+An NFL Back of the Card payload has `columns` (`label` and `decimals`) for the player's position group (passing,
+rushing, receiving or defence), each season's `games` and `values` as season totals, and a career line of totals;
+seasons are by their own year. The NBA payload keeps `points`, `rebounds` and `assists` per game.
 
 ## Letter Jacket
 

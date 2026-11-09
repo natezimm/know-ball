@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using KnowBall.Application.Games;
+using KnowBall.Application.Games.BackOfTheCard;
 using KnowBall.Application.Games.ScoutingReport;
 using KnowBall.Domain;
 
@@ -42,7 +43,6 @@ public class NflEditionTests : IDisposable
         }
 
         using var engine = Engine();
-        Assert.Equal(GameFailure.NotFound, (await engine.Service.GetDailyAsync("back-of-the-card", User, CancellationToken.None, "nfl")).Failure);
         Assert.Equal(GameFailure.NotFound, (await engine.Service.GetDailyAsync("career-path", User, CancellationToken.None, "mlb")).Failure);
         Assert.Equal(GameFailure.NotFound, (await engine.Service.GetArchiveAsync("career-path", User, CancellationToken.None, "nhl")).Failure);
     }
@@ -148,7 +148,7 @@ public class NflEditionTests : IDisposable
 
         var today = await engine.Service.GetTodayAsync(User, CancellationToken.None);
         Assert.Equal(
-            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba"],
+            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba", "back-of-the-card nfl"],
             today.Select(t => $"{t.Game} {t.League}").ToList());
         Assert.Equal(GameStatus.Won, today.Single(t => t is { Game: "career-path", League: "nfl" }).Status);
         Assert.Equal(GameStatus.New, today.Single(t => t is { Game: "career-path", League: "nba" }).Status);
@@ -169,11 +169,101 @@ public class NflEditionTests : IDisposable
         using var engine = Engine();
         var game = engine.Games.Find("scouting-report")!;
         Assert.Equal(["nba", "nfl"], engine.Games.LeaguesOf(game));
-        Assert.Equal(["nba"], engine.Games.LeaguesOf(engine.Games.Find("back-of-the-card")!));
+        Assert.Equal(["nba", "nfl"], engine.Games.LeaguesOf(engine.Games.Find("back-of-the-card")!));
 
         Assert.Equal(5, await engine.Scheduler.FillQueueAsync(game, 5, CancellationToken.None, "nfl"));
         var nflId = _world.Nfl.Id;
         Assert.Equal(5, await engine.Db.Puzzles.CountAsync(p => p.GameType == GameType.ScoutingReport && p.LeagueId == nflId));
+    }
+
+    /// <summary>Today's NFL Back of the Card with the given answer, and the answers it can be drawn from.</summary>
+    private async Task<(GameState State, HashSet<int?> Drawn)> NflCardFor(string answer)
+    {
+        var drawn = new HashSet<int?>();
+        for (var seed = 1; seed < 100; seed++)
+        {
+            using var engine = Engine(seed);
+            var state = (await engine.Service.GetDailyAsync("back-of-the-card", User, CancellationToken.None, "nfl")).Result!;
+            var puzzle = await engine.Db.Puzzles.SingleAsync(p => p.Id == state.PuzzleId);
+            drawn.Add(puzzle.AnswerPlayerId);
+            if (puzzle.AnswerPlayerId == _world.Id(answer)) return (state, drawn);
+            engine.Db.Puzzles.Remove(puzzle);
+            await engine.Db.SaveChangesAsync();
+        }
+        throw new InvalidOperationException($"{answer} never came up");
+    }
+
+    private async Task<GameState> MissAll(GameState state, params string[] misses)
+    {
+        using var engine = Engine();
+        foreach (var miss in misses)
+            state = (await engine.Service.GuessAsync("back-of-the-card", state.PuzzleId, _world.Id(miss), User, CancellationToken.None)).Result!;
+        return state;
+    }
+
+    private static FootballCardPayload Card(GameState state) =>
+        state.Payload.Deserialize<FootballCardPayload>(new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+
+    [Fact]
+    public async Task Nfl_back_of_the_card_prints_a_quarterbacks_season_totals_and_his_stamps()
+    {
+        var (state, _) = await NflCardFor("Pat Thrower");
+        var payload = Card(state);
+
+        Assert.Equal(["Cmp%", "Yds", "TD", "Int"], payload.Columns.Select(c => c.Label));
+        Assert.Equal([2017, 2018, 2019, 2020, 2021], payload.Seasons.Select(s => s.Season));
+        Assert.Equal(new double[] { 66.0, 5097, 50, 12 }, payload.Seasons[1].Values);
+        Assert.Equal(new double[] { 0, 0, 0, 0 }, payload.Seasons[4].Values);
+        // Career completion rate from the totals: 1,114 of 1,687.
+        Assert.Equal((5, 63), (payload.Career.Seasons, payload.Career.Games));
+        Assert.Equal(new double[] { 66.0, 14152, 114, 24 }, payload.Career.Values);
+        Assert.DoesNotContain("KC", state.Payload.ToJsonString() + state.Clues!.ToJsonString());
+        Assert.DoesNotContain("MVP", state.Payload.ToJsonString() + state.Clues!.ToJsonString());
+
+        var open = await MissAll(state, "Cee Back", "Kenny Kicker", "Old Timer", "Boot Leg");
+        Assert.Equal(["KC", "KC", "KC", "KC", "KC"], open.Clues!["teams"]!.AsArray().Select(t => t!.GetValue<string>()));
+        Assert.Equal(new[] { null, "MVP", "SB MVP", "Pro Bowl", null }, open.Clues!["stamps"]!.AsArray().Select(t => t?.GetValue<string>()));
+        Assert.Equal("QB", open.Clues!["position"]!.GetValue<string>());
+    }
+
+    [Fact]
+    public async Task Nfl_back_of_the_card_only_draws_long_careers_the_stats_cover()
+    {
+        var (state, drawn) = await NflCardFor("Road Warrior");
+        var payload = Card(state);
+
+        Assert.Equal(["Rec", "Yds", "TD", "Avg"], payload.Columns.Select(c => c.Label));
+        Assert.Equal(new double[] { 290, 3900, 26, 13.4 }, payload.Career.Values);
+        // Cee Back has four seasons, Kenny Kicker kicks and Old Timer's career began before the stats do.
+        Assert.Subset(new HashSet<int?> { _world.Id("Pat Thrower"), _world.Id("Road Warrior") }, drawn);
+
+        var open = await MissAll(state, "Cee Back");
+        Assert.Equal(["OAK", "OAK", "OAK", "OAK", "NE"], open.Clues!["teams"]!.AsArray().Select(t => t!.GetValue<string>()));
+    }
+
+    [Fact]
+    public void A_football_season_gets_its_best_award_as_its_stamp()
+    {
+        Assert.Equal("MVP", BackOfTheCardGame.FootballStamp(["ProBowl", "AllPro1", "MVP", "OPOY"]));
+        Assert.Equal("DPOY", BackOfTheCardGame.FootballStamp(["ProBowl", "DPOY", "SBMVP"]));
+        Assert.Equal("OROY", BackOfTheCardGame.FootballStamp(["OROY", "ProBowl"]));
+        Assert.Equal("All-Pro 2nd", BackOfTheCardGame.FootballStamp(["AllPro2", "ProBowl"]));
+        Assert.Equal("Pro Bowl", BackOfTheCardGame.FootballStamp(["ProBowl"]));
+        Assert.Null(BackOfTheCardGame.FootballStamp(["AllStar"]));
+    }
+
+    [Fact]
+    public void A_defenders_card_counts_half_sacks_and_a_backs_counts_his_catches()
+    {
+        PlayerSeasonStat Row(int season, string json) => new() { Season = season, IsSeasonTotal = true, Games = 16, StatsJson = json };
+        var defender = BackOfTheCardGame.FootballCard("OLB", [BackOfTheCardGame.FootballLine.Read(Row(2020, """{"tkl":60,"sk":10.5,"dint":1,"ff":3}""")),
+            BackOfTheCardGame.FootballLine.Read(Row(2021, """{"tkl":40,"sk":4}"""))]);
+        Assert.Equal(["Tkl", "Sacks", "Int", "FF"], defender.Columns.Select(c => c.Label));
+        Assert.Equal(new double[] { 100, 14.5, 1, 3 }, defender.Career.Values);
+
+        var back = BackOfTheCardGame.FootballCard("RB", [BackOfTheCardGame.FootballLine.Read(Row(2020, """{"car":250,"ryd":1100,"rtd":9,"rec":40}"""))]);
+        Assert.Equal(["Car", "Yds", "TD", "Rec"], back.Columns.Select(c => c.Label));
+        Assert.Equal(new double[] { 250, 1100, 9, 40 }, back.Seasons[0].Values);
     }
 
     public void Dispose() => _world.Dispose();
