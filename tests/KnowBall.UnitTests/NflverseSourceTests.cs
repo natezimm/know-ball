@@ -40,7 +40,7 @@ public class NflverseSourceTests
         Assert.Equal("nfl", snapshot.LeagueCode);
         Assert.Equal("gsis", snapshot.IdSource);
         Assert.Equal(2025, snapshot.LatestSeason);
-        Assert.False(snapshot.KeepSeasonLines);
+        Assert.True(snapshot.KeepSeasonLines);
 
         var alpha = snapshot.Players.Single(p => p.ExternalId == "00-0000001");
         Assert.Equal(("Alpha", "Passer"), (alpha.FirstName, alpha.LastName));
@@ -48,7 +48,11 @@ public class NflverseSourceTests
         Assert.Equal((2017, 2025), (alpha.FromYear, alpha.ToYear));
         Assert.Equal((1, 2017), (alpha.DraftNumber, alpha.DraftYear));
         Assert.Equal(("15", "https://static.www.nfl.com/image/upload/alpha"), (alpha.JerseyNumber, alpha.HeadshotUrl));
-        Assert.Empty(alpha.Awards);
+        // ESPN's AP awards, linked by the ESPN id in the players file; a tied vote's other winner is no one here.
+        Assert.Equal([new HistoryAward(2024, AwardTypes.OffensivePlayer), new HistoryAward(2025, AwardTypes.Mvp)], alpha.Awards);
+        // His career began before the stat lines this build keeps, so his lines only place him on a team.
+        Assert.False(alpha.KeepSeasonLines);
+        Assert.All(alpha.Seasons, s => Assert.Equal("{}", s.StatsJson));
 
         // Season file: the team he was traded away from first. Weekly files: in week order.
         var bravo = snapshot.Players.Single(p => p.ExternalId == "00-0000002");
@@ -97,6 +101,30 @@ public class NflverseSourceTests
         Assert.True(Fame("00-0000001") > 80);
         Assert.True(Fame("00-0000001") > Fame("00-0000002"));
         Assert.True(Fame("00-0000002") > Fame("00-0000005"));
+    }
+
+    [Fact]
+    public async Task History_keeps_a_stat_line_for_each_season_of_a_career_the_stats_cover()
+    {
+        var echo = (await History(MidSeason)).Players.Single(p => p.ExternalId == "00-0000005");
+
+        Assert.True(echo.KeepSeasonLines);
+        var line = Assert.Single(echo.Seasons);
+        Assert.Equal((2025, "BUF", true, (int?)5), (line.Season, line.TeamKey, line.IsSeasonTotal, line.Games));
+        Assert.Equal("""{"car":61,"ryd":288,"rtd":2,"rec":4,"wyd":31}""", line.StatsJson);
+    }
+
+    [Fact]
+    public void A_season_split_by_a_trade_has_a_line_per_team_and_the_stats_on_a_combined_line()
+    {
+        List<NflverseHistorySource.RosterSpell> spells = [new(2024, 1, "NYJ"), new(2024, 6, "BUF"), new(2025, 1, "BUF")];
+        var lines = NflverseHistorySource.CardLines(spells, new() { [2024] = 2, [2025] = 1 },
+            [new(2024, 15, "BUF", "{\"rec\":50}"), new(2025, 4, "BUF", "{\"rec\":6}"), new(2023, 2, "ARI", "{\"rec\":1}")]);
+
+        Assert.Equal(
+            ["2023 ARI total 2", "2024 NYJ split -", "2024 BUF split -", "2024 - total 15", "2025 BUF total 4"],
+            lines.Select(l => $"{l.Season} {l.TeamKey ?? "-"} {(l.IsSeasonTotal ? "total" : "split")} {l.Games?.ToString() ?? "-"}").ToList());
+        Assert.Equal("{\"rec\":50}", lines[3].StatsJson);
     }
 
     [Fact]

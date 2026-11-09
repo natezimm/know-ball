@@ -28,6 +28,19 @@ public sealed class NflverseOptions
     /// season: a one-year backup is nobody's guess, and leaving thousands of them out keeps the import small.
     /// </summary>
     public int MinSeasons { get; set; } = 2;
+    /// <summary>
+    /// Season stat lines are kept for careers that began this season or later, the first year nflverse has
+    /// them, for the positions a stat line describes (no linemen on offense, no kickers, punters or snappers).
+    /// </summary>
+    public int StatLinesFromSeason { get; set; } = 1999;
+    /// <summary>
+    /// ESPN's season awards (AP MVP, Offensive and Defensive Player and Rookie of the Year, Comeback Player, Super Bowl
+    /// MVP), as {url}{season}/awards/{id}. Empty to leave them out. With <see cref="Directory"/> set they are read from
+    /// espn-awards/{season}/{id}.json there instead, when the file is present.
+    /// </summary>
+    public string EspnAwardsUrl { get; set; } = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/";
+    /// <summary>The first season whose awards are read, and the first in the All-Pro and Pro Bowl file.</summary>
+    public int AwardsFromSeason { get; set; } = 1999;
 }
 
 /// <summary>NFL dates: when a season starts, and which season a day belongs to.</summary>
@@ -80,6 +93,10 @@ internal sealed class NflTeams
         }
         return Current.ContainsKey(code) || Former.ContainsKey(code) ? code : null;
     }
+
+    /// <summary>The current team a key belongs to: "OAK" → "LV"; the key itself for a current team.</summary>
+    public string? Franchise(string key) =>
+        Current.ContainsKey(key) ? key : Former.TryGetValue(key, out var f) ? f.Franchise : null;
 
     public static SourceTeam ToSourceTeam(CurrentTeam t) =>
         new(t.Key, t.City, t.Name, t.Abbreviation, t.Conference, t.Division, LogoUrl: t.LogoUrl);
@@ -184,8 +201,9 @@ internal static class NflverseFiles
 /// The NFL's full record from nflverse (open data, CC-BY): every player with bio facts, draft slot and
 /// headshot, the team each was on in every season since <see cref="NflverseOptions.FirstSeason"/>, and a
 /// fame score from the draft record (career value, Pro Bowls, All-Pros, Hall of Fame) and fantasy
-/// production. Every file is read a row at a time and only the fields used are kept, so the import
-/// stays small; no season stat lines are stored.
+/// production. Season stat lines are kept from 1999 for the careers a card can be made of, and awards come
+/// from ESPN (the AP awards) and the bundled All-Pro and Pro Bowl file (<see cref="NflHonors"/>). Every file is
+/// read a row at a time and only the fields used are kept, so the import stays small.
 /// </summary>
 public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOptions> options, TimeProvider clock, ILogger<NflverseHistorySource> logger)
     : IHistorySource
@@ -196,7 +214,7 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
 
     internal sealed record PlayerFacts(
         string Id, string DisplayName, string? Position, int? Height, int? Weight, DateOnly? BirthDate, string? College,
-        string? Jersey, string? Headshot, int? RookieSeason, int? DraftYear, int? DraftPick);
+        string? Jersey, string? Headshot, int? RookieSeason, int? DraftYear, int? DraftPick, string? EspnId = null);
 
     internal sealed record DraftRecord(double? CareerValue, int ProBowls, int AllPros, bool HallOfFame);
 
@@ -204,6 +222,16 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
     internal readonly record struct RosterSpell(int Season, int Order, string TeamKey);
 
     internal sealed record Production(double CareerFantasyPoints, double? RecentPerGame);
+
+    /// <summary>One regular season's stat line: games, the team he finished with, and the totals as card JSON.</summary>
+    internal sealed record StatLine(int Season, int Games, string? TeamKey, string StatsJson);
+
+    /// <summary>Positions whose season is told by a stat line. Offensive linemen and specialists have none worth printing.</summary>
+    public static bool HasStatLine(string? position) => position is not null
+        && CardPositions.Contains(position);
+
+    private static readonly HashSet<string> CardPositions =
+        ["QB", "RB", "HB", "FB", "WR", "TE", "DE", "DT", "NT", "DL", "EDGE", "LB", "ILB", "MLB", "OLB", "CB", "DB", "S", "FS", "SS"];
 
     public async Task<HistorySnapshot> FetchAsync(CancellationToken cancellationToken)
     {
@@ -247,7 +275,10 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
         }
 
         var production = await ReadProductionAsync(newest, cancellationToken);
-        var snapshot = Build(players, draft, spells, production, newest, teams, opts.MinSeasons);
+        var statsFrom = Math.Max(opts.StatLinesFromSeason, opts.FirstSeason);
+        var statLines = await ReadStatLinesAsync(statsFrom, newest, players, cancellationToken);
+        var awards = await ReadAwardsAsync(players, spells, newest, teams, cancellationToken);
+        var snapshot = Build(players, draft, spells, production, newest, teams, opts.MinSeasons, statLines, statsFrom, awards);
         logger.LogInformation("nflverse has {Players} players and {Teams} teams from {First} through {Season}",
             snapshot.Players.Count, snapshot.Teams.Count, opts.FirstSeason, newest);
         return snapshot;
@@ -260,7 +291,10 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
         IReadOnlyDictionary<string, Production> production,
         int latestSeason,
         NflTeams teams,
-        int minSeasons = 1)
+        int minSeasons = 1,
+        IReadOnlyDictionary<string, List<StatLine>>? statLines = null,
+        int statsFrom = int.MaxValue,
+        IReadOnlyDictionary<string, List<HistoryAward>>? awards = null)
     {
         var seen = new Dictionary<string, (int From, int To)>();
         var history = new List<HistoryPlayer>(spells.Count);
@@ -302,6 +336,10 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
                 facts.DraftPick,
                 lastSeason >= latestSeason ? produced?.RecentPerGame : null));
 
+            var fromYear = facts.RookieSeason is { } rookie ? Math.Min(rookie, firstSeason) : firstSeason;
+            List<StatLine>? stats = null;
+            var keepLines = fromYear >= statsFrom && HasStatLine(facts.Position) && statLines is not null && statLines.TryGetValue(id, out stats);
+
             history.Add(new HistoryPlayer(
                 ExternalId: id,
                 FirstName: first,
@@ -311,20 +349,190 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
                 WeightLbs: facts.Weight,
                 BirthDate: facts.BirthDate,
                 College: facts.College,
-                FromYear: facts.RookieSeason is { } rookie ? Math.Min(rookie, firstSeason) : firstSeason,
+                FromYear: fromYear,
                 ToYear: lastSeason,
                 HallOfFame: picked?.HallOfFame ?? false,
                 DraftYear: facts.DraftYear,
                 DraftNumber: facts.DraftPick,
-                Seasons: lines.Select(s => new HistorySeason(s.Season, s.TeamKey, perSeason[s.Season] == 1, null, null, null, null, null)).ToList(),
-                Awards: [],
+                Seasons: keepLines ? CardLines(lines, perSeason, stats!) : lines.Select(s => new HistorySeason(s.Season, s.TeamKey, perSeason[s.Season] == 1, null, null, null, null, null)).ToList(),
+                Awards: awards?.GetValueOrDefault(id)?.OrderBy(a => a.Season).ThenBy(a => a.Type, StringComparer.Ordinal).ToList() ?? [],
                 // Before 2023 nobody could wear 0, so a 0 in the file means the number is unknown.
                 JerseyNumber: facts.Jersey == "0" && lastSeason < 2023 ? null : facts.Jersey,
                 HeadshotUrl: facts.Headshot,
-                Popularity: popularity));
+                Popularity: popularity,
+                KeepSeasonLines: keepLines));
         }
 
-        return new HistorySnapshot("nfl", IdSource, latestSeason, teams.HistoryTeams(seen, latestSeason), history, KeepSeasonLines: false);
+        return new HistorySnapshot("nfl", IdSource, latestSeason, teams.HistoryTeams(seen, latestSeason), history);
+    }
+
+    /// <summary>
+    /// The roster lines with each season's stat line on them, shaped like a basketball record: a one-team season is one
+    /// line with the stats, and a season split by a trade has a line per team and a combined line with no team that
+    /// carries the stats. A season with stats but no roster line (signed and gone between roster files) takes the team
+    /// the stat file names.
+    /// </summary>
+    internal static List<HistorySeason> CardLines(List<RosterSpell> lines, Dictionary<int, int> perSeason, List<StatLine> stats)
+    {
+        var bySeason = stats.ToDictionary(s => s.Season);
+        var result = new List<HistorySeason>();
+        foreach (var year in lines.GroupBy(l => l.Season))
+        {
+            bySeason.TryGetValue(year.Key, out var line);
+            if (perSeason[year.Key] == 1)
+            {
+                result.Add(Line(year.Key, year.First().TeamKey, true, line));
+                continue;
+            }
+            result.AddRange(year.Select(l => Line(year.Key, l.TeamKey, false, null)));
+            if (line is not null) result.Add(Line(year.Key, null, true, line));
+        }
+        foreach (var line in stats.Where(s => !perSeason.ContainsKey(s.Season) && s.TeamKey is not null))
+            result.Add(Line(line.Season, line.TeamKey, true, line));
+        return result.OrderBy(s => s.Season).ToList();
+
+        static HistorySeason Line(int season, string? team, bool total, StatLine? stats) =>
+            new(season, team, total, stats?.Games, null, null, null, null, stats?.StatsJson ?? "{}");
+    }
+
+    /// <summary>
+    /// Every regular-season stat line from <paramref name="from"/> on, for the players a card can be made of. The totals
+    /// are kept as card JSON with short keys and zeros left out.
+    /// </summary>
+    private async Task<Dictionary<string, List<StatLine>>> ReadStatLinesAsync(int from, int latestSeason, IReadOnlyDictionary<string, PlayerFacts> players, CancellationToken ct)
+    {
+        var lines = new Dictionary<string, List<StatLine>>();
+        var teams = NflTeams.Instance.Value;
+        for (var season = from; season <= latestSeason; season++)
+        {
+            await using var stream = await NflverseFiles.OpenAsync(http, options.Value, NflverseFiles.SeasonStatsPath(season), ct);
+            if (stream is null) continue;
+            await foreach (var r in CsvReader.StreamAsync(stream, ct))
+            {
+                if (r.Str("player_id") is not { } id || !players.TryGetValue(id, out var facts) || !HasStatLine(facts.Position)) continue;
+                if (StatLineOf(r, season, teams) is not { } line) continue;
+                if (!lines.TryGetValue(id, out var list)) lines[id] = list = [];
+                list.Add(line);
+            }
+        }
+        return lines;
+    }
+
+    /// <summary>ESPN's award ids for the AP honors read from it, and the award each one is.</summary>
+    internal static readonly (int Id, string Type)[] EspnAwards =
+    [
+        (477, AwardTypes.Mvp),
+        (478, AwardTypes.OffensivePlayer),
+        (479, AwardTypes.DefensivePlayer),
+        (480, AwardTypes.OffensiveRookie),
+        (481, AwardTypes.DefensiveRookie),
+        (483, AwardTypes.Comeback),
+        (317, AwardTypes.SuperBowlMvp),
+    ];
+
+    /// <summary>
+    /// Every player's awards: the All-Pro teams and Pro Bowls from the embedded file, and the AP awards from ESPN,
+    /// whose winners are linked by the ESPN id the players file carries.
+    /// </summary>
+    private async Task<Dictionary<string, List<HistoryAward>>> ReadAwardsAsync(
+        IReadOnlyDictionary<string, PlayerFacts> players, IReadOnlyDictionary<string, List<RosterSpell>> spells, int latestSeason,
+        NflTeams teams, CancellationToken ct)
+    {
+        var opts = options.Value;
+        var names = players.Values.Where(p => spells.ContainsKey(p.Id)).ToDictionary(p => p.Id, p => p.DisplayName);
+        var (awards, unplaced) = NflHonors.Instance.Value.Place(names, spells, teams);
+        logger.LogInformation("All-Pro and Pro Bowl honors placed on {Players} players; {Unplaced} names matched no one player",
+            awards.Count, unplaced.Count);
+        foreach (var h in unplaced)
+            logger.LogDebug("No one player for {Season} {Type} {Name} ({Team})", h.Season, h.Type, h.Name, h.Franchise);
+
+        var byEspn = new Dictionary<string, string>();
+        foreach (var p in players.Values)
+        {
+            if (p.EspnId is { } espn && spells.ContainsKey(p.Id)) byEspn.TryAdd(espn, p.Id);
+        }
+
+        var won = 0;
+        for (var season = opts.AwardsFromSeason; season <= latestSeason; season++)
+        {
+            foreach (var (awardId, type) in EspnAwards)
+            {
+                await using var stream = await OpenEspnAwardAsync(opts, season, awardId, ct);
+                if (stream is null) continue;
+                foreach (var espn in await EspnWinnersAsync(stream, ct))
+                {
+                    if (!byEspn.TryGetValue(espn, out var id)) continue;
+                    if (!awards.TryGetValue(id, out var list)) awards[id] = list = [];
+                    var award = new HistoryAward(season, type);
+                    if (!list.Contains(award)) list.Add(award);
+                    won++;
+                }
+            }
+        }
+        logger.LogInformation("ESPN has {Awards} AP awards for our players from {First} through {Season}", won, opts.AwardsFromSeason, latestSeason);
+        return awards;
+    }
+
+    /// <summary>One award's page for one season, or null when it is not given yet (or ESPN is turned off).</summary>
+    private async Task<Stream?> OpenEspnAwardAsync(NflverseOptions opts, int season, int awardId, CancellationToken ct)
+    {
+        if (!string.IsNullOrWhiteSpace(opts.Directory))
+        {
+            var local = Path.Combine(opts.Directory, "espn-awards", season.ToString(CultureInfo.InvariantCulture), $"{awardId}.json");
+            return File.Exists(local) ? File.OpenRead(local) : null;
+        }
+        if (string.IsNullOrWhiteSpace(opts.EspnAwardsUrl)) return null;
+
+        var response = await http.GetAsync(new Uri($"{opts.EspnAwardsUrl.TrimEnd('/')}/{season}/awards/{awardId}"), HttpCompletionOption.ResponseHeadersRead, ct);
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            response.Dispose();
+            return null;
+        }
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStreamAsync(ct);
+    }
+
+    /// <summary>The ESPN athlete ids of an award's winners: more than one in a tied vote.</summary>
+    internal static async Task<List<string>> EspnWinnersAsync(Stream stream, CancellationToken ct)
+    {
+        using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
+        var ids = new List<string>();
+        if (!doc.RootElement.TryGetProperty("winners", out var winners) || winners.ValueKind != JsonValueKind.Array) return ids;
+        foreach (var w in winners.EnumerateArray())
+        {
+            if (!w.TryGetProperty("athlete", out var athlete) || !athlete.TryGetProperty("$ref", out var link)) continue;
+            var match = System.Text.RegularExpressions.Regex.Match(link.GetString() ?? "", @"/athletes/(\d+)");
+            if (match.Success) ids.Add(match.Groups[1].Value);
+        }
+        return ids;
+    }
+
+    /// <summary>The card line for one row of a season stats file, or null when he played no games.</summary>
+    internal static StatLine? StatLineOf(CsvRow r, int season, NflTeams teams)
+    {
+        if (r.Int("games") is not { } games || games <= 0) return null;
+        var json = new System.Text.Json.Nodes.JsonObject();
+        void Add(string key, double? value)
+        {
+            if (value is { } v && v != 0) json[key] = Math.Round(v, 1);
+        }
+        Add("cmp", r.Dbl("completions"));
+        Add("att", r.Dbl("attempts"));
+        Add("pyd", r.Dbl("passing_yards"));
+        Add("ptd", r.Dbl("passing_tds"));
+        Add("int", r.Dbl("passing_interceptions") ?? r.Dbl("interceptions"));
+        Add("car", r.Dbl("carries"));
+        Add("ryd", r.Dbl("rushing_yards"));
+        Add("rtd", r.Dbl("rushing_tds"));
+        Add("rec", r.Dbl("receptions"));
+        Add("wyd", r.Dbl("receiving_yards"));
+        Add("wtd", r.Dbl("receiving_tds"));
+        Add("tkl", (r.Dbl("def_tackles_solo") ?? 0) + (r.Dbl("def_tackle_assists") ?? 0));
+        Add("sk", r.Dbl("def_sacks"));
+        Add("dint", r.Dbl("def_interceptions"));
+        Add("ff", r.Dbl("def_fumbles_forced"));
+        return new StatLine(season, games, teams.Identity(r.Str("recent_team"), season), json.ToJsonString());
     }
 
     /// <summary>The player and team one roster row places together, or null for a row that does not count.</summary>
@@ -372,8 +580,12 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
         return new PlayerFacts(
             id, name, NflverseFiles.Position(r.Str("position")), NflverseFiles.Height(r.Str("height")), r.Int("weight"),
             NflverseFiles.Date(r.Str("birth_date")), r.Str("college_name"), r.Str("jersey_number"), r.Str("headshot"),
-            r.Int("rookie_season"), r.Int("draft_year"), r.Int("draft_pick"));
+            r.Int("rookie_season"), r.Int("draft_year"), r.Int("draft_pick"), EspnId(r.Str("espn_id")));
     }
+
+    /// <summary>"14856" or "14856.0" → "14856".</summary>
+    private static string? EspnId(string? value) =>
+        value is null ? null : value.EndsWith(".0", StringComparison.Ordinal) ? value[..^2] : value;
 
     private async Task<Dictionary<string, DraftRecord>> ReadDraftAsync(CancellationToken ct)
     {

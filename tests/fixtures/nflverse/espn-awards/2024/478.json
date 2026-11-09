@@ -1,0 +1,1 @@
+{"id":"478","name":"NFL Offensive Player of the Year","winners":[{"athlete":{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/9001?lang=en&region=us"}},{"athlete":{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes/123456?lang=en&region=us"}}]}

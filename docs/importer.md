@@ -51,7 +51,9 @@ run hits it.
 | Basketball-Reference CSV mirror (GitHub) | Every player since 1947: bio, season stats, awards, team history | Every `Import:HistoryRefreshDays` (30) |
 | Wikidata | NBA.com ids (for headshots) and birthplaces | Right after the history |
 | ESPN roster feed | Current team, jersey number, new players | Nightly |
-| nflverse release files (GitHub) | Every NFL player on a game-day roster since 1990 (two seasons or more, or on a roster now): bio, draft slot, NFL.com headshot, team each season; Pro Bowls, All-Pros and career value for fame | Every `Import:HistoryRefreshDays` (30) |
+| nflverse release files (GitHub) | Every NFL player on a game-day roster since 1990 (two seasons or more, or on a roster now): bio, draft slot, NFL.com headshot, team each season; Pro Bowls, All-Pros and career value for fame; season stat lines since 1999 | Every `Import:HistoryRefreshDays` (30) |
+| ESPN core API (`sports.core.api.espn.com`) | AP MVP, Offensive and Defensive Player and Rookie of the Year, Comeback Player and Super Bowl MVP for each season since 1999, linked by the `espn_id` in nflverse's players file | With the NFL history |
+| `nfl-honors.json` (bundled, from Wikipedia) | AP All-Pro first and second teams and Pro Bowl rosters for each season since 1999 | With the NFL history; the file is refreshed by hand once a year (below) |
 | nflverse current-season roster | Current team, jersey number, active status, new players | Nightly |
 
 The NFL history reads the season roster file up to 2015 and the weekly roster files from 2016, because from 2016
@@ -60,6 +62,20 @@ active or inactive on a game day there (weekly files), or ended the season with 
 practice squad and released rows do not count. The fame score (`PopularityCalculator.FromFootballCareer`) is
 weighted towards quarterbacks and skill players, so linemen and specialists only rank high as real stars.
 Measured on a full load: about 35 seconds and under 200 MB of managed heap; a second run changes nothing.
+
+Season stat lines are kept for players whose careers began in 1999 or later (the first season nflverse has stats),
+at the positions a stat line describes: quarterbacks, running backs, receivers, tight ends and defenders, but not
+offensive linemen or specialists. Everyone else's lines only place him on a team each season. A season split by a
+trade is stored like a basketball one: a line per team and a combined line with no team that carries the stats.
+They add about 41,000 rows and 30 MB to the load's peak memory (about 335 MB resident with the heap capped at 200 MB).
+
+No open data set has the All-Pro teams or Pro Bowl rosters by season, so `scripts/nfl-honors.py` reads Wikipedia's
+yearly pages into `src/KnowBall.Infrastructure/Data/nfl-honors.json`. Re-run it each year once the All-Pro team is
+named in January (`--check` prints each season's counts without writing), check the counts look like the earlier
+years' (about 28 first-team, 30 second-team and 90 to 130 Pro Bowl players), and commit the file. The importer
+places each name on the player of that name who was on that franchise that season, allowing for initials ("J. J.
+Watt") and a different first name on the same team ("Darius" and "Shaquille Leonard"); it logs how many it could
+not place, and names them at debug level (4 of about 4,800 on the 2026-11 load).
 
 More on each source, and the ones that were rejected, in [research.md](research.md).
 
@@ -81,6 +97,9 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | `Sources:Nflverse:Directory` | empty | Read the nflverse files from a folder laid out like the releases (`players/players.csv`) |
 | `Sources:Nflverse:FirstSeason` / `WeeklyFromSeason` | `1990` / `2016` | First season of rosters read, and the first read from the weekly files |
 | `Sources:Nflverse:MinSeasons` | `2` | Players with fewer game-day seasons are left out unless they are on a roster now |
+| `Sources:Nflverse:StatLinesFromSeason` | `1999` | Season stat lines are kept for careers that began this season or later |
+| `Sources:Nflverse:EspnAwardsUrl` | ESPN core API seasons URL | Where the AP awards are read; empty leaves them out. With `Directory` set they are read from `espn-awards/{season}/{id}.json` there |
+| `Sources:Nflverse:AwardsFromSeason` | `1999` | First season whose ESPN awards are read |
 | `NumbersDontLie:QueueEnabled` | `false` | Queue approved Numbers Don't Lie snapshots (needs `CatalogueId` and `LaunchDate`) |
 
 ## Numbers Don't Lie content tools

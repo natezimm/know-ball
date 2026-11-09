@@ -239,6 +239,29 @@ public class HistoryImportServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task A_player_can_keep_his_season_lines_while_another_in_the_record_only_builds_stops()
+    {
+        var withStats = Footballer("qb01", "Quarter") with
+        {
+            Seasons = [new HistorySeason(2018, "OKC", true, 16, null, null, null, null, """{"pyd":4100}"""), new HistorySeason(2025, "GSW", true, 17, null, null, null, null, """{"pyd":3900}""")],
+            Awards = [new HistoryAward(2018, AwardTypes.ProBowl)],
+        };
+        var stopsOnly = Footballer("ol01", "Tackle") with { Awards = [new HistoryAward(2025, AwardTypes.AllPro + "1")], KeepSeasonLines = false };
+
+        await Import(new HistorySnapshot("nba", "bref", 2025, Teams, [withStats, stopsOnly]));
+
+        var qb = await Load("Sam Quarter");
+        Assert.Equal([(2018, 16), (2025, 17)], qb.SeasonStats.OrderBy(s => s.Season).Select(s => (s.Season, s.Games ?? 0)));
+        Assert.Equal(AwardTypes.ProBowl, Assert.Single(qb.Awards).Type);
+
+        // His stops and awards are kept even with no stat rows.
+        var tackle = await Load("Sam Tackle");
+        Assert.Equal("OKC 2018-2018 (1), GSW 2025-now (1)", Path(tackle));
+        Assert.Empty(tackle.SeasonStats);
+        Assert.Equal("AllPro1", Assert.Single(tackle.Awards).Type);
+    }
+
+    [Fact]
     public async Task The_record_fills_a_missing_jersey_number_but_never_replaces_the_rosters()
     {
         await Import(new HistorySnapshot("nba", "bref", 2025, Teams, [Footballer("qb01", "Quarter", jersey: null)], KeepSeasonLines: false));

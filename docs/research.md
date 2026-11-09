@@ -147,7 +147,8 @@ nflverse covers more than any of these, for free, so none is needed.
 
 | Missing | Workaround |
 | --- | --- |
-| Awards (MVP, Offensive and Defensive Player of the Year, Super Bowl MVP) | Hand lists; MVP is about 70 rows |
+| Awards (MVP, Offensive and Defensive Player of the Year, Super Bowl MVP) | ESPN's core API has them by season (`seasons/{y}/awards/{id}`) with ESPN athlete ids, which nflverse's `espn_id` links; every winner since 1999 matched (tested 11-08) |
+| All-Pro teams and Pro Bowl rosters by season (nflverse and Wikidata only have career counts, or almost nothing) | Wikipedia's yearly "All-Pro Team" and "Pro Bowl" pages, read into a bundled file by `scripts/nfl-honors.py` (text CC BY-SA 4.0) |
 | All-Pro and Pro Bowl counts for undrafted players and anyone drafted before 1980 | Not available; affects GOAT and popularity for older players |
 | Season stats before 1999 | Not available; Stat Quiz and Back of the Card start at 1999 |
 | Ids for players before 1974 | Match on name plus birth date |
