@@ -3,6 +3,7 @@ import { GeoSportsMock } from './games/geo-sports';
 import { GoatMock } from './games/goat';
 import { SoundItOutMock } from './games/sound-it-out';
 import { StatQuizMock } from './games/stat-quiz';
+import { TeamPhotoMock } from './games/team-photo';
 import { Mockups } from './mockups';
 import { ThemesMock } from './themes/themes';
 
@@ -14,6 +15,7 @@ export const MOCKUP_ROUTES: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'themes' },
       { path: 'themes', component: ThemesMock },
+      { path: 'team-photo', component: TeamPhotoMock },
       { path: 'stat-quiz', component: StatQuizMock },
       { path: 'geo-sports', component: GeoSportsMock },
       // Built: the sketches left the gallery, and their old addresses open the game.
