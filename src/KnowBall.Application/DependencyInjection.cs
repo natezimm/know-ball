@@ -4,6 +4,7 @@ using KnowBall.Application.Games.BackOfTheCard;
 using KnowBall.Application.Games.CareerPath;
 using KnowBall.Application.Games.ScoutingReport;
 using KnowBall.Application.Games.LetterJacket;
+using KnowBall.Application.Games.TeamPhoto;
 using KnowBall.Application.Import;
 using KnowBall.Application.Players;
 
@@ -25,9 +26,11 @@ public static class DependencyInjection
         services.AddScoped<ScoutingReportGame>();
         services.AddScoped<CareerPathGame>();
         services.AddScoped<BackOfTheCardGame>();
+        services.AddScoped<TeamPhotoGame>();
         services.AddScoped<IGame>(sp => sp.GetRequiredService<ScoutingReportGame>());
         services.AddScoped<IGame>(sp => sp.GetRequiredService<CareerPathGame>());
         services.AddScoped<IGame>(sp => sp.GetRequiredService<BackOfTheCardGame>());
+        services.AddScoped<IGame>(sp => sp.GetRequiredService<TeamPhotoGame>());
         services.AddScoped<GameRegistry>();
         services.AddSingleton<PuzzleCalendar>();
         services.AddScoped<PuzzleScheduler>();

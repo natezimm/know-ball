@@ -3,6 +3,7 @@ using KnowBall.Application.Games;
 using KnowBall.Application.Games.BackOfTheCard;
 using KnowBall.Application.Games.CareerPath;
 using KnowBall.Application.Games.ScoutingReport;
+using KnowBall.Application.Games.TeamPhoto;
 
 namespace KnowBall.Api.Endpoints;
 
@@ -16,7 +17,7 @@ public static partial class GameEndpoints
     public const string AnonHeader = "X-Anon-Id";
 
     // Named in the route so "/api/{game}/..." cannot swallow other endpoints.
-    private const string Game = "{game:regex(^(" + ScoutingReportGame.GameSlug + "|" + CareerPathGame.GameSlug + "|" + BackOfTheCardGame.GameSlug + ")$)}";
+    private const string Game = "{game:regex(^(" + ScoutingReportGame.GameSlug + "|" + CareerPathGame.GameSlug + "|" + BackOfTheCardGame.GameSlug + "|" + TeamPhotoGame.GameSlug + ")$)}";
 
     public static IEndpointRouteBuilder MapGames(this IEndpointRouteBuilder api)
     {

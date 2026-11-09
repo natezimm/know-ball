@@ -169,6 +169,8 @@ public enum GameType
     LetterJacket = 8,
     /// <summary>Guess the player from the stat lines on the back of their trading card.</summary>
     BackOfTheCard = 9,
+    /// <summary>Name the starting five of a team that reached the Finals.</summary>
+    TeamPhoto = 10,
 }
 
 public enum PuzzleStatus

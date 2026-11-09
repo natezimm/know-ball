@@ -27,7 +27,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
         if (existing is not null) return existing;
 
         var puzzle = game.IsGenerated
-            ? await GenerateAsync(game, league, date, await RecentAnswersAsync(game, league.Id, date, ct), ct)
+            ? await GenerateAsync(game, league, date, await RecentAsync(game, league.Id, date, ct), ct)
             : await ReplayAsync(game, league, date, ct);
         if (puzzle is null) return null;
 
@@ -61,7 +61,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
                 .ToListAsync(ct))
             .ToHashSet();
 
-        var recent = await RecentAnswersAsync(game, league.Id, today, ct, spanDays: NoRepeatDays + days);
+        var recent = await RecentAsync(game, league.Id, today, ct, spanDays: NoRepeatDays + days);
         var first = await FirstDateAsync(game, league.Id, ct);
 
         var made = 0;
@@ -79,7 +79,8 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
             first ??= date;
             puzzle.Number = date.DayNumber - first.Value.DayNumber + 1;
             db.Puzzles.Add(puzzle);
-            if (puzzle.AnswerPlayerId is { } answer) recent.Add(answer);
+            if (puzzle.AnswerPlayerId is { } answer) recent.Answers.Add(answer);
+            recent.Secrets.Add(puzzle.SecretJson);
             made++;
         }
 
@@ -96,7 +97,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
 
         // Steering clear of recent and queued answers also keeps practice from spoiling a coming daily.
         var today = calendar.Today;
-        var puzzle = await GenerateAsync(game, league, today, await RecentAnswersAsync(game, league.Id, today, ct), ct);
+        var puzzle = await GenerateAsync(game, league, today, await RecentAsync(game, league.Id, today, ct), ct, practice: true);
         if (puzzle is null) return null;
 
         puzzle.Status = PuzzleStatus.Practice;
@@ -135,20 +136,26 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
             .Where(p => p.GameType == game.Type && p.LeagueId == leagueId && p.Status == PuzzleStatus.Scheduled && p.Date != null)
             .MinAsync(p => p.Date, ct);
 
-    private async Task<HashSet<int>> RecentAnswersAsync(IGame game, int leagueId, DateOnly date, CancellationToken ct, int spanDays = NoRepeatDays)
+    /// <summary>Answers and secrets of this game's puzzles from <see cref="NoRepeatDays"/> before the date to <paramref name="spanDays"/> after it, oldest first.</summary>
+    private async Task<Recent> RecentAsync(IGame game, int leagueId, DateOnly date, CancellationToken ct, int spanDays = NoRepeatDays)
     {
         var from = date.AddDays(-NoRepeatDays);
         var to = date.AddDays(spanDays);
-        var ids = await db.Puzzles
-            .Where(p => p.GameType == game.Type && p.LeagueId == leagueId && p.Date >= from && p.Date <= to && p.AnswerPlayerId != null)
-            .Select(p => p.AnswerPlayerId!.Value)
+        var rows = await db.Puzzles
+            .Where(p => p.GameType == game.Type && p.LeagueId == leagueId && p.Date >= from && p.Date <= to)
+            .OrderBy(p => p.Date)
+            .Select(p => new { p.AnswerPlayerId, p.SecretJson })
             .ToListAsync(ct);
-        return ids.ToHashSet();
+        return new Recent(
+            rows.Where(r => r.AnswerPlayerId != null).Select(r => r.AnswerPlayerId!.Value).ToHashSet(),
+            rows.Select(r => r.SecretJson).ToList());
     }
 
-    private async Task<Puzzle?> GenerateAsync(IGame game, League league, DateOnly date, HashSet<int> recent, CancellationToken ct)
+    private sealed record Recent(HashSet<int> Answers, List<string> Secrets);
+
+    private async Task<Puzzle?> GenerateAsync(IGame game, League league, DateOnly date, Recent recent, CancellationToken ct, bool practice = false)
     {
-        var generated = await game.GenerateAsync(new GenerationContext(league, date, recent, Random), ct);
+        var generated = await game.GenerateAsync(new GenerationContext(league, date, recent.Answers, Random, recent.Secrets, practice), ct);
         if (generated is null) return null;
 
         return new Puzzle
