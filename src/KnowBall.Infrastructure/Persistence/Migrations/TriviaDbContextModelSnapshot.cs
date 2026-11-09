@@ -656,6 +656,37 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.ToTable("Teams");
                 });
 
+            modelBuilder.Entity("KnowBall.Domain.TeamSeason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Losses")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("MadePlayoffs")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Season")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TeamId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Wins")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId", "Season")
+                        .IsUnique();
+
+                    b.ToTable("TeamSeasons");
+                });
+
             modelBuilder.Entity("KnowBall.Domain.UserResult", b =>
                 {
                     b.Property<int>("Id")
@@ -821,6 +852,17 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.Navigation("Franchise");
 
                     b.Navigation("League");
+                });
+
+            modelBuilder.Entity("KnowBall.Domain.TeamSeason", b =>
+                {
+                    b.HasOne("KnowBall.Domain.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("KnowBall.Domain.UserResult", b =>

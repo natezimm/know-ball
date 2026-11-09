@@ -120,6 +120,24 @@ public class HistoryImportServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Team_records_are_stored_corrected_and_left_alone_on_a_second_load()
+    {
+        HistorySnapshot WithRecords(params HistoryTeamSeason[] records) =>
+            Snapshot(Durant()) with { TeamSeasons = [.. records, new HistoryTeamSeason("XXX", 2015, 1, 1, false)] };
+
+        await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("SEA", 1995, 64, 18, true)));
+        await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("SEA", 1995, 64, 18, true)));
+        await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("OKC", 2025, 68, 14, true)));
+
+        await using var ctx = _db.NewContext();
+        var rows = await ctx.TeamSeasons.Include(t => t.Team).OrderBy(t => t.Season).ToListAsync();
+        Assert.Equal(
+            ["SEA 1995 64-18", "GSW 2015 73-9", "OKC 2025 68-14"],
+            rows.Select(r => $"{r.Team!.Abbreviation} {r.Season} {r.Wins}-{r.Losses}"));
+        Assert.All(rows, r => Assert.True(r.MadePlayoffs));
+    }
+
+    [Fact]
     public async Task A_split_season_keeps_its_team_lines_and_its_combined_line()
     {
         var traded = Durant(Line(2022, null, 29, 47), Line(2022, "BRK", 29.7, 39, total: false), Line(2022, "GSW", 26, 8, total: false));

@@ -48,7 +48,7 @@ run hits it.
 
 | Source | Gives | When |
 | --- | --- | --- |
-| Basketball-Reference CSV mirror (GitHub) | Every player since 1947: bio, season stats, awards, team history | Every `Import:HistoryRefreshDays` (30) |
+| Basketball-Reference CSV mirror (GitHub) | Every player since 1947: bio, season stats (with games started and the position listed that season), awards, team history; each team's won-lost record and playoff flag by season (`Team Summaries.csv`, for Team Photo) | Every `Import:HistoryRefreshDays` (30) |
 | Wikidata | NBA.com ids (for headshots) and birthplaces | Right after the history |
 | ESPN roster feed | Current team, jersey number, new players | Nightly |
 | nflverse release files (GitHub) | Every NFL player on a game-day roster since 1990 (two seasons or more, or on a roster now): bio, draft slot, NFL.com headshot, team each season; Pro Bowls, All-Pros and career value for fame; season stat lines since 1999 | Every `Import:HistoryRefreshDays` (30) |

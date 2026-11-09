@@ -132,6 +132,19 @@ public class PlayerSeasonStat
     public string StatsJson { get; set; } = "{}";
 }
 
+/// <summary>How one team did in one season: its record and whether it reached the playoffs. Powers Team Photo's plaque.</summary>
+public class TeamSeason
+{
+    public int Id { get; set; }
+    public int TeamId { get; set; }
+    public Team? Team { get; set; }
+    /// <summary>Season start year: 2015 means the 2015-16 season.</summary>
+    public int Season { get; set; }
+    public int Wins { get; set; }
+    public int Losses { get; set; }
+    public bool MadePlayoffs { get; set; }
+}
+
 public class Award
 {
     public int Id { get; set; }
