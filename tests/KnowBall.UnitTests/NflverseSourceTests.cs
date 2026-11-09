@@ -89,6 +89,9 @@ public class NflverseSourceTests
         Assert.Equal(("LAR", "NFC", "NFC West"), (rams.Team.Abbreviation, rams.Team.Conference, rams.Team.Division));
         Assert.Null(rams.ActiveTo);
         Assert.Equal(33, snapshot.Teams.Count);
+        // Still the Rams, so the St. Louis years show the Rams' logo.
+        Assert.Equal(rams.Team.LogoUrl, stLouis.Team.LogoUrl);
+        Assert.NotNull(stLouis.Team.LogoUrl);
     }
 
     [Fact]
@@ -179,6 +182,10 @@ public class NflverseSourceTests
         var teams = NflTeams.Instance.Value;
         Assert.Equal(32, teams.Current.Count);
         Assert.All(teams.Former.Values, f => Assert.True(teams.Current.ContainsKey(f.Franchise)));
+        // The Oilers became the Titans under another name and logo, so they keep their initials.
+        var oilers = teams.HistoryTeams(new Dictionary<string, (int, int)> { ["OIL"] = (1990, 1996), ["SD"] = (1990, 2016) }, 2025);
+        Assert.Null(oilers.Single(t => t.Key == "OIL").Team.LogoUrl);
+        Assert.Equal(teams.Current["LAC"].LogoUrl, oilers.Single(t => t.Key == "SD").Team.LogoUrl);
         Assert.All(teams.Current.Values, t => Assert.StartsWith(t.Conference + " ", t.Division));
         Assert.Equal(8, teams.Current.Values.Select(t => t.Division).Distinct().Count());
     }
