@@ -72,6 +72,9 @@ load fixtures and make gameplay writes.
 - **Each game can be paused** by its flag in the `FeatureManagement` section (`Api/Endpoints/GamePauses.cs`): its
   endpoints answer 503 and the home page shows it taking a break. A flag that is not set leaves its game on. A
   new game gets a flag there and a line in `deploy/docker-compose.yml`.
+- **Telemetry** is OpenTelemetry, on only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (`Infrastructure/Telemetry`,
+  [docs/observability.md](docs/observability.md)). Add Know Ball's own spans and metrics to `KnowBallTelemetry`
+  in Application, and never tag them with the anonymous id, names or addresses.
 - **Configuration** is read through options or inside DI factories. Rate limits are in
   `Api/Endpoints/RateLimits.cs`; [docs/api.md](docs/api.md) and [docs/importer.md](docs/importer.md) list the
   settings, so update them when a setting or endpoint changes.

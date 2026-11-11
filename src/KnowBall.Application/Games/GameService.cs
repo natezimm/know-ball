@@ -1,6 +1,7 @@
 using System.Text.Json.Nodes;
 using Microsoft.EntityFrameworkCore;
 using KnowBall.Domain;
+using KnowBall.Application.Telemetry;
 
 namespace KnowBall.Application.Games;
 
@@ -109,6 +110,7 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
                         .SetProperty(r => r.CompletedAt, result.CompletedAt), ct);
                 if (changed == 0) continue;
             }
+            Record(game, puzzle, evaluation.Correct, result);
             return GameOutcome<GameState>.Success(BuildState(game, puzzle, result));
         }
         return GameOutcome<GameState>.Conflict("Progress changed. Reload your saved puzzle and retry.");
@@ -234,6 +236,16 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
             Guesses: guesses,
             Answer: complete ? game.Reveal(puzzle) : null,
             NextPuzzleAt: isToday ? calendar.NextPuzzleAt : null);
+    }
+
+    /// <summary>Counts a saved guess, and the game's end when this guess finished it.</summary>
+    private static void Record(IGame game, Puzzle puzzle, bool correct, UserResult result)
+    {
+        var practice = puzzle.Status == PuzzleStatus.Practice;
+        KnowBallTelemetry.Guesses.Add(1, new("knowball.game", game.Slug), new("knowball.correct", correct));
+        if (result.CompletedAt is not null)
+            KnowBallTelemetry.GamesFinished.Add(1, new("knowball.game", game.Slug),
+                new("knowball.outcome", result.Solved ? "won" : "lost"), new("knowball.practice", practice));
     }
 
     private static string StatusOf(UserResult? result) => result switch

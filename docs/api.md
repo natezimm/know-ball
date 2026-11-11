@@ -82,6 +82,10 @@ draws only questions marked daily-eligible. See
 | `GET /api/stats/summary` | Counts of leagues, teams, players and headshots |
 | `GET /api/games/paused` | The slugs of games paused by their feature flags; usually `[]` |
 
+Traces, metrics and logs go out over OpenTelemetry when `OTEL_EXPORTER_OTLP_ENDPOINT` is set; see
+[observability.md](observability.md). `Telemetry:TraceSampleRatio` (default 0.25) is the share of requests
+traced. Console logs are JSON lines except in Development.
+
 ## Rate limits
 
 Every request to the site, pages and files included, is limited per address by `RateLimits:RequestsPerMinute`

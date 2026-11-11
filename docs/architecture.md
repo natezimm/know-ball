@@ -41,6 +41,8 @@ flowchart LR
   Api --> Db[("PostgreSQL 18<br/>players, puzzles, results, rounds")]
   Importer["KnowBall.Importer<br/>nightly worker, 04:00 Eastern"] --> Db
   Importer --> Sources["Basketball-Reference mirror<br/>Wikidata, ESPN"]
+  Api -.->|"OTLP traces, metrics, logs"| Grafana["Grafana Cloud<br/>free tier"]
+  Importer -.->|"OTLP"| Grafana
 
   subgraph Vm["GCP VM, Docker Compose"]
     Nginx
@@ -58,8 +60,10 @@ flowchart LR
   class Nginx site
   class Api,Importer server
   class Db data
-  class Sources external
+  class Sources,Grafana external
 ```
+
+Dotted lines are OpenTelemetry, sent only when an endpoint is configured ([observability](observability.md)).
 
 - **Browser.** A standalone, zoneless Angular app. It makes up an anonymous player id on the first visit and
   sends it as `X-Anon-Id` on every API call (`core/anon-id.ts`). The service worker caches the app shell only;
