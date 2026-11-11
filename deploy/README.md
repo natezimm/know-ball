@@ -181,3 +181,19 @@ something the older app reads, restore the latest daily backup from before that 
 the image it was taken with.
 The deploy job only has a registry login while it runs, so before a manual `docker compose pull`, log in with
 a GitHub token that can read packages: `docker login ghcr.io -u natezimm`.
+
+## Deployment image retention
+
+Deployments install `storage.py` and `install-storage.sh` in `~/know-ball`. The daily
+`knowball-storage.timer` removes unused commit-tagged Know Ball images older than 24 hours at 08:00 UTC
+(with up to 15 minutes of jitter). It preserves the configured image, images used by
+all containers (including stopped containers), every retained backup manifest's image,
+and PostgreSQL migration recovery images. Unknown tags and other repositories are left
+alone. It never removes backups or volumes; the existing backup job controls its own
+14-day retention. Missing or malformed recovery metadata stops cleanup.
+
+Preview with `python3 ~/know-ball/storage.py plan`, or run `cleanup` to apply it.
+`systemctl list-timers knowball-storage.timer` shows the next run. Deployments, backups
+and cleanup share `.operations.lock`; cleanup defers when another operation is active.
+After installing manually as the deployment user, run `bash ~/know-ball/install-storage.sh`.
+Only versions still present locally or available from the registry can be used for rollback.

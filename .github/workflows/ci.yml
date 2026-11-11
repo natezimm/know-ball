@@ -135,7 +135,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Backup tooling failure-path tests
-        run: python3 -m unittest discover -s tests -p test_operations.py -v
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: PostgreSQL major upgrade and rollback
         run: python3 deploy/test-postgres-upgrade.py
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
@@ -218,12 +218,14 @@ jobs:
           scp -i ~/.ssh/deploy deploy/upgrade-postgres.py "$GCP_USER@$GCP_HOST:know-ball/upgrade-postgres.py"
           $SSH "$GCP_USER@$GCP_HOST" 'cd know-ball && if [ -f docker-compose.yml ]; then python3 upgrade-postgres.py --require-current; fi'
           scp -i ~/.ssh/deploy deploy/docker-compose.yml "$GCP_USER@$GCP_HOST:know-ball/docker-compose.yml"
+          scp -i ~/.ssh/deploy deploy/storage.py deploy/install-storage.sh deploy/deploy.sh "$GCP_USER@$GCP_HOST:know-ball/"
+          $SSH "$GCP_USER@$GCP_HOST" 'bash know-ball/install-storage.sh'
           # The job's token can read the private image; it expires when this job ends. It goes to Know
           # Ball's own Docker config, so another app deploying to the VM at the same time cannot
           # overwrite or sign out of it.
           DOCKER_CONFIG_SETUP='export DOCKER_CONFIG=$HOME/.docker-know-ball; mkdir -p "$DOCKER_CONFIG"; [ -L "$DOCKER_CONFIG/cli-plugins" ] || [ ! -d "$HOME/.docker/cli-plugins" ] || ln -s "$HOME/.docker/cli-plugins" "$DOCKER_CONFIG/cli-plugins"'
           printf '%s' "$REGISTRY_TOKEN" | $SSH "$GCP_USER@$GCP_HOST" "$DOCKER_CONFIG_SETUP; docker login ghcr.io -u ${{ github.actor }} --password-stdin"
-          $SSH "$GCP_USER@$GCP_HOST" "$DOCKER_CONFIG_SETUP; cd know-ball && sed -i '/^KNOWBALL_TAG=/d' .env && echo 'KNOWBALL_TAG=${{ github.sha }}' >> .env && docker compose pull -q && docker compose up -d --remove-orphans && docker image prune -f"
+          $SSH "$GCP_USER@$GCP_HOST" "$DOCKER_CONFIG_SETUP; bash know-ball/deploy.sh ${{ github.sha }}"
           for i in $(seq 1 30); do
             if $SSH "$GCP_USER@$GCP_HOST" "curl -fs http://127.0.0.1:8090/health" >/dev/null; then
               echo "Deployed ${{ github.sha }}; the site is healthy."
