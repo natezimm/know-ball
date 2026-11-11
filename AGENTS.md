@@ -91,12 +91,14 @@ rather than raw values or unstyled controls.
   and logos show their fallbacks there.
 - CI (`.github/workflows/ci.yml`) runs backend, web, e2e and Docker jobs on every pull request; a push to `main`
   then publishes the image and deploys it.
-- `.github/workflows/security.yml` runs CodeQL (C#, TypeScript, Python, the workflows), GitHub's dependency review
+- `.github/workflows/security.yml` runs CodeQL (C#, TypeScript, Python, the workflows), a Grype scan of the built image for fixable high or critical advisories, GitHub's dependency review
   on pull requests and an audit of NuGet and shipped npm packages for high or critical advisories, on pull
   requests, `main` and every Monday. It is apart from CI, so a new advisory never holds a deploy.
 
 ## Project rules
 
+- **Actions are pinned to commit SHAs** with the version in a comment (`@<sha> # v7`); Dependabot updates both.
+  Published images carry an SBOM, SLSA provenance and a signed GitHub attestation (`deploy/README.md`).
 - **Changes reach `main` through pull requests**, and `main` deploys to production automatically once CI passes.
 - **Player data, headshots and logos belong to their sources.** Do not commit downloaded headshots or logos;
   link them as the app does. See [docs/research.md](docs/research.md).
