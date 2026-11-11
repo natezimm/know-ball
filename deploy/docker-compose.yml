@@ -5,7 +5,17 @@
 # Settings, from .env:
 #   KNOWBALL_DB_PASSWORD  the database password (any long random string; set once, never change)
 #   KNOWBALL_TAG          the image tag to run (default latest; CI sets the commit it deploys)
+#   OTEL_EXPORTER_OTLP_ENDPOINT, OTEL_EXPORTER_OTLP_HEADERS
+#                         where to send traces, metrics and logs (Grafana Cloud's OTLP gateway and its
+#                         Basic auth header); leave both unset to send nothing (docs/observability.md)
 name: knowball
+
+# OpenTelemetry settings shared by the site and the importer. With no endpoint, nothing is sent.
+x-telemetry: &telemetry
+  OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+  OTEL_EXPORTER_OTLP_HEADERS: ${OTEL_EXPORTER_OTLP_HEADERS:-}
+  OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+  OTEL_RESOURCE_ATTRIBUTES: service.version=${KNOWBALL_TAG:-latest},deployment.environment.name=production
 
 # Docker keeps container logs forever by default. Cap each service at three 10 MB files so a noisy day
 # cannot fill the shared VM's disk.
@@ -40,14 +50,17 @@ services:
     image: ghcr.io/natezimm/know-ball:${KNOWBALL_TAG:-latest}
     logging: *logging
     environment:
+      <<: *telemetry
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
       # nginx reaches the container from this network's gateway, so only its X-Forwarded-For counts.
       ForwardedHeaders__KnownNetworks__0: 172.31.250.0/24
     ports:
       - "127.0.0.1:8090:8080"
     # .NET sizes its heap to the container's limit. Locally the site used about 100 MB uncapped and about
-    # 72 MB with a 128 MB cap; 160 MB leaves room for production's larger player data.
-    mem_limit: 160m
+    # 72 MB with a 128 MB cap; 160 MB left room for production's larger player data. OpenTelemetry, when
+    # turned on, measured 81 MB without it and 107 MB with it after the same 600 requests, so 192 MB keeps
+    # the same headroom.
+    mem_limit: 192m
     volumes:
       - photos:/data
     depends_on:
@@ -64,6 +77,7 @@ services:
     working_dir: /app/importer
     entrypoint: ["sh", "run-nightly.sh"]
     environment:
+      <<: *telemetry
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
     depends_on:
       site:

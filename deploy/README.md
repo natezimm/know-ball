@@ -41,6 +41,9 @@ chmod 600 ~/know-ball/.env
 
 Never change `KNOWBALL_DB_PASSWORD` after the first start: Postgres keeps the one it was created with.
 
+Optional: `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS` send traces, metrics and logs to
+Grafana Cloud ([observability](../docs/observability.md#production-grafana-cloud)).
+
 ### 4. nginx and HTTPS
 
 ```sh
