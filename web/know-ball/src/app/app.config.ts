@@ -4,13 +4,14 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
 import { anonIdInterceptor } from './core/anon-id';
+import { traceContextInterceptor } from './core/trace-context';
 import { providePageMeta } from './core/page-meta';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideHttpClient(withFetch(), withInterceptors([anonIdInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([anonIdInterceptor, traceContextInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
     providePageMeta(),
     // Production builds only: caches the app shell so it opens instantly and can be installed. API calls always go to the network.

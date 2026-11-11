@@ -4,6 +4,9 @@
 # Settings, read from the shell or from a .env file beside this one:
 #   KNOWBALL_PORT        the port the site is published on (default 8080)
 #   KNOWBALL_DB_PORT     the port Postgres is published on (default 5432)
+#
+# Traces, metrics and logs on a laptop:  docker compose --profile site --profile telemetry up -d --build
+# then open http://localhost:18888 (the .NET Aspire dashboard; it keeps everything in memory).
 services:
   db:
     image: postgres:18.6-bookworm
@@ -28,6 +31,10 @@ services:
     image: know-ball
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
+      # Set by the telemetry profile's dashboard below; empty (nothing sent) when it is not running.
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      Telemetry__TraceSampleRatio: "1"
     ports:
       - "${KNOWBALL_PORT:-8080}:8080"
     volumes:
@@ -45,10 +52,23 @@ services:
     entrypoint: ["dotnet", "KnowBall.Importer.dll"]
     environment:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     depends_on:
       site:
         condition: service_started
     restart: unless-stopped
+
+  # The .NET Aspire dashboard: traces, metrics and structured logs from the site and the importer,
+  # held in memory. Start it with the site and point them at it:
+  #   OTEL_EXPORTER_OTLP_ENDPOINT=http://dashboard:18890 docker compose --profile site --profile telemetry up -d --build
+  dashboard:
+    profiles: [telemetry]
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:13.6.5
+    environment:
+      ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+    ports:
+      - "127.0.0.1:18888:18888"
 
 volumes:
   pgdata:
