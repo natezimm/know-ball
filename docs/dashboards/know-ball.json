@@ -216,7 +216,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(increase(knowball_import_runs_total{knowball_status!=\"Succeeded\"}[7d]))",
+          "expr": "sum(max_over_time(knowball_import_runs_total{knowball_status!=\"Succeeded\"}[7d]))",
           "legendFormat": "failed",
           "datasource": {
             "type": "prometheus",

@@ -21,6 +21,10 @@ Know Ball's own metrics ([`KnowBallTelemetry`](../src/KnowBall.Application/Telem
 | `knowball.import.runs` | counter | `knowball.league`, `knowball.source`, `knowball.status` |
 | `knowball.import.duration` | histogram, seconds | the same as `knowball.import.runs` |
 
+Production runs each import as its own short process (`run-nightly.sh`), and each process is its own series
+(its `service.instance.id`), whose import counters start and end at 1. `increase()` sees no change in such a
+series, so the dashboard counts imports with `max_over_time` summed across series instead.
+
 Nothing identifies a player: the anonymous id, guesses' player names and addresses are never tags or span
 attributes. `/health` is left out of traces, since the uptime checks would otherwise be most of them.
 
