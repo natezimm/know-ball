@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-export type Game = 'scouting-report' | 'career-path' | 'back-of-the-card';
+export type Game = 'scouting-report' | 'career-path' | 'back-of-the-card' | 'team-photo';
 export type League = 'nba' | 'nfl';
 
 export interface Player {
@@ -14,6 +14,7 @@ export interface Player {
 interface Guess {
   playerId: number;
   correct: boolean;
+  miss?: boolean;
 }
 
 interface State {
@@ -21,7 +22,7 @@ interface State {
   maxGuesses: number;
   status: 'playing' | 'won' | 'lost';
   guesses: Guess[];
-  answer: { playerId: number; name: string } | null;
+  answer: { playerId: number; name: string; slots?: Player[] } | null;
 }
 
 export const repoRoot = resolve(__dirname, '../../..');

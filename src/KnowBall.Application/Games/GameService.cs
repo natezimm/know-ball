@@ -72,15 +72,21 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
                 return GameOutcome<GameState>.Invalid("Choose a player from this puzzle's saved roster.");
 
             var evaluation = await game.EvaluateAsync(puzzle, player, ct);
-            guesses.Add(new GuessRecord(player.Id, player.FullName, player.HeadshotUrl, evaluation.Correct, evaluation.Feedback, requestId));
+            // Stored only when it differs from the default, so the other games' saved guesses are unchanged.
+            var miss = evaluation.Miss is { } m && m != !evaluation.Correct ? m : (bool?)null;
+            guesses.Add(new GuessRecord(player.Id, player.FullName, player.HeadshotUrl, evaluation.Correct, evaluation.Feedback, requestId, miss));
             var original = result?.GuessesJson;
             var isNew = result is null;
             result ??= new UserResult { UserKey = userKey, PuzzleId = puzzle.Id, StartedAt = clock.GetUtcNow() };
+            var misses = guesses.Count(g => g.IsMiss);
+            var solved = evaluation.Correct && guesses.Count(g => g.Correct) >= game.AnswersIn(puzzle);
+            var spent = game.LimitsMisses ? misses : guesses.Count;
             result.GuessesJson = GameJson.Write(guesses);
-            result.HintsUsed = guesses.Count(g => !g.Correct);
-            result.Solved = evaluation.Correct;
-            result.Score = evaluation.Correct ? guesses.Count : 0;
-            result.CompletedAt = evaluation.Correct || guesses.Count >= game.MaxGuesses ? clock.GetUtcNow() : null;
+            result.HintsUsed = misses;
+            result.Solved = solved;
+            // A game that limits misses scores a win by its misses (1 is flawless), so it fits the same distribution.
+            result.Score = solved ? (game.LimitsMisses ? misses + 1 : guesses.Count) : 0;
+            result.CompletedAt = solved || spent >= game.MaxGuesses ? clock.GetUtcNow() : null;
             if (isNew)
             {
                 db.UserResults.Add(result);
@@ -179,8 +185,10 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
             }
 
             var result = await FindResultAsync(puzzle.Id, userKey, ct);
-            entries.Add(new TodayEntry(
-                game.Slug, game.Name, true, puzzle.Number, StatusOf(result), result is null ? 0 : ReadGuesses(result).Count, game.MaxGuesses, league));
+            // A game that limits misses reports misses here, so "2 of 4" means the same thing as its dots.
+            var guesses = result is null ? [] : ReadGuesses(result);
+            var used = game.LimitsMisses ? guesses.Count(g => g.IsMiss) : guesses.Count;
+            entries.Add(new TodayEntry(game.Slug, game.Name, true, puzzle.Number, StatusOf(result), used, game.MaxGuesses, league));
         }
         return entries;
     }
@@ -209,7 +217,7 @@ public sealed class GameService(ITriviaDb db, GameRegistry games, PuzzleSchedule
         var guesses = result is null ? [] : ReadGuesses(result);
         var status = StatusOf(result);
         var complete = status is GameStatus.Won or GameStatus.Lost;
-        var misses = guesses.Count(g => !g.Correct);
+        var misses = guesses.Count(g => g.IsMiss);
         var isToday = puzzle.Status == PuzzleStatus.Scheduled && puzzle.Date == calendar.Today;
 
         return new GameState(

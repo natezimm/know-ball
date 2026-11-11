@@ -9,7 +9,7 @@ interface GameCard {
   /** What kind of game it is, in a word or two, above its name. */
   kind: string;
   /** Which badge sits in the navy circle; drawn as inline SVG so it is centred whatever the font. */
-  icon: 'tile' | 'clipboard' | 'jersey' | 'card' | 'chart';
+  icon: 'tile' | 'clipboard' | 'jersey' | 'card' | 'photo' | 'chart';
   /** The play label for a game without a tracked daily puzzle. */
   play?: string;
   /** The colour of this game's card border. One theme for the site, one trim per game. */
@@ -17,6 +17,8 @@ interface GameCard {
   link: string;
   /** Set for the games whose daily state the home page tracks; the others open whenever you like. */
   daily?: GameSlug;
+  /** A daily that counts misses rather than guesses (Team Photo), whose today entry reports misses. */
+  limitsMisses?: boolean;
 }
 
 /**
@@ -24,12 +26,21 @@ interface GameCard {
  * took one guess, so the cards you have won today look like the ones worth keeping.
  */
 export function cardStatus(
-  card: Pick<GameCard, 'daily' | 'play'>, today: TodayEntry | undefined, loaded: boolean | null,
+  card: Pick<GameCard, 'daily' | 'play' | 'limitsMisses'>, today: TodayEntry | undefined, loaded: boolean | null,
 ): { label: string; open: boolean; done?: boolean; foil?: 'gold' | 'holo' } {
   if (!card.daily) return { label: card.play ?? 'Play anytime', open: true };
   if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
   if (!today.available) return { label: 'No puzzle today', open: false };
+
+  if (card.limitsMisses) {
+    switch (today.status) {
+      case 'won':
+        return { label: 'Full photo', open: true, done: true, foil: today.guesses === 0 ? 'gold' : 'holo' };
+      case 'playing':
+        return { label: `Carry on · ${today.guesses} of ${today.maxGuesses} misses`, open: true };
+    }
+  }
 
   switch (today.status) {
     case 'won':
@@ -43,7 +54,7 @@ export function cardStatus(
   }
 }
 
-const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
+const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
 
 @Component({
   selector: 'app-home',
@@ -84,6 +95,13 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
                     <rect x="4.5" y="3" width="15" height="18" rx="1.5" />
                     <path d="M7.5 6.5h9" stroke="var(--mustard)" stroke-width="2.4" />
                     <path d="M7.5 11h2M11.5 11h5M7.5 14h2M11.5 14h5M7.5 17h2M11.5 17h3.5" />
+                  }
+                  @case ('photo') {
+                    <rect x="3" y="5" width="18" height="14" rx="1.5" />
+                    <circle cx="8" cy="10" r="1.6" fill="currentColor" stroke="none" />
+                    <circle cx="12" cy="9.5" r="1.6" fill="var(--mustard)" stroke="none" />
+                    <circle cx="16" cy="10" r="1.6" fill="currentColor" stroke="none" />
+                    <path d="M5.5 16.5c.4-2 1.4-3 2.5-3s2.1 1 2.5 3M9.5 16c.4-2 1.4-3 2.5-3s2.1 1 2.5 3M13.5 16.5c.4-2 1.4-3 2.5-3s2.1 1 2.5 3" />
                   }
                   @case ('chart') {
                     <path d="M4 20.5h16" />
@@ -190,7 +208,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five'];
   `,
 })
 export class Home {
-  /** The five games, in the order the home page shows them. */
+  /** The six games, in the order the home page shows them. */
   private readonly games: GameCard[] = [
     { name: 'Letter Jacket', kind: 'Word game', link: '/letter-jacket', icon: 'tile', trim: 'var(--red)', blurb: 'Six guesses to find a sports word of 4, 5 or 6 letters.' },
     {
@@ -204,6 +222,10 @@ export class Home {
     {
       name: 'Back of the Card', kind: 'Daily', link: '/back-of-the-card', daily: 'back-of-the-card', icon: 'card', trim: 'var(--gold)',
       blurb: "Every season's stats from a player's card, with the name blacked out. Who is it?",
+    },
+    {
+      name: 'Team Photo', kind: 'Daily', link: '/team-photo', daily: 'team-photo', icon: 'photo', trim: 'var(--red)', limitsMisses: true,
+      blurb: 'A blank team photo of an NBA Finals team. Name the starting five before your fourth miss.',
     },
     { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz",
       blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },
@@ -233,7 +255,7 @@ export class Home {
       };
     });
   });
-  protected readonly countWord = computed(() => this.today() === undefined ? 'Five' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Five');
+  protected readonly countWord = computed(() => this.today() === undefined ? 'Six' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Six');
 
   constructor() {
     // If the API is down the cards still link to the games, which report the problem themselves.

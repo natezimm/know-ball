@@ -21,6 +21,20 @@ public interface IGame
     bool IsGenerated { get; }
     /// <summary>Whether the guess box offers retired players as well as current ones.</summary>
     bool IncludesRetired { get; }
+    /// <summary>
+    /// True when <see cref="MaxGuesses"/> limits misses rather than guesses: right answers are free, and the round
+    /// is lost once the misses reach it. For a game with several answers, such as Team Photo.
+    /// </summary>
+    bool LimitsMisses => false;
+
+    /// <summary>How many right guesses win the round: 1 for a guess-the-player game.</summary>
+    int AnswersIn(Puzzle puzzle) => 1;
+
+    /// <summary>
+    /// True when the game avoids repeats by reading <see cref="GenerationContext.RecentSecrets"/>. Secrets can be
+    /// large (Scouting Report keeps a whole roster), so the scheduler loads them only for a game that asks.
+    /// </summary>
+    bool ReadsRecentSecrets => false;
     /// <summary>The leagues the game has an edition for, by code, the default first. Each has its own daily puzzle.</summary>
     IReadOnlyList<string> Leagues => [LeagueCodes.Nba];
 
@@ -38,14 +52,31 @@ public interface IGame
 
 /// <param name="AsOf">The day the puzzle will be played; ages are worked out as of this day.</param>
 /// <param name="RecentAnswerIds">Players used as answers too recently to use again.</param>
-public sealed record GenerationContext(League League, DateOnly AsOf, IReadOnlySet<int> RecentAnswerIds, Random Random);
+/// <param name="RecentSecrets">
+/// The secrets of this game's puzzles in the same window, oldest first, for a game whose answer is not one player
+/// and so cannot be kept from repeating by <paramref name="RecentAnswerIds"/>.
+/// </param>
+/// <param name="Practice">True for a practice round, which a game may draw from a wider pool than its dailies.</param>
+public sealed record GenerationContext(
+    League League,
+    DateOnly AsOf,
+    IReadOnlySet<int> RecentAnswerIds,
+    Random Random,
+    IReadOnlyList<string>? RecentSecrets = null,
+    bool Practice = false);
 
-public sealed record GeneratedPuzzle(int AnswerPlayerId, string PayloadJson, string SecretJson, int Difficulty = 0);
+/// <param name="AnswerPlayerId">The one player the puzzle is about; null for a puzzle with several answers.</param>
+public sealed record GeneratedPuzzle(int? AnswerPlayerId, string PayloadJson, string SecretJson, int Difficulty = 0);
 
-public sealed record GuessEvaluation(bool Correct, JsonNode? Feedback = null);
+/// <param name="Miss">Whether the guess counts as a miss; null means it does when it is not correct.</param>
+public sealed record GuessEvaluation(bool Correct, JsonNode? Feedback = null, bool? Miss = null);
 
 /// <summary>A guess as it is saved and as it is sent back to the player.</summary>
-public sealed record GuessRecord(int PlayerId, string Name, string? HeadshotUrl, bool Correct, JsonNode? Feedback, Guid? RequestId = null);
+/// <param name="Miss">Set only when a wrong guess does not count as a miss (false); null means it is one when not correct.</param>
+public sealed record GuessRecord(int PlayerId, string Name, string? HeadshotUrl, bool Correct, JsonNode? Feedback, Guid? RequestId = null, bool? Miss = null)
+{
+    public bool IsMiss => Miss ?? !Correct;
+}
 
 public static class GameStatus
 {

@@ -1,9 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ArchiveEntry, GameApi, GameState, GameStats, LEAGUE_NAMES, League, dailyLink } from '../../core/game-api';
+import { ArchiveEntry, GameApi, GameState, GameStats, LEAGUE_NAMES, League, dailyLink, isMiss } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
-import { shareHeadline, shareText } from '../../core/share';
+import { missHeadline, shareHeadline, shareText } from '../../core/share';
 import { Avatar } from '../avatar/avatar';
 import { Countdown } from '../countdown/countdown';
 import { NextGame } from '../next-game/next-game';
@@ -75,7 +75,7 @@ const NOTICE_MS = 3500;
                 No. {{ s.number }} · {{ s.date | date: 'EEE, MMM d' }}
               }
             </span>
-            <span class="dots kb-dots" role="img" [attr.aria-label]="s.guesses.length + ' of ' + s.maxGuesses + ' guesses used'">
+            <span class="dots kb-dots" role="img" [attr.aria-label]="dotsLabel(s)">
               @for (g of dots(); track $index) {
                 <i [class]="g"></i>
               }
@@ -86,7 +86,7 @@ const NOTICE_MS = 3500;
             <div class="guess">
               <app-player-search
                 label="Guess a player"
-                [placeholder]="'Guess ' + (s.guesses.length + 1) + ' of ' + s.maxGuesses + ': type a name'"
+                [placeholder]="limitsMisses() ? 'Name a player' : 'Guess ' + (s.guesses.length + 1) + ' of ' + s.maxGuesses + ': type a name'"
                 [includeInactive]="includeInactive()" [puzzleId]="s.puzzleId" [league]="s.league ?? 'nba'"
                 [disabled]="store.busy()"
                 (selected)="store.guess($event.id)"
@@ -103,10 +103,10 @@ const NOTICE_MS = 3500;
           @if (store.over()) {
             <div class="result kb-result" kbTilt [class.won]="s.status === 'won'" [attr.data-tier]="tier(s)" [attr.data-stamp]="stamp(s)" role="status">
               <i class="kb-shine" aria-hidden="true"></i>
-              <app-avatar [src]="$safeNavigationMigration(s.answer?.headshotUrl)" [name]="s.answer?.name ?? ''" />
+              <app-avatar [src]="resultName() ? resultImage() : $safeNavigationMigration(s.answer?.headshotUrl)" [name]="resultName() || (s.answer?.name ?? '')" />
               <div class="who kb-result-who">
                 <span class="kb-label">{{ verdict(s) }}</span>
-                <strong>{{ s.answer?.name }}</strong>
+                <strong>{{ resultName() || s.answer?.name }}</strong>
                 <ng-content select="[answer]" />
               </div>
               <div class="next kb-result-next">
@@ -159,11 +159,11 @@ const NOTICE_MS = 3500;
           <div><dd>{{ st.currentStreak }}</dd><dt>Streak</dt></div>
           <div><dd>{{ st.bestStreak }}</dd><dt>Best</dt></div>
         </dl>
-        <h3 class="kb-label">Guesses to solve</h3>
+        <h3 class="kb-label">{{ limitsMisses() ? 'Misses in a solve' : 'Guesses to solve' }}</h3>
         <ol class="bars">
           @for (count of st.distribution; track $index) {
             <li>
-              <span>{{ $index + 1 }}</span>
+              <span>{{ limitsMisses() ? $index : $index + 1 }}</span>
               <i [style.width.%]="barWidth(st, count)" [class.zero]="count === 0">{{ count }}</i>
             </li>
           }
@@ -284,6 +284,15 @@ export class GameShell {
   readonly leagues = input<League[]>(['nba']);
   /** The emoji rows under the headline when the result is shared. */
   readonly shareRows = input<string[]>([]);
+  /**
+   * For a game with several answers (Team Photo): the dots count misses, not guesses, right answers are free,
+   * and the result is told by misses. Matches the API's <code>maxGuesses</code> being a miss limit there.
+   */
+  readonly limitsMisses = input(false, { transform: booleanAttribute });
+  /** What the result card names when the answer is not one player: "2015–16 Golden State Warriors". */
+  readonly resultName = input('');
+  /** The picture beside {@link resultName}, such as a team logo. */
+  readonly resultImage = input<string | null>(null);
 
   protected readonly stats = signal<GameStats | null>(null);
   protected readonly archive = signal<ArchiveEntry[] | null>(null);
@@ -292,10 +301,14 @@ export class GameShell {
   protected readonly leagueNames = LEAGUE_NAMES;
   protected readonly dailyLink = dailyLink;
 
-  /** One dot per allowed guess: a miss, the winning guess, or still to come. */
+  /** One dot per allowed guess: a miss, the winning guess, or still to come. A game that limits misses shows one per miss allowed. */
   protected readonly dots = computed(() => {
     const state = this.store.state();
     if (!state) return [];
+    if (this.limitsMisses()) {
+      const misses = state.guesses.filter(isMiss).length;
+      return Array.from({ length: state.maxGuesses }, (_, i) => (i < misses ? 'miss' : ''));
+    }
     return Array.from({ length: state.maxGuesses }, (_, i) => {
       const guess = state.guesses[i];
       return guess ? (guess.correct ? 'hit' : 'miss') : '';
@@ -313,7 +326,18 @@ export class GameShell {
     });
   }
 
+  protected dotsLabel(state: GameState): string {
+    return this.limitsMisses()
+      ? `${state.guesses.filter(isMiss).length} of ${state.maxGuesses} misses used`
+      : `${state.guesses.length} of ${state.maxGuesses} guesses used`;
+  }
+
   protected verdict(state: GameState): string {
+    if (this.limitsMisses()) {
+      const misses = state.guesses.filter(isMiss).length;
+      if (state.status !== 'won') return 'Out of misses';
+      return misses === 0 ? 'Every name, no misses' : `Every name, ${misses} ${misses === 1 ? 'miss' : 'misses'}`;
+    }
     if (state.status !== 'won') return 'The answer was';
     return state.guesses.length === 1 ? 'Solved on the first guess' : `Solved in ${state.guesses.length} guesses`;
   }
@@ -321,10 +345,12 @@ export class GameShell {
   /** The finish the answer card comes up in: gold foil for a first-guess win, foil for any other win, plain for a loss. */
   protected tier(state: GameState): 'gold' | 'holo' | null {
     if (state.status !== 'won') return null;
+    if (this.limitsMisses()) return state.guesses.some(isMiss) ? 'holo' : 'gold';
     return state.guesses.length === 1 ? 'gold' : 'holo';
   }
 
   protected stamp(state: GameState): string | null {
+    if (this.limitsMisses()) return state.status === 'won' && !state.guesses.some(isMiss) ? 'No misses' : null;
     return state.status === 'won' && state.guesses.length === 1 ? 'First try' : null;
   }
 
@@ -335,7 +361,11 @@ export class GameShell {
   protected async share(state: GameState): Promise<void> {
     const won = state.status === 'won';
     const name = state.league && state.league !== 'nba' ? `${this.name()} ${LEAGUE_NAMES[state.league]}` : this.name();
-    const text = [shareHeadline(name, state.practice ? null : state.number, state.guesses.length, state.maxGuesses, won), ...this.shareRows()].join('\n');
+    const used = this.limitsMisses() ? state.guesses.filter(isMiss).length : state.guesses.length;
+    const headline = this.limitsMisses()
+      ? missHeadline(name, state.practice ? null : state.number, used, state.maxGuesses, won)
+      : shareHeadline(name, state.practice ? null : state.number, used, state.maxGuesses, won);
+    const text = [headline, ...this.shareRows()].join('\n');
     const outcome = await shareText(text);
     this.shareLabel.set(outcome === 'copied' ? 'Copied' : outcome === 'failed' ? 'Could not copy' : 'Share');
     if (outcome !== 'shared') setTimeout(() => this.shareLabel.set('Share'), 2500);
@@ -373,7 +403,7 @@ export class GameShell {
   protected archiveLabel(entry: ArchiveEntry): string {
     switch (entry.status) {
       case 'won':
-        return `Solved in ${entry.guesses}`;
+        return this.limitsMisses() ? 'Solved' : `Solved in ${entry.guesses}`;
       case 'lost':
         return 'Missed';
       case 'playing':

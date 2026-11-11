@@ -8,6 +8,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Games\LetterJacket\Data\sports-words.json" />
     <EmbeddedResource Include="Games\LetterJacket\Data\guess-words.txt" />
+    <EmbeddedResource Include="Games\TeamPhoto\Data\finals-teams.json" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="KnowBall.UnitTests" />

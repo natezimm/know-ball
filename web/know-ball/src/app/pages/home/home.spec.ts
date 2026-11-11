@@ -35,16 +35,17 @@ describe('Home', () => {
 
   const badges = (el: HTMLElement) => [...el.querySelectorAll('.badge')].map((b) => b.textContent?.trim());
 
-  it("shows the five games with today's state", async () => {
+  it("shows the six games with today's state", async () => {
     const el = await render([
       entry({ status: 'playing', guesses: 3 }),
       entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 2, maxGuesses: 6 }),
       entry({ game: 'back-of-the-card', name: 'Back of the Card', number: 1 }),
     ]);
 
-    expect([...el.querySelectorAll('.grid h2')].map((h) => h.textContent)).toEqual(['Letter Jacket', 'Scouting Report', 'Career Path', 'Back of the Card', "Numbers Don't Lie"]);
-    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'Play No. 1', "Play today's quiz"]);
+    expect([...el.querySelectorAll('.grid h2')].map((h) => h.textContent)).toEqual(['Letter Jacket', 'Scouting Report', 'Career Path', 'Back of the Card', 'Team Photo', "Numbers Don't Lie"]);
+    expect(badges(el)).toEqual(['Play anytime', 'Carry on · 3 of 8', 'Solved in 2', 'Play No. 1', 'Coming soon', "Play today's quiz"]);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/letter-jacket', '/scouting-report', '/career-path', '/back-of-the-card', '/numbers-dont-lie']);
+    // Team Photo has no puzzle in this list, so five games are open.
     expect(el.querySelector('h1')?.textContent).toContain('Five ways');
     expect(el.querySelector('.badge.done')?.textContent?.trim()).toBe('Solved in 2');
     // A daily won today turns foil; the others stay plain card stock.
@@ -55,21 +56,21 @@ describe('Home', () => {
     stats = [{ game: 'career-path', played: 4, wins: 4, currentStreak: 3, bestStreak: 3, distribution: [0, 1, 2, 1, 0, 0] }];
     const el = await render([entry({}), entry({ game: 'career-path' }), entry({ game: 'back-of-the-card' })]);
 
-    expect([...el.querySelectorAll('.no')].map((n) => n.textContent)).toEqual(['Word game', 'Daily', 'Daily', 'Daily', 'Daily quiz']);
+    expect([...el.querySelectorAll('.no')].map((n) => n.textContent)).toEqual(['Word game', 'Daily', 'Daily', 'Daily', 'Daily', 'Daily quiz']);
     expect([...el.querySelectorAll('.streak')].map((n) => n.getAttribute('aria-label'))).toEqual(['3-day streak']);
   });
 
-  it('counts five ways when every game has a puzzle', async () => {
-    const el = await render([entry({}), entry({ game: 'career-path' }), entry({ game: 'back-of-the-card' })]);
+  it('counts six ways when every game has a puzzle', async () => {
+    const el = await render([entry({}), entry({ game: 'career-path' }), entry({ game: 'back-of-the-card' }), entry({ game: 'team-photo', maxGuesses: 4 })]);
 
-    expect(el.querySelector('h1')?.textContent).toContain('Five ways');
-    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'Play No. 12', "Play today's quiz"]);
+    expect(el.querySelector('h1')?.textContent).toContain('Six ways');
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'Play No. 12', 'Play No. 12', "Play today's quiz"]);
   });
 
   it('still links to every game when the API is down', async () => {
     const el = await render('down');
 
-    expect(el.querySelectorAll('a.badge').length).toBe(5);
+    expect(el.querySelectorAll('a.badge').length).toBe(6);
   });
 
   it('waits for availability before offering daily games', async () => {
@@ -77,14 +78,14 @@ describe('Home', () => {
     const fixture = TestBed.createComponent(Home);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', 'Checking today…', "Play today's quiz"]);
+    expect(badges(el)).toEqual(['Play anytime', 'Checking today…', 'Checking today…', 'Checking today…', 'Checking today…', "Play today's quiz"]);
     expect([...el.querySelectorAll('a.badge')].map((a) => a.getAttribute('href'))).toEqual(['/letter-jacket', '/numbers-dont-lie']);
 
     TestBed.inject(HttpTestingController).expectOne('/api/me/today').flush([
-      entry({}), entry({ game: 'career-path', available: false, number: null }), entry({ game: 'back-of-the-card' }),
+      entry({}), entry({ game: 'career-path', available: false, number: null }), entry({ game: 'back-of-the-card' }), entry({ game: 'team-photo' }),
     ]);
     await fixture.whenStable();
-    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'No puzzle today', 'Play No. 12', "Play today's quiz"]);
+    expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'No puzzle today', 'Play No. 12', 'Play No. 12', "Play today's quiz"]);
     expect(el.querySelector('a[href="/career-path"]')).toBeNull();
   });
 
@@ -95,9 +96,10 @@ describe('Home', () => {
       entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 1 }),
       entry({ game: 'career-path', name: 'Career Path', league: 'nfl', status: 'won', guesses: 1 }),
       entry({ game: 'back-of-the-card' }),
+      entry({ game: 'team-photo' }),
     ]);
 
-    expect(badges(el)).toEqual(['Play anytime', 'NBA · Solved in 1 guess', 'NFL · Play No. 2', 'NBA · Solved in 1 guess', 'NFL · Solved in 1 guess', 'Play No. 12', "Play today's quiz"]);
+    expect(badges(el)).toEqual(['Play anytime', 'NBA · Solved in 1 guess', 'NFL · Play No. 2', 'NBA · Solved in 1 guess', 'NFL · Solved in 1 guess', 'Play No. 12', 'Play No. 12', "Play today's quiz"]);
     expect([...el.querySelectorAll('a.badge.edition')].map((a) => a.getAttribute('href'))).toEqual(['/scouting-report/nfl', '/career-path/nfl']);
     // Foil only once both editions are solved.
     expect([...el.querySelectorAll('.card.kb-foil h2')].map((h) => h.textContent)).toEqual(['Career Path']);
@@ -110,5 +112,14 @@ describe('Home', () => {
     expect(cardStatus(daily, entry({ status: 'lost', guesses: 8 }), true)).toEqual({ label: 'Missed · see the answer', open: true, done: true });
     expect(cardStatus(daily, undefined, true)).toEqual({ label: 'Coming soon', open: false });
     expect(cardStatus(daily, undefined, false)).toEqual({ label: 'Play today', open: true });
+  });
+
+  it('words Team Photo by misses, not guesses', () => {
+    const photo = { daily: 'team-photo' as const, limitsMisses: true };
+    const today = (o: Partial<TodayEntry>) => entry({ game: 'team-photo', maxGuesses: 4, ...o });
+    expect(cardStatus(photo, today({ status: 'won', guesses: 0 }), true)).toEqual({ label: 'Full photo', open: true, done: true, foil: 'gold' });
+    expect(cardStatus(photo, today({ status: 'won', guesses: 2 }), true).foil).toBe('holo');
+    expect(cardStatus(photo, today({ status: 'playing', guesses: 1 }), true).label).toBe('Carry on · 1 of 4 misses');
+    expect(cardStatus(photo, today({ status: 'lost', guesses: 4 }), true).label).toBe('Missed · see the answer');
   });
 });

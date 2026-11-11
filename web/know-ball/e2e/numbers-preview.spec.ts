@@ -9,7 +9,7 @@ test('the quiz opens and saves daily feedback across reloads', async ({ page }) 
   });
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
-  await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(5);
+  await expect(page.getByRole('list',{name:'Games'}).getByRole('heading',{level:2})).toHaveCount(6);
   await page.getByRole('link',{name:"Numbers Don't Lie: Play today's quiz"}).click();
   await expect(page.getByRole('heading',{name:"Numbers Don't Lie",exact:true})).toBeVisible();
   for(let i=0;i<5;i++) {

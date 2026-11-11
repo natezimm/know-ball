@@ -198,6 +198,49 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Team_photo_hides_every_name_until_the_five_are_found_and_bench_names_are_free()
+    {
+        var client = NewPlayer();
+        var daily = await Json(await client.GetAsync("/api/team-photo/daily"));
+        var puzzleId = daily.GetProperty("puzzleId").GetInt32();
+        var secret = JsonDocument.Parse(await Db(async db => (await db.Puzzles.AsNoTracking().SingleAsync(p => p.Id == puzzleId)).SecretJson)).RootElement;
+        var starters = secret.GetProperty("slots").EnumerateArray().Select(s => s.GetProperty("playerId").GetInt32()).ToList();
+        var bench = secret.GetProperty("bench").EnumerateArray().Select(b => b.GetInt32()).ToList();
+
+        Assert.Equal(("team-photo", 4, "playing", 5), (daily.GetProperty("game").GetString(), daily.GetProperty("maxGuesses").GetInt32(),
+            daily.GetProperty("status").GetString(), daily.GetProperty("payload").GetProperty("slots").GetArrayLength()));
+        foreach (var id in starters) AssertHidden(daily, await Db(db => db.Players.AsNoTracking().SingleAsync(p => p.Id == id)));
+
+        // A bench player is not a miss; someone who was not on the team is. The daily is any Finals team the
+        // fixtures can build, and one of them (2021-22 Golden State) has no one beyond its five.
+        if (bench.Count > 0)
+        {
+            var benched = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = bench[0] }));
+            var free = benched.GetProperty("guesses")[0];
+            Assert.True(free.GetProperty("feedback").GetProperty("bench").GetBoolean());
+            Assert.False(free.GetProperty("miss").GetBoolean());
+        }
+        var outsider = await Db(db => db.Players.AsNoTracking()
+            .Where(p => p.League!.Code == "nba" && !starters.Contains(p.Id) && !bench.Contains(p.Id)).Select(p => p.Id).FirstAsync());
+        var missed = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = outsider }));
+        var last = missed.GetProperty("guesses");
+        Assert.False(last[last.GetArrayLength() - 1].GetProperty("correct").GetBoolean());
+
+        JsonElement state = missed;
+        foreach (var id in starters)
+            state = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = id }));
+        Assert.Equal("won", state.GetProperty("status").GetString());
+        Assert.Equal(5, state.GetProperty("answer").GetProperty("slots").GetArrayLength());
+
+        var stats = await Json(await client.GetAsync("/api/me/stats"));
+        var photo = stats.EnumerateArray().Single(s => s.GetProperty("game").GetString() == "team-photo");
+        Assert.Equal([0, 1, 0, 0], photo.GetProperty("distribution").EnumerateArray().Select(d => d.GetInt32())); // one miss
+        // The home page hears misses, not guesses: six or seven guesses, one of them a miss.
+        var today = await Json(await client.GetAsync("/api/me/today"));
+        Assert.Equal(1, today.EnumerateArray().Single(t => t.GetProperty("game").GetString() == "team-photo").GetProperty("guesses").GetInt32());
+    }
+
+    [Fact]
     public async Task A_practice_round_is_a_fresh_puzzle_outside_the_calendar()
     {
         var client = NewPlayer();
@@ -225,7 +268,7 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, (await NewPlayer().GetAsync(path)).StatusCode);
         var today = await Json(await NewPlayer().GetAsync("/api/me/today"));
         Assert.Equal(
-            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba", "back-of-the-card nfl"],
+            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba", "back-of-the-card nfl", "team-photo nba"],
             today.EnumerateArray().Select(t => $"{t.GetProperty("game").GetString()} {t.GetProperty("league").GetString()}"));
     }
 

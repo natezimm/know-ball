@@ -1,6 +1,10 @@
 # Team Photo: plan
 
-Status: plan only, written 2026-11-09. Nothing is built yet apart from the sketches at `/mockups/team-photo`.
+Status: built in PRs #95 (data) and #96 (game), 2026-11. This page is the plan as written on 2026-11-09; where the
+build differs, these decisions from Nathan win: launch with option A (starting five only, no bench row), and the
+daily pool is all 100 NBA Finals teams since the 1976 merger, champions and runners-up, kept in
+`Application/Games/TeamPhoto/Data/finals-teams.json`. The sketches have left the lab; `/mockups/team-photo` now opens
+the game.
 
 Team Photo shows a blank team photo of one NBA team-season, such as the 2015–16 Golden State team that went 73–9.
 The player names the people in it. Each correct name puts a face in the photo. It is the first Know Ball game with
