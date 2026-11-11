@@ -185,6 +185,20 @@ the image it was taken with.
 The deploy job only has a registry login while it runs, so before a manual `docker compose pull`, log in with
 a GitHub token that can read packages: `docker login ghcr.io -u natezimm`.
 
+## Verifying an image
+
+Every published image carries an SBOM and SLSA provenance in the registry, and a provenance attestation
+signed with the workflow's GitHub identity. Before running a tag by hand, check it was built by this
+repository's CI:
+
+```sh
+gh attestation verify oci://ghcr.io/natezimm/know-ball:<sha> --owner natezimm
+docker buildx imagetools inspect ghcr.io/natezimm/know-ball:<sha> --format '{{ json .SBOM }}' | head
+```
+
+The site and importer containers run with a read-only root filesystem (only `/data` and a 64 MB `/tmp`
+are writable), no Linux capabilities and `no-new-privileges`.
+
 ## Deployment image retention
 
 Deployments install `storage.py` and `install-storage.sh` in `~/know-ball`. The daily
