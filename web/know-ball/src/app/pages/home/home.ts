@@ -234,14 +234,17 @@ export class Home {
   // Undefined while checking availability; null after a failed request.
   private readonly today = signal<TodayEntry[] | null | undefined>(undefined);
   private readonly stats = signal<GameStats[]>([]);
+  private readonly paused = signal<string[]>([]);
 
   protected readonly cards = computed(() => {
     const today = this.today();
     const stats = this.stats();
+    const paused = this.paused();
     const loaded = today === undefined ? null : today !== null;
     const find = <T extends { game: GameSlug; league?: League }>(rows: T[] | null | undefined, game: GameSlug | undefined, league: League) =>
       rows?.find((r) => r.game === game && (r.league ?? 'nba') === league);
     return this.games.map((card) => {
+      if (paused.includes(card.link.slice(1))) return { ...card, status: { label: 'Taking a break', open: false } as ReturnType<typeof cardStatus>, nfl: null, streak: 0 };
       const status = cardStatus(card, find(today, card.daily, 'nba'), loaded);
       // The NFL edition shows only once the API lists it for today.
       const nflEntry = find(today, card.daily, 'nfl');
@@ -263,5 +266,7 @@ export class Home {
     api.today().subscribe({ next: (entries) => this.today.set(entries), error: () => this.today.set(null) });
     // Streaks are a bonus; the cards work without them.
     api.stats().subscribe({ next: (stats) => this.stats.set(stats), error: () => {} });
+    // A game paused by its feature flag shows as taking a break; without this list every game stays open.
+    api.paused().subscribe({ next: (paused) => this.paused.set(paused), error: () => {} });
   }
 }

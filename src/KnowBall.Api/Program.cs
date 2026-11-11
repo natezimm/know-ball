@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.FeatureManagement;
 using KnowBall.Api.Endpoints;
 using KnowBall.Application;
 using KnowBall.Infrastructure;
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddProblemDetails();
+builder.Services.AddFeatureManagement();
 builder.Services.ConfigureHttpJsonOptions(o =>
     o.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 #if NET9_0_OR_GREATER
@@ -86,6 +88,7 @@ api.MapData();
 api.MapLetterJacket();
 api.MapGames();
 api.MapNumbers();
+api.MapGamePauses();
 
 app.MapHealthChecks("/health");
 
