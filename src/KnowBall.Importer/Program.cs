@@ -3,6 +3,7 @@ using KnowBall.Domain;
 using KnowBall.Importer;
 using KnowBall.Infrastructure;
 using KnowBall.Infrastructure.Persistence;
+using KnowBall.Infrastructure.Telemetry;
 
 if (args.Contains("--simulate-numbers"))
 {
@@ -67,10 +68,16 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.Configure<ImportOptions>(builder.Configuration.GetSection("Import"));
 builder.Services.AddSingleton<ImportJob>();
 builder.Services.AddSingleton<NumbersQueueJob>();
+// The nightly run's import shows as one trace, its HTTP downloads and database work inside it.
+builder.AddKnowBallTelemetry("know-ball-importer");
 
 if (!once) builder.Services.AddHostedService<NightlyImportWorker>();
 
-var host = builder.Build();
+// Disposing the host on exit flushes any telemetry still waiting to be sent.
+using var host = builder.Build();
+// The one-shot runs below never start the host, so build the telemetry providers here; they would
+// otherwise wait for a hosted service that never runs, and the night's trace would be lost.
+TelemetrySetup.StartProviders(host.Services);
 await DatabaseInitializer.InitializeAsync(host.Services);
 
 if (importNumbers is not null)

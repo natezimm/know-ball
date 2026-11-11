@@ -71,6 +71,9 @@ load fixtures and make gameplay writes.
 - **Two databases, one model.** Postgres uses EF Core migrations applied when the API starts. SQLite uses
   `EnsureCreated` with a schema version number in `DatabaseInitializer`; bump it when the model changes, and add
   a Postgres migration in the same change. Never edit an existing migration.
+- **Telemetry** is OpenTelemetry, on only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (`Infrastructure/Telemetry`,
+  [docs/observability.md](docs/observability.md)). Add Know Ball's own spans and metrics to `KnowBallTelemetry`
+  in Application, and never tag them with the anonymous id, names or addresses.
 - **Configuration** is read through options or inside DI factories. Rate limits are in
   `Api/Endpoints/RateLimits.cs`; [docs/api.md](docs/api.md) and [docs/importer.md](docs/importer.md) list the
   settings, so update them when a setting or endpoint changes.

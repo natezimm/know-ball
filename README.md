@@ -55,6 +55,9 @@ stays with your browser.
 - **Abuse limits that hold behind a proxy.** Every request is rate limited per address, with stricter limits on
   guesses, IPv6 counted by /64, and `X-Forwarded-For` trusted only from known proxies
   ([`RateLimits`](src/KnowBall.Api/Endpoints/RateLimits.cs)).
+- **Observable without a collector.** OpenTelemetry traces, metrics and logs go straight to Grafana Cloud's free
+  tier, including game and import metrics of its own; a browser's failed call logs a trace id the server's traces
+  share ([observability](docs/observability.md), [ADR 0007](docs/adr/0007-opentelemetry-without-a-collector.md)).
 
 ## Architecture
 

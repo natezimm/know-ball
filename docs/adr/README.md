@@ -10,3 +10,4 @@ Short records of the decisions that shape Know Ball: the context, what was decid
 | [0004](0004-idempotent-guesses.md) | Guesses are idempotent and safe across tabs |
 | [0005](0005-defensive-nightly-import.md) | The nightly import refuses bad data rather than trusting it |
 | [0006](0006-one-image-pulled-by-the-vm.md) | One image, built in CI and pulled by the VM |
+| [0007](0007-opentelemetry-without-a-collector.md) | OpenTelemetry, sent straight to a free hosted backend |
