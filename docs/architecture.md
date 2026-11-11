@@ -38,7 +38,7 @@ The processes on the VM and what calls what.
 flowchart LR
   Browser["Browser<br/>Angular 22 app, service worker"] -->|"HTTPS"| Nginx["Host nginx<br/>TLS, X-Forwarded-For"]
   Nginx -->|"127.0.0.1:8090"| Api["KnowBall.Api<br/>minimal API + static Angular build"]
-  Api --> Db[("PostgreSQL 17<br/>players, puzzles, results, rounds")]
+  Api --> Db[("PostgreSQL 18<br/>players, puzzles, results, rounds")]
   Importer["KnowBall.Importer<br/>nightly worker, 04:00 Eastern"] --> Db
   Importer --> Sources["Basketball-Reference mirror<br/>Wikidata, ESPN"]
 

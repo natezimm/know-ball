@@ -20,7 +20,7 @@ with tempfile.TemporaryDirectory(prefix="knowball-ops-smoke-") as directory:
     compose = {
         "name": "knowball-ops-test-" + uuid.uuid4().hex[:8],
         "services": {
-            "db": {"image": "postgres:17", "environment": {
+            "db": {"image": "postgres:18.6-bookworm", "environment": {
                 "POSTGRES_USER": "knowball", "POSTGRES_DB": "know_ball", "POSTGRES_PASSWORD": "test-only"}},
             "site": {"image": image, "environment": {
                 "ConnectionStrings__Trivia": "Host=db;Database=know_ball;Username=knowball;Password=test-only"}, "ports": ["127.0.0.1::8080"]},
@@ -58,5 +58,9 @@ with tempfile.TemporaryDirectory(prefix="knowball-ops-smoke-") as directory:
         # The source stack still serves its own database after the disposable drill is removed.
         assert ops.request(base, "/health")
         print(json.dumps(report, indent=2))
+    except Exception:
+        logs = ops.compose(root, "logs", "--no-color", "--tail", "80", "site", "db", check=False)
+        print(logs.stdout.decode(), flush=True)
+        raise
     finally:
         ops.compose(root, "down", "-v", "--remove-orphans", check=False)

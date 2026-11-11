@@ -3,13 +3,14 @@
 Guidance for coding agents working in this repository. `CLAUDE.md` imports this file, so edit this one. The
 README covers what Know Ball is; [docs/architecture.md](docs/architecture.md) has the diagrams.
 
-Know Ball is a set of daily sports trivia games: an ASP.NET Core (.NET 10) API that also serves the built
+Know Ball is a set of daily sports trivia games: an ASP.NET Core (.NET 11) API that also serves the built
 Angular 22 app, a worker that imports player data and queues puzzles, and PostgreSQL. All three ship in one
 Docker image.
 
 ## Commands
 
-Run from the repository root unless a line says otherwise.
+Run from the repository root unless a line says otherwise. `global.json` selects the .NET 11 SDK (C# 15).
+`Directory.Packages.props` pins EF Core and its PostgreSQL provider to matching 11 release candidates until the stable provider is available.
 
 | Task | Command |
 | --- | --- |
@@ -27,15 +28,23 @@ Run from the repository root unless a line says otherwise.
 | Web dev server on port 4200, in `web/know-ball` | `npm start` (proxies `/api` to 5080) |
 | Whole site in Docker on port 8080 | `docker compose --profile site up -d --build` |
 | Everything CI runs, plus Docker | `./scripts/verify.sh` |
-| New Postgres migration | `dotnet tool install dotnet-ef --tool-path .tools`, then `.tools/dotnet-ef migrations add <Name> --project src/KnowBall.Infrastructure --startup-project src/KnowBall.Infrastructure --output-dir Persistence/Migrations` |
+| New Postgres migration | `dotnet tool install dotnet-ef --version 11.0.0-rc.3.26522.148 --allow-roll-forward --tool-path .tools`, then `.tools/dotnet-ef migrations add <Name> --project src/KnowBall.Infrastructure --startup-project src/KnowBall.Infrastructure --output-dir Persistence/Migrations` |
 
 Without Docker, point the API and importer at SQLite:
 `Database__Provider=Sqlite ConnectionStrings__Trivia="Data Source=$PWD/artifacts/trivia-dev.db"`.
 
-The Angular CLI needs Node 22.22.3+ or 24.15+; CI uses Node 24. There is no linter, and Prettier is not enforced,
+Use Node 26 LTS: `.nvmrc` drives local selection and CI, `web/know-ball/package.json` declares `26.x`,
+and the Dockerfile uses Node 26. Keep them aligned. There is no linter, and Prettier is not enforced,
 so do not reformat files you are not otherwise changing.
 
 ## Architecture
+
+PostgreSQL 18.6 is used in development, production, CI and restore drills. Migrate
+existing 17 volumes with `deploy/upgrade-postgres.py`; see
+[the upgrade guide](deploy/postgres-upgrade.md). `KNOWBALL_DB_VOLUME` selects the
+migrated volume. `python3 deploy/test-postgres-upgrade.py` rehearses upgrade and
+rollback in Docker. Integration tests must use a separate database because they
+load fixtures and make gameplay writes.
 
 - **Layers point inward.** `Api` and `Importer` reference `Infrastructure`, which references `Application`, which
   references `Domain`. Game rules, the scheduler and import logic belong in `Application` and reach the database

@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 20
     services:
       postgres:
-        image: postgres:17
+        image: postgres:18.6-bookworm
         env:
           POSTGRES_DB: sports_trivia
           POSTGRES_USER: trivia
@@ -30,14 +30,14 @@ jobs:
           --health-cmd "pg_isready -U trivia -d sports_trivia"
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
-      TriviaTfm: net10.0
+      TriviaTfm: net11.0
       DOTNET_NOLOGO: "1"
       DOTNET_CLI_TELEMETRY_OPTOUT: "1"
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "10.0.x"
+          global-json-file: global.json
       - name: Build
         run: dotnet build KnowBall.sln -c Release
       - name: Unit tests
@@ -53,7 +53,7 @@ jobs:
           ConnectionStrings__Trivia: Host=localhost;Port=5432;Database=sports_trivia;Username=trivia;Password=trivia
           Import__MaxAttempts: "1"
         run: |
-          IMPORTER=src/KnowBall.Importer/bin/Release/net10.0/KnowBall.Importer.dll
+          IMPORTER=src/KnowBall.Importer/bin/Release/net11.0/KnowBall.Importer.dll
           dotnet $IMPORTER --once --source seed --no-history --leagues nba
           dotnet $IMPORTER --once --source seed --no-history --leagues nba | tee second.txt
           grep -q "0 new, 0 updated, 0 deactivated, 0 team changes" second.txt
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: web/know-ball/package-lock.json
       - run: npm ci --no-audit --no-fund
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      TriviaTfm: net10.0
+      TriviaTfm: net11.0
       DOTNET_NOLOGO: "1"
       DOTNET_CLI_TELEMETRY_OPTOUT: "1"
     defaults:
@@ -93,10 +93,10 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "10.0.x"
+          global-json-file: global.json
       - uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: web/know-ball/package-lock.json
       - run: npm ci --no-audit --no-fund
@@ -136,6 +136,8 @@ jobs:
       - uses: actions/checkout@v7
       - name: Backup tooling failure-path tests
         run: python3 -m unittest discover -s tests -p test_operations.py -v
+      - name: PostgreSQL major upgrade and rollback
+        run: python3 deploy/test-postgres-upgrade.py
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
       - name: Build the image
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
@@ -213,6 +215,8 @@ jobs:
           fi
           printf '%s\n' "$GCP_KNOWN_HOSTS" > ~/.ssh/known_hosts
           SSH="ssh -i $HOME/.ssh/deploy -o StrictHostKeyChecking=yes"
+          scp -i ~/.ssh/deploy deploy/upgrade-postgres.py "$GCP_USER@$GCP_HOST:know-ball/upgrade-postgres.py"
+          $SSH "$GCP_USER@$GCP_HOST" 'cd know-ball && if [ -f docker-compose.yml ]; then python3 upgrade-postgres.py --require-current; fi'
           scp -i ~/.ssh/deploy deploy/docker-compose.yml "$GCP_USER@$GCP_HOST:know-ball/docker-compose.yml"
           # The job's token can read the private image; it expires when this job ends. It goes to Know
           # Ball's own Docker config, so another app deploying to the VM at the same time cannot

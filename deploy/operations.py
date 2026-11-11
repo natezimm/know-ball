@@ -249,7 +249,7 @@ def restore(bundle):
             # the loopback-only published API port used by the host-side HTTP checks.
             run(["docker", "network", "create", network])
             run(["docker", "run", "-d", "--name", db, "--network", network,
-                 "-e", "POSTGRES_USER=knowball", "-e", "POSTGRES_DB=know_ball", "-e", "POSTGRES_PASSWORD=" + password, "postgres:17"])
+                 "-e", "POSTGRES_USER=knowball", "-e", "POSTGRES_DB=know_ball", "-e", "POSTGRES_PASSWORD=" + password, "postgres:18.6-bookworm"])
             for attempt in range(60):
                 # The entrypoint's bootstrap server accepts Unix sockets before initdb finishes.
                 # TCP readiness waits for the final server and its created database.

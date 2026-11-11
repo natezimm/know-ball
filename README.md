@@ -62,7 +62,7 @@ stays with your browser.
 flowchart LR
   Browser["Browser<br/>Angular 22 app, service worker"] -->|"HTTPS"| Nginx["Host nginx<br/>TLS, X-Forwarded-For"]
   Nginx -->|"127.0.0.1:8090"| Api["KnowBall.Api<br/>minimal API + static Angular build"]
-  Api --> Db[("PostgreSQL 17<br/>players, puzzles, results, rounds")]
+  Api --> Db[("PostgreSQL 18<br/>players, puzzles, results, rounds")]
   Importer["KnowBall.Importer<br/>nightly worker, 04:00 Eastern"] --> Db
   Importer --> Sources["Basketball-Reference mirror<br/>Wikidata, ESPN"]
 
@@ -94,8 +94,8 @@ guess sequence, and the delivery pipeline. Design decisions are recorded in [doc
 | Area | Choices |
 | --- | --- |
 | Front end | Angular 22 (standalone, zoneless, signals), service worker, Vitest |
-| API | ASP.NET Core minimal APIs on .NET 10, built-in rate limiting, health checks |
-| Data | EF Core with PostgreSQL 17 (migrations) and SQLite (tests and quick local runs) |
+| API | ASP.NET Core minimal APIs on .NET 11, built-in rate limiting, health checks |
+| Data | EF Core with PostgreSQL 18 (migrations) and SQLite (tests and quick local runs) |
 | Import | Hosted worker, Basketball-Reference CSV mirror, Wikidata SPARQL, ESPN roster feed |
 | Testing | xUnit, `FakeTimeProvider`, Playwright, Docker smoke test |
 | Delivery | GitHub Actions, GitHub Container Registry, Docker Compose on a GCP VM, nginx, Let's Encrypt |
@@ -109,7 +109,7 @@ which takes about a minute):
 docker compose --profile site up -d --build
 ```
 
-From source, with .NET 10 and Node 24:
+From source, with .NET 11 and Node 26 LTS (see `.nvmrc`):
 
 ```bash
 docker compose up -d db                                # Postgres on :5432 (KNOWBALL_DB_PORT to change)
