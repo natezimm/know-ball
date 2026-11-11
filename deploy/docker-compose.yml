@@ -43,6 +43,13 @@ services:
       ConnectionStrings__Trivia: Host=db;Port=5432;Database=know_ball;Username=knowball;Password=${KNOWBALL_DB_PASSWORD}
       # nginx reaches the container from this network's gateway, so only its X-Forwarded-For counts.
       ForwardedHeaders__KnownNetworks__0: 172.31.250.0/24
+      # Set one of these to false in .env, then `docker compose up -d site`, to pause that game (docs/api.md).
+      FeatureManagement__LetterJacket: ${KNOWBALL_LETTER_JACKET:-true}
+      FeatureManagement__ScoutingReport: ${KNOWBALL_SCOUTING_REPORT:-true}
+      FeatureManagement__CareerPath: ${KNOWBALL_CAREER_PATH:-true}
+      FeatureManagement__BackOfTheCard: ${KNOWBALL_BACK_OF_THE_CARD:-true}
+      FeatureManagement__TeamPhoto: ${KNOWBALL_TEAM_PHOTO:-true}
+      FeatureManagement__NumbersDontLie: ${KNOWBALL_NUMBERS_DONT_LIE:-true}
     ports:
       - "127.0.0.1:8090:8080"
     # .NET sizes its heap to the container's limit. Locally the site used about 100 MB uncapped and about

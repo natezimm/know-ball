@@ -45,6 +45,14 @@ public sealed class GamePauseTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task A_paused_game_stays_paused_whatever_the_case_of_its_address()
+    {
+        var client = Client("CareerPath");
+
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, (await client.GetAsync("/api/Career-Path/daily")).StatusCode);
+    }
+
+    [Fact]
     public async Task Guesses_and_practice_are_paused_with_the_game()
     {
         var client = Client("TeamPhoto");

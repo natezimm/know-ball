@@ -70,8 +70,8 @@ load fixtures and make gameplay writes.
   `EnsureCreated` with a schema version number in `DatabaseInitializer`; bump it when the model changes, and add
   a Postgres migration in the same change. Never edit an existing migration.
 - **Each game can be paused** by its flag in the `FeatureManagement` section (`Api/Endpoints/GamePauses.cs`): its
-  endpoints answer 503 and the home page shows it taking a break. A new game gets a flag there, on in
-  `appsettings.json`, because an undeclared flag reads as off.
+  endpoints answer 503 and the home page shows it taking a break. A flag that is not set leaves its game on. A
+  new game gets a flag there and a line in `deploy/docker-compose.yml`.
 - **Configuration** is read through options or inside DI factories. Rate limits are in
   `Api/Endpoints/RateLimits.cs`; [docs/api.md](docs/api.md) and [docs/importer.md](docs/importer.md) list the
   settings, so update them when a setting or endpoint changes.
