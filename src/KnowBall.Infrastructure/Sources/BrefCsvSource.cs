@@ -34,11 +34,12 @@ public sealed partial class BrefCsvSource(HttpClient http, IOptions<BrefOptions>
     private const string AwardsFile = "Player Award Shares.csv";
     private const string DraftFile = "Draft Pick History.csv";
     private const string TeamsFile = "Team Abbrev.csv";
+    private const string TeamSummariesFile = "Team Summaries.csv";
 
     public async Task<HistorySnapshot> FetchAsync(CancellationToken cancellationToken)
     {
         var files = new Dictionary<string, List<CsvRow>>();
-        foreach (var name in new[] { CareerFile, PerGameFile, AllStarFile, SeasonTeamsFile, AwardsFile, DraftFile, TeamsFile })
+        foreach (var name in new[] { CareerFile, PerGameFile, AllStarFile, SeasonTeamsFile, AwardsFile, DraftFile, TeamsFile, TeamSummariesFile })
         {
             await using var stream = await OpenAsync(name, cancellationToken);
             files[name] = await CsvReader.ReadAsync(stream, cancellationToken);
@@ -47,7 +48,7 @@ public sealed partial class BrefCsvSource(HttpClient http, IOptions<BrefOptions>
 
         var snapshot = Build(
             files[CareerFile], files[PerGameFile], files[AllStarFile], files[SeasonTeamsFile],
-            files[AwardsFile], files[DraftFile], files[TeamsFile]);
+            files[AwardsFile], files[DraftFile], files[TeamsFile], files[TeamSummariesFile]);
 
         logger.LogInformation("bref has {Players} players and {Teams} teams through {Season}",
             snapshot.Players.Count, snapshot.Teams.Count, SeasonCalendar.Label(snapshot.LatestSeason));
@@ -67,7 +68,7 @@ public sealed partial class BrefCsvSource(HttpClient http, IOptions<BrefOptions>
 
     internal static HistorySnapshot Build(
         List<CsvRow> career, List<CsvRow> perGame, List<CsvRow> allStars, List<CsvRow> seasonTeams,
-        List<CsvRow> awardShares, List<CsvRow> draft, List<CsvRow> teamCodes)
+        List<CsvRow> awardShares, List<CsvRow> draft, List<CsvRow> teamCodes, List<CsvRow>? teamSummaries = null)
     {
         var map = TeamHistory.Value;
 
@@ -124,7 +125,23 @@ public sealed partial class BrefCsvSource(HttpClient http, IOptions<BrefOptions>
                 Awards: awards.TryGetValue(id, out var won) ? won.OrderBy(a => a.Season).ThenBy(a => a.Type, StringComparer.Ordinal).ToList() : []));
         }
 
-        return new HistorySnapshot("nba", SourceName, latestSeason, teams, players);
+        var known = teams.Select(t => t.Key).ToHashSet();
+        var records = BuildTeamSeasons(teamSummaries ?? [], map).Where(r => known.Contains(r.TeamKey)).ToList();
+        return new HistorySnapshot("nba", SourceName, latestSeason, teams, players, TeamSeasons: records);
+    }
+
+    /// <summary>Each team's won-lost record by season. The league-average rows have no code and are skipped.</summary>
+    private static IEnumerable<HistoryTeamSeason> BuildTeamSeasons(List<CsvRow> rows, TeamHistoryMap map)
+    {
+        var seen = new HashSet<(string, int)>();
+        foreach (var r in rows)
+        {
+            if (r.Str("abbreviation") is not { } code || r.Int("season") is not { } endYear) continue;
+            if (r.Int("w") is not { } wins || r.Int("l") is not { } losses) continue;
+            var key = map.Identity(code);
+            if (!seen.Add((key, endYear - 1))) continue;
+            yield return new HistoryTeamSeason(key, endYear - 1, wins, losses, r.Flag("playoffs"));
+        }
     }
 
     private static List<HistoryTeam> BuildTeams(List<CsvRow> teamCodes, TeamHistoryMap map, int latestSeason)
@@ -193,12 +210,14 @@ public sealed partial class BrefCsvSource(HttpClient http, IOptions<BrefOptions>
 
     private static string ExtraStats(CsvRow r)
     {
-        var extras = new SortedDictionary<string, double>(StringComparer.Ordinal);
+        var extras = new SortedDictionary<string, object>(StringComparer.Ordinal);
         void Add(string key, string column)
         {
             if (r.Dbl(column) is { } value) extras[key] = value;
         }
 
+        // The position listed for that season ("PF"), which can differ from the career one.
+        if (r.Str("pos") is { } position) extras["pos"] = position;
         Add("gs", "gs");
         Add("stl", "stl_per_game");
         Add("blk", "blk_per_game");

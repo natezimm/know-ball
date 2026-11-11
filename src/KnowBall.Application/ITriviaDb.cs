@@ -12,6 +12,7 @@ public interface ITriviaDb
     DbSet<PlayerTeamStint> PlayerTeamStints { get; }
     DbSet<PlayerSeasonStat> PlayerSeasonStats { get; }
     DbSet<Award> Awards { get; }
+    DbSet<TeamSeason> TeamSeasons { get; }
     DbSet<PlayerExternalId> PlayerExternalIds { get; }
     DbSet<Puzzle> Puzzles { get; }
     DbSet<UserResult> UserResults { get; }

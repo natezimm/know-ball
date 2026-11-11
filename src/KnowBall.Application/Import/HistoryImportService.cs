@@ -80,6 +80,7 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
             if (team.Franchise is null) team.FranchiseId = null;
         }
         run.TeamsUpserted = snapshot.Teams.Count;
+        if (snapshot.TeamSeasons is { Count: > 0 } records) await SyncTeamSeasonsAsync(league, records, teams, ct);
 
         // ---- Players -----------------------------------------------------------------------
         List<Player> existing = [];
@@ -158,6 +159,29 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
                 db.Detach(batch);
                 batch.Clear();
             }
+        }
+    }
+
+    /// <summary>Adds or corrects each team's record; a season the source no longer lists is left alone.</summary>
+    private async Task SyncTeamSeasonsAsync(League league, IReadOnlyList<HistoryTeamSeason> records, Dictionary<string, Team> teams, CancellationToken ct)
+    {
+        var existing = league.Id == 0
+            ? []
+            : await db.TeamSeasons.Where(t => t.Team!.LeagueId == league.Id).ToListAsync(ct);
+        var byKey = existing.ToDictionary(t => (t.TeamId, t.Season));
+
+        foreach (var r in records)
+        {
+            if (!teams.TryGetValue(r.TeamKey, out var team)) continue;
+            if (team.Id == 0 || !byKey.TryGetValue((team.Id, r.Season), out var row))
+            {
+                row = new TeamSeason { Team = team, Season = r.Season };
+                db.TeamSeasons.Add(row);
+                if (team.Id != 0) byKey[(team.Id, r.Season)] = row;
+            }
+            if (row.Wins != r.Wins) row.Wins = r.Wins;
+            if (row.Losses != r.Losses) row.Losses = r.Losses;
+            if (row.MadePlayoffs != r.MadePlayoffs) row.MadePlayoffs = r.MadePlayoffs;
         }
     }
 

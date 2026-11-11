@@ -14,6 +14,8 @@ public interface IHistorySource
 /// <param name="IdSource">Namespace of the player ids, e.g. "bref".</param>
 /// <param name="LatestSeason">Start year of the newest season in the data.</param>
 /// <param name="KeepSeasonLines">
+/// <param name="TeamSeasons">Each team's record by season, when the source has it.</param>
+/// <param name="KeepSeasonLines">
 /// False for a record that only says which team a player was on each season: the lines still build the
 /// stops of a career, but no stat rows or awards are stored or even loaded. A player can also opt out on his own.
 /// </param>
@@ -23,7 +25,11 @@ public sealed record HistorySnapshot(
     int LatestSeason,
     IReadOnlyList<HistoryTeam> Teams,
     IReadOnlyList<HistoryPlayer> Players,
-    bool KeepSeasonLines = true);
+    bool KeepSeasonLines = true,
+    IReadOnlyList<HistoryTeamSeason>? TeamSeasons = null);
+
+/// <summary>A team's regular-season record. <paramref name="TeamKey"/> is what season rows call the team.</summary>
+public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs);
 
 /// <param name="Key">What season rows call the team.</param>
 /// <param name="ActiveTo">Last season under this name; null while it still plays.</param>

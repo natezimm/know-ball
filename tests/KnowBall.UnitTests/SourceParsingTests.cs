@@ -84,6 +84,19 @@ public class BrefCsvSourceTests
         Assert.Equal("GSW", season.TeamKey);
         Assert.Equal(30.1, season.PointsPerGame);
         Assert.Contains("\"tp\":0.454", season.StatsJson);
+        Assert.Contains("\"pos\":\"PG\"", season.StatsJson);
+    }
+
+    [Fact]
+    public void Team_records_are_read_by_season_and_filed_under_the_teams_identity()
+    {
+        var records = Snapshot.Value.TeamSeasons!.ToDictionary(r => (r.TeamKey, r.Season));
+
+        Assert.Equal(new HistoryTeamSeason("GSW", 2015, 73, 9, true), records[("GSW", 2015)]);
+        Assert.Equal(new HistoryTeamSeason("CHI", 1995, 72, 10, true), records[("CHI", 1995)]);
+        // The 1998-99 Hornets (CHH) are today's Hornets; the 2004-05 Bobcats are their own identity.
+        Assert.Equal((26, 24), (records[("CHO", 1998)].Wins, records[("CHO", 1998)].Losses));
+        Assert.Equal((18, 64, false), (records[("CHA", 2004)].Wins, records[("CHA", 2004)].Losses, records[("CHA", 2004)].MadePlayoffs));
     }
 
     [Fact]

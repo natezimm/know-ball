@@ -15,6 +15,7 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
     public DbSet<PlayerTeamStint> PlayerTeamStints => Set<PlayerTeamStint>();
     public DbSet<PlayerSeasonStat> PlayerSeasonStats => Set<PlayerSeasonStat>();
     public DbSet<Award> Awards => Set<Award>();
+    public DbSet<TeamSeason> TeamSeasons => Set<TeamSeason>();
     public DbSet<PlayerExternalId> PlayerExternalIds => Set<PlayerExternalId>();
     public DbSet<Puzzle> Puzzles => Set<Puzzle>();
     public DbSet<UserResult> UserResults => Set<UserResult>();
@@ -130,6 +131,12 @@ public class TriviaDbContext(DbContextOptions<TriviaDbContext> options) : DbCont
             e.HasOne(x => x.Player).WithMany(p => p.SeasonStats).HasForeignKey(x => x.PlayerId).OnDelete(DeleteBehavior.Cascade);
             e.HasOne(x => x.Team).WithMany().HasForeignKey(x => x.TeamId).OnDelete(DeleteBehavior.SetNull);
             e.Property(x => x.StatsJson).HasColumnType(Database.IsNpgsql() ? "jsonb" : null);
+        });
+
+        b.Entity<TeamSeason>(e =>
+        {
+            e.HasIndex(x => new { x.TeamId, x.Season }).IsUnique();
+            e.HasOne(x => x.Team).WithMany().HasForeignKey(x => x.TeamId).OnDelete(DeleteBehavior.Cascade);
         });
 
         b.Entity<Award>(e =>
