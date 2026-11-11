@@ -14,6 +14,7 @@ Run from the repository root unless a line says otherwise. `global.json` selects
 
 | Task | Command |
 | --- | --- |
+| Storage safety tests | `python3 -m unittest discover -s tests -p 'test_*.py' -v` |
 | Build everything | `dotnet build KnowBall.sln` |
 | Unit tests | `dotnet test tests/KnowBall.UnitTests` |
 | Integration tests on SQLite | `dotnet test tests/KnowBall.IntegrationTests` |
