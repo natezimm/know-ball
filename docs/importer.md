@@ -90,6 +90,7 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | `Import:DailyAt` / `Import:TimeZone` | `04:00` / `America/New_York` | Nightly run time, safe across daylight saving changes |
 | `Import:RunOnStartup` | `true` | Also run when the worker starts |
 | `Import:MaxAttempts` / `Import:RetryDelaySeconds` | `3` / `60` | Retries before giving up for the night |
+| `Sources:Retry:Retries` / `BaseDelaySeconds` / `MaxDelaySeconds` | `2` / `2` / `30` | Retries of one failed request (5xx, 408, 429, a dropped connection or a timed-out attempt) before the import attempt fails; waits double with jitter and honour `Retry-After` up to the maximum. Each attempt gets the source's own `TimeoutSeconds`, and the whole call, reading the body included, is held to the attempts and waits together |
 | `Import:HistoryRefreshDays` | `30` | 0 = only with `--history` |
 | `Import:PuzzleDaysAhead` | `30` | Days of daily puzzles kept queued per generated game |
 | `Import:PracticeRetentionDays` | `7` | Practice rounds older than this are deleted |
