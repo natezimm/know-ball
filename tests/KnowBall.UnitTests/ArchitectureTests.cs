@@ -19,30 +19,34 @@ public class ArchitectureTests
     private static readonly System.Reflection.Assembly Application = typeof(ITriviaDb).Assembly;
     private static readonly System.Reflection.Assembly Infrastructure = typeof(TriviaDbContext).Assembly;
 
+    /// <summary>Our own types only: coverage instrumentation adds a tracker type that uses System.IO.</summary>
+    private static PredicateList Ours(System.Reflection.Assembly assembly) =>
+        Types.InAssembly(assembly).That().ResideInNamespaceStartingWith("KnowBall");
+
     private static void Holds(TestResult result, string rule) =>
         Assert.True(result.IsSuccessful, $"{rule}: {string.Join(", ", result.FailingTypeNames ?? [])}");
 
     [Fact]
     public void The_domain_depends_on_nothing_but_the_framework() =>
-        Holds(Types.InAssembly(Domain).ShouldNot().HaveDependencyOnAny(
+        Holds(Ours(Domain).ShouldNot().HaveDependencyOnAny(
             "KnowBall.Application", "KnowBall.Infrastructure", "Microsoft.EntityFrameworkCore", "Microsoft.AspNetCore",
             "Microsoft.Extensions").GetResult(), "Domain types reach outside the domain");
 
     [Fact]
     public void Game_rules_reach_the_database_only_through_ITriviaDb() =>
-        Holds(Types.InAssembly(Application).ShouldNot().HaveDependencyOnAny(
+        Holds(Ours(Application).ShouldNot().HaveDependencyOnAny(
             "KnowBall.Infrastructure", "Npgsql", "Microsoft.EntityFrameworkCore.Sqlite", "Microsoft.Data.Sqlite").GetResult(),
             "Application types use a database provider or Infrastructure");
 
     [Fact]
     public void Application_has_no_web_or_outside_calls() =>
-        Holds(Types.InAssembly(Application).ShouldNot().HaveDependencyOnAny(
+        Holds(Ours(Application).ShouldNot().HaveDependencyOnAny(
             "Microsoft.AspNetCore", "System.Net.Http").GetResult(),
             "Application types use ASP.NET Core or HttpClient; data source clients belong in Infrastructure");
 
     [Fact]
     public void Infrastructure_knows_nothing_of_the_hosts() =>
-        Holds(Types.InAssembly(Infrastructure).ShouldNot().HaveDependencyOnAny(
+        Holds(Ours(Infrastructure).ShouldNot().HaveDependencyOnAny(
             "KnowBall.Api", "KnowBall.Importer", "Microsoft.AspNetCore").GetResult(),
             "Infrastructure types use the API, the importer or ASP.NET Core");
 
