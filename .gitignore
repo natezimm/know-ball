@@ -19,3 +19,9 @@ media/
 
 # Local Understand Anything analysis
 .ua/
+
+# Private PostgreSQL major-upgrade backups and lock
+.postgres-upgrade-backups/
+.postgres-upgrade.lock
+.env.postgres-upgrade
+__pycache__/

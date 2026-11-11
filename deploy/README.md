@@ -1,5 +1,8 @@
 # Deploying Know Ball
 
+Existing PostgreSQL 17 instances must complete the [PostgreSQL 18 migration](postgres-upgrade.md)
+before the next deployment. New installations start directly on PostgreSQL 18.
+
 Know Ball runs on a GCP VM (us-east1) at **https://knowball.nathanzimmerman.com**, next to the
 other apps on that machine. The host's nginx owns ports 80 and 443 and forwards this domain to the site on
 `127.0.0.1:8090`. Postgres and the importer run beside it in Docker and are not reachable from outside.

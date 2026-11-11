@@ -10,7 +10,7 @@ set -euo pipefail
 
 WEB="$(cd "$(dirname "$0")/.." && pwd)"
 ROOT="$(cd "$WEB/../.." && pwd)"
-TFM="${TriviaTfm:-net10.0}"
+TFM="${TriviaTfm:-net11.0}"
 SITE="$WEB/dist/know-ball/browser"
 WORK="$ROOT/artifacts/e2e"
 

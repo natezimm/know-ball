@@ -1,7 +1,7 @@
 # One image for the whole site: the API serves the built Angular app from wwwroot, and the same
 # image runs the nightly importer when started with a different command (see docker-compose.yml).
 
-FROM node:24-alpine AS web
+FROM node:26-alpine AS web
 WORKDIR /web
 COPY web/know-ball/package.json web/know-ball/package-lock.json ./
 RUN npm ci --no-audit --no-fund
@@ -9,16 +9,18 @@ COPY web/know-ball/ ./
 COPY docs/prototypes/numbers-dont-lie/ /docs/prototypes/numbers-dont-lie/
 RUN npm run build
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:11.0 AS build
+ARG TARGETARCH
 WORKDIR /src
-COPY Directory.Build.props Directory.Packages.props ./
+COPY global.json Directory.Build.props Directory.Packages.props ./
 COPY src/ src/
 # ReadyToRun compiles ahead of time, so a new container answers its first requests sooner: locally
 # it cut startup from 1.8 to 1.1 seconds and the first API call from 0.76 to 0.42 seconds.
-RUN dotnet publish src/KnowBall.Api -c Release -r linux-x64 --self-contained false -p:PublishReadyToRun=true -o /out/api \
- && dotnet publish src/KnowBall.Importer -c Release -r linux-x64 --self-contained false -p:PublishReadyToRun=true -o /out/importer
+# Its native output must match Docker's target architecture on both ARM64 and x64.
+RUN dotnet publish src/KnowBall.Api -c Release -a "$TARGETARCH" --self-contained false -p:PublishReadyToRun=true -o /out/api \
+ && dotnet publish src/KnowBall.Importer -c Release -a "$TARGETARCH" --self-contained false -p:PublishReadyToRun=true -o /out/importer
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:11.0
 COPY --from=build /out/api /app/api
 COPY --from=build /out/importer /app/importer
 COPY --from=web /web/dist/know-ball/browser /app/api/wwwroot

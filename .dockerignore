@@ -19,3 +19,8 @@ docs/**
 tests
 *.db
 *.tar.gz
+.env
+.env.*
+.postgres-upgrade-backups
+.postgres-upgrade.lock
+**/__pycache__

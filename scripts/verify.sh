@@ -52,15 +52,11 @@ if ! command -v dotnet >/dev/null 2>&1; then
   result FAIL "dotnet SDK not found (install from https://dot.net)"
   exit 1
 fi
-SDK_VERSION="$(dotnet --version)"
-SDK_MAJOR="${SDK_VERSION%%.*}"
-TFM_MAJOR="$SDK_MAJOR"
-[ "$TFM_MAJOR" -gt 10 ] && TFM_MAJOR=10
-if [ "$TFM_MAJOR" -lt 8 ]; then
-  result FAIL ".NET SDK $SDK_VERSION is too old; need 8 or newer"
+if ! SDK_VERSION="$(dotnet --version)"; then
+  result FAIL ".NET SDK from global.json is not available"
   exit 1
 fi
-export TriviaTfm="net${TFM_MAJOR}.0"
+export TriviaTfm="${TriviaTfm:-net11.0}"
 result INFO ".NET SDK $SDK_VERSION → target $TriviaTfm"
 command -v node >/dev/null 2>&1 && result INFO "node $(node -v), npm $(npm -v)" || result INFO "node not found"
 
