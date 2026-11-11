@@ -41,7 +41,11 @@ jobs:
       - name: Build
         run: dotnet build KnowBall.sln -c Release
       - name: Unit tests
-        run: dotnet test tests/KnowBall.UnitTests -c Release --no-build
+        run: dotnet test tests/KnowBall.UnitTests -c Release --no-build --collect "XPlat Code Coverage" --results-directory artifacts/coverage
+      # Game rules and the domain are where a quiet drop in tested code matters; floors sit a few points
+      # under today's coverage so they catch a drop, not ordinary churn. Raise them as coverage grows.
+      - name: Coverage floors
+        run: python3 scripts/coverage-floor.py artifacts/coverage/*/coverage.cobertura.xml KnowBall.Application=0.92 KnowBall.Domain=0.88
       - name: Integration tests (SQLite)
         run: dotnet test tests/KnowBall.IntegrationTests -c Release --no-build
       - name: Integration tests (Postgres)

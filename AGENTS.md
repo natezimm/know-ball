@@ -29,6 +29,8 @@ Run from the repository root unless a line says otherwise. `global.json` selects
 | Web dev server on port 4200, in `web/know-ball` | `npm start` (proxies `/api` to 5080) |
 | Whole site in Docker on port 8080 | `docker compose --profile site up -d --build` |
 | Everything CI runs, plus Docker | `./scripts/verify.sh` |
+| Coverage floors, after unit tests with `--collect "XPlat Code Coverage" --results-directory artifacts/coverage` | `python3 scripts/coverage-floor.py artifacts/coverage/*/coverage.cobertura.xml KnowBall.Application=0.92 KnowBall.Domain=0.88` |
+| Mutation testing of `KnowBall.Application`, in `tests/KnowBall.UnitTests` | `dotnet tool install dotnet-stryker --version 5.1.0 --tool-path ../../.tools`, then `../../.tools/dotnet-stryker` (add `--mutate "**/LetterJacket/*.cs"` for one area) |
 | New Postgres migration | `dotnet tool install dotnet-ef --version 11.0.0-rc.3.26522.148 --allow-roll-forward --tool-path .tools`, then `.tools/dotnet-ef migrations add <Name> --project src/KnowBall.Infrastructure --startup-project src/KnowBall.Infrastructure --output-dir Persistence/Migrations` |
 
 Without Docker, point the API and importer at SQLite:
@@ -89,6 +91,12 @@ rather than raw values or unstyled controls.
 - Backend behaviour gets a unit test in `tests/KnowBall.UnitTests` (SQLite in memory, fixtures in
   `tests/fixtures`) and, for anything visible over HTTP, an integration test that runs on both SQLite and
   Postgres.
+- `ArchitectureTests` holds the layer rules above that project references cannot: Domain and Application take no
+  database provider, ASP.NET Core or HttpClient, Infrastructure knows nothing of the hosts, every `IGame` is
+  registered, and Domain and Application never read `DateTime.Now`/`UtcNow` or make an unseeded `Random`.
+- CI fails when unit-test line coverage of `KnowBall.Application` or `KnowBall.Domain` falls under its floor
+  (`scripts/coverage-floor.py`, with the table in the job summary). `mutation.yml` runs Stryker.NET over
+  `KnowBall.Application` every Sunday and on demand; it reports a score and surviving mutants and never fails a build.
 - The browser tests in `web/know-ball/e2e` start their own site (`e2e/serve.sh`) on port 5180 with a fresh SQLite
   database loaded offline, and win and lose each game. Requests that leave the site are blocked, so headshots
   and logos show their fallbacks there.

@@ -9,8 +9,13 @@
     <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+    <PackageReference Include="NetArchTest.Rules" />
+    <PackageReference Include="Mono.Cecil" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Named directly, though Infrastructure brings them, so Stryker.NET can find them to mutate. -->
+    <ProjectReference Include="..\..\src\KnowBall.Domain\KnowBall.Domain.csproj" />
+    <ProjectReference Include="..\..\src\KnowBall.Application\KnowBall.Application.csproj" />
     <ProjectReference Include="..\..\src\KnowBall.Infrastructure\KnowBall.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\KnowBall.Importer\KnowBall.Importer.csproj" />
   </ItemGroup>
