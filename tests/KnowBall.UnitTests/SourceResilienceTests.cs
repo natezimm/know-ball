@@ -42,6 +42,8 @@ public class SourceResilienceTests
             ["Database:Provider"] = "Sqlite",
             ["ConnectionStrings:Trivia"] = "Data Source=:memory:",
             ["Sources:Retry:BaseDelaySeconds"] = "0",
+            // Keeps the whole call's budget, and so the stalled-body test, to a few seconds.
+            ["Sources:Retry:MaxDelaySeconds"] = "1",
             ["Sources:Espn:TimeoutSeconds"] = timeoutSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture),
         }).Build();
         var services = new ServiceCollection().AddLogging();
@@ -94,6 +96,45 @@ public class SourceResilienceTests
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal(1, server.Calls);
+    }
+
+    [Fact]
+    public void A_long_retry_after_is_held_to_the_longest_wait()
+    {
+        var asked = new HttpResponseMessage(HttpStatusCode.TooManyRequests);
+        asked.Headers.RetryAfter = new System.Net.Http.Headers.RetryConditionHeaderValue(TimeSpan.FromMinutes(5));
+
+        Assert.Equal(TimeSpan.FromSeconds(30), SourceResilience.RetryAfter(asked, TimeSpan.FromSeconds(30), DateTimeOffset.UnixEpoch));
+        Assert.Null(SourceResilience.RetryAfter(new HttpResponseMessage(HttpStatusCode.BadGateway), TimeSpan.FromSeconds(30), DateTimeOffset.UnixEpoch));
+    }
+
+    [Fact]
+    public async Task A_body_that_stalls_is_given_up_on()
+    {
+        var server = new Scripted(() => new HttpResponseMessage(HttpStatusCode.OK) { Content = new StreamContent(new StallingStream()) });
+
+        // Headers arrive at once; HttpClient then reads the body outside the handler, under its own timeout.
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => Espn(server, timeoutSeconds: 1).GetAsync("https://example.test/teams"));
+    }
+
+    private sealed class StallingStream : Stream
+    {
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => 0; set => throw new NotSupportedException(); }
+        public override void Flush() { }
+        public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken ct = default)
+        {
+            await Task.Delay(Timeout.Infinite, ct);
+            return 0;
+        }
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken ct) => ReadAsync(buffer.AsMemory(offset, count), ct).AsTask();
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
 
     [Fact]

@@ -23,23 +23,23 @@ public static class SourceResilience
     /// <summary>
     /// Retries a source's transient failures one request at a time, so a blip on one page of a roster
     /// does not cost the whole import attempt that <c>Import:MaxAttempts</c> would otherwise repeat.
-    /// Each attempt gets the source's own <c>TimeoutSeconds</c>; <see cref="HttpClient.Timeout"/> is
-    /// turned off because it would otherwise cover every attempt together and cut the retries short.
+    /// Each attempt gets the source's own <c>TimeoutSeconds</c>. <see cref="HttpClient.Timeout"/> bounds
+    /// the whole call, every attempt and wait and the reading of the body, which HttpClient does after
+    /// this handler returns, so a server that stalls part way through a body cannot hold the import.
     /// There is no circuit breaker: a run makes a few dozen calls a night, and the job-level retries
     /// already space out a longer outage.
     /// </summary>
     public static IHttpClientBuilder AddSourceResilience(this IHttpClientBuilder builder, Func<IServiceProvider, int> timeoutSeconds)
     {
-        builder.ConfigureHttpClient(http => http.Timeout = Timeout.InfiniteTimeSpan);
+        builder.ConfigureHttpClient((services, http) =>
+        {
+            var (attempt, retries, maxDelay) = Budget(services, timeoutSeconds);
+            http.Timeout = attempt * (retries + 1) + maxDelay * retries;
+        });
         builder.AddResilienceHandler("source", (pipeline, context) =>
         {
+            var (attempt, retries, maxDelay) = Budget(context.ServiceProvider, timeoutSeconds);
             var retry = context.ServiceProvider.GetRequiredService<IOptions<SourceRetryOptions>>().Value;
-            var attempt = TimeSpan.FromSeconds(Math.Max(1, timeoutSeconds(context.ServiceProvider)));
-            var retries = Math.Max(0, retry.Retries);
-            var maxDelay = TimeSpan.FromSeconds(Math.Max(0, retry.MaxDelaySeconds));
-
-            // Outermost: a bound on the whole call, every attempt and wait together.
-            pipeline.AddTimeout(attempt * (retries + 1) + maxDelay * retries);
             if (retries > 0)
             {
                 pipeline.AddRetry(new HttpRetryStrategyOptions
@@ -49,11 +49,36 @@ public static class SourceResilience
                     UseJitter = true,
                     Delay = TimeSpan.FromSeconds(Math.Max(0, retry.BaseDelaySeconds)),
                     MaxDelay = maxDelay,
-                    ShouldRetryAfterHeader = true,
+                    // Polly's own Retry-After handling is not held to MaxDelay, so read the header here.
+                    ShouldRetryAfterHeader = false,
+                    DelayGenerator = args => ValueTask.FromResult(RetryAfter(args.Outcome.Result, maxDelay, DateTimeOffset.UtcNow)),
                 });
             }
             pipeline.AddTimeout(attempt);
         });
         return builder;
+    }
+
+    /// <summary>
+    /// The wait a response's Retry-After asks for, held to <paramref name="maxDelay"/>; null when it
+    /// asks for none, so the exponential backoff decides.
+    /// </summary>
+    internal static TimeSpan? RetryAfter(HttpResponseMessage? response, TimeSpan maxDelay, DateTimeOffset now)
+    {
+        var header = response?.Headers.RetryAfter;
+        var wait = header?.Delta ?? (header?.Date is { } date ? date - now : null);
+        if (wait is not { } asked)
+        {
+            return null;
+        }
+        return asked < TimeSpan.Zero ? TimeSpan.Zero : asked > maxDelay ? maxDelay : asked;
+    }
+
+    private static (TimeSpan Attempt, int Retries, TimeSpan MaxDelay) Budget(IServiceProvider services, Func<IServiceProvider, int> timeoutSeconds)
+    {
+        var retry = services.GetRequiredService<IOptions<SourceRetryOptions>>().Value;
+        return (TimeSpan.FromSeconds(Math.Max(1, timeoutSeconds(services))),
+            Math.Max(0, retry.Retries),
+            TimeSpan.FromSeconds(Math.Max(0, retry.MaxDelaySeconds)));
     }
 }
