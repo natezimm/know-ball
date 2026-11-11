@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -53,13 +54,20 @@ public class ArchitectureTests
     [Fact]
     public void Every_daily_game_is_registered()
     {
-        var written = Application.GetTypes().Where(t => t is { IsClass: true, IsAbstract: false } && typeof(IGame).IsAssignableFrom(t));
-        var services = new ServiceCollection().AddApplication();
-        var registered = services.Where(d => d.ServiceType.IsAssignableTo(typeof(IGame)) || d.ImplementationType?.IsAssignableTo(typeof(IGame)) == true)
-            .Select(d => d.ImplementationType ?? d.ServiceType).ToHashSet();
+        var written = Application.GetTypes().Where(t => t is { IsClass: true, IsAbstract: false } && typeof(IGame).IsAssignableFrom(t)).ToHashSet();
+        // What each IGame registration hands GameRegistry: its type, or what its factory asks the container for.
+        var resolved = new ServiceCollection().AddApplication()
+            .Where(d => d.ServiceType == typeof(IGame))
+            .Select(d => d.ImplementationType ?? d.ImplementationInstance?.GetType() ?? d.ImplementationFactory!(new Uninitialized()).GetType())
+            .ToList();
 
-        Assert.All(written, game => Assert.Contains(game, registered));
-        Assert.Equal(written.Count(), services.Count(d => d.ServiceType == typeof(IGame)));
+        Assert.Equal(written.OrderBy(t => t.Name), resolved.OrderBy(t => t.Name));
+    }
+
+    /// <summary>Answers every request with a blank instance, so a factory shows which type it returns without its dependencies.</summary>
+    private sealed class Uninitialized : IServiceProvider
+    {
+        public object GetService(Type serviceType) => RuntimeHelpers.GetUninitializedObject(serviceType);
     }
 
     /// <summary>
