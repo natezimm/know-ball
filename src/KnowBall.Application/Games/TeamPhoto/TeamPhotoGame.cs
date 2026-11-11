@@ -62,6 +62,8 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
     /// <summary>Misses allowed; right answers and bench players are free.</summary>
     public int MaxGuesses => 4;
     public bool LimitsMisses => true;
+    /// <summary>Repeats are by team-season, which only the secret records.</summary>
+    public bool ReadsRecentSecrets => true;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
 

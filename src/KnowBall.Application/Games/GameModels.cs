@@ -29,6 +29,12 @@ public interface IGame
 
     /// <summary>How many right guesses win the round: 1 for a guess-the-player game.</summary>
     int AnswersIn(Puzzle puzzle) => 1;
+
+    /// <summary>
+    /// True when the game avoids repeats by reading <see cref="GenerationContext.RecentSecrets"/>. Secrets can be
+    /// large (Scouting Report keeps a whole roster), so the scheduler loads them only for a game that asks.
+    /// </summary>
+    bool ReadsRecentSecrets => false;
     /// <summary>The leagues the game has an edition for, by code, the default first. Each has its own daily puzzle.</summary>
     IReadOnlyList<string> Leagues => [LeagueCodes.Nba];
 

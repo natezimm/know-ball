@@ -80,7 +80,7 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
             puzzle.Number = date.DayNumber - first.Value.DayNumber + 1;
             db.Puzzles.Add(puzzle);
             if (puzzle.AnswerPlayerId is { } answer) recent.Answers.Add(answer);
-            recent.Secrets.Add(puzzle.SecretJson);
+            recent.Secrets?.Add(puzzle.SecretJson);
             made++;
         }
 
@@ -136,22 +136,30 @@ public sealed class PuzzleScheduler(ITriviaDb db, PuzzleCalendar calendar, TimeP
             .Where(p => p.GameType == game.Type && p.LeagueId == leagueId && p.Status == PuzzleStatus.Scheduled && p.Date != null)
             .MinAsync(p => p.Date, ct);
 
-    /// <summary>Answers and secrets of this game's puzzles from <see cref="NoRepeatDays"/> before the date to <paramref name="spanDays"/> after it, oldest first.</summary>
+    /// <summary>
+    /// Answers of this game's puzzles from <see cref="NoRepeatDays"/> before the date to <paramref name="spanDays"/>
+    /// after it, and their secrets oldest first for a game that <see cref="IGame.ReadsRecentSecrets">reads them</see>.
+    /// </summary>
     private async Task<Recent> RecentAsync(IGame game, int leagueId, DateOnly date, CancellationToken ct, int spanDays = NoRepeatDays)
     {
         var from = date.AddDays(-NoRepeatDays);
         var to = date.AddDays(spanDays);
-        var rows = await db.Puzzles
+        var window = db.Puzzles
             .Where(p => p.GameType == game.Type && p.LeagueId == leagueId && p.Date >= from && p.Date <= to)
-            .OrderBy(p => p.Date)
-            .Select(p => new { p.AnswerPlayerId, p.SecretJson })
-            .ToListAsync(ct);
+            .OrderBy(p => p.Date);
+        if (!game.ReadsRecentSecrets)
+        {
+            var answers = await window.Where(p => p.AnswerPlayerId != null).Select(p => p.AnswerPlayerId!.Value).ToListAsync(ct);
+            return new Recent(answers.ToHashSet(), null);
+        }
+
+        var rows = await window.Select(p => new { p.AnswerPlayerId, p.SecretJson }).ToListAsync(ct);
         return new Recent(
             rows.Where(r => r.AnswerPlayerId != null).Select(r => r.AnswerPlayerId!.Value).ToHashSet(),
             rows.Select(r => r.SecretJson).ToList());
     }
 
-    private sealed record Recent(HashSet<int> Answers, List<string> Secrets);
+    private sealed record Recent(HashSet<int> Answers, List<string>? Secrets);
 
     private async Task<Puzzle?> GenerateAsync(IGame game, League league, DateOnly date, Recent recent, CancellationToken ct, bool practice = false)
     {
