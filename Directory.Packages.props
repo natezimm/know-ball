@@ -1,24 +1,26 @@
 <Project>
-  <!-- Central package versions. Each tracks the latest patch of the major that matches the target framework. -->
+  <!-- Framework packages track the target. The PostgreSQL provider requires the matching EF Core 11 release candidate. -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
     <FxMajor>$([System.Text.RegularExpressions.Regex]::Match('$(TriviaTfm)', '\d+').Value)</FxMajor>
-    <FxMajor Condition="'$(FxMajor)' == ''">10</FxMajor>
+    <FxMajor Condition="'$(FxMajor)' == ''">11</FxMajor>
     <FxFloat>$(FxMajor).0.*</FxFloat>
+    <EfCoreVersion>11.0.0-rc.3.26522.148</EfCoreVersion>
+    <PostgresProviderVersion>11.0.0-rc.3</PostgresProviderVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(FxFloat)" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(FxFloat)" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(FxFloat)" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(FxFloat)" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EfCoreVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(EfCoreVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EfCoreVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfCoreVersion)" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(PostgresProviderVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="$(FxFloat)" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(FxFloat)" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="$(FxFloat)" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="$(EfCoreVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(FxFloat)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(FxFloat)" />
-    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.*" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="11.*" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.*" />
     <PackageVersion Include="xunit" Version="2.*" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.*" />
