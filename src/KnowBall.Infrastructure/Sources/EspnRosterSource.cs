@@ -108,7 +108,10 @@ public sealed class EspnRosterSource(
                 return await response.Content.ReadFromJsonAsync<JsonDocument>(ct)
                        ?? throw new InvalidOperationException($"Empty response from {host}{path}");
             }
+            // A host that keeps timing out (TimeoutRejectedException from the client's resilience handler,
+            // after its retries) moves on to the next host, as any other failure does.
             catch (Exception ex) when (ex is HttpRequestException or JsonException or InvalidOperationException
+                                       or Polly.Timeout.TimeoutRejectedException
                                        || (ex is TaskCanceledException && !ct.IsCancellationRequested))
             {
                 last = ex;

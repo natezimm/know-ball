@@ -37,34 +37,31 @@ public static class DependencyInjection
         services.Configure<BrefOptions>(config.GetSection("Sources:Bref"));
         services.Configure<WikidataOptions>(config.GetSection("Sources:Wikidata"));
         services.Configure<NflverseOptions>(config.GetSection("Sources:Nflverse"));
+        services.Configure<SourceRetryOptions>(config.GetSection("Sources:Retry"));
         services.Configure<KnowBall.Application.Games.GameLeagueOptions>(config.GetSection("Games"));
 
         services.AddHttpClient<NbaStatsPlayerSource>((sp, http) =>
         {
             var opts = sp.GetRequiredService<IOptions<NbaStatsOptions>>().Value;
             http.BaseAddress = new Uri(opts.BaseUrl);
-            http.Timeout = TimeSpan.FromSeconds(opts.TimeoutSeconds);
             // stats.nba.com rejects requests that don't look like they come from nba.com.
             http.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36");
             http.DefaultRequestHeaders.Referrer = new Uri("https://www.nba.com/");
             http.DefaultRequestHeaders.Add("Origin", "https://www.nba.com");
             http.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-        });
+        }).AddSourceResilience(sp => sp.GetRequiredService<IOptions<NbaStatsOptions>>().Value.TimeoutSeconds);
 
-        services.AddHttpClient<EspnRosterSource>((sp, http) =>
-        {
-            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<EspnOptions>>().Value.TimeoutSeconds);
-            http.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-        });
-        services.AddHttpClient<BrefCsvSource>((sp, http) =>
-            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<BrefOptions>>().Value.TimeoutSeconds));
-        services.AddHttpClient<WikidataCrosswalkSource>((sp, http) =>
-            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<WikidataOptions>>().Value.TimeoutSeconds));
+        services.AddHttpClient<EspnRosterSource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<EspnOptions>>().Value.TimeoutSeconds);
+        services.AddHttpClient<BrefCsvSource>()
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<BrefOptions>>().Value.TimeoutSeconds);
+        services.AddHttpClient<WikidataCrosswalkSource>()
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<WikidataOptions>>().Value.TimeoutSeconds);
 
-        services.AddHttpClient<NflverseHistorySource>((sp, http) =>
-            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds));
-        services.AddHttpClient<NflverseRosterSource>((sp, http) =>
-            http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds));
+        services.AddHttpClient<NflverseHistorySource>()
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds);
+        services.AddHttpClient<NflverseRosterSource>()
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds);
 
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<EspnRosterSource>());
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NbaStatsPlayerSource>());
