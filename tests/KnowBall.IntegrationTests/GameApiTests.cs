@@ -211,13 +211,20 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
             daily.GetProperty("status").GetString(), daily.GetProperty("payload").GetProperty("slots").GetArrayLength()));
         foreach (var id in starters) AssertHidden(daily, await Db(db => db.Players.AsNoTracking().SingleAsync(p => p.Id == id)));
 
-        // A bench player is not a miss; someone who was not on the team is.
-        var benched = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = bench[0] }));
-        Assert.True(benched.GetProperty("guesses")[0].GetProperty("feedback").GetProperty("bench").GetBoolean());
+        // A bench player is not a miss; someone who was not on the team is. The daily is any Finals team the
+        // fixtures can build, and one of them (2021-22 Golden State) has no one beyond its five.
+        if (bench.Count > 0)
+        {
+            var benched = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = bench[0] }));
+            var free = benched.GetProperty("guesses")[0];
+            Assert.True(free.GetProperty("feedback").GetProperty("bench").GetBoolean());
+            Assert.False(free.GetProperty("miss").GetBoolean());
+        }
         var outsider = await Db(db => db.Players.AsNoTracking()
             .Where(p => p.League!.Code == "nba" && !starters.Contains(p.Id) && !bench.Contains(p.Id)).Select(p => p.Id).FirstAsync());
         var missed = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = outsider }));
-        Assert.False(missed.GetProperty("guesses")[1].GetProperty("correct").GetBoolean());
+        var last = missed.GetProperty("guesses");
+        Assert.False(last[last.GetArrayLength() - 1].GetProperty("correct").GetBoolean());
 
         JsonElement state = missed;
         foreach (var id in starters)
@@ -228,7 +235,7 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         var stats = await Json(await client.GetAsync("/api/me/stats"));
         var photo = stats.EnumerateArray().Single(s => s.GetProperty("game").GetString() == "team-photo");
         Assert.Equal([0, 1, 0, 0], photo.GetProperty("distribution").EnumerateArray().Select(d => d.GetInt32())); // one miss
-        // The home page hears misses, not guesses: seven guesses, one of them a miss.
+        // The home page hears misses, not guesses: six or seven guesses, one of them a miss.
         var today = await Json(await client.GetAsync("/api/me/today"));
         Assert.Equal(1, today.EnumerateArray().Single(t => t.GetProperty("game").GetString() == "team-photo").GetProperty("guesses").GetInt32());
     }
