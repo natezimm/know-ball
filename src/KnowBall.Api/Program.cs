@@ -5,6 +5,9 @@ using KnowBall.Api.Endpoints;
 using KnowBall.Application;
 using KnowBall.Infrastructure;
 using KnowBall.Infrastructure.Persistence;
+using KnowBall.Infrastructure.Telemetry;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,12 @@ builder.Services.AddOpenApi();
 #endif
 builder.Services.AddHealthChecks().AddDbContextCheck<TriviaDbContext>("database");
 builder.Services.AddApiRateLimits();
+
+// Traces, metrics and logs over OTLP, only when an endpoint is configured (docs/observability.md).
+// Health checks are left out of traces: the uptime checks would otherwise be most of them.
+builder.AddKnowBallTelemetry("know-ball",
+    tracing: t => t.AddAspNetCoreInstrumentation(o => o.Filter = context => !context.Request.Path.StartsWithSegments("/health")),
+    metrics: m => m.AddAspNetCoreInstrumentation());
 
 // Behind a reverse proxy, a visitor's address comes from X-Forwarded-For, but only on requests that
 // arrive from a trusted proxy: loopback, plus the networks in ForwardedHeaders:KnownNetworks

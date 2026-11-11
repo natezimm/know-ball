@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using KnowBall.Application;
 using KnowBall.Application.Games;
 using KnowBall.Application.Games.LetterJacket;
 using KnowBall.Application.Import;
+using KnowBall.Application.Telemetry;
 using KnowBall.Domain;
 using KnowBall.Infrastructure;
 using KnowBall.Infrastructure.Persistence;
@@ -53,6 +55,9 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
     {
         var opts = options.Value;
         var leagues = LeaguesOf(opts.Leagues);
+        // One trace per night: the downloads, database work and queue top-up all hang off this span.
+        using var activity = KnowBallTelemetry.Source.StartActivity("knowball.import");
+        activity?.SetTag("knowball.leagues", string.Join(",", leagues.Order()));
         var runs = new List<ImportRun>();
 
         if (leagues.Contains(Nba))
@@ -91,6 +96,20 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
             .ToHashSet();
 
     private async Task<ImportRun> RunWithRetriesAsync(string sourceName, ImportOptions opts, CancellationToken ct)
+    {
+        var started = clock.GetTimestamp();
+        using var activity = KnowBallTelemetry.Source.StartActivity("knowball.import.roster");
+        activity?.SetTag("knowball.source", sourceName);
+        var run = await RunAttemptsAsync(sourceName, opts, ct);
+
+        var tags = new TagList { { "knowball.league", run.LeagueCode }, { "knowball.source", sourceName }, { "knowball.status", run.Status.ToString() } };
+        KnowBallTelemetry.ImportRuns.Add(1, tags);
+        KnowBallTelemetry.ImportDuration.Record(clock.GetElapsedTime(started).TotalSeconds, tags);
+        if (run.Status != ImportStatus.Succeeded) activity?.SetStatus(ActivityStatusCode.Error, run.Error);
+        return run;
+    }
+
+    private async Task<ImportRun> RunAttemptsAsync(string sourceName, ImportOptions opts, CancellationToken ct)
     {
         ImportRun? run = null;
         for (var attempt = 1; attempt <= Math.Max(1, opts.MaxAttempts); attempt++)
