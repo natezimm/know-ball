@@ -5,6 +5,7 @@ export interface MockGame {
 
 export const MOCK_GAMES: MockGame[] = [
   { path: 'themes', name: 'Themes' },
+  { path: 'team-photo', name: 'Team Photo' },
   { path: 'stat-quiz', name: 'Stat Quiz' },
   { path: 'geo-sports', name: 'Geo Sports' },
   { path: 'sound-it-out', name: 'Sound It Out' },
