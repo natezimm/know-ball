@@ -21,7 +21,7 @@ describe('Home', () => {
   let stats: unknown[] = [];
   beforeEach(() => { stats = []; });
 
-  async function render(today: TodayEntry[] | 'down') {
+  async function render(today: TodayEntry[] | 'down', paused: string[] = []) {
     TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
     const fixture = TestBed.createComponent(Home);
     const http = TestBed.inject(HttpTestingController);
@@ -29,6 +29,7 @@ describe('Home', () => {
     if (today === 'down') request.flush('boom', { status: 500, statusText: 'Server Error' });
     else request.flush(today);
     http.expectOne('/api/me/stats').flush(stats);
+    http.expectOne('/api/games/paused').flush(paused);
     await fixture.whenStable();
     return fixture.nativeElement as HTMLElement;
   }
@@ -65,6 +66,14 @@ describe('Home', () => {
 
     expect(el.querySelector('h1')?.textContent).toContain('Six ways');
     expect(badges(el)).toEqual(['Play anytime', 'Play No. 12', 'Play No. 12', 'Play No. 12', 'Play No. 12', "Play today's quiz"]);
+  });
+
+  it('shows a paused game as taking a break, with no link', async () => {
+    const el = await render([entry({}), entry({ game: 'career-path' }), entry({ game: 'back-of-the-card' }), entry({ game: 'team-photo' })], ['career-path', 'letter-jacket']);
+
+    expect(badges(el)).toEqual(['Taking a break', 'Play No. 12', 'Taking a break', 'Play No. 12', 'Play No. 12', "Play today's quiz"]);
+    expect(el.querySelector('a[href="/career-path"]')).toBeNull();
+    expect(el.querySelector('h1')?.textContent).toContain('Four ways');
   });
 
   it('still links to every game when the API is down', async () => {

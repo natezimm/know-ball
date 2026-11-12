@@ -11,7 +11,7 @@ public static class LetterJacketEndpoints
 {
     public static IEndpointRouteBuilder MapLetterJacket(this IEndpointRouteBuilder api)
     {
-        var games = api.MapGroup("/letter-jacket/games");
+        var games = api.MapGroup("/letter-jacket/games").PausedWhenOff("letter-jacket");
 
         games.MapPost("/", async (StartGameRequest? request, LetterJacketGameService service, CancellationToken ct) =>
                 Results.Json(await service.CreateGameAsync(request?.WordLength, ct), statusCode: StatusCodes.Status201Created))

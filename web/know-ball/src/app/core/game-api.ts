@@ -113,6 +113,11 @@ export class GameApi {
   today(): Observable<TodayEntry[]> {
     return this.http.get<TodayEntry[]>('/api/me/today');
   }
+
+  /** The slugs of the games switched off for now; usually none. */
+  paused(): Observable<string[]> {
+    return this.http.get<string[]>('/api/games/paused');
+  }
 }
 
 /** NBA is the default edition, so its addresses carry no league. */

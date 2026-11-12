@@ -80,6 +80,7 @@ draws only questions marked daily-eligible. See
 | `GET /health` | Database health check; never rate limited |
 | `GET /api/import-runs/latest` | The last importer run, for monitoring |
 | `GET /api/stats/summary` | Counts of leagues, teams, players and headshots |
+| `GET /api/games/paused` | The slugs of games paused by their feature flags; usually `[]` |
 
 Traces, metrics and logs go out over OpenTelemetry when `OTEL_EXPORTER_OTLP_ENDPOINT` is set; see
 [observability.md](observability.md). `Telemetry:TraceSampleRatio` (default 0.25) is the share of requests
@@ -95,3 +96,19 @@ count by their /64. A visitor over a limit gets `429` with `Retry-After` in seco
 
 Behind nginx the address comes from `X-Forwarded-For`, trusted only from loopback and the networks in
 `ForwardedHeaders:KnownNetworks`, so a made-up header cannot dodge the limits.
+
+## Pausing a game
+
+Each game has a feature flag in the `FeatureManagement` section: `LetterJacket`, `ScoutingReport`, `CareerPath`,
+`BackOfTheCard`, `TeamPhoto` and `NumbersDontLie`. A flag that is not set leaves its game on. Set one to `false` to
+take that game off the site when its puzzles have gone wrong: its endpoints answer `503` with an `error` the game
+page shows, the home page shows its card as taking a break, and the other games, stats and today's progress carry
+on. `GET /api/games/paused` lists the paused slugs.
+
+On the server, `deploy/docker-compose.yml` passes each flag from `.env`: add `KNOWBALL_CAREER_PATH=false` (or
+`KNOWBALL_LETTER_JACKET`, `KNOWBALL_SCOUTING_REPORT`, `KNOWBALL_BACK_OF_THE_CARD`, `KNOWBALL_TEAM_PHOTO`,
+`KNOWBALL_NUMBERS_DONT_LIE`), then run `docker compose up -d site` in `~/know-ball` so the container takes the new
+value. Remove the line, or set it to `true`, and run the same command to bring the game back.
+
+Flags are plain on/off here. `Microsoft.FeatureManagement` could also switch one by a time window or a share of
+visitors, but nothing needs that yet.

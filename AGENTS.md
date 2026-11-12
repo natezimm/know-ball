@@ -71,6 +71,9 @@ load fixtures and make gameplay writes.
 - **Two databases, one model.** Postgres uses EF Core migrations applied when the API starts. SQLite uses
   `EnsureCreated` with a schema version number in `DatabaseInitializer`; bump it when the model changes, and add
   a Postgres migration in the same change. Never edit an existing migration.
+- **Each game can be paused** by its flag in the `FeatureManagement` section (`Api/Endpoints/GamePauses.cs`): its
+  endpoints answer 503 and the home page shows it taking a break. A flag that is not set leaves its game on. A
+  new game gets a flag there and a line in `deploy/docker-compose.yml`.
 - **Telemetry** is OpenTelemetry, on only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set (`Infrastructure/Telemetry`,
   [docs/observability.md](docs/observability.md)). Add Know Ball's own spans and metrics to `KnowBallTelemetry`
   in Application, and never tag them with the anonymous id, names or addresses.

@@ -21,17 +21,19 @@ public static partial class GameEndpoints
 
     public static IEndpointRouteBuilder MapGames(this IEndpointRouteBuilder api)
     {
-        api.MapGet($"/{Game}/daily", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
+        var games = api.MapGroup("").PausedWhenOff();
+
+        games.MapGet($"/{Game}/daily", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => Respond(await service.GetDailyAsync(game, user, ct, league))))
             .WithName("DailyPuzzle")
             .WithSummary("Today's puzzle with this player's progress, for ?league=nba (the default) or nfl. The answer is absent until the game is over.");
 
-        api.MapGet($"/{Game}/puzzles/{{puzzleId:int}}", (string game, int puzzleId, HttpContext http, GameService service, CancellationToken ct) =>
+        games.MapGet($"/{Game}/puzzles/{{puzzleId:int}}", (string game, int puzzleId, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => Respond(await service.GetPuzzleAsync(game, puzzleId, user, ct))))
             .WithName("PuzzleById")
             .WithSummary("A past daily or a practice round, with this player's progress.");
 
-        api.MapPost($"/{Game}/{{puzzleId:int}}/guess", (string game, int puzzleId, GuessRequest? request, HttpContext http, GameService service, CancellationToken ct) =>
+        games.MapPost($"/{Game}/{{puzzleId:int}}/guess", (string game, int puzzleId, GuessRequest? request, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => request?.PlayerId is { } playerId
                     ? Respond(await service.GuessAsync(game, puzzleId, playerId, user, ct, request.RequestId))
                     : Error(GameFailure.Invalid, "Pick a player from the list.")))
@@ -39,13 +41,13 @@ public static partial class GameEndpoints
             .WithName("SubmitGuess")
             .WithSummary("Guess a player. Returns the puzzle with the new guess judged.");
 
-        api.MapPost($"/{Game}/practice", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
+        games.MapPost($"/{Game}/practice", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async _ => Respond(await service.StartPracticeAsync(game, ct, league))))
             .RequireRateLimiting(RateLimits.GamePlay)
             .WithName("StartPractice")
             .WithSummary("Start a practice round: a fresh puzzle that is not counted in stats.");
 
-        api.MapGet($"/{Game}/archive", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
+        games.MapGet($"/{Game}/archive", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => Respond(await service.GetArchiveAsync(game, user, ct, league))))
             .WithName("PuzzleArchive")
             .WithSummary("Past daily puzzles, newest first, with how this player did on each.");

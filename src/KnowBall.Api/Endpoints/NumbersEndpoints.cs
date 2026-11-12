@@ -6,7 +6,7 @@ public static class NumbersEndpoints
 {
     public static IEndpointRouteBuilder MapNumbers(this IEndpointRouteBuilder api)
     {
-        var group = api.MapGroup("/numbers-dont-lie").RequireRateLimiting(RateLimits.GamePlay);
+        var group = api.MapGroup("/numbers-dont-lie").RequireRateLimiting(RateLimits.GamePlay).PausedWhenOff("numbers-dont-lie");
         group.MapGet("/daily", (HttpContext http, NumbersPlayService service, CancellationToken ct) =>
             Handle(http, user => service.Daily(user, ct)));
         group.MapGet("/quizzes/{id:guid}", (Guid id, HttpContext http, NumbersPlayService service, CancellationToken ct) =>

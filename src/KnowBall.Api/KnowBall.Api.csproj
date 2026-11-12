@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.FeatureManagement" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
   </ItemGroup>
   <ItemGroup Condition="'$(FxMajor)' &gt;= '9'">
