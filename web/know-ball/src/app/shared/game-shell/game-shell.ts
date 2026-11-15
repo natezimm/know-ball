@@ -52,7 +52,7 @@ function atRest(): boolean {
       @if (leagues().length > 1) {
         <nav class="leagues" aria-label="League">
           @for (l of leagues(); track l) {
-            <a [routerLink]="dailyLink(store.game(), l)" [class.on]="store.league() === l" [attr.aria-current]="store.league() === l ? 'page' : null">{{ leagueNames[l] }}</a>
+            <a class="kb-tap" [routerLink]="dailyLink(store.game(), l)" [class.on]="store.league() === l" [attr.aria-current]="store.league() === l ? 'page' : null">{{ leagueNames[l] }}</a>
           }
         </nav>
       }
@@ -231,6 +231,10 @@ function atRest(): boolean {
     .leagues a.on { background: var(--navy); color: var(--cream); }
     .practice { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 10px 12px; border: 2px dashed var(--navy); border-radius: 4px; }
     .practice span { color: var(--muted); font-size: 15px; line-height: 1.3; }
+    /* On a narrow screen the button sits above its explanation rather than squeezing it into a thin column. */
+    @media (max-width: 420px) {
+      .practice { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
 
     .state { margin: 40px 0; text-align: center; font-size: 19px; }
     .state p { margin: 0 0 14px; }
@@ -250,7 +254,7 @@ function atRest(): boolean {
     .stats div:nth-child(even) dd { background: var(--surface-2); }
     .stats dt {
       padding: 4px 2px 3px; background: var(--navy); color: var(--cream);
-      font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
     }
     .bars { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
     .bars li { display: grid; grid-template-columns: 14px 1fr; align-items: center; gap: 8px; font-weight: 700; }

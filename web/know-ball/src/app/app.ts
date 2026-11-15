@@ -61,9 +61,9 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
     .footer > span a { text-underline-offset: 3px; }
     .footer nav { flex-wrap: wrap; }
-    .footer nav a { color: var(--muted); font-size: 12px; white-space: normal; }
+    .footer nav a { color: var(--muted); font-size: 13px; white-space: normal; }
     .footer a:hover { color: var(--navy); }
-    .disclaimer { flex-basis: 100%; margin: 0; font-size: 12px; }
+    .disclaimer { flex-basis: 100%; margin: 0; font-size: 13px; }
     @media (max-width: 480px) {
       .bar { padding: 10px 14px; gap: 8px; }
       .brand { font-size: 16px; gap: 7px; }
@@ -72,7 +72,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
     @media (max-width: 380px) {
       .brand { font-size: 15px; }
-      nav a { padding: 6px 5px; font-size: 12px; letter-spacing: .03em; }
+      nav a { padding: 6px 5px; letter-spacing: .03em; }
     }
   `,
 })

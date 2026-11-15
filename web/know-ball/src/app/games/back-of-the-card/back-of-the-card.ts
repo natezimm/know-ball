@@ -222,17 +222,17 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
     }
     .strip .name { font: 400 20px/1.1 var(--script); overflow-wrap: anywhere; }
     .strip .redact { color: var(--navy); font: 400 16px/1 var(--font); letter-spacing: -1px; }
-    .strip .no { flex: none; font: 400 12px/1 var(--display); letter-spacing: .06em; }
+    .strip .no { flex: none; font: 400 13px/1 var(--display); letter-spacing: .06em; }
     .redact { font-style: normal; color: var(--navy); opacity: .8; user-select: none; }
 
     .bio { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; font-size: 14px; }
     .bio div { display: flex; gap: 5px; align-items: baseline; }
-    .bio dt { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .bio dt { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
     .bio dd { margin: 0; font-weight: 700; }
 
     table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.2; font-variant-numeric: tabular-nums; }
     thead th {
-      font: 400 11px/1 var(--display); color: var(--red); text-transform: uppercase; letter-spacing: .05em;
+      font: 400 13px/1 var(--display); color: var(--red); text-transform: uppercase; letter-spacing: .03em;
       padding: 4px 3px 5px; border-bottom: 2px solid var(--navy); text-align: right;
     }
     td, tfoot th { padding: 3px; text-align: right; white-space: nowrap; }
@@ -244,20 +244,20 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
     .club b { font-weight: 700; white-space: nowrap; }
     .stamp {
       display: inline-block; margin-left: 6px; transform: rotate(-6deg); padding: 1px 4px 0;
-      font: 400 10px/1.3 var(--display); font-style: normal; text-transform: uppercase; letter-spacing: .03em;
+      font: 400 13px/1.3 var(--display); font-style: normal; text-transform: uppercase; letter-spacing: 0;
       color: var(--teal); border: 1.5px solid var(--teal); border-radius: 3px; background: var(--surface);
     }
     .stamp.top { color: var(--red); border-color: var(--red); }
 
     .fact { margin: 2px 0 0; padding: 6px 9px; font-size: 15px; border: 2px dashed var(--navy); border-radius: 4px; }
     .fact b { color: var(--red); }
-    .fact.locked { text-align: center; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .fact.locked { text-align: center; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 
     /* What each miss uncovers, as ticket stubs: dashed until earned. */
     .ladder { list-style: none; margin: 2px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .ladder li {
       text-align: center; padding: 4px 2px; border: 2px solid var(--navy); border-radius: 999px;
-      font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+      font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
     }
     .ladder .open { background: var(--navy); color: var(--cream); }
     .ladder .next { border-style: dashed; color: var(--navy); }

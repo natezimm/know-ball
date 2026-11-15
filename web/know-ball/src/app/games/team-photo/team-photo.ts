@@ -212,15 +212,15 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
     .figure u { position: absolute; left: 6%; right: 6%; bottom: -4%; height: 46%; border-radius: 50% 50% 0 0; background: var(--cream); }
     .pos {
       position: absolute; top: 5px; left: 50%; transform: translateX(-50%); padding: 0 4px; border-radius: 3px;
-      font: 400 12px/1.3 var(--display); letter-spacing: .05em; color: var(--cream); background: rgb(29 43 83 / .55);
+      font: 400 13px/1.3 var(--display); letter-spacing: .03em; color: var(--cream); background: rgb(29 43 83 / .55);
     }
     .found .pos, .missed .pos { top: auto; bottom: 3px; }
     .plate {
       display: grid; max-width: 104px; padding: 2px 6px; border-radius: 4px; text-align: center; line-height: 1.15;
       background: rgb(0 0 0 / .35); color: var(--cream);
     }
-    .plate small { font-size: 12px; white-space: nowrap; }
-    .plate small:last-of-type { font-size: 11px; opacity: .85; }
+    .plate small { font-size: 13px; white-space: nowrap; }
+    .plate small:last-of-type { opacity: .85; }
     .plate b { font-size: 14px; overflow-wrap: anywhere; }
     .found .plate { background: var(--mustard); color: var(--navy); }
     .missed .plate { background: var(--red); color: var(--cream); }

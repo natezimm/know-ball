@@ -61,6 +61,7 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
           @for (n of lengths; track n) {
             <button
               type="button"
+              class="kb-tap"
               [class.selected]="n === game.wordLength()"
               [attr.aria-pressed]="n === game.wordLength()"
               [attr.aria-label]="n + ' letters'"
@@ -111,7 +112,7 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
           <span id="letter-jacket-hints" class="kb-label">Hints</span>
           <button
             type="button"
-            class="btn hint"
+            class="btn hint kb-tap"
             [class.revealed]="game.categoryHint()"
             [disabled]="game.status() !== 'playing'"
             (mousedown)="$event.preventDefault()"
@@ -121,7 +122,7 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
           </button>
           <button
             type="button"
-            class="btn hint"
+            class="btn hint kb-tap"
             [class.revealed]="game.letterHint()"
             [disabled]="game.status() !== 'playing'"
             (mousedown)="$event.preventDefault()"
@@ -263,8 +264,8 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
 
     .hints { display: flex; align-items: center; gap: 8px; min-height: 34px; }
     .toolbar { flex-wrap: wrap; }
-    .lengths { display: flex; align-items: center; gap: 5px; }
-    .lengths .kb-label { margin-right: 4px; }
+    .lengths { display: flex; align-items: center; gap: 12px; }
+    .lengths .kb-label { margin-right: -2px; }
     .lengths button {
       width: 32px; height: 32px; padding: 0; border: 2px solid var(--line); border-radius: 50%;
       background: var(--surface); color: var(--text); font: 700 16px/1 var(--font); cursor: pointer;
@@ -323,7 +324,7 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
     .stats div { padding: 12px 6px; border: 2px solid var(--navy); border-radius: 4px; background: var(--cream); text-align: center; }
     .stats dd { margin: 0; font: 400 26px/1.1 var(--display); }
-    .stats dt { margin-top: 3px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+    .stats dt { margin-top: 3px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
     .bars { list-style: none; margin: 8px 0 14px; padding: 0; display: grid; gap: 4px; }
     .bars li { display: grid; grid-template-columns: 14px 1fr; align-items: center; gap: 8px; font-weight: 700; }
     .bars i {

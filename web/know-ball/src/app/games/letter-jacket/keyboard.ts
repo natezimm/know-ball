@@ -40,7 +40,7 @@ const ROWS = [[...'qwertyuiop'], [...'asdfghjkl'], ['Enter', ...'zxcvbnm', 'Back
     }
     .key:hover { filter: brightness(.96); }
     .key:active { transform: translateY(1px); }
-    .key.wide { flex-grow: 1.6; max-width: 70px; font-size: 12px; letter-spacing: .04em; }
+    .key.wide { flex-grow: 1.6; max-width: 70px; font-size: 13px; letter-spacing: 0; }
     .key.correct { background: var(--ok); color: var(--ok-ink); }
     .key.present { background: var(--close); color: var(--close-ink); }
     .key.absent { background: var(--miss); border-color: var(--miss-line); color: var(--miss-ink); }
