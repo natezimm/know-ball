@@ -5,6 +5,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
+    <a class="skip" href="#main" (click)="skip($event, main)">Skip to content</a>
     <header class="bar" id="site-header">
       <a class="brand" routerLink="/">
         <span class="mark" aria-hidden="true">★</span>
@@ -14,7 +15,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Games</a>
       </nav>
     </header>
-    <main>
+    <main #main id="main" tabindex="-1">
       <router-outlet />
     </main>
     <footer class="footer">
@@ -27,6 +28,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
+    /* The first stop for the Tab key, off screen until it has focus. */
+    .skip {
+      position: absolute; left: 8px; top: -60px; z-index: 30; padding: 8px 14px; border: 2px solid var(--navy); border-radius: 4px;
+      background: var(--cream); color: var(--navy); font-weight: 700; text-decoration: none;
+    }
+    .skip:focus { top: 8px; }
     /* A navy banner with the card's red, cream and navy border running along its bottom edge. */
     .bar {
       display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -69,4 +76,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
   `,
 })
-export class App {}
+export class App {
+  /** Moves focus past the header. Done by hand: with the app's base address a "#main" link would load the home page. */
+  protected skip(event: Event, main: HTMLElement): void {
+    event.preventDefault();
+    // On a game page the guess box is where the player was heading.
+    const first = main.querySelector<HTMLElement>('input:not([disabled])');
+    (first ?? main).focus();
+  }
+}
