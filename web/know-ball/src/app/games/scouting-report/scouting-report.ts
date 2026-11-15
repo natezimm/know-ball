@@ -93,15 +93,28 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
       }
 
       @if (state(); as s) {
-        <div class="board" role="table" aria-label="Your guesses, oldest first">
+        <div class="board" role="table" aria-label="Your guesses, newest first">
           <div class="cols" role="row">
             @for (c of clues; track c.key) {
               <span role="columnheader" [attr.aria-label]="c.label">{{ c.header }}</span>
             }
           </div>
 
-          @for (g of s.guesses; track g.playerId; let i = $index) {
-            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="i >= settled()" [style.--cells]="clues.length">
+          @if (!s.guesses.length && !over()) {
+            <div class="row blank" aria-hidden="true">
+              <div class="who">
+                <app-avatar name="?" />
+                <span>Mystery player</span>
+              </div>
+              @for (c of clues; track c.key) {
+                <div class="cell"></div>
+              }
+            </div>
+          }
+
+          @for (row of board(); track row.guess.playerId) {
+            @let g = row.guess;
+            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="row.index >= settled()" [style.--cells]="clues.length">
               <div class="who" role="rowheader">
                 <app-avatar [src]="g.headshotUrl" [name]="g.name" />
                 <b>{{ g.name }}</b>
@@ -126,19 +139,6 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
             </div>
           }
 
-          @if (!over()) {
-            @for (n of blanks(); track n; let first = $first) {
-              <div class="row blank" [class.next]="first" aria-hidden="true">
-                <div class="who">
-                  <app-avatar name="?" />
-                  <span>{{ first && !s.guesses.length ? 'Mystery player' : 'Guess ' + n }}</span>
-                </div>
-                @for (c of clues; track c.key) {
-                  <div class="cell"></div>
-                }
-              </div>
-            }
-          }
         </div>
 
         @if (!s.guesses.length) {
@@ -149,7 +149,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
-    /* The board: one header, then one row per guess, oldest at the top. */
+    /* The board: one header, then one row per guess, the newest at the top, next to the guess box. */
     .board { display: grid; gap: 8px; }
     .cols, .row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
     .cols {
@@ -222,11 +222,8 @@ export class ScoutingReport {
 
   protected readonly state = computed(() => this.store.state() as GameState<unknown, { rosterSnapshot: boolean }, ScoutingFeedback, ScoutingAnswer> | null);
   protected readonly over = computed(() => this.store.over());
-  /** The number of the next guess, shown as one empty row; the dots already count the rest. */
-  protected readonly blanks = computed(() => {
-    const s = this.state();
-    return s && s.guesses.length < s.maxGuesses ? [s.guesses.length + 1] : [];
-  });
+  /** The guesses as the board shows them: newest first, each with its place in the order they were made. */
+  protected readonly board = computed(() => (this.state()?.guesses ?? []).map((guess, index) => ({ guess, index })).reverse());
   protected readonly rows = computed(() => shareRows(this.state()?.guesses ?? []));
   protected readonly answerLine = computed(() => {
     const a = this.state()?.answer;

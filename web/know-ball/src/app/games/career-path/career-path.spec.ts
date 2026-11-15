@@ -2,6 +2,7 @@ import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { GameStore } from '../../core/game-store';
 import { gameState, guess } from '../../core/testing';
 import { CareerPath, CareerStop, stopYears } from './career-path';
 
@@ -84,6 +85,25 @@ describe('Career Path', () => {
     expect([...el.querySelectorAll('.kb-result-detail')].map((d) => d.textContent)).toContain('1 other player shares this exact path.');
     expect(el.querySelectorAll('.misses li').length).toBe(0);
     expect(el.querySelector('.ask')?.textContent).toBe("Kevin Durant's career");
+  });
+
+  it('says beside the guess box which hint a miss opened', async () => {
+    await open();
+    const store = fixture.debugElement.injector.get(GameStore);
+
+    store.guess(3);
+    http.expectOne('/api/career-path/7/guess').flush(
+      gameState({ game: 'career-path', maxGuesses: 6, payload: { stops }, clues: hints(1), guesses: [guess('Jeff Green', false, { shared: [0] })] }),
+    );
+    await fixture.whenStable();
+
+    expect(el.querySelector('.kb-toast')?.textContent).toBe('Not Jeff Green. Position: F-G.');
+  });
+
+  it('says nothing extra when the puzzle is only being opened with misses already on it', async () => {
+    await open({ clues: hints(1), guesses: [guess('Jeff Green', false, { shared: [0] })] });
+
+    expect(el.querySelector('.kb-toast')).toBeNull();
   });
 
   it('writes a stop as a span of years', () => {

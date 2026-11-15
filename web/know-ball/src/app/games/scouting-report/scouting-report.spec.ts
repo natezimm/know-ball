@@ -39,11 +39,11 @@ describe('Scouting Report', () => {
 
     expect([...el.querySelectorAll('.cols span')].map((s) => s.textContent)).toEqual(['Team', 'Conf', 'Div', 'Pos', 'Ht', 'Age', '#']);
     expect(el.querySelectorAll('.row.blank').length).toBe(1);
-    expect(el.querySelector('.row.blank.next')?.textContent).toContain('Mystery player');
+    expect(el.querySelector('.row.blank')?.textContent).toContain('Mystery player');
     expect(el.querySelectorAll('.row:not(.blank)').length).toBe(0);
   });
 
-  it('shows each guess as a row of coloured clues, oldest first', async () => {
+  it('shows each guess as a row of coloured clues, newest first, under the guess box', async () => {
     await open(
       gameState({
         guesses: [
@@ -54,11 +54,12 @@ describe('Scouting Report', () => {
     );
 
     const rows = [...el.querySelectorAll('.row:not(.blank)')];
-    expect(rows.map((r) => r.querySelector('b')?.textContent)).toEqual(['Nikola Jokić', 'Jalen Brunson']);
-    expect(el.querySelectorAll('.row.blank').length).toBe(1);
-    expect(el.querySelector('.row.blank.next')?.textContent).toContain('Guess 3');
+    expect(rows.map((r) => r.querySelector('b')?.textContent)).toEqual(['Jalen Brunson', 'Nikola Jokić']);
+    expect(el.querySelector('.board')?.getAttribute('aria-label')).toBe('Your guesses, newest first');
+    // The empty row only stands in for the board before the first guess.
+    expect(el.querySelectorAll('.row.blank').length).toBe(0);
 
-    const cells = [...rows[1].querySelectorAll('.cell')];
+    const cells = [...rows[0].querySelectorAll('.cell')];
     expect(cells.map((c) => ['ok', 'close', 'miss'].find((s) => c.classList.contains(s)))).toEqual(['close', 'ok', 'ok', 'close', 'miss', 'close', 'miss']);
     expect(cells[0].querySelector('img')?.getAttribute('src')).toBe('https://logos/nyk.svg');
     expect(cells[0].querySelector('.visually-hidden')?.textContent).toBe('Team: Knicks, close');

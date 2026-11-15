@@ -2,6 +2,7 @@ import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { GameStore } from '../../core/game-store';
 import { gameState, guess } from '../../core/testing';
 import { BackOfTheCard, CardClues, CardSeason, cardTable, seasonLabel } from './back-of-the-card';
 
@@ -83,6 +84,17 @@ describe('Back of the Card', () => {
   it('labels a season across the century', () => {
     expect(seasonLabel(1999)).toBe('99–00');
     expect(seasonLabel(2005)).toBe('05–06');
+  });
+
+  it('says beside the guess box what a miss put on the card', async () => {
+    await open();
+    const store = fixture.debugElement.injector.get(GameStore);
+
+    store.guess(3);
+    http.expectOne('/api/back-of-the-card/7/guess').flush(gameState({ game: 'back-of-the-card', payload, clues: clues(1), guesses: [guess('Jeff Green')] }));
+    await fixture.whenStable();
+
+    expect(el.querySelector('.kb-toast')?.textContent).toBe('Not Jeff Green. Now on the card: Teams.');
   });
 });
 

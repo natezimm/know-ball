@@ -28,7 +28,7 @@ let nextId = 0;
         [attr.aria-activedescendant]="activeIndex() >= 0 ? listId + '-' + activeIndex() : null"
         aria-autocomplete="list"
         [placeholder]="placeholder()"
-        [disabled]="disabled()"
+        [attr.aria-busy]="disabled() ? 'true' : null"
         [value]="query()"
         (input)="onInput($any($event.target).value)"
         (keydown)="onKeydown($event)"
@@ -115,6 +115,10 @@ export class PlayerSearch {
   readonly placeholder = input('Type a player name…');
   readonly league = input('nba');
   readonly puzzleId = input<number>();
+  /**
+   * While true a pick is ignored. The box itself stays live: a disabled field drops focus, which would send a
+   * keyboard player back to the mouse after every guess and close a phone's keyboard.
+   */
   readonly disabled = input(false);
   /** Offer retired players too. */
   readonly includeInactive = input(false, { transform: booleanAttribute });

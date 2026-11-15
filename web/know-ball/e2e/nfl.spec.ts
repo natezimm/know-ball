@@ -72,7 +72,7 @@ test('NFL Scouting Report scores a guess with NFL clues and is won', async ({ pa
   await expect(page.getByRole('dialog', { name: 'How to play' })).toHaveCount(0);
 
   await guessPlayer(page, scouting.wrong[0].fullName);
-  const board = page.getByRole('table', { name: 'Your guesses, oldest first' });
+  const board = page.getByRole('table', { name: 'Your guesses, newest first' });
   const row = board.locator('.row:not(.blank)').first();
   await expect(row.getByRole('cell')).toHaveCount(7);
   await expect(row.getByRole('cell').nth(1)).toHaveText(/AFC|NFC/);

@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
 import { GameState, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
+import { noticeOnMiss } from '../../core/miss-notice';
 import { loadFromRoute } from '../../core/puzzle-route';
 import { Avatar } from '../../shared/avatar/avatar';
 import { GameShell } from '../../shared/game-shell/game-shell';
@@ -311,6 +312,11 @@ export class BackOfTheCard {
 
   constructor() {
     loadFromRoute(this.store, 'back-of-the-card', this.puzzleId, this.league);
+    noticeOnMiss(this.store, this.state, (now, before) => {
+      const open = (state: typeof now) => (state.clues?.steps ?? []).filter((step) => step.open);
+      const steps = open(now);
+      return steps.length > open(before).length ? `Now on the card: ${steps[steps.length - 1].label}.` : null;
+    });
     effect(() => {
       const s = this.state();
       if (s && untracked(this.loaded)?.puzzleId !== s.puzzleId) {
