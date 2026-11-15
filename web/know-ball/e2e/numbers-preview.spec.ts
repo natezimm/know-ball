@@ -75,7 +75,7 @@ test('practice keeps topic and year filters on reload and makes exhausted replay
     await page.getByRole('button', { name: i === 4 ? 'See results' : 'Next question' }).click();
   }
   await expect(page.locator('.score')).toBeVisible();
-  await page.getByRole('button', { name: 'Play another round' }).click();
+  await page.getByRole('button', { name: 'Practice round' }).click();
   await expect(page.getByRole('heading', { name: 'Choose your practice' })).toBeVisible();
   await expect(page.locator('.filter-summary')).toHaveText('NBA · Playoff Moments · 1991–2015');
   await expect(page.getByRole('button', { name: 'Start practice', exact: true })).toBeDisabled();

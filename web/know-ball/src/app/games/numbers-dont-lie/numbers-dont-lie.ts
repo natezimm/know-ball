@@ -39,7 +39,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
         </span>
       </div>
     } @else {
-      <div class="kb-meta"><span class="kb-label">Practice</span></div>
+      <div class="kb-meta"><span class="kb-label">{{ setup() ? 'Practice setup' : "Today's quiz" }}</span></div>
     }
     @if (setup() || state()?.mode === 'practice' || isPastDaily()) {
       <nav class="modes" aria-label="Quiz mode"><button type="button" class="kb-btn" (click)="daily()" [disabled]="busy()">Today's quiz</button></nav>
@@ -92,7 +92,7 @@ interface State { filters?: Filters | null; id: string; mode: string; date: stri
             </div>
             <div class="kb-result-next">
               <button class="kb-btn primary" (click)="share()">Share result</button>
-              <button class="kb-btn" (click)="practice()" [disabled]="busy()">Play another round</button>
+              <button class="kb-btn" (click)="practice()" [disabled]="busy()">Practice round</button>
               <app-next-game current="numbers-dont-lie" />
               <button class="kb-link" (click)="customize()">Customize practice</button>
             </div>
@@ -336,7 +336,7 @@ export class NumbersDontLie {
     let checked = false;
     this.run(async () => {
       if (checked) return this.fetch(this.http.post<State>('/api/numbers-dont-lie/practice', body));
-      // Recheck before creation, including Play another round after a completed quiz.
+      // Recheck before creation, including Practice round after a completed quiz.
       const c = await this.fetch(this.http.post<Coverage>('/api/numbers-dont-lie/practice/coverage', body));
       this.coverage.set(c);
       if (!c.canStartFresh && !(body.allowRepeats && c.canStartWithRepeats)) {
