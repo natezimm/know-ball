@@ -227,7 +227,26 @@ describe('LetterJacketGame', () => {
     http.expectOne('/api/letter-jacket/games').flush(null, { status: 500, statusText: 'Server Error' });
 
     expect(game.status()).toBe('error');
-    expect(game.message()).toContain('Failed to start');
+
+    game.retry();
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
+    expect(game.status()).toBe('playing');
+  });
+
+  it('retries a saved round that could not be loaded without starting a new one', () => {
+    startGame();
+    guess('punts', miss);
+    reopen();
+    http.expectOne('/api/letter-jacket/games/g1').flush(null, { status: 500, statusText: 'Server Error' });
+    expect(game.status()).toBe('error');
+
+    game.retry();
+    http.expectNone('/api/letter-jacket/games');
+    http.expectOne('/api/letter-jacket/games/g1').flush({
+      gameId: 'g1', wordLength: 5, maxAttempts: 6, guesses: [{ word: 'punts', score: miss }], letterHint: null, complete: false, won: false,
+    });
+    expect(game.status()).toBe('playing');
+    expect(game.attempts()).toHaveLength(1);
   });
 
   it('types letters up to the word length and deletes them', () => {

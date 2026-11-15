@@ -77,6 +77,24 @@ describe('Letter Jacket page', () => {
     expect(el.querySelectorAll('.row.active .tile').length).toBe(6);
     expect(six.getAttribute('aria-pressed')).toBe('true');
   });
+
+  it('shows a retry button when a game cannot start, and starts one from it', async () => {
+    fixture.destroy();
+    localStorage.clear();
+    fixture = TestBed.createComponent(LetterJacket);
+    el = fixture.nativeElement;
+    http.expectOne('/api/letter-jacket/games').flush(null, { status: 503, statusText: 'Unavailable' });
+    await fixture.whenStable();
+
+    const alert = el.querySelector('[role="alert"]')!;
+    expect(alert.textContent).toContain('could not be started');
+    alert.querySelector('button')!.click();
+    http.expectOne('/api/letter-jacket/games').flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6 });
+    await fixture.whenStable();
+
+    expect(el.querySelector('[role="alert"]')).toBeNull();
+    expect(el.querySelector('.status')?.textContent).toBe('Guess 1 of 6');
+  });
 });
 
 describe('Letter Jacket share text', () => {
