@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
 test('a wrong guess adds a row of clues, and the answer wins', async ({ page }) => {
   await expect(page.getByText('Mystery player')).toBeVisible();
 
-  const board = page.getByRole('table', { name: 'Your guesses, oldest first' });
+  const board = page.getByRole('table', { name: 'Your guesses, newest first' });
   await expect(board.getByRole('columnheader')).toHaveText(['Team', 'Conf', 'Div', 'Pos', 'Ht', 'Age', '#']);
   await expect(board.locator('.row.blank')).toHaveCount(1);
 
@@ -25,7 +25,7 @@ test('a wrong guess adds a row of clues, and the answer wins', async ({ page }) 
   const first = rows.filter({ hasText: wrong[0].fullName });
   await expect(first).toBeVisible();
   await expect(first.getByRole('cell')).toHaveCount(7);
-  await expect(board.locator('.row.blank')).toHaveCount(1);
+  await expect(board.locator('.row.blank')).toHaveCount(0);
   await expect(page.getByRole('img', { name: '1 of 8 guesses used' })).toBeVisible();
 
   await page.getByRole('combobox', { name: 'Guess a player' }).fill(wrong[0].fullName);
@@ -41,7 +41,8 @@ test('a wrong guess adds a row of clues, and the answer wins', async ({ page }) 
   await expect(result.getByText(answer.fullName, { exact: true })).toBeVisible();
   await expect(page.getByRole('combobox', { name: 'Guess a player' })).toHaveCount(0);
   await expect(rows).toHaveCount(2);
-  await expect(rows.last()).toHaveClass(/right/);
+  // The newest guess sits at the top, next to the guess box.
+  await expect(rows.first()).toHaveClass(/right/);
 
   // The server keeps the result, so a reload shows the finished game.
   await page.reload();
@@ -72,4 +73,26 @@ test('eight misses lose and show the answer, then a practice round starts', asyn
   await expect(page).toHaveURL(/\/scouting-report\/puzzle\/\d+$/);
   await expect(page.locator('.meta')).toContainText('Practice round');
   await expect(page.getByRole('combobox', { name: 'Guess a player' })).toBeEnabled();
+});
+
+test('three guesses in a row from the keyboard, without touching the mouse', async ({ page }) => {
+  const box = page.getByRole('combobox', { name: 'Guess a player' });
+  // With a mouse and keyboard the box is ready to type in as soon as the puzzle is up.
+  await expect(box).toBeFocused();
+
+  for (const [i, player] of wrong.slice(0, 3).entries()) {
+    await page.keyboard.type(player.fullName);
+    await expect(page.getByRole('option').filter({ hasText: player.fullName }).first()).toBeVisible();
+    const verdict = page.waitForResponse((r) => r.request().method() === 'POST' && /\/guess$/.test(r.url()));
+    await page.keyboard.press('Enter');
+    expect((await verdict).ok()).toBe(true);
+    await expect(page.getByRole('img', { name: `${i + 1} of 8 guesses used` })).toBeVisible();
+    // The box keeps focus, so the next name can be typed straight away.
+    await expect(box).toBeFocused();
+  }
+
+  // The newest guess is the first row under the box.
+  const rows = page.getByRole('table', { name: 'Your guesses, newest first' }).locator('.row:not(.blank)');
+  await expect(rows.first()).toContainText(wrong[2].fullName);
+  await expect(rows.last()).toContainText(wrong[0].fullName);
 });
