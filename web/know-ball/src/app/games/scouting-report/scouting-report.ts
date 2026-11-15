@@ -72,7 +72,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl']" [shareRows]="rows()">
       <div help>
         <p>Guess the current {{ leagueName() }} player in eight tries. Start with anyone.</p>
-        <p>Every guess adds a row of seven clues, coloured by how that player compares with the answer:</p>
+        <p>Every guess adds a row of seven clues, colored by how that player compares with the answer:</p>
         <ul class="key">
           <li><i class="ok"></i><span><b>Teal</b> is the same as the answer.</span></li>
           <li>

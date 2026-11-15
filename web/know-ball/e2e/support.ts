@@ -28,8 +28,16 @@ interface State {
 export const repoRoot = resolve(__dirname, '../../..');
 
 /** Every page starts as a new visitor. Requests that leave the site (team logos, headshots) are cut off, so nothing depends on the network. */
-export const test = base.extend({
-  page: async ({ page, baseURL }, use) => {
+export const test = base.extend<{ firstVisit: boolean }>({
+  /** Set true to arrive as a newcomer, whose first look at a game opens How to play. Tests otherwise skip that. */
+  firstVisit: [false, { option: true }],
+  page: async ({ page, baseURL, firstVisit }, use) => {
+    if (!firstVisit) {
+      const games = ['scouting-report', 'career-path', 'back-of-the-card', 'team-photo', 'numbers-dont-lie', 'letter-jacket'];
+      await page.addInitScript((seen) => {
+        if (!localStorage.getItem('knowball.helpSeen')) localStorage.setItem('knowball.helpSeen', JSON.stringify(seen));
+      }, games);
+    }
     await page.route(
       (url) => url.origin !== new URL(baseURL!).origin,
       (route) => route.abort(),

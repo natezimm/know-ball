@@ -1,8 +1,9 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, afterRenderEffect, inject, signal, viewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { firstVisit } from '../../core/first-visit';
 import { easternDate, nextEasternMidnight } from '../../core/games';
 import { saveNumbersToday } from '../../core/numbers-today';
 import { Countdown } from '../../shared/countdown/countdown';
@@ -265,8 +266,15 @@ export class NumbersDontLie {
   private readonly destroyRef = inject(DestroyRef);
   /** Set once the player leaves the page; late responses must not navigate or move focus then. */
   private destroyed = false;
+  private readonly help = viewChild<ElementRef<HTMLDialogElement>>('helpDialog');
   constructor() {
     this.destroyRef.onDestroy(() => { this.destroyed = true; });
+    // A newcomer gets How to play once, on today's quiz before any answer. Not on practice or an older day.
+    afterRenderEffect(() => {
+      const s = this.state(); const help = this.help()?.nativeElement;
+      if (!help || !s || s.mode !== 'daily' || s.date !== easternDate() || s.answeredCount || s.complete) return;
+      if (firstVisit('numbers-dont-lie')) this.openHelp(help);
+    });
     try {
       const saved = JSON.parse(localStorage.getItem('knowball.numbers.filters') || 'null');
       if (saved) this.restoreFilters(saved);

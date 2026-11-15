@@ -1,4 +1,5 @@
-import { Component, ElementRef, computed, effect, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, computed, effect, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { firstVisit } from '../../core/first-visit';
 import { shareText } from '../../core/share';
 import { NextGame } from '../../shared/next-game/next-game';
 import { Tilt } from '../../shared/tilt/tilt';
@@ -416,6 +417,7 @@ export class LetterJacket {
     }
   });
 
+  private readonly helpDialog = viewChild.required<ElementRef<HTMLDialogElement>>('helpDialog');
   private readonly hintDialog = viewChild.required<ElementRef<HTMLDialogElement>>('hintDialog');
   private readonly statsDialog = viewChild.required<ElementRef<HTMLDialogElement>>('statsDialog');
   private readonly confirmDialog = viewChild.required<ElementRef<HTMLDialogElement>>('confirmDialog');
@@ -428,6 +430,12 @@ export class LetterJacket {
       const dialog = this.hintDialog().nativeElement;
       if (dialog.open && typeof dialog.close === 'function') dialog.close();
       else dialog.removeAttribute('open');
+    });
+
+    // A newcomer gets How to play once, on a board with nothing on it yet.
+    afterRenderEffect(() => {
+      if (this.game.status() !== 'playing' || this.game.attempts().length) return;
+      if (firstVisit('letter-jacket')) openDialog(this.helpDialog().nativeElement);
     });
 
     // A turned-away word shakes the row once.
