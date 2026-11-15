@@ -154,7 +154,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     .cols, .row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
     .cols {
       position: sticky; top: 0; z-index: 1; padding: 4px 0; background: var(--bg);
-      font: 700 12px/1 var(--font); letter-spacing: .12em; text-transform: uppercase; text-align: center; color: var(--muted);
+      font: 700 13px/1 var(--font); letter-spacing: .08em; text-transform: uppercase; text-align: center; color: var(--muted);
     }
     .who { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-width: 0; }
     .who b { font: 400 17px/1.15 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -175,7 +175,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
     @keyframes win-jump { 40% { transform: translateY(-8px) scale(1.02); } }
     .value { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .cell img { width: 26px; height: 26px; object-fit: contain; }
-    .cell small { font-size: 10px; letter-spacing: .04em; }
+    .cell small { font-size: 13px; letter-spacing: 0; }
 
     /* The arrow keeps nudging toward the answer: up for higher, down for lower. */
     .arrow { font-style: normal; font-size: 15px; line-height: 1; animation: nudge-up 1.1s ease-in-out infinite; }
@@ -206,7 +206,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
 
     @media (max-width: 400px) {
       .cell { height: 50px; font-size: 14px; }
-      .cols { font-size: 12px; }
+      .cols { letter-spacing: 0; }
     }
   `,
 })

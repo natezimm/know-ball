@@ -204,14 +204,15 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
     .badge.play { background: var(--accent); color: var(--accent-ink); text-decoration: none; }
     /* A game with an NFL edition shows a second badge under the first, with a link of its own above the card's. */
     .badge.edition { margin-top: 4px; position: relative; z-index: 4; }
-    .badge.play.edition::after { content: none; }
+    /* Its own touch area is the badge and a little above and below, not the whole card. */
+    .badge.play.edition::after { inset: min(0px, (100% - 44px) / 2) 0; z-index: auto; }
     .badge.done { background: var(--ok); color: var(--ok-ink); }
     /* Stretch the link over the whole card so the card itself is the tap target. */
     .badge.play::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: 4px; }
     /* The card's number in the set, on a tab that breaks the bottom border. */
     .set-no {
       position: absolute; right: 16px; bottom: -13px; padding: 2px 7px 1px; border: 2px solid var(--trim); border-radius: 4px;
-      background: var(--surface); color: var(--navy); font: 400 12px/1.2 var(--display); letter-spacing: .06em;
+      background: var(--surface); color: var(--navy); font: 400 13px/1.2 var(--display); letter-spacing: .06em;
     }
     .card:has(.play):hover { transform: translateY(-3px) rotate(-.6deg); }
     /* With a mouse the card turns toward the pointer and lifts off the table. */

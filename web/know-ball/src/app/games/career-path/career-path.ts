@@ -147,7 +147,7 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
       display: grid; padding: 5px 9px 6px; border: 2px dashed var(--navy); border-radius: 4px;
       color: var(--muted); font-weight: 700; line-height: 1.15; min-width: 0; overflow-wrap: anywhere;
     }
-    .hints small { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .hints small { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
     .hints .open { border-style: solid; background: var(--mustard); color: var(--navy); }
     /* A hint opened by the guess just made turns over like a card. */
     .hints .fresh { animation: hint-flip .5s ease-out both; }

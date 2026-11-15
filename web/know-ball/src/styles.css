@@ -99,6 +99,15 @@ a { color: inherit; }
 }
 .kb-link:hover { color: var(--accent); }
 
+/*
+  Small controls keep their size on screen but take a touch area of at least 44px. The extra reaches
+  out evenly past each edge, and is nothing on a side that is already 44px or more.
+*/
+.kb-btn, .kb-link, .kb-icon, .kb-close, .kb-tap { position: relative; }
+.kb-btn::after, .kb-link::after, .kb-icon::after, .kb-close::after, .kb-tap::after {
+  content: ""; position: absolute; inset: min(0px, (100% - 44px) / 2);
+}
+
 /* The title row every game shares: script wordmark on the left, round icon buttons on the right. */
 .kb-game-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .kb-game-top .kb-wordmark { font-size: clamp(30px, 9.4vw, 46px); }
@@ -107,7 +116,7 @@ a { color: inherit; }
   .kb-game-top .kb-icons { gap: 4px; }
   .kb-game-top .kb-icon { width: 33px; height: 33px; }
 }
-.kb-icons { display: flex; gap: 6px; }
+.kb-icons { display: flex; gap: 8px; }
 .kb-icon {
   width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border: 2px solid var(--line); border-radius: 50%;
   background: var(--surface); color: var(--text); font: 700 17px/1 var(--font); cursor: pointer; text-decoration: none;
@@ -183,7 +192,7 @@ a { color: inherit; }
 @keyframes kb-stamp { from { transform: rotate(8deg) scale(2.2); opacity: 0; } }
 @keyframes kb-shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 @media (max-width: 420px) {
-  .kb-result .kb-btn { padding: 6px 10px; font-size: 12px; }
+  .kb-result .kb-btn { padding: 6px 9px; letter-spacing: .03em; }
   .kb-result-count { margin-left: 0; }
 }
 
