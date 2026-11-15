@@ -33,6 +33,15 @@ test('the quiz opens and saves daily feedback across reloads', async ({ page }) 
   await expect(page.getByText(/Daily streak: 1 day/)).toBeVisible();
   await page.reload();
   await expect(page.locator('.score')).toBeVisible();
+  // The home page now shows the day's score and streak on the quiz's card.
+  await page.goto('/');
+  const card = page.getByRole('listitem').filter({hasText:"Numbers Don't Lie"});
+  await expect(card.getByRole('link',{name:/Numbers Don't Lie: Scored \d of 5/})).toBeVisible();
+  await expect(card.getByLabel('1-day streak')).toBeVisible();
+  // On a phone the second game is on screen without scrolling.
+  await expect(page.getByRole('heading',{name:'Scouting Report'})).toBeInViewport();
+  await card.getByRole('link').click();
+  await expect(page.locator('.score')).toBeVisible();
   await page.getByRole('button',{name:'Customize practice'}).click();
   for(const name of ['NFL','MLB','NHL']) await page.getByRole('checkbox',{name,exact:true}).uncheck();
   await page.getByRole('button',{name:'Start practice'}).click();
