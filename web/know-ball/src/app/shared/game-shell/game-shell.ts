@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, ElementRef, afterRenderEffect, booleanAttribute, computed, effect, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ArchiveEntry, GameApi, GameState, GameStats, LEAGUE_NAMES, League, dailyLink, isMiss } from '../../core/game-api';
+import { firstVisit } from '../../core/first-visit';
 import { GameStore } from '../../core/game-store';
 import { missHeadline, shareHeadline, shareText } from '../../core/share';
 import { Avatar } from '../avatar/avatar';
@@ -331,6 +332,7 @@ export class GameShell {
   });
 
   private readonly search = viewChild(PlayerSearch);
+  private readonly help = viewChild<ElementRef<HTMLDialogElement>>('helpDialog');
   private readonly result = viewChild<ElementRef<HTMLElement>>('result');
   private readonly statsDialog = viewChild.required<ElementRef<HTMLDialogElement>>('statsDialog');
   private readonly archiveDialog = viewChild.required<ElementRef<HTMLDialogElement>>('archiveDialog');
@@ -340,6 +342,15 @@ export class GameShell {
       if (!this.store.notice()) return;
       const timer = setTimeout(() => this.store.notice.set(''), NOTICE_MS);
       onCleanup(() => clearTimeout(timer));
+    });
+
+    // A newcomer to this game gets How to play once, on today's untouched puzzle. Practice rounds and
+    // past puzzles are opened on purpose by someone who already knows the game.
+    afterRenderEffect(() => {
+      const state = this.store.state();
+      const help = this.help()?.nativeElement;
+      if (!help || !state || state.practice || !state.nextPuzzleAt || state.status !== 'playing' || state.guesses.length) return;
+      if (firstVisit(state.game)) this.open(help);
     });
 
     // With a mouse and keyboard the guess box is ready to type in as soon as a puzzle is on screen. A touch screen is

@@ -18,6 +18,8 @@ describe('Letter Jacket page', () => {
 
   beforeEach(async () => {
     useMemoryStorage();
+    // Someone who has seen How to play; the newcomer's first visit has a test of its own.
+    localStorage.setItem('knowball.helpSeen', '["letter-jacket"]');
     TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting()] });
     fixture = TestBed.createComponent(LetterJacket);
     http = TestBed.inject(HttpTestingController);
@@ -94,6 +96,23 @@ describe('Letter Jacket page', () => {
 
     expect(el.querySelector('[role="alert"]')).toBeNull();
     expect(el.querySelector('.status')?.textContent).toBe('Guess 1 of 6');
+  });
+
+  it('opens How to play once for a newcomer, on an empty board', async () => {
+    fixture.destroy();
+    localStorage.clear();
+    const open = () => !!el.querySelector('dialog[aria-labelledby="letter-jacket-help-title"]')?.hasAttribute('open');
+    const visit = async () => {
+      fixture = TestBed.createComponent(LetterJacket);
+      el = fixture.nativeElement;
+      http.match(() => true).at(-1)!.flush({ gameId: 'g2', wordLength: 5, maxAttempts: 6, guesses: [], letterHint: null, complete: false, won: false });
+      await fixture.whenStable();
+    };
+    await visit();
+    expect(open()).toBe(true);
+    fixture.destroy();
+    await visit();
+    expect(open()).toBe(false);
   });
 });
 

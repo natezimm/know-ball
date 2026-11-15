@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { noteReturningPlayer } from './core/first-visit';
 
 @Component({
   selector: 'app-root',
@@ -78,6 +79,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   `,
 })
 export class App {
+  constructor() {
+    noteReturningPlayer();
+  }
+
   /** Moves focus past the header. Done by hand: with the app's base address a "#main" link would load the home page. */
   protected skip(event: Event, main: HTMLElement): void {
     event.preventDefault();

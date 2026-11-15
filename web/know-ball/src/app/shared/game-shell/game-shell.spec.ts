@@ -226,4 +226,29 @@ describe('GameShell', () => {
     ]);
     expect(rows.map((a) => a.querySelector('em')?.textContent)).toEqual(['2 guessed', 'Solved in 4', 'Missed', 'Not played']);
   });
+
+  describe('first visit', () => {
+    const helpOpen = () => !!el.querySelector('dialog[aria-labelledby="shell-help-title"]')?.hasAttribute('open');
+    beforeEach(() => localStorage.removeItem('knowball.helpSeen'));
+
+    it("opens How to play once, on today's untouched puzzle", async () => {
+      await flushDaily(gameState({ nextPuzzleAt: '2026-10-14T04:00:00Z' }));
+      expect(helpOpen()).toBe(true);
+      expect(JSON.parse(localStorage.getItem('knowball.helpSeen')!)).toEqual(['scouting-report']);
+    });
+
+    it('stays shut on a practice round, a past puzzle and a puzzle already begun', async () => {
+      await flushDaily(gameState({ nextPuzzleAt: '2026-10-14T04:00:00Z', practice: true }));
+      expect(helpOpen()).toBe(false);
+
+      store.load('scouting-report');
+      await flushDaily(gameState({ nextPuzzleAt: null }));
+      expect(helpOpen()).toBe(false);
+
+      store.load('scouting-report');
+      await flushDaily(gameState({ nextPuzzleAt: '2026-10-14T04:00:00Z', guesses: [guess('A')] }));
+      expect(helpOpen()).toBe(false);
+      expect(localStorage.getItem('knowball.helpSeen')).toBeNull();
+    });
+  });
 });
