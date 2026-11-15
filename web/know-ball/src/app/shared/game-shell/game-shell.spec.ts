@@ -67,6 +67,30 @@ describe('GameShell', () => {
     expect(el.querySelector('input')?.getAttribute('placeholder')).toBe('Guess 3 of 8: type a name');
   });
 
+  it('keeps the guess box live while a guess is sent, then moves focus to the result when that guess ends the game', async () => {
+    await flushDaily(gameState({ maxGuesses: 2, guesses: [guess('A')] }));
+    const box = el.querySelector('input')!;
+    box.focus();
+
+    store.guess(5);
+    await fixture.whenStable();
+    expect(box.disabled).toBe(false);
+    expect(document.activeElement).toBe(box);
+
+    http.expectOne('/api/scouting-report/7/guess').flush(
+      gameState({ maxGuesses: 2, status: 'lost', guesses: [guess('A'), guess('B')], answer: { playerId: 9, name: 'Jayson Tatum' } }),
+    );
+    await fixture.whenStable();
+    expect(el.querySelector('input')).toBeNull();
+    expect(document.activeElement).toBe(el.querySelector('.result'));
+  });
+
+  it('leaves focus alone when a finished puzzle is only being opened', async () => {
+    await flushDaily(gameState({ status: 'won', guesses: [guess('Jayson Tatum', true)], answer: { playerId: 9, name: 'Jayson Tatum' } }));
+
+    expect(document.activeElement).not.toBe(el.querySelector('.result'));
+  });
+
   it('offers practice from the archive before a daily guess and keeps mode changes disabled during a save', async () => {
     await flushDaily();
     expect(el.querySelector('.modes')).toBeNull();

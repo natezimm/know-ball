@@ -132,4 +132,27 @@ describe('PlayerSearch', () => {
     http.expectNone(r => r.url === '/api/players/search');
   });
 
+  it('stays focusable while a guess is being sent, and ignores a pick until it is back', async () => {
+    const picked: PlayerSearchResult[] = [];
+    fixture.componentInstance.selected.subscribe((p) => picked.push(p));
+    await type('jam');
+    http.expectOne((r) => r.url === '/api/players/search').flush(rows);
+    await fixture.whenStable();
+    input.focus();
+
+    fixture.componentRef.setInput('disabled', true);
+    await fixture.whenStable();
+    // A disabled field would drop focus and close a phone's keyboard between guesses.
+    expect(input.disabled).toBe(false);
+    expect(input.getAttribute('aria-busy')).toBe('true');
+    expect(document.activeElement).toBe(input);
+    await key('Enter');
+    expect(picked).toEqual([]);
+
+    fixture.componentRef.setInput('disabled', false);
+    await fixture.whenStable();
+    expect(input.getAttribute('aria-busy')).toBeNull();
+    await key('Enter');
+    expect(picked.map((p) => p.fullName)).toEqual(['LeBron James']);
+  });
 });

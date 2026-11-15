@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, booleanAttribute, computed, effect, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, booleanAttribute, computed, effect, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ArchiveEntry, GameApi, GameState, GameStats, LEAGUE_NAMES, League, dailyLink, isMiss } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
@@ -11,6 +11,17 @@ import { PlayerSearch } from '../player-search/player-search';
 import { Tilt } from '../tilt/tilt';
 
 const NOTICE_MS = 3500;
+
+/** A mouse or trackpad, where focusing a text box does not open an on-screen keyboard. */
+function finePointer(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(pointer: fine)').matches;
+}
+
+/** Nothing has focus that moving it would interrupt: no control in use and no dialog open. */
+function atRest(): boolean {
+  const active = document.activeElement;
+  return (!active || active === document.body) && !document.querySelector('dialog[open]');
+}
 
 /**
  * The frame around every daily game: title bar with the puzzle number, help, stats and the
@@ -101,7 +112,7 @@ const NOTICE_MS = 3500;
           }
 
           @if (store.over()) {
-            <div class="result kb-result" kbTilt [class.won]="s.status === 'won'" [attr.data-tier]="tier(s)" [attr.data-stamp]="stamp(s)" role="status">
+            <div #result tabindex="-1" class="result kb-result" kbTilt [class.won]="s.status === 'won'" [attr.data-tier]="tier(s)" [attr.data-stamp]="stamp(s)" role="status">
               <i class="kb-shine" aria-hidden="true"></i>
               <app-avatar [src]="resultName() ? resultImage() : $safeNavigationMigration(s.answer?.headshotUrl)" [name]="resultName() || (s.answer?.name ?? '')" />
               <div class="who kb-result-who">
@@ -315,6 +326,8 @@ export class GameShell {
     });
   });
 
+  private readonly search = viewChild(PlayerSearch);
+  private readonly result = viewChild<ElementRef<HTMLElement>>('result');
   private readonly statsDialog = viewChild.required<ElementRef<HTMLDialogElement>>('statsDialog');
   private readonly archiveDialog = viewChild.required<ElementRef<HTMLDialogElement>>('archiveDialog');
 
@@ -323,6 +336,23 @@ export class GameShell {
       if (!this.store.notice()) return;
       const timer = setTimeout(() => this.store.notice.set(''), NOTICE_MS);
       onCleanup(() => clearTimeout(timer));
+    });
+
+    // With a mouse and keyboard the guess box is ready to type in as soon as a puzzle is on screen. A touch screen is
+    // left alone: focusing the box there would throw the keyboard up over the puzzle before it has been read.
+    afterRenderEffect(() => {
+      const search = this.search();
+      if (search && finePointer() && atRest()) search.focus();
+    });
+
+    // The guess that ends the game takes the guess box away, and focus with it. Put focus on the result, so the next
+    // Tab reaches Share and a screen reader starts from the verdict. A finished puzzle that is only being opened is left alone.
+    let playing: number | null = null;
+    afterRenderEffect(() => {
+      const state = this.store.state();
+      const result = this.result();
+      if (state && result && playing === state.puzzleId && atRest()) result.nativeElement.focus({ preventScroll: true });
+      playing = state && !this.store.over() ? state.puzzleId : null;
     });
   }
 
