@@ -151,6 +151,33 @@ test('the word length can be changed and is remembered', async ({ page }) => {
   await expect(page.getByRole('button', { name: '4 letters' })).toHaveAttribute('aria-pressed', 'true');
 });
 
+// Phone screens with the browser's bars showing, down to the smallest in common use.
+for (const [width, height] of [[375, 553], [320, 568], [390, 664], [412, 780]]) {
+  test(`the whole board and keyboard fit a ${width} by ${height} screen`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    for (const letters of [4, 5, 6]) {
+      await page.getByRole('button', { name: `${letters} letters` }).click();
+      await expect(page.getByRole('group', { name: /^Guess \d/ }).first().locator('.tile')).toHaveCount(letters);
+      const keyboard = (await page.getByRole('group', { name: 'Keyboard' }).boundingBox())!;
+      expect(keyboard.y + keyboard.height).toBeLessThanOrEqual(height);
+      const title = (await page.getByRole('heading', { name: 'Letter Jacket' }).boundingBox())!;
+      expect(title.y).toBeGreaterThanOrEqual(0);
+      expect(await page.evaluate(() => scrollY)).toBe(0);
+    }
+  });
+}
+
+test('a game that cannot start says so and starts from the retry button', async ({ page }) => {
+  await page.evaluate(() => localStorage.clear());
+  await page.route('**/api/letter-jacket/games', (route) => route.fulfill({ status: 503, json: {} }));
+  await page.reload();
+  await expect(page.getByRole('alert')).toContainText('could not be started');
+  await page.unroute('**/api/letter-jacket/games');
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Guess 1 of 6' })).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+});
+
 /** Opens a hint, reveals it and returns its text as the hint button then shows it. */
 async function revealHint(page: Page, button: string, reveal: string): Promise<string> {
   await page.getByRole('button', { name: button, exact: true }).click();
