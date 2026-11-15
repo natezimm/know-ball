@@ -102,10 +102,16 @@ export class LetterJacketGame {
       next: (state) => this.applyState(state, round),
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) { this.expire(); return; }
-        this.message.set('Could not resume your game. Reload to retry; your saved round is still available.');
         this.status.set('error');
       },
     });
+  }
+
+  /** After a failed load: fetch the saved round again, or ask for a new game when there was none. */
+  retry(): void {
+    if (this.status() !== 'error') return;
+    if (this.gameId()) this.resume();
+    else this.start();
   }
 
   /**
@@ -205,7 +211,6 @@ export class LetterJacketGame {
         this.persist();
       },
       error: () => {
-        this.message.set('Failed to start a game. Please try again later.');
         this.status.set('error');
       },
     });

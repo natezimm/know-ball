@@ -82,6 +82,17 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
         </div>
       }
 
+      @if (game.status() === 'error') {
+        <div class="expired" role="alert">
+          @if (game.gameId()) {
+            <p>Your game could not be loaded. Your round is saved, so nothing is lost.</p>
+          } @else {
+            <p>A new game could not be started. Check your connection and try again.</p>
+          }
+          <button type="button" class="kb-btn primary" (click)="game.retry()">Try again</button>
+        </div>
+      }
+
       @if (game.result(); as result) {
         <div class="outcome kb-result" kbTilt [class.won]="result.won"
           [attr.data-tier]="result.won ? (result.guesses === 1 ? 'gold' : 'holo') : null" [attr.data-stamp]="result.won && result.guesses === 1 ? 'First try' : null">
@@ -259,7 +270,15 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; margin: 0 0 -44px; }
-    .letter-jacket { max-width: 480px; margin: 0 auto; display: grid; gap: 12px; --trim: var(--red); }
+    /*
+      --key is the height of a keyboard key and --chrome everything else that is not a tile: the site
+      header, this game's rows above the board, the gaps, and the keyboard's own gaps. The board
+      takes what is left of the screen's height, so the keyboard ends inside it.
+    */
+    .letter-jacket {
+      max-width: 480px; margin: 0 auto; display: grid; gap: 12px; --trim: var(--red);
+      --key: clamp(42px, 6.4dvh, 52px); --chrome: 328px; --tile-gap: 6px;
+    }
 
     .hints { display: flex; align-items: center; gap: 8px; min-height: 34px; }
     .toolbar { flex-wrap: wrap; }
@@ -297,11 +316,21 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
     /* Tiles shrink to fit the narrower of the screen's width and its spare height. */
     .board {
       --tile: clamp(
-        34px,
-        min((100vw - 40px - (var(--cols) - 1) * 6px) / var(--cols), (100dvh - 430px) / 6),
+        28px,
+        min((100vw - 40px - (var(--cols) - 1) * var(--tile-gap)) / var(--cols), (100dvh - var(--chrome) - 3 * var(--key)) / 6),
         58px
       );
       padding: 4px 0;
+    }
+    /* Short screens, such as a small phone with the browser's bars showing: tighten every row. */
+    @media (max-height: 720px) {
+      :host { margin-top: -22px; }
+      .letter-jacket { gap: 8px; --key: clamp(40px, 6.4dvh, 52px); --chrome: 270px; --tile-gap: 4px; }
+      .toolbar { padding-bottom: 4px; }
+      .board { padding: 2px 0; }
+    }
+    @media (max-height: 720px) and (max-width: 480px) {
+      .letter-jacket { --chrome: 250px; }
     }
 
     .kb-dialog h2 small { display: block; margin-top: 4px; font: 500 15px/1.3 var(--font); letter-spacing: 0; color: var(--muted); }

@@ -29,7 +29,7 @@ interface Row {
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host { display: block; }
-    .grid { --gap: 6px; display: grid; gap: var(--gap); justify-content: center; }
+    .grid { --gap: var(--tile-gap, 6px); display: grid; gap: var(--gap); justify-content: center; }
     .row { display: grid; grid-template-columns: repeat(var(--cols), var(--tile, 52px)); gap: var(--gap); }
     .tile {
       height: var(--tile, 52px); border-radius: 4px; border: 2px solid var(--line); background: var(--surface);

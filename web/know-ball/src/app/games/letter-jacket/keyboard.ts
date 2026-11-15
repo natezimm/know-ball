@@ -34,7 +34,7 @@ const ROWS = [[...'qwertyuiop'], [...'asdfghjkl'], ['Enter', ...'zxcvbnm', 'Back
     .keyboard { display: grid; gap: 6px; }
     .keys { display: flex; justify-content: center; gap: 5px; }
     .key {
-      flex: 1 1 0; min-width: 0; max-width: 44px; height: clamp(42px, 6.4dvh, 52px); padding: 0;
+      flex: 1 1 0; min-width: 0; max-width: 44px; height: var(--key, clamp(42px, 6.4dvh, 52px)); padding: 0;
       border: 2px solid var(--line); border-radius: 4px; background: var(--surface); color: var(--text);
       font: 700 18px/1 var(--font); text-transform: uppercase; cursor: pointer; touch-action: manipulation;
     }
