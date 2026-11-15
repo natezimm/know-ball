@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
 import { GameState, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
+import { noticeOnMiss } from '../../core/miss-notice';
 import { loadFromRoute } from '../../core/puzzle-route';
 import { Avatar } from '../../shared/avatar/avatar';
 import { GameShell } from '../../shared/game-shell/game-shell';
@@ -191,6 +192,12 @@ export class CareerPath {
 
   constructor() {
     loadFromRoute(this.store, 'career-path', this.puzzleId, this.league);
+    noticeOnMiss(this.store, this.state, (now, before) => {
+      const open = (state: typeof now) => (state.clues?.hints ?? []).filter((h) => h.value);
+      const hints = open(now);
+      const hint = hints[hints.length - 1];
+      return hints.length > open(before).length ? `${hint.label}: ${hint.value}.` : null;
+    });
     effect(() => {
       const s = this.state();
       if (s && untracked(this.loaded)?.puzzleId !== s.puzzleId) {
