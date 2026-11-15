@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { easternDate, nextEasternMidnight } from '../../core/games';
+import { saveNumbersToday } from '../../core/numbers-today';
 import { Countdown } from '../../shared/countdown/countdown';
 import { NextGame } from '../../shared/next-game/next-game';
 import { Tilt } from '../../shared/tilt/tilt';
@@ -363,7 +364,7 @@ export class NumbersDontLie {
       const s = await action();
       if (this.destroyed) return;
       if (s.mode === 'practice' && s.filters) { this.restoreFilters(s.filters); this.saveFilters(); }
-      this.state.set(s); this.setup.set(false); this.choice = s.review[s.position]?.optionId || '';
+      this.state.set(s); saveNumbersToday(s); this.setup.set(false); this.choice = s.review[s.position]?.optionId || '';
       await this.router.navigate([], {queryParams:{round:s.id},replaceUrl:true});
       if (this.destroyed) return;
       setTimeout(() => {

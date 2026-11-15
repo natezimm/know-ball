@@ -28,6 +28,10 @@ describe('Numbers practice filters and coverage', () => {
   });
   afterEach(() => http.verify());
 
+  it("remembers the daily round for the home page, and not a practice round", async () => {
+    expect(JSON.parse(localStorage.getItem('knowball.numbers.today')!)).toMatchObject({ date: '2026-10-28', answered: 0, complete: false });
+  });
+
   it('persists all filters and restores the saved round filters over later preferences', async () => {
     game.selected = ['nba']; game.chosen = ['playoff-moments']; game.fromYear = 2023; game.throughYear = 2023;
     game.filtersChanged(); http.expectOne(ROOT + '/practice/coverage').flush(fresh); await settle();

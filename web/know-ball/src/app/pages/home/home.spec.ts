@@ -3,7 +3,10 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { TodayEntry } from '../../core/game-api';
-import { Home, cardStatus } from './home';
+import { easternDate } from '../../core/games';
+import { saveNumbersToday } from '../../core/numbers-today';
+import { useMemoryStorage } from '../../games/letter-jacket/memory-storage';
+import { Home, cardStatus, quizStatus } from './home';
 
 const entry = (overrides: Partial<TodayEntry>): TodayEntry => ({
   game: 'scouting-report',
@@ -19,7 +22,7 @@ const entry = (overrides: Partial<TodayEntry>): TodayEntry => ({
 
 describe('Home', () => {
   let stats: unknown[] = [];
-  beforeEach(() => { stats = []; });
+  beforeEach(() => { stats = []; useMemoryStorage(); });
 
   async function render(today: TodayEntry[] | 'down', paused: string[] = []) {
     TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
@@ -130,5 +133,26 @@ describe('Home', () => {
     expect(cardStatus(photo, today({ status: 'won', guesses: 2 }), true).foil).toBe('holo');
     expect(cardStatus(photo, today({ status: 'playing', guesses: 1 }), true).label).toBe('Carry on · 1 of 4 misses');
     expect(cardStatus(photo, today({ status: 'lost', guesses: 4 }), true).label).toBe('Missed · see the answer');
+  });
+
+  it("shows today's quiz score and streak on its card once it is finished in this browser", async () => {
+    saveNumbersToday({ mode: 'daily', date: easternDate(), answeredCount: 5, correctCount: 4, complete: true, dailyStreak: 2 });
+    const el = await render([]);
+    const card = [...el.querySelectorAll('.card')].at(-1)!;
+    expect(card.querySelector('.badge')?.textContent?.trim()).toBe('Scored 4 of 5');
+    expect(card.querySelector('.badge')?.classList).toContain('done');
+    expect(card.classList).toContain('kb-foil');
+    expect(card.querySelector('.streak')?.getAttribute('aria-label')).toBe('2-day streak');
+  });
+
+  it('words each state of the quiz card', () => {
+    const play = "Play today's quiz";
+    const today = { date: '2026-11-14', answered: 0, correct: 0, complete: false, streak: 0 };
+    expect(quizStatus(play, null)).toEqual({ label: play, open: true });
+    expect(quizStatus(play, today)).toEqual({ label: play, open: true });
+    expect(quizStatus(play, { ...today, answered: 2, correct: 1 })).toEqual({ label: 'Carry on · 2 of 5', open: true });
+    expect(quizStatus(play, { ...today, answered: 5, correct: 5, complete: true }).foil).toBe('gold');
+    expect(quizStatus(play, { ...today, answered: 5, correct: 3, complete: true }).foil).toBe('holo');
+    expect(quizStatus(play, { ...today, answered: 5, correct: 2, complete: true })).toEqual({ label: 'Scored 2 of 5', open: true, done: true, foil: undefined });
   });
 });

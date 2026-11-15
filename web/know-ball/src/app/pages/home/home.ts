@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameApi, GameSlug, GameStats, League, TodayEntry } from '../../core/game-api';
+import { NumbersToday, numbersStreak, numbersToday } from '../../core/numbers-today';
 import { Tilt } from '../../shared/tilt/tilt';
 
 interface GameCard {
@@ -19,6 +20,8 @@ interface GameCard {
   daily?: GameSlug;
   /** A daily that counts misses rather than guesses (Team Photo), whose today entry reports misses. */
   limitsMisses?: boolean;
+  /** The daily quiz, whose state for today is remembered by this browser rather than listed by the API. */
+  quiz?: boolean;
 }
 
 /**
@@ -52,6 +55,15 @@ export function cardStatus(
     default:
       return { label: `Play No. ${today.number}`, open: true };
   }
+}
+
+/** The quiz card: today's score once finished, in foil for three or more right and gold for all five. */
+export function quizStatus(play: string, today: NumbersToday | null): ReturnType<typeof cardStatus> {
+  if (!today) return { label: play, open: true };
+  if (today.complete) {
+    return { label: `Scored ${today.correct} of 5`, open: true, done: true, foil: today.correct === 5 ? 'gold' : today.correct >= 3 ? 'holo' : undefined };
+  }
+  return today.answered ? { label: `Carry on · ${today.answered} of 5`, open: true } : { label: play, open: true };
 }
 
 const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
@@ -144,6 +156,12 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
       text-shadow: 1.5px 1.5px 0 var(--cream), 3px 3px 0 var(--navy); transform: rotate(-3deg);
     }
     .lede { color: var(--muted); font-size: 20px; margin: 18px 0 0; }
+    /* On a phone the games come first: a shorter welcome, so the second card shows without scrolling. */
+    @media (max-width: 500px) {
+      .hero { padding: 0 0 20px; }
+      .kicker { margin-bottom: 6px; font-size: 13px; }
+      .lede { font-size: 17px; margin-top: 10px; }
+    }
 
     /* Three across on a wide screen, with a short last row centred under the full one rather than left behind. */
     .grid {
@@ -157,7 +175,9 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
       .grid > .card:first-child:nth-last-child(odd) { grid-column: 1 / -1; min-height: 0; }
     }
     @media (max-width: 500px) {
-      .grid { grid-template-columns: minmax(0, 1fr); }
+      .grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+      .grid > .card { min-height: 0; padding: 16px 16px 18px; gap: 4px; }
+      .grid h2 { margin-top: 2px; }
     }
     /* Each game is a card from the same set: trim colour outside, then a cream gap and a navy line. */
     .card {
@@ -227,7 +247,7 @@ export class Home {
       name: 'Team Photo', kind: 'Daily', link: '/team-photo', daily: 'team-photo', icon: 'photo', trim: 'var(--red)', limitsMisses: true,
       blurb: 'A blank team photo of an NBA Finals team. Name the starting five before your fourth miss.',
     },
-    { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz",
+    { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz", quiz: true,
       blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },
   ];
 
@@ -235,6 +255,8 @@ export class Home {
   private readonly today = signal<TodayEntry[] | null | undefined>(undefined);
   private readonly stats = signal<GameStats[]>([]);
   private readonly paused = signal<string[]>([]);
+  private readonly quiz = numbersToday();
+  private readonly quizStreak = numbersStreak();
 
   protected readonly cards = computed(() => {
     const today = this.today();
@@ -245,6 +267,7 @@ export class Home {
       rows?.find((r) => r.game === game && (r.league ?? 'nba') === league);
     return this.games.map((card) => {
       if (paused.includes(card.link.slice(1))) return { ...card, status: { label: 'Taking a break', open: false } as ReturnType<typeof cardStatus>, nfl: null, streak: 0 };
+      if (card.quiz) return { ...card, status: quizStatus(card.play!, this.quiz), nfl: null, streak: this.quizStreak };
       const status = cardStatus(card, find(today, card.daily, 'nba'), loaded);
       // The NFL edition shows only once the API lists it for today.
       const nflEntry = find(today, card.daily, 'nfl');

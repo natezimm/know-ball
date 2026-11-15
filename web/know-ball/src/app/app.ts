@@ -12,7 +12,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         <span>KNOW BALL</span>
       </a>
       <nav aria-label="Main">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Games</a>
+        <!-- On the home page the games are already on screen, so the link shows only inside a game. -->
+        <a routerLink="/" routerLinkActive #home="routerLinkActive" [routerLinkActiveOptions]="{ exact: true }" [hidden]="home.isActive">Games</a>
       </nav>
     </header>
     <main #main id="main" tabindex="-1">

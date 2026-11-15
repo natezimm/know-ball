@@ -2,7 +2,12 @@ import { expect, test } from './support';
 
 test('portfolio navigation, metadata and social preview describe the game site', async ({ page, request }) => {
   await page.goto('/');
-  await expect(page.getByRole('navigation', { name: 'Main', exact: true }).getByRole('link')).toHaveText(['Games']);
+  // The way back to the games shows inside a game, not on the home page where they already are.
+  const main = page.getByRole('navigation', { name: 'Main', exact: true });
+  await expect(main.getByRole('link')).toHaveCount(0);
+  await page.goto('/letter-jacket');
+  await main.getByRole('link', { name: 'Games' }).click();
+  await expect(page).toHaveURL(/\/$/);
   const footer = page.getByRole('contentinfo');
   await expect(footer.getByRole('link', { name: 'Nathan Zimmerman' })).toHaveAttribute('href', 'https://www.nathanzimmerman.com/');
   await expect(footer.getByRole('link', { name: 'GitHub' })).toHaveAttribute('href', 'https://github.com/natezimm/know-ball');
