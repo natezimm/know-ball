@@ -366,6 +366,11 @@ export function shareResult(attempts: readonly Attempt[], won: boolean, wordLeng
     @media (max-width: 420px) {
       .tile-mark { width: 48px; height: 48px; font-size: 25px; }
     }
+    /* On the narrowest phones the word lengths and the guess count must still share one row. */
+    @media (max-width: 360px) {
+      .lengths { gap: 6px; }
+      .status { font-size: 15px; }
+    }
   `,
 })
 export class LetterJacket {

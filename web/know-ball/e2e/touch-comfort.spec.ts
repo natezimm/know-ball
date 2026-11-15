@@ -64,7 +64,8 @@ test('Letter Jacket word lengths and hints, and the home page, take a full-size 
 
   await page.goto('/');
   const nfl = page.getByRole('link', { name: /^Scouting Report NFL/ });
-  await nfl.scrollIntoViewIfNeeded();
+  // Mid-screen, so the area above and below the badge is on screen too.
+  await nfl.evaluate((el) => el.scrollIntoView({ block: 'center' }));
   expect(await takesTaps(nfl), 'NFL badge').toBe(true);
   expect(await smallestText(page)).toBeGreaterThanOrEqual(13);
 });
