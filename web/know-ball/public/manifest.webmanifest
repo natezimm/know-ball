@@ -1,7 +1,7 @@
 {
   "name": "Know Ball",
   "short_name": "Know Ball",
-  "description": "Daily sports trivia: Letter Jacket, Scouting Report, Career Path and Numbers Don't Lie",
+  "description": "Daily sports trivia: Scouting Report, Career Path, Back of the Card, Team Photo, Numbers Don't Lie and Letter Jacket",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

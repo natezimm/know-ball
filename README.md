@@ -1,6 +1,6 @@
 # Know Ball
 
-Sports trivia: three daily guess-the-player games, a daily sports trivia quiz and an unlimited word game, with new
+Sports trivia: four daily guess-the-player games, a daily sports trivia quiz and an unlimited word game, with new
 dailies at midnight Eastern. Angular front end, ASP.NET Core API and PostgreSQL, fed by a nightly import of every NBA player
 since 1947.
 
