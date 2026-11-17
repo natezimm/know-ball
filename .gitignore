@@ -17,6 +17,14 @@ node_modules/
 .transfer.tar.gz
 media/
 
+# Python
+__pycache__/
+*.py[cod]
+
+# Local PostgreSQL upgrade artifacts
+.postgres-upgrade-backups/
+.postgres-upgrade.lock
+
 # Local Understand Anything analysis
 .ua/
 
