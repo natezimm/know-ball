@@ -69,6 +69,8 @@ positions a stat line describes: quarterbacks, running backs, receivers, tight e
 linemen or specialists. Back of the Card still only uses careers that began in 1999 or later; Team Photo needs every
 starter's season, Peyton Manning's included. Everyone else's lines only place him on a team each season. A season split by a
 trade is stored like a basketball one: a line per team and a combined line with no team that carries the stats.
+Each team's line has what he did there, summed from the game-by-game files (`stats_player_week_{season}.csv`), which
+are read only for seasons with a traded player; Team Photo ranks a team's players by those lines.
 They add about 51,600 rows and 60 MB to the load's peak memory (about 366 MB resident with the heap capped at 200 MB,
 measured 2026-11-22 on a full load with the schedule's 893 team records).
 

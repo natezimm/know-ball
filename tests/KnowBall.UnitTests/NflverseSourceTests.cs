@@ -58,7 +58,12 @@ public class NflverseSourceTests
 
         // Season file: the team he was traded away from first. Weekly files: in week order.
         var bravo = snapshot.Players.Single(p => p.ExternalId == "00-0000002");
-        Assert.Equal("2023 ARI*, 2023 NYJ*, 2024 NYJ*, 2024 BUF*, 2025 BUF", Path(bravo));
+        Assert.Equal("2023 ARI*, 2023 NYJ*, 2024 NYJ*, 2024 BUF*, 2024 , 2025 BUF", Path(bravo));
+        // His 2024 split by team from the game-by-game file, under the roster's team keys; the whole season on the line with no team.
+        var bravo2024 = bravo.Seasons.Where(s => s.Season == 2024).ToList();
+        Assert.Equal(
+            ["NYJ 2 {\"rec\":7,\"wyd\":80}", "BUF 1 {\"rec\":4,\"wyd\":61,\"wtd\":1}", "- 3 {\"rec\":11,\"wyd\":141,\"wtd\":1}"],
+            bravo2024.Select(s => $"{s.TeamKey ?? "-"} {s.Games} {s.StatsJson}"));
         Assert.Equal(("Bravo", "Catcher Jr."), (bravo.FirstName, bravo.LastName));
         Assert.Equal(73, bravo.HeightInches); // "6-1"
         Assert.Equal("0", bravo.JerseyNumber); // 0 has been allowed since 2023
@@ -150,6 +155,13 @@ public class NflverseSourceTests
             ["2023 ARI total 2", "2024 NYJ split -", "2024 BUF split -", "2024 - total 15", "2025 BUF total 4"],
             lines.Select(l => $"{l.Season} {l.TeamKey ?? "-"} {(l.IsSeasonTotal ? "total" : "split")} {l.Games?.ToString() ?? "-"}").ToList());
         Assert.Equal("{\"rec\":50}", lines[3].StatsJson);
+        Assert.Equal("{}", lines[1].StatsJson);
+
+        // With the game-by-game split, each team's line carries what he did there.
+        var split = NflverseHistorySource.CardLines(spells, new() { [2024] = 2, [2025] = 1 }, [new(2024, 15, "BUF", "{\"rec\":50}")],
+            new Dictionary<(int, string), NflverseHistorySource.StatLine> { [(2024, "NYJ")] = new(2024, 5, "NYJ", "{\"rec\":12}") });
+        Assert.Equal(("{\"rec\":12}", (int?)5), (split[0].StatsJson, split[0].Games));
+        Assert.Equal("{}", split[1].StatsJson);
     }
 
     [Fact]

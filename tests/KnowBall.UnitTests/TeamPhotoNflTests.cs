@@ -56,6 +56,8 @@ public class TeamPhotoNflTests : IDisposable
         Add(ctx, nfl, bal, 2000, "Qadry Ismail", "WR", 15, """{"rec":49,"wyd":655}""");
         Add(ctx, nfl, bal, 2000, "Travis Taylor", "WR", 9, """{"rec":28,"wyd":276}""");
         Add(ctx, nfl, bal, 2000, "Shannon Sharpe", "TE", 16, """{"rec":67,"wyd":810}""");
+        // Traded to Baltimore midseason: his Ravens line leads their receivers, though his whole season is on a line with no team.
+        Add(ctx, nfl, bal, 2000, "Midseason Arrival", "WR", 8, """{"rec":40,"wyd":700}""", split: (nyj, """{"rec":30,"wyd":400}"""));
 
         // 1999 St. Louis has no tight end on record, so it makes no photo.
         Add(ctx, nfl, stl, 1999, "Kurt Warner", "QB", 16, """{"att":499}""");
@@ -78,7 +80,7 @@ public class TeamPhotoNflTests : IDisposable
     }
 
     private static void Add(Microsoft.EntityFrameworkCore.DbContext ctx, League league, Team team, int season, string name, string pos, int games,
-        string? stats, string? gsis = null, double popularity = 50)
+        string? stats, string? gsis = null, double popularity = 50, (Team Team, string Stats)? split = null)
     {
         var space = name.IndexOf(' ');
         var player = new Player
@@ -88,7 +90,14 @@ public class TeamPhotoNflTests : IDisposable
             HeadshotUrl = $"https://heads/{name.Replace(' ', '-')}.png",
         };
         // Linemen and kickers have no stat line, only the stint that puts them on the team.
-        if (stats is not null) player.SeasonStats.Add(new PlayerSeasonStat { Season = season, Team = team, Games = games, StatsJson = stats });
+        if (split is { } other)
+        {
+            // A season split by a trade, stored as the importer does: a line per team and the whole season on a line with no team.
+            player.SeasonStats.Add(new PlayerSeasonStat { Season = season, Team = other.Team, IsSeasonTotal = false, Games = 8, StatsJson = other.Stats });
+            player.SeasonStats.Add(new PlayerSeasonStat { Season = season, Team = team, IsSeasonTotal = false, Games = games, StatsJson = stats! });
+            player.SeasonStats.Add(new PlayerSeasonStat { Season = season, Games = games + 8, StatsJson = """{"rec":70,"wyd":1100}""" });
+        }
+        else if (stats is not null) player.SeasonStats.Add(new PlayerSeasonStat { Season = season, Team = team, Games = games, StatsJson = stats });
         player.Stints.Add(new PlayerTeamStint { Team = team, StartSeason = season - 1, EndSeason = season + 1, Seasons = 3 });
         if (gsis is not null) player.ExternalIds.Add(new PlayerExternalId { Source = "gsis", Value = gsis });
         ctx.Add(player);
@@ -222,11 +231,17 @@ public class TeamPhotoNflTests : IDisposable
     }
 
     [Fact]
-    public async Task The_curated_list_can_put_the_super_bowl_quarterback_in()
+    public async Task The_curated_list_can_put_the_super_bowl_quarterback_in_and_a_traded_player_counts_his_line_for_this_team()
     {
         var state = await DailyFor("2000-BAL");
         Assert.True((await Guess(state.PuzzleId, "Trent Dilfer")).Result!.Guesses[^1].Correct);
         Assert.False((await Guess(state.PuzzleId, "Tony Banks")).Result!.Guesses[^1].IsMiss);
+
+        // His 700 yards for Baltimore lead Ismail's 655; the receivers stand back left and back right.
+        var arrival = (await Guess(state.PuzzleId, "Midseason Arrival")).Result!;
+        Assert.Equal((true, 0), (arrival.Guesses[^1].Correct, arrival.Guesses[^1].Feedback!["slot"]!.GetValue<int>()));
+        Assert.Equal(700.0, arrival.Payload["slots"]![0]!["stats"]!["wyd"]!.GetValue<double>());
+        Assert.False((await Guess(state.PuzzleId, "Travis Taylor")).Result!.Guesses[^1].IsMiss);
     }
 
     [Fact]
