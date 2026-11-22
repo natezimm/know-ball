@@ -28,7 +28,7 @@ Scouting Report, Career Path and Back of the Card also have an NFL edition. `dai
 streak and stats. Every puzzle response carries `league`, and so does each entry from `me/stats` and `me/today`.
 A guess at a player from another league is refused with 400, and a league a game has no edition in returns 404.
 The NFL editions are live only when `Games:Leagues` lists `nfl` (`nba,nfl` in appsettings); the importer reads
-the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl`, `/career-path/nfl` and `/back-of-the-card/nfl`.
+the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl`, `/career-path/nfl`, `/back-of-the-card/nfl` and `/team-photo/nfl`.
 
 An NFL Back of the Card payload has `columns` (`label` and `decimals`) for the player's position group (passing,
 rushing, receiving or defence), each season's `games` and `values` as season totals, and a career line of totals;
@@ -41,6 +41,14 @@ player's games, points, rebounds and assists that season. A guess at a starter i
 `{ "bench": true }`; anyone else is a miss. `maxGuesses` (4) is a limit on misses, not guesses, and the game is
 won once every slot is named. The answer is `{ "slots": [{ "playerId", "name", "headshotUrl" }] }` in slot order.
 In `me/stats` its distribution counts solves by misses (0 to 3), and in `me/today` its `guesses` are misses.
+
+The NFL Team Photo is one of the two Super Bowl teams of a season since 1999 (`finals` is the Super Bowl result,
+`season` the season's own year, and the record adds `ties`). Its five `slots` are, in order, a wide receiver, the
+tight end and the other wide receiver in the `back` row, then the quarterback and running back in `front`: each the
+player with the most pass attempts, carries or receiving yards at his position for that team. A slot has `games`
+and `stats`, the season totals by card key (`pyd`, `ptd`, `int` for the quarterback; `car`, `ryd`, `rtd` for the
+running back; `rec`, `wyd`, `wtd` for a receiver). Anyone else on that team's roster that season, linemen and
+kickers included, is a free bench guess. Practice rounds are other playoff teams since 1999 whose five are clear.
 
 ## Letter Jacket
 

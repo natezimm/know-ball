@@ -5,3 +5,7 @@ gsis_id,display_name,common_first_name,first_name,last_name,birth_date,position_
 00-0000004,Delta Backup,Delta,Delta,Backup,1990-01-01,OL,OT,78,310,,Iowa,71,2023,2023,KC,CUT,,,,,
 00-0000005,Echo Rookie,Echo,Echo,Rookie,2002-03-03,RB,RB,70,210,,Georgia,2,2025,2025,BUF,ACT,2025,2,40,BUF,
 00-0000006,Foxtrot Oldtimer,Foxtrot,Foxtrot,Oldtimer,1988-08-08,DB,SAF,72,205,,Miami,21,2010,2024,ARI,RET,2010,3,80,ARI,
+00-0000012,Hotel Runner,Hotel,Hotel,Runner,1990-04-01,RB,RB,72,210,,Kansas,20,2024,2025,KC,ACT,,,,,
+00-0000013,India Wideout,India,India,Wideout,1991-04-02,WR,WR,72,210,,Kansas,21,2024,2025,KC,ACT,,,,,
+00-0000014,Juliet Flanker,Juliet,Juliet,Flanker,1992-04-03,WR,WR,72,210,,Kansas,22,2024,2025,KC,ACT,,,,,
+00-0000015,Kilo Tight,Kilo,Kilo,Tight,1993-04-04,TE,TE,72,210,,Kansas,23,2024,2025,KC,ACT,,,,,

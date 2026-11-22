@@ -29,8 +29,9 @@ public sealed class NflverseOptions
     /// </summary>
     public int MinSeasons { get; set; } = 2;
     /// <summary>
-    /// Season stat lines are kept for careers that began this season or later, the first year nflverse has
-    /// them, for the positions a stat line describes (no linemen on offense, no kickers, punters or snappers).
+    /// Season stat lines are kept from this season on, the first year nflverse has them, for the positions a stat
+    /// line describes (no linemen on offense, no kickers, punters or snappers). A career that began earlier keeps
+    /// the lines from here on, so Team Photo knows who started in 1999 even when he broke in before it.
     /// </summary>
     public int StatLinesFromSeason { get; set; } = 1999;
     /// <summary>
@@ -170,6 +171,8 @@ internal static class NflverseFiles
     public const string DraftPath = "draft_picks/draft_picks.csv";
     public const string CareerStatsPath = "player_stats/player_stats_season.csv";
     public static string SeasonStatsPath(int season) => $"stats_player/stats_player_reg_{season}.csv";
+    /// <summary>Every game since 1999 with its score: what the team records are worked out from.</summary>
+    public const string SchedulePath = "schedules/games.csv";
 
     /// <summary>Inches from "75" or "6-3".</summary>
     public static int? Height(string? value)
@@ -280,7 +283,9 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
         var statsFrom = Math.Max(opts.StatLinesFromSeason, opts.FirstSeason);
         var statLines = await ReadStatLinesAsync(statsFrom, newest, players, cancellationToken);
         var awards = await ReadAwardsAsync(players, spells, newest, teams, cancellationToken);
-        var snapshot = Build(players, draft, spells, production, newest, teams, opts.MinSeasons, statLines, statsFrom, awards);
+        var records = await ReadRecordsAsync(opts.FirstSeason, newest, teams, cancellationToken);
+        var snapshot = Build(players, draft, spells, production, newest, teams, opts.MinSeasons, statLines, statsFrom, awards)
+            with { TeamSeasons = records };
         logger.LogInformation("nflverse has {Players} players and {Teams} teams from {First} through {Season}",
             snapshot.Players.Count, snapshot.Teams.Count, opts.FirstSeason, newest);
         return snapshot;
@@ -340,7 +345,7 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
 
             var fromYear = facts.RookieSeason is { } rookie ? Math.Min(rookie, firstSeason) : firstSeason;
             List<StatLine>? stats = null;
-            var keepLines = fromYear >= statsFrom && HasStatLine(facts.Position) && statLines is not null && statLines.TryGetValue(id, out stats);
+            var keepLines = HasStatLine(facts.Position) && statLines is not null && statLines.TryGetValue(id, out stats);
 
             history.Add(new HistoryPlayer(
                 ExternalId: id,
@@ -418,6 +423,54 @@ public sealed class NflverseHistorySource(HttpClient http, IOptions<NflverseOpti
             }
         }
         return lines;
+    }
+
+    /// <summary>
+    /// Each team's regular-season record and whether it made the playoffs, from the schedule file. Empty when the file is
+    /// not there (an offline run), which leaves the records the database already has.
+    /// </summary>
+    private async Task<List<HistoryTeamSeason>> ReadRecordsAsync(int from, int latestSeason, NflTeams teams, CancellationToken ct)
+    {
+        await using var stream = await NflverseFiles.OpenAsync(http, options.Value, NflverseFiles.SchedulePath, ct);
+        if (stream is null)
+        {
+            logger.LogInformation("nflverse has no schedule file; team records are left as they are");
+            return [];
+        }
+        var rows = new List<CsvRow>();
+        await foreach (var r in CsvReader.StreamAsync(stream, ct)) rows.Add(r);
+        var records = Records(rows, from, latestSeason, teams);
+        logger.LogInformation("nflverse schedule gives {Records} team records", records.Count);
+        return records;
+    }
+
+    /// <summary>
+    /// Wins, losses and ties in regular-season games that have a score, and a playoff berth for any team that played a
+    /// postseason game. A game not played yet has no score and counts for nothing.
+    /// </summary>
+    internal static List<HistoryTeamSeason> Records(IEnumerable<CsvRow> games, int from, int latestSeason, NflTeams teams)
+    {
+        var tally = new Dictionary<(string Team, int Season), (int W, int L, int T, bool Playoffs)>();
+        foreach (var g in games)
+        {
+            if (g.Int("season") is not { } season || season < from || season > latestSeason) continue;
+            if (g.Int("home_score") is not { } home || g.Int("away_score") is not { } away) continue;
+            var regular = g.Str("game_type") == "REG";
+            foreach (var (code, mine, theirs) in new[] { (g.Str("home_team"), home, away), (g.Str("away_team"), away, home) })
+            {
+                if (teams.Identity(code, season) is not { } key) continue;
+                var t = tally.GetValueOrDefault((key, season));
+                if (!regular) t.Playoffs = true;
+                else if (mine > theirs) t.W++;
+                else if (mine < theirs) t.L++;
+                else t.T++;
+                tally[(key, season)] = t;
+            }
+        }
+        return tally
+            .OrderBy(t => t.Key.Season).ThenBy(t => t.Key.Team, StringComparer.Ordinal)
+            .Select(t => new HistoryTeamSeason(t.Key.Team, t.Key.Season, t.Value.W, t.Value.L, t.Value.Playoffs, t.Value.T))
+            .ToList();
     }
 
     /// <summary>ESPN's award ids for the AP honors read from it, and the award each one is.</summary>

@@ -89,6 +89,38 @@ public sealed class NflGameApiTests(ApiFactory factory) : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Nfl_team_photo_is_a_super_bowl_teams_offense_with_its_record_from_the_schedule()
+    {
+        var client = NewPlayer();
+        var daily = await Json(await client.GetAsync("/api/team-photo/daily?league=nfl"));
+        var payload = daily.GetProperty("payload");
+
+        // Kansas City lost the Super Bowl after the 2024 season, and the fixtures hold that offense.
+        Assert.Equal(("nfl", "Chiefs", 2024, "lost"),
+            (daily.GetProperty("league").GetString(), payload.GetProperty("team").GetProperty("name").GetString(),
+                payload.GetProperty("season").GetInt32(), payload.GetProperty("finals").GetString()));
+        Assert.Equal((1, 1, 1), (payload.GetProperty("wins").GetInt32(), payload.GetProperty("losses").GetInt32(), payload.GetProperty("ties").GetInt32()));
+        Assert.Equal(["WR", "TE", "WR", "QB", "RB"], payload.GetProperty("slots").EnumerateArray().Select(s => s.GetProperty("position").GetString()));
+        Assert.Equal(4100, payload.GetProperty("slots")[3].GetProperty("stats").GetProperty("pyd").GetDouble());
+        Assert.DoesNotContain("Passer", daily.GetRawText());
+        Assert.DoesNotContain("Wideout", daily.GetRawText());
+
+        var puzzleId = daily.GetProperty("puzzleId").GetInt32();
+        var nbaId = (await Json(await client.GetAsync("/api/players/search?q=curry")))[0].GetProperty("id").GetInt32();
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = nbaId })).StatusCode);
+
+        var missed = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = await PlayerId(client, "Bravo Catcher Jr.", true) }));
+        // A miss: wrong, and not marked free as a bench player's guess would be.
+        Assert.Equal((false, JsonValueKind.Null), (missed.GetProperty("guesses")[0].GetProperty("correct").GetBoolean(), missed.GetProperty("guesses")[0].GetProperty("miss").ValueKind));
+
+        JsonElement state = missed;
+        foreach (var name in new[] { "India Wideout", "Kilo Tight", "Juliet Flanker", "Alpha Passer", "Hotel Runner" })
+            state = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = await PlayerId(client, name, true) }));
+        Assert.Equal("won", state.GetProperty("status").GetString());
+        Assert.Equal("Alpha Passer", state.GetProperty("answer").GetProperty("slots")[3].GetProperty("name").GetString());
+    }
+
+    [Fact]
     public async Task Leagues_without_an_edition_are_not_found()
     {
         var client = NewPlayer();

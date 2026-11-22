@@ -142,6 +142,8 @@ public class TeamSeason
     public int Season { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
+    /// <summary>Tied games: only the NFL has them.</summary>
+    public int Ties { get; set; }
     public bool MadePlayoffs { get; set; }
 }
 

@@ -1,6 +1,7 @@
 // Writes a small made-up NFL league in the layout of the nflverse releases, for the browser tests:
-// enough current players to lose a game of Scouting Report, enough well-travelled ones for Career Path, and five
-// seasons of stats for Back of the Card.
+// enough current players to lose a game of Scouting Report, enough well-travelled ones for Career Path, five
+// seasons of stats for Back of the Card, and a Kansas City offense (quarterback, running back, two receivers and a
+// tight end) for Team Photo, whose dailies are the Super Bowl teams: Kansas City played in three from 2022 to 2024.
 // The seasons run up to this year, so the importer reads them as recent whatever the date.
 // Usage: node nfl-fixtures.mjs <out-dir>; prints the first season, for Sources__Nflverse__FirstSeason.
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -16,6 +17,10 @@ const seasons = [year - 4, year - 3, year - 2, year - 1, year];
 // player starts a season early with his first team, so the paths below keep the stops they had with four seasons.
 const players = [
   ['Rex Launcher', 'QB', 76, '9', 1996, ['KC', 'KC', 'KC', 'KC']],
+  ['Jet Sweeper', 'RB', 69, '25', 1999, ['KC', 'KC', 'KC', 'KC']],
+  ['Rocket Deep', 'WR', 72, '10', 1998, ['KC', 'KC', 'KC', 'KC']],
+  ['Slot Shifty', 'WR', 69, '84', 1997, ['KC', 'KC', 'KC', 'KC']],
+  ['Bolt Tight', 'TE', 78, '88', 1996, ['KC', 'KC', 'KC', 'KC']],
   ['Milo Gunslinger', 'QB', 75, '12', 1994, ['DEN', 'SEA', 'CHI', 'CHI']],
   ['Dash Burner', 'RB', 70, '22', 1998, ['SF', 'SF', 'SF', 'SF']],
   ['Hank Bulldozer', 'RB', 72, '28', 1995, ['DAL', 'PIT', 'NE', 'NE']],
@@ -91,5 +96,17 @@ for (const [s, season] of seasons.entries()) {
   });
   write(`stats_player/stats_player_reg_${season}.csv`, [statColumns, ...rows]);
 }
+
+// A few scored games each season, so every team here has a record (Team Photo makes no photo without one), and a
+// playoff game for Kansas City.
+const teamsIn = (s) => [...new Set(players.map((p) => p[5][s]))].sort();
+write('schedules/games.csv', [
+  ['game_id', 'season', 'game_type', 'week', 'away_team', 'away_score', 'home_team', 'home_score'],
+  ...seasons.flatMap((season, s) => {
+    const teams = teamsIn(s);
+    const games = teams.map((team, i) => [`${season}_01_${team}`, season, 'REG', 1, teams[(i + 1) % teams.length], 17 + i, team, 24 + i]);
+    return [...games, [`${season}_19_KC`, season, 'DIV', 19, 'BUF', 20, 'KC', 27]];
+  }),
+]);
 
 process.stdout.write(`${seasons[0]}\n`);

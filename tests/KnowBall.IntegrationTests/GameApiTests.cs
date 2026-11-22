@@ -233,11 +233,11 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(5, state.GetProperty("answer").GetProperty("slots").GetArrayLength());
 
         var stats = await Json(await client.GetAsync("/api/me/stats"));
-        var photo = stats.EnumerateArray().Single(s => s.GetProperty("game").GetString() == "team-photo");
+        var photo = stats.EnumerateArray().Single(s => s.GetProperty("game").GetString() == "team-photo" && s.GetProperty("league").GetString() == "nba");
         Assert.Equal([0, 1, 0, 0], photo.GetProperty("distribution").EnumerateArray().Select(d => d.GetInt32())); // one miss
         // The home page hears misses, not guesses: six or seven guesses, one of them a miss.
         var today = await Json(await client.GetAsync("/api/me/today"));
-        Assert.Equal(1, today.EnumerateArray().Single(t => t.GetProperty("game").GetString() == "team-photo").GetProperty("guesses").GetInt32());
+        Assert.Equal(1, today.EnumerateArray().Single(t => t.GetProperty("game").GetString() == "team-photo" && t.GetProperty("league").GetString() == "nba").GetProperty("guesses").GetInt32());
     }
 
     [Fact]
@@ -268,7 +268,7 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, (await NewPlayer().GetAsync(path)).StatusCode);
         var today = await Json(await NewPlayer().GetAsync("/api/me/today"));
         Assert.Equal(
-            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba", "back-of-the-card nfl", "team-photo nba"],
+            ["scouting-report nba", "scouting-report nfl", "career-path nba", "career-path nfl", "back-of-the-card nba", "back-of-the-card nfl", "team-photo nba", "team-photo nfl"],
             today.EnumerateArray().Select(t => $"{t.GetProperty("game").GetString()} {t.GetProperty("league").GetString()}"));
     }
 
