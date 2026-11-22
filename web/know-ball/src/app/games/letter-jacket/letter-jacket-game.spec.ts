@@ -150,6 +150,25 @@ describe('LetterJacketGame', () => {
     expect(game.currentGuess()).toBe('wh');
   });
 
+  it('drops keys typed ahead when a lost response sends the board back to the server', () => {
+    startGame();
+    type('punts');
+    game.press('Enter');
+    type('other');
+    game.press('Enter');
+    const request = http.expectOne(GUESSES);
+    request.error(new ProgressEvent('error'));
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved,
+      guesses: [{ ...saved.guesses[0], requestId: request.request.body.requestId }],
+    });
+    expect(game.status()).toBe('playing');
+    // A later word replays nothing that was typed before the board was reloaded.
+    guess('blitz', { ...miss, attemptsRemaining: 4 });
+    http.expectNone(GUESSES);
+    expect(game.attempts().map((a) => a.word)).toEqual(['punts', 'blitz']);
+    expect(game.currentGuess()).toBe('');
+  });
+
   it('drops keys typed ahead when the word is turned away', () => {
     startGame();
     type('abcde');

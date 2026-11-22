@@ -155,6 +155,8 @@ export class LetterJacketGame {
     this.status.set('validating');
     this.request = this.api.getGame(this.gameId()).subscribe({
       next: (state) => {
+        // Keys typed ahead were meant for a board that may have changed; drop them rather than replay them later.
+        this.queued = [];
         const acknowledged = this.applyState(state, {
           currentGuess: this.currentGuess(), categoryHint: this.categoryHint(), pendingGuess: this.pendingGuess,
         });
@@ -162,6 +164,7 @@ export class LetterJacketGame {
       },
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) { this.expire(); return; }
+        this.queued = [];
         if (failure) this.message.set(failure);
         this.status.set('playing');
       },
