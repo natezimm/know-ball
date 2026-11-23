@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { GuessRecord } from '../../core/game-api';
 import { gameState, guess } from '../../core/testing';
-import { PhotoPayload, TeamPhoto, photoRows, seasonName, statLine } from './team-photo';
+import { PhotoPayload, TeamPhoto, photoRows, seasonName, statLine, superBowl } from './team-photo';
 
 const slot = (position: string, row: 'back' | 'front', points: number) => ({ position, row, games: 80, points, rebounds: 5, assists: 3 });
 const payload: PhotoPayload = {
@@ -86,6 +86,53 @@ describe('Team Photo', () => {
   });
 });
 
+describe('Team Photo NFL', () => {
+  const spot = (position: string, row: 'back' | 'front', stats: Record<string, number>) => ({ position, row, games: 16, stats });
+  const chiefs: PhotoPayload = {
+    team: { city: 'Kansas City', name: 'Chiefs', abbreviation: 'KC', logoUrl: null },
+    season: 2019,
+    wins: 12,
+    losses: 4,
+    ties: 0,
+    finals: 'won',
+    slots: [
+      spot('WR', 'back', { rec: 58, wyd: 860, wtd: 7 }), spot('TE', 'back', { rec: 97, wyd: 1229, wtd: 5 }), spot('WR', 'back', { rec: 52, wyd: 673, wtd: 3 }),
+      spot('QB', 'front', { pyd: 4031, ptd: 26, int: 5 }), spot('RB', 'front', { car: 111, ryd: 498, rtd: 5 }),
+    ],
+  };
+  let el: HTMLElement;
+  let http: HttpTestingController;
+
+  async function open(p: PhotoPayload) {
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
+    const fixture = TestBed.createComponent(TeamPhoto);
+    fixture.componentRef.setInput('league', 'nfl');
+    http = TestBed.inject(HttpTestingController);
+    el = fixture.nativeElement;
+    await fixture.whenStable();
+    http.expectOne('/api/team-photo/daily?league=nfl').flush(gameState({ game: 'team-photo', league: 'nfl', maxGuesses: 4, payload: p }));
+    await fixture.whenStable();
+  }
+
+  afterEach(() => http.verify());
+
+  it('names the season by its year and the Super Bowl it ended in, with the receivers at the back', async () => {
+    await open(chiefs);
+
+    expect(el.querySelector('.plaque b')?.textContent).toBe('2019 Kansas City Chiefs');
+    expect(el.querySelector('.plaque small')?.textContent).toBe('12–4 · Won Super Bowl LIV');
+    expect([...el.querySelectorAll('.row:not(.front) .pos')].map((p) => p.textContent)).toEqual(['WR', 'TE', 'WR']);
+    expect([...el.querySelectorAll('.row.front .plate')].map((p) => p.textContent?.replace(/\s+/g, ' ').trim()))
+      .toEqual(['4,031 pass yds26 TD · 5 INT', '498 rush yds111 car · 5 TD']);
+    expect(el.querySelector('.help')?.textContent).toContain('two wide receivers and tight end');
+  });
+
+  it('shows a tie in the record, and a practice team as a playoff team', async () => {
+    await open({ ...chiefs, season: 2012, wins: 11, losses: 4, ties: 1, finals: null });
+    expect(el.querySelector('.plaque small')?.textContent).toBe('11–4–1 · Made the playoffs');
+  });
+});
+
 describe('Team Photo helpers', () => {
   it('names the season across the century', () => {
     expect(seasonName(1999)).toBe('1999–00');
@@ -94,6 +141,15 @@ describe('Team Photo helpers', () => {
 
   it('prints a stat line in two parts', () => {
     expect(statLine(slot('C', 'back', 5.4))).toEqual(['5.4 pts', '5.0 reb · 3.0 ast']);
+    expect(statLine({ position: 'TE', row: 'back', games: 16, stats: { rec: 97, wyd: 1229, wtd: 5 } })).toEqual(['1,229 rec yds', '97 rec · 5 TD']);
+    expect(statLine({ position: 'QB', row: 'front', games: 16, stats: { pyd: 300 } })).toEqual(['300 pass yds', '0 TD · 0 INT']);
+  });
+
+  it('numbers the Super Bowl from the season it closed', () => {
+    expect(superBowl(1999)).toBe('XXXIV');
+    expect(superBowl(2012)).toBe('XLVII');
+    expect(superBowl(2019)).toBe('LIV');
+    expect(superBowl(2025)).toBe('LX');
   });
 
   it('keeps slot numbers when laying out the rows', () => {

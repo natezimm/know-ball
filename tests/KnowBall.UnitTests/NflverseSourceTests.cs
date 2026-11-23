@@ -50,17 +50,43 @@ public class NflverseSourceTests
         Assert.Equal(("15", "https://static.www.nfl.com/image/upload/alpha"), (alpha.JerseyNumber, alpha.HeadshotUrl));
         // ESPN's AP awards, linked by the ESPN id in the players file; a tied vote's other winner is no one here.
         Assert.Equal([new HistoryAward(2024, AwardTypes.OffensivePlayer), new HistoryAward(2025, AwardTypes.Mvp)], alpha.Awards);
-        // His career began before the stat lines this build keeps, so his lines only place him on a team.
-        Assert.False(alpha.KeepSeasonLines);
-        Assert.All(alpha.Seasons, s => Assert.Equal("{}", s.StatsJson));
+        // His career began before the first season read, but the stat lines from then on are still his: Team Photo
+        // needs every starter's season, whenever he broke in.
+        Assert.True(alpha.KeepSeasonLines);
+        Assert.Equal((16, 10), (alpha.Seasons.Single(s => s.Season == 2024).Games, alpha.Seasons.Single(s => s.Season == 2025).Games));
+        Assert.Equal("{}", alpha.Seasons.Single(s => s.Season == 2023).StatsJson); // no stat file for 2023 here
 
         // Season file: the team he was traded away from first. Weekly files: in week order.
         var bravo = snapshot.Players.Single(p => p.ExternalId == "00-0000002");
-        Assert.Equal("2023 ARI*, 2023 NYJ*, 2024 NYJ*, 2024 BUF*, 2025 BUF", Path(bravo));
+        Assert.Equal("2023 ARI*, 2023 NYJ*, 2024 NYJ*, 2024 BUF*, 2024 , 2025 BUF", Path(bravo));
+        // His 2024 split by team from the game-by-game file, under the roster's team keys; the whole season on the line with no team.
+        var bravo2024 = bravo.Seasons.Where(s => s.Season == 2024).ToList();
+        Assert.Equal(
+            ["NYJ 2 {\"rec\":7,\"wyd\":80}", "BUF 1 {\"rec\":4,\"wyd\":61,\"wtd\":1}", "- 3 {\"rec\":11,\"wyd\":141,\"wtd\":1}"],
+            bravo2024.Select(s => $"{s.TeamKey ?? "-"} {s.Games} {s.StatsJson}"));
         Assert.Equal(("Bravo", "Catcher Jr."), (bravo.FirstName, bravo.LastName));
         Assert.Equal(73, bravo.HeightInches); // "6-1"
         Assert.Equal("0", bravo.JerseyNumber); // 0 has been allowed since 2023
         Assert.Null(bravo.DraftNumber);
+    }
+
+    [Fact]
+    public async Task History_reads_each_teams_record_from_the_schedule()
+    {
+        var snapshot = await History(MidSeason);
+
+        // Regular-season wins, losses and ties; a playoff game counts only as a berth; a game with no score yet and a
+        // season before the first one read count for nothing; "LAR" and "LA" are both the Rams.
+        Assert.Equal(
+            [
+                new HistoryTeamSeason("ARI", 2024, 1, 0, false),
+                new HistoryTeamSeason("BUF", 2024, 0, 1, true),
+                new HistoryTeamSeason("KC", 2024, 1, 1, true, Ties: 1),
+                new HistoryTeamSeason("NYJ", 2024, 0, 0, false, Ties: 1),
+                new HistoryTeamSeason("KC", 2025, 1, 0, false),
+                new HistoryTeamSeason("LA", 2025, 0, 1, false),
+            ],
+            snapshot.TeamSeasons);
     }
 
     [Fact]
@@ -69,7 +95,8 @@ public class NflverseSourceTests
         var ids = (await History(MidSeason)).Players.Select(p => p.ExternalId).Order().ToList();
 
         // 3 was only ever on a practice squad, 4 played one season and left, 9 is on a team this build does not know.
-        Assert.Equal(["00-0000001", "00-0000002", "00-0000005", "00-0000006"], ids);
+        // 12 to 15 are the rest of Kansas City's 2024 offense, for Team Photo.
+        Assert.Equal(["00-0000001", "00-0000002", "00-0000005", "00-0000006", "00-0000012", "00-0000013", "00-0000014", "00-0000015"], ids);
     }
 
     [Fact]
@@ -128,6 +155,13 @@ public class NflverseSourceTests
             ["2023 ARI total 2", "2024 NYJ split -", "2024 BUF split -", "2024 - total 15", "2025 BUF total 4"],
             lines.Select(l => $"{l.Season} {l.TeamKey ?? "-"} {(l.IsSeasonTotal ? "total" : "split")} {l.Games?.ToString() ?? "-"}").ToList());
         Assert.Equal("{\"rec\":50}", lines[3].StatsJson);
+        Assert.Equal("{}", lines[1].StatsJson);
+
+        // With the game-by-game split, each team's line carries what he did there.
+        var split = NflverseHistorySource.CardLines(spells, new() { [2024] = 2, [2025] = 1 }, [new(2024, 15, "BUF", "{\"rec\":50}")],
+            new Dictionary<(int, string), NflverseHistorySource.StatLine> { [(2024, "NYJ")] = new(2024, 5, "NYJ", "{\"rec\":12}") });
+        Assert.Equal(("{\"rec\":12}", (int?)5), (split[0].StatsJson, split[0].Games));
+        Assert.Equal("{}", split[1].StatsJson);
     }
 
     [Fact]

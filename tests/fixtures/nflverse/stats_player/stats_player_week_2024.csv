@@ -1,0 +1,6 @@
+player_id,player_display_name,position,season,week,season_type,team,opponent_team,receptions,receiving_yards,receiving_tds,attempts
+00-0000002,Bravo Catcher Jr.,WR,2024,1,REG,NYJ,SF,3,30,0,
+00-0000002,Bravo Catcher Jr.,WR,2024,2,REG,NYJ,TEN,4,50,0,
+00-0000002,Bravo Catcher Jr.,WR,2024,6,REG,BUF,NYJ,4,61,1,
+00-0000002,Bravo Catcher Jr.,WR,2024,19,POST,BUF,DEN,9,99,2,
+00-0000001,Alpha Passer,QB,2024,1,REG,KC,BAL,,,,30

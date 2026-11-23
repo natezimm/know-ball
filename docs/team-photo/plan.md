@@ -6,6 +6,12 @@ daily pool is all 100 NBA Finals teams since the 1976 merger, champions and runn
 `Application/Games/TeamPhoto/Data/finals-teams.json`. The sketches have left the lab; `/mockups/team-photo` now opens
 the game.
 
+NFL edition (2026-11-22): Nathan chose the offense's five skill players, a quarterback, a running back, two wide
+receivers and a tight end, each the one with the most pass attempts, carries or receiving yards at his position, with
+four misses as in the NBA game. The daily pool is both Super Bowl teams of every season since 1999, the first season
+with NFL stat lines, in `super-bowl-teams.json` beside the Finals list; add the new pair there after each Super Bowl in
+February, as with the Finals list. The whole roster is the free bench, linemen and kickers too.
+
 Team Photo shows a blank team photo of one NBA team-season, such as the 2015–16 Golden State team that went 73–9.
 The player names the people in it. Each correct name puts a face in the photo. It is the first Know Ball game with
 more than one answer per puzzle.

@@ -28,7 +28,8 @@ stays with your browser.
 - **Career Path**: name the NBA or NFL player from every team they played for, in order; each miss unlocks a hint.
 - **Back of the Card**: name the NBA or NFL player from every season's stats on the back of their card; each miss uncovers
   their teams, then position and height, then award stamps, then draft and college.
-- **Team Photo**: a blank team photo of one of the 100 NBA Finals teams since the 1976 merger; name its starting five
+- **Team Photo**: a blank team photo of one of the 100 NBA Finals teams since the 1976 merger, or one of the NFL's
+  Super Bowl teams since 1999; name its starting five, or its quarterback, running back, two receivers and tight end,
   before your fourth miss. Naming a bench player is free.
 - **Numbers Don't Lie**: five multiple-choice questions on records, nicknames, famous numbers and history across the
   NBA, NFL, MLB and NHL, with an explanation and source for every answer.

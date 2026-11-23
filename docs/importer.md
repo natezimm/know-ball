@@ -52,6 +52,7 @@ run hits it.
 | Wikidata | NBA.com ids (for headshots) and birthplaces | Right after the history |
 | ESPN roster feed | Current team, jersey number, new players | Nightly |
 | nflverse release files (GitHub) | Every NFL player on a game-day roster since 1990 (two seasons or more, or on a roster now): bio, draft slot, NFL.com headshot, team each season; Pro Bowls, All-Pros and career value for fame; season stat lines since 1999 | Every `Import:HistoryRefreshDays` (30) |
+| nflverse schedule (`schedules/games.csv`, same release) | Every game since 1999 with its score: each team's won-lost-tied record and playoff flag by season, for Team Photo | With the NFL history; left as is when the file is missing |
 | ESPN core API (`sports.core.api.espn.com`) | AP MVP, Offensive and Defensive Player and Rookie of the Year, Comeback Player and Super Bowl MVP for each season since 1999, linked by the `espn_id` in nflverse's players file | With the NFL history |
 | `nfl-honors.json` (bundled, from Wikipedia) | AP All-Pro first and second teams and Pro Bowl rosters for each season since 1999 | With the NFL history; the file is refreshed by hand once a year (below) |
 | nflverse current-season roster | Current team, jersey number, active status, new players | Nightly |
@@ -63,11 +64,15 @@ practice squad and released rows do not count. The fame score (`PopularityCalcul
 weighted towards quarterbacks and skill players, so linemen and specialists only rank high as real stars.
 Measured on a full load: about 35 seconds and under 200 MB of managed heap; a second run changes nothing.
 
-Season stat lines are kept for players whose careers began in 1999 or later (the first season nflverse has stats),
-at the positions a stat line describes: quarterbacks, running backs, receivers, tight ends and defenders, but not
-offensive linemen or specialists. Everyone else's lines only place him on a team each season. A season split by a
+Season stat lines are kept from 1999 on (the first season nflverse has stats), whenever the career began, at the
+positions a stat line describes: quarterbacks, running backs, receivers, tight ends and defenders, but not offensive
+linemen or specialists. Back of the Card still only uses careers that began in 1999 or later; Team Photo needs every
+starter's season, Peyton Manning's included. Everyone else's lines only place him on a team each season. A season split by a
 trade is stored like a basketball one: a line per team and a combined line with no team that carries the stats.
-They add about 41,000 rows and 30 MB to the load's peak memory (about 335 MB resident with the heap capped at 200 MB).
+Each team's line has what he did there, summed from the game-by-game files (`stats_player_week_{season}.csv`), which
+are read only for seasons with a traded player; Team Photo ranks a team's players by those lines.
+They add about 51,600 rows and 60 MB to the load's peak memory (about 366 MB resident with the heap capped at 200 MB,
+measured 2026-11-22 on a full load with the schedule's 893 team records).
 
 No open data set has the All-Pro teams or Pro Bowl rosters by season, so `scripts/nfl-honors.py` reads Wikipedia's
 yearly pages into `src/KnowBall.Infrastructure/Data/nfl-honors.json`. Re-run it each year once the All-Pro team is
@@ -98,7 +103,7 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | `Sources:Nflverse:Directory` | empty | Read the nflverse files from a folder laid out like the releases (`players/players.csv`) |
 | `Sources:Nflverse:FirstSeason` / `WeeklyFromSeason` | `1990` / `2016` | First season of rosters read, and the first read from the weekly files |
 | `Sources:Nflverse:MinSeasons` | `2` | Players with fewer game-day seasons are left out unless they are on a roster now |
-| `Sources:Nflverse:StatLinesFromSeason` | `1999` | Season stat lines are kept for careers that began this season or later |
+| `Sources:Nflverse:StatLinesFromSeason` | `1999` | Season stat lines are kept from this season on |
 | `Sources:Nflverse:EspnAwardsUrl` | ESPN core API seasons URL | Where the AP awards are read; empty leaves them out. With `Directory` set they are read from `espn-awards/{season}/{id}.json` there |
 | `Sources:Nflverse:AwardsFromSeason` | `1999` | First season whose ESPN awards are read |
 | `NumbersDontLie:QueueEnabled` | `false` | Queue approved Numbers Don't Lie snapshots (needs `CatalogueId` and `LaunchDate`) |

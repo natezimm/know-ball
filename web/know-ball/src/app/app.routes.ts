@@ -92,6 +92,15 @@ export const routes: Routes = [
     } satisfies PageMetaData,
     loadComponent: teamPhoto,
   },
+  {
+    path: 'team-photo/nfl',
+    title: 'Team Photo NFL — Know Ball',
+    data: {
+      league: 'nfl',
+      description: "Team Photo NFL: a blank team photo of a Super Bowl team. Name the quarterback, running back, receivers and tight end before your fourth miss. A new puzzle every day.",
+    } satisfies PageMetaData & { league: 'nfl' },
+    loadComponent: teamPhoto,
+  },
   { path: 'team-photo/puzzle/:puzzleId', title: 'Team Photo — Know Ball', data: archive, loadComponent: teamPhoto },
   {
     path: 'mockups',

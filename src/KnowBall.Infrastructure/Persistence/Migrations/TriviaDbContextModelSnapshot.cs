@@ -676,6 +676,9 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Ties")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Wins")
                         .HasColumnType("integer");
 

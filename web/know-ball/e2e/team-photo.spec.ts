@@ -1,26 +1,31 @@
-import { Player, asPlayer, expect, guessPlayer, players, test } from './support';
+import { APIRequestContext } from '@playwright/test';
+import { Player, asPlayer, expect, guessPlayer, nflPlayers, players, test } from './support';
 
 let starters: Player[];
 let misses: Player[];
 
 /**
- * Learns today's starting five, and four players who count as misses, by losing the daily through the API as a
- * throwaway player. A bench player is skipped, since he costs nothing.
+ * Learns today's five, and four players who count as misses, by losing the daily through the API as a throwaway
+ * player. A bench player is skipped, since he costs nothing.
  */
-test.beforeAll(async ({ request }) => {
-  const pool = await players(request, true);
+async function learnPhoto(request: APIRequestContext, pool: Player[], league: 'nba' | 'nfl') {
   const api = await asPlayer(request);
-  let state = await api.daily('team-photo');
-  misses = [];
+  let state = await api.daily('team-photo', league);
+  const wrong: Player[] = [];
   for (const player of pool) {
     state = await api.guess('team-photo', state.puzzleId, player.id);
     const last = state.guesses[state.guesses.length - 1];
-    if (!last.correct && last.miss !== false) misses.push(player);
+    if (!last.correct && last.miss !== false) wrong.push(player);
     if (state.status !== 'playing') break;
   }
   expect(state.status).toBe('lost');
-  starters = (state.answer as unknown as { slots: { playerId: number; name: string }[] }).slots.map((s) => ({ id: s.playerId, fullName: s.name }));
-  expect(starters).toHaveLength(5);
+  const five = (state.answer as unknown as { slots: { playerId: number; name: string }[] }).slots.map((s) => ({ id: s.playerId, fullName: s.name }));
+  expect(five).toHaveLength(5);
+  return { five, wrong };
+}
+
+test.beforeAll(async ({ request }) => {
+  ({ five: starters, wrong: misses } = await learnPhoto(request, await players(request, true), 'nba'));
 });
 
 test.beforeEach(async ({ page }) => {
@@ -60,4 +65,38 @@ test('four misses lose and show the missing faces', async ({ page }) => {
   await expect(page.locator('.spot.found')).toHaveCount(1);
   await expect(page.locator('.spot.missed')).toHaveCount(4);
   await expect(page.getByRole('list', { name: 'Misses, newest first' }).getByRole('listitem')).toHaveCount(4);
+});
+
+test.describe('NFL edition', () => {
+  let offense: Player[];
+  let outsiders: Player[];
+
+  test.beforeAll(async ({ request }) => {
+    // The made-up league's players, last first: its Kansas City offense is listed first, and the misses come first here.
+    const pool = (await nflPlayers(request)).reverse();
+    const probe = await learnPhoto(request, pool, 'nfl');
+    offense = probe.five;
+    outsiders = probe.wrong;
+  });
+
+  test('a Super Bowl team\'s offense is named from its season totals and won', async ({ page }) => {
+    await page.goto('/team-photo/nfl');
+    await expect(page.getByRole('navigation', { name: 'League' }).getByRole('link', { name: 'NFL' })).toHaveAttribute('aria-current', 'page');
+    await expect(page.locator('.meta')).toContainText('No. 1 ·');
+    await expect(page.locator('.plaque b')).toHaveText(/^20\d\d Kansas City Chiefs$/);
+    await expect(page.locator('.plaque small')).toHaveText(/^\d+–\d+ · (Won|Lost) Super Bowl [LXVI]+$/);
+    await expect(page.locator('.row:not(.front) .pos')).toHaveText(['WR', 'TE', 'WR']);
+    await expect(page.locator('.row.front .pos')).toHaveText(['QB', 'RB']);
+    await expect(page.locator('.row.front .plate').first()).toContainText('pass yds');
+
+    await guessPlayer(page, outsiders[0].fullName);
+    await expect(page.getByRole('img', { name: '1 of 4 misses used' })).toBeVisible();
+    for (const player of offense) await guessPlayer(page, player.fullName);
+    await expect(page.locator('.spot.found')).toHaveCount(5);
+    await expect(page.locator('.result')).toContainText('Every name, 1 miss');
+
+    await page.goto('/');
+    const home = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Team Photo' }) });
+    await expect(home.getByRole('link', { name: /^Team Photo NFL: / })).toHaveAttribute('href', '/team-photo/nfl');
+  });
 });

@@ -38,9 +38,9 @@ public sealed record RosterLine(int PlayerId, int Games, double Minutes, int? St
 /// A blank team photo of one team-season: name its five starters. Starters are free and so are
 /// bench players; four names that were not on the team end the round. Daily puzzles are the teams
 /// that reached the Finals since the 1976 merger; practice draws from every playoff team since
-/// 1981-82 whose starting five is clear.
+/// 1981-82 whose starting five is clear. The NFL edition is in TeamPhotoGame.Football.cs.
 /// </summary>
-public sealed class TeamPhotoGame(ITriviaDb db) : IGame
+public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
 {
     public const string GameSlug = "team-photo";
     public const int Starters = 5;
@@ -66,15 +66,22 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
     public bool ReadsRecentSecrets => true;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
 
     public int AnswersIn(Puzzle puzzle) => GameJson.Read<PhotoSecret>(puzzle.SecretJson).Slots.Count;
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
         var teams = await db.Teams.AsNoTracking().Where(t => t.LeagueId == context.League.Id).ToListAsync(cancellationToken);
+        if (context.League.Code == LeagueCodes.Nfl)
+        {
+            return context.Practice
+                ? await FootballPracticeAsync(context, teams, cancellationToken)
+                : await DailyAsync(context, teams, SuperBowlTeams, (team, entry) => BuildFootballAsync(team, entry.Season, entry.Finals, entry.Swap, cancellationToken));
+        }
         return context.Practice
             ? await PracticeAsync(context, teams, cancellationToken)
-            : await DailyAsync(context, teams, cancellationToken);
+            : await DailyAsync(context, teams, FinalsTeams, (team, entry) => BuildAsync(team, entry.Season, entry.Finals, entry.Swap, cancellationToken));
     }
 
     public Task<GuessEvaluation> EvaluateAsync(Puzzle puzzle, Player guess, CancellationToken cancellationToken)
@@ -97,10 +104,11 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
         new JsonObject { ["slots"] = GameJson.Node(GameJson.Read<PhotoSecret>(puzzle.SecretJson).Slots) };
 
     /// <summary>
-    /// A Finals team not used in the recent window, chosen at random. Once every team has been used the one
-    /// shown longest ago comes round again, so the pool cycles rather than running dry.
+    /// A team from the daily pool not used in the recent window, chosen at random. Once every team has been used the
+    /// one shown longest ago comes round again, so the pool cycles rather than running dry.
     /// </summary>
-    private async Task<GeneratedPuzzle?> DailyAsync(GenerationContext context, List<Team> teams, CancellationToken ct)
+    private static async Task<GeneratedPuzzle?> DailyAsync(
+        GenerationContext context, List<Team> teams, IReadOnlyList<FinalsTeam> pool, Func<Team, FinalsTeam, Task<GeneratedPuzzle?>> build)
     {
         var lastUsed = new Dictionary<string, int>();
         var recent = context.RecentSecrets ?? [];
@@ -109,12 +117,12 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
             if (KeyOf(recent[i]) is { } key) lastUsed[key] = i;
         }
 
-        var fresh = FinalsTeams.Where(f => !lastUsed.ContainsKey(f.Key)).OrderBy(_ => context.Random.Next()).ToList();
-        var stale = FinalsTeams.Where(f => lastUsed.ContainsKey(f.Key)).OrderBy(f => lastUsed[f.Key]);
+        var fresh = pool.Where(f => !lastUsed.ContainsKey(f.Key)).OrderBy(_ => context.Random.Next()).ToList();
+        var stale = pool.Where(f => lastUsed.ContainsKey(f.Key)).OrderBy(f => lastUsed[f.Key]);
         foreach (var entry in fresh.Concat(stale))
         {
             if (FindTeam(teams, entry.Team, entry.Season) is not { } team) continue;
-            var puzzle = await BuildAsync(team, entry.Season, entry.Finals, entry.Swap, ct);
+            var puzzle = await build(team, entry);
             if (puzzle is not null) return puzzle;
         }
         return null;
@@ -164,17 +172,7 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
             .ToListAsync(ct);
         if (rows.Count < Starters) return null;
 
-        Dictionary<int, int>? swaps = null;
-        if (swap is { Count: > 0 })
-        {
-            var ids = swap.Keys.Concat(swap.Values).ToList();
-            var byRef = await db.PlayerExternalIds.AsNoTracking()
-                .Where(x => x.Source == "bref" && ids.Contains(x.Value))
-                .ToDictionaryAsync(x => x.Value, x => x.PlayerId, ct);
-            swaps = swap
-                .Where(s => byRef.ContainsKey(s.Key) && byRef.ContainsKey(s.Value))
-                .ToDictionary(s => byRef[s.Key], s => byRef[s.Value]);
-        }
+        var swaps = await SwapsAsync("bref", swap, ct);
 
         var lines = rows.Select(r => Line(r.PlayerId, r.Games, r.MinutesPerGame, r.StatsJson, r.Player!.Position,
             r.PointsPerGame ?? 0, r.ReboundsPerGame ?? 0, r.AssistsPerGame ?? 0)).ToList();
@@ -200,6 +198,19 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
         var fame = five.Average(l => players[l.PlayerId].Popularity);
         var difficulty = (int)Math.Clamp(Math.Round(100 - fame + Math.Max(0, 2000 - season) / 2.0), 0, 100);
         return new GeneratedPuzzle(null, GameJson.Write(payload), GameJson.Write(secret), difficulty);
+    }
+
+    /// <summary>A curated swap list, from the source's player ids to ours. Ids the database does not have are dropped.</summary>
+    private async Task<Dictionary<int, int>?> SwapsAsync(string source, IReadOnlyDictionary<string, string>? swap, CancellationToken ct)
+    {
+        if (swap is not { Count: > 0 }) return null;
+        var ids = swap.Keys.Concat(swap.Values).ToList();
+        var byRef = await db.PlayerExternalIds.AsNoTracking()
+            .Where(x => x.Source == source && ids.Contains(x.Value))
+            .ToDictionaryAsync(x => x.Value, x => x.PlayerId, ct);
+        return swap
+            .Where(s => byRef.ContainsKey(s.Key) && byRef.ContainsKey(s.Value))
+            .ToDictionary(s => byRef[s.Key], s => byRef[s.Value]);
     }
 
     /// <summary>
@@ -292,12 +303,14 @@ public sealed class TeamPhotoGame(ITriviaDb db) : IGame
         }
     }
 
-    private static IReadOnlyList<FinalsTeam> LoadFinalsTeams()
+    private static IReadOnlyList<FinalsTeam> LoadFinalsTeams() => LoadPool("finals-teams.json");
+
+    private static IReadOnlyList<FinalsTeam> LoadPool(string file)
     {
         var asm = Assembly.GetExecutingAssembly();
-        var name = asm.GetManifestResourceNames().Single(n => n.EndsWith("finals-teams.json", StringComparison.Ordinal));
+        var name = asm.GetManifestResourceNames().Single(n => n.EndsWith(file, StringComparison.Ordinal));
         using var stream = asm.GetManifestResourceStream(name)!;
         return JsonSerializer.Deserialize<List<FinalsTeam>>(stream, GameJson.Options)
-               ?? throw new InvalidOperationException("finals-teams.json is empty");
+               ?? throw new InvalidOperationException($"{file} is empty");
     }
 }

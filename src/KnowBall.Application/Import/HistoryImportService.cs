@@ -80,7 +80,6 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
             if (team.Franchise is null) team.FranchiseId = null;
         }
         run.TeamsUpserted = snapshot.Teams.Count;
-        if (snapshot.TeamSeasons is { Count: > 0 } records) await SyncTeamSeasonsAsync(league, records, teams, ct);
 
         // ---- Players -----------------------------------------------------------------------
         List<Player> existing = [];
@@ -160,6 +159,10 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
                 batch.Clear();
             }
         }
+
+        // Records go in with the last batch of players, never before it: the NFL Team Photo takes a record to mean the
+        // season's stat lines are all in, so a load that stops partway must not leave records behind.
+        if (snapshot.TeamSeasons is { Count: > 0 } records) await SyncTeamSeasonsAsync(league, records, teams, ct);
     }
 
     /// <summary>Adds or corrects each team's record; a season the source no longer lists is left alone.</summary>
@@ -181,6 +184,7 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
             }
             if (row.Wins != r.Wins) row.Wins = r.Wins;
             if (row.Losses != r.Losses) row.Losses = r.Losses;
+            if (row.Ties != r.Ties) row.Ties = r.Ties;
             if (row.MadePlayoffs != r.MadePlayoffs) row.MadePlayoffs = r.MadePlayoffs;
         }
     }

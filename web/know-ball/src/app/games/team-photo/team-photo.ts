@@ -1,12 +1,12 @@
 import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
-import { GameState, GuessRecord, isMiss } from '../../core/game-api';
+import { GameState, GuessRecord, League, isMiss } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
 import { Avatar } from '../../shared/avatar/avatar';
 import { GameShell } from '../../shared/game-shell/game-shell';
 
-/** One blank in the photo: where he stood and his line that season, per game. */
-export interface PhotoSlot {
+/** One blank in an NBA photo: where he stood and his line that season, per game. */
+export interface BasketballSlot {
   position: string;
   row: 'back' | 'front';
   games: number;
@@ -15,13 +15,28 @@ export interface PhotoSlot {
   assists: number;
 }
 
+/**
+ * One blank in an NFL photo: the position and the season's totals it is known by, by card key (pyd, ptd, int for a
+ * quarterback; car, ryd, rtd for a running back; rec, wyd, wtd for a receiver).
+ */
+export interface FootballSlot {
+  position: string;
+  row: 'back' | 'front';
+  games: number;
+  stats: Record<string, number>;
+}
+
+export type PhotoSlot = BasketballSlot | FootballSlot;
+
 export interface PhotoPayload {
   team: { city: string; name: string; abbreviation: string; logoUrl: string | null };
-  /** The year the season started: 2015 is 2015-16. */
+  /** NBA: the year the season started, 2015 is 2015-16. NFL: the season's year, 2019 ended in Super Bowl LIV. */
   season: number;
   wins: number | null;
   losses: number | null;
-  /** "won" or "lost" for a Finals team; null for a practice team that did not get there. */
+  /** NFL only. */
+  ties?: number | null;
+  /** "won" or "lost" for a Finals (or Super Bowl) team; null for a practice team that did not get there. */
   finals: 'won' | 'lost' | null;
   slots: PhotoSlot[];
 }
@@ -53,8 +68,32 @@ export function seasonName(season: number): string {
   return `${season}–${String((season + 1) % 100).padStart(2, '0')}`;
 }
 
-/** "30.1 pts" over "5.4 reb · 6.7 ast". */
+/** 2019 → "LIV": Super Bowl I closed the 1966 season. */
+export function superBowl(season: number): string {
+  let n = season - 1965;
+  let out = '';
+  for (const [value, numeral] of [[50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']] as const) {
+    while (n >= value) {
+      out += numeral;
+      n -= value;
+    }
+  }
+  return out;
+}
+
+const count = (n: number | undefined) => Math.round(n ?? 0).toLocaleString('en-US');
+
+/**
+ * NBA: "30.1 pts" over "5.4 reb · 6.7 ast". NFL: "4,031 pass yds" over "26 TD · 5 INT", "1,229 rec yds" over
+ * "97 rec · 5 TD", or "498 rush yds" over "111 car · 5 TD".
+ */
 export function statLine(slot: PhotoSlot): [string, string] {
+  if ('stats' in slot) {
+    const s = slot.stats;
+    if (slot.position === 'QB') return [`${count(s['pyd'])} pass yds`, `${count(s['ptd'])} TD · ${count(s['int'])} INT`];
+    if (slot.position === 'RB') return [`${count(s['ryd'])} rush yds`, `${count(s['car'])} car · ${count(s['rtd'])} TD`];
+    return [`${count(s['wyd'])} rec yds`, `${count(s['rec'])} rec · ${count(s['wtd'])} TD`];
+  }
   return [`${slot.points.toFixed(1)} pts`, `${slot.rebounds.toFixed(1)} reb · ${slot.assists.toFixed(1)} ast`];
 }
 
@@ -73,27 +112,46 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
   return { back: spots.filter((s) => s.slot.row === 'back'), front: spots.filter((s) => s.slot.row !== 'back') };
 }
 
-/** Team Photo: a blank photo of a Finals team's starting five. Name all five before your fourth miss; naming a bench player is free. */
+/**
+ * Team Photo: a blank photo of a Finals team's starting five, or in the NFL edition a Super Bowl team's quarterback,
+ * running back, two receivers and tight end. Name all five before your fourth miss; naming a bench player is free.
+ */
 @Component({
   selector: 'app-team-photo',
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
     <app-game-shell
-      name="Team Photo" trim="var(--red)" limitsMisses includeInactive practice
+      name="Team Photo" trim="var(--red)" limitsMisses includeInactive practice [leagues]="['nba', 'nfl']"
       [shareRows]="rows()" [resultName]="teamName()" [resultImage]="state()?.payload?.team?.logoUrl ?? null"
     >
       <div help>
-        <p>This is the team photo of one NBA team that reached the Finals, with the faces left blank. Name its starting five.</p>
-        <p>
-          The five are the players who started the most games that season. Under each blank is his position and his
-          points, rebounds and assists per game.
-        </p>
-        <p>
-          Naming a starter puts him in the photo. Naming someone who came off the bench for that team is free. Anyone
-          else is a miss, and four misses ends the game.
-        </p>
-        <p>Practice rounds use other playoff teams since 1981–82.</p>
+        @if (football()) {
+          <p>
+            This is the team photo of one NFL team that played in the Super Bowl, with the faces left blank. Name its
+            quarterback, running back, two wide receivers and tight end.
+          </p>
+          <p>
+            Each is the player with the most of what his position does for that team that season: pass attempts,
+            carries or receiving yards. Under each blank is his position and his season totals.
+          </p>
+          <p>
+            Naming one of the five puts him in the photo. Naming anyone else on that team's roster is free, linemen and
+            kickers too. Anyone else is a miss, and four misses ends the game.
+          </p>
+          <p>Practice rounds use other playoff teams since 1999.</p>
+        } @else {
+          <p>This is the team photo of one NBA team that reached the Finals, with the faces left blank. Name its starting five.</p>
+          <p>
+            The five are the players who started the most games that season. Under each blank is his position and his
+            points, rebounds and assists per game.
+          </p>
+          <p>
+            Naming a starter puts him in the photo. Naming someone who came off the bench for that team is free. Anyone
+            else is a miss, and four misses ends the game.
+          </p>
+          <p>Practice rounds use other playoff teams since 1981–82.</p>
+        }
       </div>
 
       @if (state()?.answer) {
@@ -250,8 +308,12 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
 export class TeamPhoto {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
+  /** From the route's data: "nfl" on the NFL edition's address. */
+  readonly league = input<League>();
 
   private readonly store = inject(GameStore);
+
+  protected readonly football = computed(() => this.store.league() === 'nfl');
 
   protected readonly isMiss = isMiss;
   protected readonly line = statLine;
@@ -264,17 +326,21 @@ export class TeamPhoto {
   protected readonly latest = computed(() => this.state()?.guesses.at(-1) ?? null);
   protected readonly bench = computed(() => (this.state()?.guesses ?? []).filter((g) => !g.correct && !isMiss(g)));
   protected readonly misses = computed(() => (this.state()?.guesses ?? []).filter(isMiss).reverse());
-  /** "2015–16 Golden State Warriors". */
+  /** "2015–16 Golden State Warriors"; an NFL season is one year, "2019 Kansas City Chiefs". */
   protected readonly teamName = computed(() => {
     const p = this.state()?.payload;
-    return p ? `${seasonName(p.season)} ${p.team.city} ${p.team.name}` : '';
+    return p ? `${this.football() ? p.season : seasonName(p.season)} ${p.team.city} ${p.team.name}` : '';
   });
-  /** "73–9 · Lost in the Finals". */
+  /** "73–9 · Lost in the Finals", or "11–4–1 · Lost Super Bowl XLVII". */
   protected readonly record = computed(() => {
     const p = this.state()?.payload;
     if (!p) return '';
-    const finals = p.finals === 'won' ? 'Won the title' : p.finals === 'lost' ? 'Lost in the Finals' : 'Made the playoffs';
-    return [p.wins !== null && p.losses !== null ? `${p.wins}–${p.losses}` : null, finals].filter(Boolean).join(' · ');
+    const football = this.football();
+    const finals = football
+      ? p.finals === 'won' ? `Won Super Bowl ${superBowl(p.season)}` : p.finals === 'lost' ? `Lost Super Bowl ${superBowl(p.season)}` : 'Made the playoffs'
+      : p.finals === 'won' ? 'Won the title' : p.finals === 'lost' ? 'Lost in the Finals' : 'Made the playoffs';
+    const ties = p.ties ? `–${p.ties}` : '';
+    return [p.wins != null && p.losses != null ? `${p.wins}–${p.losses}${ties}` : null, finals].filter(Boolean).join(' · ');
   });
   /** One square per guess: green for a starter, yellow for a bench player, red for a miss. */
   protected readonly rows = computed(() => [
@@ -282,7 +348,7 @@ export class TeamPhoto {
   ]);
 
   constructor() {
-    loadFromRoute(this.store, 'team-photo', this.puzzleId);
+    loadFromRoute(this.store, 'team-photo', this.puzzleId, this.league);
   }
 
   /** "Curry"; "Jr." and the like stay with the name before them. */

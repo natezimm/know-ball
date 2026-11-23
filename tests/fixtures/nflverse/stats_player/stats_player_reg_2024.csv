@@ -1,0 +1,7 @@
+player_id,player_display_name,position,season,season_type,recent_team,games,completions,attempts,passing_yards,passing_tds,passing_interceptions,carries,rushing_yards,rushing_tds,receptions,receiving_yards,receiving_tds,def_tackles_solo,def_tackle_assists,def_sacks,def_interceptions,def_fumbles_forced,fantasy_points,fantasy_points_ppr
+00-0000001,Alpha Passer,QB,2024,REG,KC,16,380,560,4100,30,8,30,150,1,,,,,,,,,300,300
+00-0000012,Hotel Runner,RB,2024,REG,KC,15,,,,,,240,1100,9,30,210,1,,,,,,180,210
+00-0000013,India Wideout,WR,2024,REG,KC,16,,,,,,,,,90,1250,10,,,,,,190,280
+00-0000014,Juliet Flanker,WR,2024,REG,KC,15,,,,,,,,,60,780,4,,,,,,100,160
+00-0000015,Kilo Tight,TE,2024,REG,KC,17,,,,,,,,,70,820,6,,,,,,110,180
+00-0000002,Bravo Catcher Jr.,WR,2024,REG,BUF,3,,,,,,,,,11,141,1,,,,,,20,31

@@ -29,7 +29,7 @@ public sealed record HistorySnapshot(
     IReadOnlyList<HistoryTeamSeason>? TeamSeasons = null);
 
 /// <summary>A team's regular-season record. <paramref name="TeamKey"/> is what season rows call the team.</summary>
-public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs);
+public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs, int Ties = 0);
 
 /// <param name="Key">What season rows call the team.</param>
 /// <param name="ActiveTo">Last season under this name; null while it still plays.</param>
