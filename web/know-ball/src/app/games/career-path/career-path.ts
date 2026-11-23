@@ -161,6 +161,11 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
     .misses s { flex: 1; min-width: 0; font-weight: 700; text-decoration-color: var(--bad); text-decoration-thickness: 2px; overflow-wrap: anywhere; }
     .misses small { flex: none; padding: 1px 8px; border-radius: 999px; background: var(--miss); color: var(--miss-ink); font-size: 13px; font-weight: 700; }
     .misses small.shared { background: var(--close); color: var(--close-ink); }
+    /* On a phone the name gets the whole line and its tag sits under it. */
+    @media (max-width: 400px) {
+      .misses li { display: grid; grid-template-columns: 26px minmax(0, 1fr); column-gap: 8px; row-gap: 2px; }
+      .misses small { grid-column: 2; justify-self: start; }
+    }
   `,
 })
 export class CareerPath {

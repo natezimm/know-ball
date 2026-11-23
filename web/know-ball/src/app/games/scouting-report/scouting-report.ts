@@ -208,6 +208,11 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
       .cell { height: 50px; font-size: 14px; }
       .cols { letter-spacing: 0; }
     }
+    /* Three letters (TOR, GSW, West) still fit a cell on the narrowest phones. */
+    @media (max-width: 360px) {
+      .cols, .row { gap: 3px; }
+      .cell { padding: 1px 0; border-width: 1.5px; font-size: 13px; letter-spacing: -.02em; }
+    }
   `,
 })
 export class ScoutingReport {

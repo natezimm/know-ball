@@ -51,6 +51,9 @@ export interface CardTable {
 /** Stamps for making a team, printed in teal; the rest are individual awards, in red. */
 const TEAM_STAMPS = new Set(['All-Star', 'All-NBA', 'All-Pro', 'All-Pro 2nd', 'Pro Bowl']);
 
+/** On a narrow phone the longer stamps print short, so each fits on its season's line. */
+const SHORT_STAMPS: Record<string, string> = { 'All-Star': 'AS', 'All-NBA': 'A-NBA', 'All-Pro': 'AP', 'All-Pro 2nd': 'AP2', 'Pro Bowl': 'PB' };
+
 /** What the misses have uncovered so far. A part that is still covered is left out. */
 export interface CardClues {
   steps: { label: string; open: boolean }[];
@@ -161,7 +164,7 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
                       <i class="redact" aria-label="Hidden">▒▒▒</i>
                     }
                     @if (clues()?.stamps?.[i]; as stamp) {
-                      <em class="stamp" [class.top]="!teamStamps.has(stamp)" [class.fresh]="fresh(2)">{{ stamp }}</em>
+                      <em class="stamp" [class.top]="!teamStamps.has(stamp)" [class.fresh]="fresh(2)">@if (shortStamps[stamp]; as short) {<span class="long">{{ stamp }}</span><span class="short" aria-hidden="true">{{ short }}</span>} @else {{{ stamp }}}</em>
                     }
                   </td>
                   <td>{{ line.games }}</td>
@@ -184,7 +187,7 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
           @if (clues()?.origin; as origin) {
             <p class="fact" [class.fresh]="fresh(3)"><b>{{ origin.label }}:</b> {{ origin.value }}</p>
           } @else {
-            <p class="fact locked">Draft and college open after 4 misses</p>
+            <p class="fact locked">Draft and college: {{ originIn() }} {{ originIn() === 1 ? 'miss' : 'misses' }} away</p>
           }
         </article>
 
@@ -244,10 +247,11 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
     .club b { font-weight: 700; white-space: nowrap; }
     .stamp {
       display: inline-block; margin-left: 6px; transform: rotate(-6deg); padding: 1px 4px 0;
-      font: 400 13px/1.3 var(--display); font-style: normal; text-transform: uppercase; letter-spacing: 0;
+      font: 400 13px/1.3 var(--display); font-style: normal; text-transform: uppercase; letter-spacing: 0; white-space: nowrap;
       color: var(--teal); border: 1.5px solid var(--teal); border-radius: 3px; background: var(--surface);
     }
     .stamp.top { color: var(--red); border-color: var(--red); }
+    .stamp .short { display: none; }
 
     .fact { margin: 2px 0 0; padding: 6px 9px; font-size: 15px; border: 2px dashed var(--navy); border-radius: 4px; }
     .fact b { color: var(--red); }
@@ -277,6 +281,16 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
     @media (max-width: 380px) {
       table { font-size: 13.5px; }
       td, tfoot th { padding: 3px 2px; }
+      /* Short stamps keep each season on one line; the full name stays for screen readers. */
+      td.club { white-space: nowrap; }
+      .stamp { margin-left: 3px; padding: 1px 2px 0; letter-spacing: -.02em; }
+      .stamp .short { display: inline; }
+      .stamp .long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    }
+    /* Below 350px even short stamps don't fit beside the club, so they drop under it: two lines, not three. */
+    @media (max-width: 349px) {
+      td.club { white-space: normal; }
+      .stamp { margin-left: 0; }
     }
   `,
 })
@@ -289,6 +303,7 @@ export class BackOfTheCard {
   private readonly store = inject(GameStore);
 
   protected readonly teamStamps = TEAM_STAMPS;
+  protected readonly shortStamps = SHORT_STAMPS;
   protected readonly football = computed(() => this.store.league() === 'nfl');
   protected readonly leagueName = computed(() => (this.football() ? 'NFL' : 'NBA'));
   protected readonly state = computed(() => this.store.state() as GameState<CardPayload | FootballCardPayload, CardClues> | null);
@@ -298,6 +313,8 @@ export class BackOfTheCard {
   });
   protected readonly clues = computed(() => this.state()?.clues ?? null);
   protected readonly openCount = computed(() => (this.clues()?.steps ?? []).filter((step) => step.open).length);
+  /** Misses still to go before the last step, draft and college, opens. */
+  protected readonly originIn = computed(() => Math.max(1, (this.clues()?.steps.length ?? 4) - this.openCount()));
   protected readonly misses = computed(() => (this.state()?.guesses ?? []).filter((g) => !g.correct).reverse());
   /** Position, height, draft and college, which every finished game has uncovered. */
   protected readonly answerLine = computed(() => {

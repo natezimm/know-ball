@@ -49,7 +49,7 @@ export function cardStatus(
     case 'won':
       return { label: today.guesses === 1 ? 'Solved in 1 guess' : `Solved in ${today.guesses}`, open: true, done: true, foil: today.guesses === 1 ? 'gold' : 'holo' };
     case 'lost':
-      return { label: 'Missed · see the answer', open: true, done: true };
+      return { label: 'Missed', open: true, done: true };
     case 'playing':
       return { label: `Carry on · ${today.guesses} of ${today.maxGuesses}`, open: true };
     default:
