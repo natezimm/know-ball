@@ -155,6 +155,8 @@ export class LetterJacketGame {
     this.status.set('validating');
     this.request = this.api.getGame(this.gameId()).subscribe({
       next: (state) => {
+        // Keys typed ahead were meant for a board that may have changed; drop them rather than replay them later.
+        this.queued = [];
         const acknowledged = this.applyState(state, {
           currentGuess: this.currentGuess(), categoryHint: this.categoryHint(), pendingGuess: this.pendingGuess,
         });
@@ -162,6 +164,7 @@ export class LetterJacketGame {
       },
       error: (error) => {
         if (error instanceof HttpErrorResponse && error.status === 404) { this.expire(); return; }
+        this.queued = [];
         if (failure) this.message.set(failure);
         this.status.set('playing');
       },
@@ -227,8 +230,8 @@ export class LetterJacketGame {
 
   /** A key from the on-screen or physical keyboard: a letter, "Enter" or "Backspace". */
   press(key: string): void {
-    // Fast typists start the next word while the last one is still flipping; keep those keys.
-    if (this.status() === 'revealing') {
+    // Fast typists start the next word while the last one is being checked or is still flipping; keep those keys.
+    if (this.status() === 'validating' || this.status() === 'revealing') {
       if (key === 'Enter' || key === 'Backspace' || /^[a-zA-Z]$/.test(key)) this.queued.push(key);
       return;
     }
@@ -304,6 +307,7 @@ export class LetterJacketGame {
         const failure = serverMessage(error) ?? 'Error checking the word. Please try again.';
         // A rejected word (400) or a rate limit (429) saved nothing; anything else may have.
         if (error instanceof HttpErrorResponse && (error.status === 400 || error.status === 429)) {
+          this.queued = [];
           this.message.set(failure);
           this.status.set('playing');
           return;
@@ -329,6 +333,8 @@ export class LetterJacketGame {
     if (!result.valid || !score) {
       this.message.set('Not in the word list. Try again.');
       this.rejected.update((n) => n + 1);
+      // The word stays on the row to fix, so keys typed ahead for the next word are dropped.
+      this.queued = [];
       this.status.set('playing');
       return;
     }

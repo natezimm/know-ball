@@ -131,6 +131,56 @@ describe('LetterJacketGame', () => {
     expect(game.currentGuess()).toBe('oth');
   });
 
+  it('keeps keys typed while a word is checked, and a second word queued behind the first', () => {
+    startGame();
+    type('about');
+    game.press('Enter');
+    expect(game.status()).toBe('validating');
+    type('other');
+    game.press('Enter');
+    type('wh');
+    http.expectOne(GUESSES).flush(miss);
+    vi.runAllTimers();
+    // The queued word was submitted after the first finished flipping; the rest waits behind it.
+    expect(game.status()).toBe('validating');
+    http.expectOne(GUESSES).flush({ ...miss, attemptsRemaining: 4 });
+    vi.runAllTimers();
+    expect(game.attempts().map((a) => a.word)).toEqual(['about', 'other']);
+    expect(game.status()).toBe('playing');
+    expect(game.currentGuess()).toBe('wh');
+  });
+
+  it('drops keys typed ahead when a lost response sends the board back to the server', () => {
+    startGame();
+    type('punts');
+    game.press('Enter');
+    type('other');
+    game.press('Enter');
+    const request = http.expectOne(GUESSES);
+    request.error(new ProgressEvent('error'));
+    http.expectOne('/api/letter-jacket/games/g1').flush({ ...saved,
+      guesses: [{ ...saved.guesses[0], requestId: request.request.body.requestId }],
+    });
+    expect(game.status()).toBe('playing');
+    // A later word replays nothing that was typed before the board was reloaded.
+    guess('blitz', { ...miss, attemptsRemaining: 4 });
+    http.expectNone(GUESSES);
+    expect(game.attempts().map((a) => a.word)).toEqual(['punts', 'blitz']);
+    expect(game.currentGuess()).toBe('');
+  });
+
+  it('drops keys typed ahead when the word is turned away', () => {
+    startGame();
+    type('abcde');
+    game.press('Enter');
+    type('other');
+    http.expectOne(GUESSES).flush({ valid: false });
+    expect(game.status()).toBe('playing');
+    expect(game.currentGuess()).toBe('abcde');
+    vi.runAllTimers();
+    expect(game.currentGuess()).toBe('abcde');
+  });
+
   it('counts each word turned away, so the row can shake', () => {
     startGame();
     type('abc');
