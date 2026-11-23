@@ -98,7 +98,7 @@ function atRest(): boolean {
             <div class="guess">
               <app-player-search
                 label="Guess a player"
-                [placeholder]="limitsMisses() ? 'Name a player' : 'Guess ' + (s.guesses.length + 1) + ' of ' + s.maxGuesses + ': type a name'"
+                [placeholder]="placeholder(s)"
                 [includeInactive]="includeInactive()" [puzzleId]="s.puzzleId" [league]="s.league ?? 'nba'"
                 [disabled]="store.busy()"
                 (selected)="store.guess($event.id)"
@@ -374,6 +374,13 @@ export class GameShell {
       if (state && result && playing === state.puzzleId && atRest()) result.nativeElement.focus({ preventScroll: true });
       playing = state && !this.store.over() ? state.puzzleId : null;
     });
+  }
+
+  /** The guess box says where the player stands: guesses used, or in a misses game, misses left. */
+  protected placeholder(state: GameState): string {
+    if (!this.limitsMisses()) return `Guess ${state.guesses.length + 1} of ${state.maxGuesses}: type a name`;
+    const left = state.maxGuesses - state.guesses.filter(isMiss).length;
+    return `Name a player · ${left} ${left === 1 ? 'miss' : 'misses'} left`;
   }
 
   protected dotsLabel(state: GameState): string {
