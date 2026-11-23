@@ -103,6 +103,10 @@ function atRest(): boolean {
                 [disabled]="store.busy()"
                 (selected)="store.guess($event.id)"
               />
+              <!-- Right under the box the player just used, over the top of the board rather than the title. -->
+              @if (store.notice(); as notice) {
+                <p class="kb-toast below" role="status">{{ notice }}</p>
+              }
             </div>
           }
 
@@ -142,8 +146,8 @@ function atRest(): boolean {
         }
       }
 
-      @if (store.notice(); as notice) {
-        <p class="kb-toast" role="status">{{ notice }}</p>
+      @if (store.notice() && (!store.state() || store.over())) {
+        <p class="kb-toast" role="status">{{ store.notice() }}</p>
       }
     </section>
 
@@ -221,6 +225,7 @@ function atRest(): boolean {
     :host { display: block; }
     .game { max-width: 520px; min-height: calc(100dvh - 120px); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
+    .guess { position: relative; }
     .modes { display: flex; }
     /* NBA or NFL: two tabs under the title, the edition on screen filled in. */
     .leagues { display: flex; gap: 6px; }
