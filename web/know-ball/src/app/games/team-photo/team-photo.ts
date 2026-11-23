@@ -188,7 +188,7 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
                       <span class="visually-hidden">{{ p.name }}{{ spot.missed ? ', not named' : '' }}</span>
                     } @else {
                       <small>{{ line(spot.slot)[0] }}</small>
-                      <small>{{ line(spot.slot)[1] }}</small>
+                      <small>@for (part of line(spot.slot)[1].split(' · '); track $index) {@if ($index) {{{ ' ' }}}<span class="part">{{ $index ? '· ' + part : part }}</span>}</small>
                     }
                   </span>
                 </li>
@@ -279,6 +279,8 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
     }
     .plate small { font-size: 13px; white-space: nowrap; }
     .plate small:last-of-type { opacity: .85; }
+    /* "6.8 reb · 5.4 ast" breaks between its parts, never inside one. */
+    .plate .part { display: inline-block; white-space: nowrap; }
     .plate b { font-size: 14px; overflow-wrap: anywhere; }
     .found .plate { background: var(--mustard); color: var(--navy); }
     .missed .plate { background: var(--red); color: var(--cream); }
@@ -302,6 +304,9 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
     @media (max-width: 360px) {
       .face { --face: 64px; }
       .row.front { gap: 12px; }
+      /* Three lines side by side outgrow a third of a 320px photo; let each wrap inside its plate. */
+      .plate { max-width: 100%; padding: 2px 4px; }
+      .plate small { white-space: normal; }
     }
   `,
 })
