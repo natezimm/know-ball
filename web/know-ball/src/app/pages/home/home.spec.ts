@@ -121,7 +121,7 @@ describe('Home', () => {
     const daily = { daily: 'scouting-report' as const };
     expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true)).toEqual({ label: 'Solved in 1 guess', open: true, done: true, foil: 'gold' });
     expect(cardStatus(daily, entry({ status: 'won', guesses: 4 }), true).foil).toBe('holo');
-    expect(cardStatus(daily, entry({ status: 'lost', guesses: 8 }), true)).toEqual({ label: 'Missed · see the answer', open: true, done: true });
+    expect(cardStatus(daily, entry({ status: 'lost', guesses: 8 }), true)).toEqual({ label: 'Missed', open: true, done: true });
     expect(cardStatus(daily, undefined, true)).toEqual({ label: 'Coming soon', open: false });
     expect(cardStatus(daily, undefined, false)).toEqual({ label: 'Play today', open: true });
   });
@@ -132,7 +132,7 @@ describe('Home', () => {
     expect(cardStatus(photo, today({ status: 'won', guesses: 0 }), true)).toEqual({ label: 'Full photo', open: true, done: true, foil: 'gold' });
     expect(cardStatus(photo, today({ status: 'won', guesses: 2 }), true).foil).toBe('holo');
     expect(cardStatus(photo, today({ status: 'playing', guesses: 1 }), true).label).toBe('Carry on · 1 of 4 misses');
-    expect(cardStatus(photo, today({ status: 'lost', guesses: 4 }), true).label).toBe('Missed · see the answer');
+    expect(cardStatus(photo, today({ status: 'lost', guesses: 4 }), true).label).toBe('Missed');
   });
 
   it("shows today's quiz score and streak on its card once it is finished in this browser", async () => {

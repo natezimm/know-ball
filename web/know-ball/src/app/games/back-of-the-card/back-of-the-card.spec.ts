@@ -52,8 +52,18 @@ describe('Back of the Card', () => {
     expect(el.querySelectorAll('tbody .club .redact').length).toBe(3);
     expect(el.querySelector('.strip .redact')).not.toBeNull();
     expect(el.querySelector('tfoot')?.textContent).toContain('1,221');
-    expect(el.querySelector('.fact.locked')).not.toBeNull();
+    expect(el.querySelector('.fact.locked')?.textContent).toBe('Draft and college: 4 misses away');
     expect([...el.querySelectorAll('.ladder li')].map((li) => li.classList.contains('open'))).toEqual([false, false, false, false]);
+  });
+
+  it('prints a short form of the longer stamps beside the full name, for narrow phones', async () => {
+    await open({ clues: { ...clues(3), stamps: ['All-Star', 'MVP', null] } });
+
+    const [allStar, mvp] = [...el.querySelectorAll('tbody .stamp')];
+    expect(allStar.querySelector('.long')?.textContent).toBe('All-Star');
+    expect(allStar.querySelector('.short')?.textContent).toBe('AS');
+    expect(allStar.querySelector('.short')?.getAttribute('aria-hidden')).toBe('true');
+    expect(mvp.textContent).toBe('MVP');
   });
 
   it('shows each part of the card the misses have uncovered', async () => {
@@ -61,6 +71,7 @@ describe('Back of the Card', () => {
 
     expect([...el.querySelectorAll('tbody .club b')].map((b) => b.textContent)).toEqual(['SEA', 'OKC', 'GSW/MIA']);
     expect([...el.querySelectorAll('tbody .club')].map((c) => c.querySelector('.stamp')?.textContent ?? null)).toEqual(['ROY', 'MVP', null]);
+    expect(el.querySelector('.fact.locked')?.textContent).toBe('Draft and college: 1 miss away');
     expect(el.querySelector('.bio')?.textContent).toContain('F-G');
     expect(el.querySelector('.bio')?.textContent).toContain('6′11″');
     expect(el.querySelector('.fact.locked')).not.toBeNull();
