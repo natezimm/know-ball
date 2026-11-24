@@ -51,12 +51,14 @@ describe('Team Photo', () => {
     expect(plates('.row.front')[0]).toBe('30.1 pts5.0 reb · 3.0 ast');
     expect(el.querySelector('.count')?.textContent).toBe('0 of 5 in the photo');
     expect(dots()).toEqual(['', '', '', '']);
+    expect(el.querySelector('input')?.getAttribute('placeholder')).toBe('Name a player · 4 misses left');
   });
 
   it('puts named starters in their spots and lets bench names go free', async () => {
     await open({ guesses: [starter('Stephen Curry', 3), guess('Kevin Durant', false, null, 7), bench('Andre Iguodala')] });
 
-    expect(plates('.row.front')[0]).toContain('Curry');
+    // A named starter keeps the first half of his line under his name.
+    expect(plates('.row.front')[0]).toMatch(/^Curry30\.1 pts/);
     expect(el.querySelectorAll('.spot.found').length).toBe(1);
     expect(el.querySelector('.count')?.textContent).toBe('1 of 5 in the photo');
     expect(el.querySelector('.note')?.textContent).toContain('Andre Iguodala came off the bench · no miss');
@@ -64,6 +66,7 @@ describe('Team Photo', () => {
     expect([...el.querySelectorAll('.misses s')].map((s) => s.textContent)).toEqual(['Kevin Durant']);
     // Only the miss uses a dot.
     expect(dots()).toEqual(['miss', '', '', '']);
+    expect(el.querySelector('input')?.getAttribute('placeholder')).toBe('Name a player · 3 misses left');
   });
 
   it('fills the missing faces in grey after a loss', async () => {
@@ -75,6 +78,8 @@ describe('Team Photo', () => {
     expect(plates('.row:not(.front)')[1]).toContain('Green');
     expect(el.querySelector('.kb-result-who strong')?.textContent).toBe('2015–16 Golden State Warriors');
     expect(el.querySelector('.kb-result-who .kb-label')?.textContent).toBe('Out of misses');
+    // The answer card says it all: no note about the last miss under it.
+    expect(el.querySelector('.note')).toBeNull();
   });
 
   it('calls a win with no misses a full photo in gold', async () => {

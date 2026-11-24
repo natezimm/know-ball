@@ -121,7 +121,7 @@ describe('Home', () => {
     const daily = { daily: 'scouting-report' as const };
     expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true)).toEqual({ label: 'Solved in 1 guess', open: true, done: true, foil: 'gold' });
     expect(cardStatus(daily, entry({ status: 'won', guesses: 4 }), true).foil).toBe('holo');
-    expect(cardStatus(daily, entry({ status: 'lost', guesses: 8 }), true)).toEqual({ label: 'Missed', open: true, done: true });
+    expect(cardStatus(daily, entry({ status: 'lost', guesses: 8 }), true)).toEqual({ label: 'Missed', open: true, done: true, missed: true });
     expect(cardStatus(daily, undefined, true)).toEqual({ label: 'Coming soon', open: false });
     expect(cardStatus(daily, undefined, false)).toEqual({ label: 'Play today', open: true });
   });

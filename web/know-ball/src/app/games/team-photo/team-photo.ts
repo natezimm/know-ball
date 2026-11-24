@@ -184,10 +184,11 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
                   <span class="plate">
                     @if (spot.person; as p) {
                       <b>{{ lastName(p.name) }}</b>
+                      <small>{{ line(spot.slot)[0] }}</small>
                       <span class="visually-hidden">{{ p.name }}{{ spot.missed ? ', not named' : '' }}</span>
                     } @else {
                       <small>{{ line(spot.slot)[0] }}</small>
-                      <small>{{ line(spot.slot)[1] }}</small>
+                      <small>@for (part of line(spot.slot)[1].split(' · '); track $index) {@if ($index) {{{ ' ' }}}<span class="part">{{ $index ? '· ' + part : part }}</span>}</small>
                     }
                   </span>
                 </li>
@@ -199,7 +200,7 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
         <p class="count">{{ found() }} of {{ s.payload.slots.length }} in the photo</p>
 
         @if (latest(); as g) {
-          @if (!g.correct) {
+          @if (!g.correct && s.status === 'playing') {
             <p class="note" [class.free]="!isMiss(g)" role="status">
               @if (isMiss(g)) {
                 <b>{{ g.name }}</b> isn't in this photo · miss
@@ -272,13 +273,14 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
       position: absolute; top: 5px; left: 50%; transform: translateX(-50%); padding: 0 4px; border-radius: 3px;
       font: 400 13px/1.3 var(--display); letter-spacing: .03em; color: var(--cream); background: rgb(29 43 83 / .55);
     }
-    .found .pos, .missed .pos { top: auto; bottom: 3px; }
     .plate {
       display: grid; max-width: 104px; padding: 2px 6px; border-radius: 4px; text-align: center; line-height: 1.15;
       background: rgb(0 0 0 / .35); color: var(--cream);
     }
     .plate small { font-size: 13px; white-space: nowrap; }
     .plate small:last-of-type { opacity: .85; }
+    /* "6.8 reb · 5.4 ast" breaks between its parts, never inside one. */
+    .plate .part { display: inline-block; white-space: nowrap; }
     .plate b { font-size: 14px; overflow-wrap: anywhere; }
     .found .plate { background: var(--mustard); color: var(--navy); }
     .missed .plate { background: var(--red); color: var(--cream); }
@@ -302,6 +304,9 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
     @media (max-width: 360px) {
       .face { --face: 64px; }
       .row.front { gap: 12px; }
+      /* Three lines side by side outgrow a third of a 320px photo; let each wrap inside its plate. */
+      .plate { max-width: 100%; padding: 2px 4px; }
+      .plate small { white-space: normal; }
     }
   `,
 })

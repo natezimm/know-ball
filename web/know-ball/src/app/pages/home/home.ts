@@ -30,7 +30,7 @@ interface GameCard {
  */
 export function cardStatus(
   card: Pick<GameCard, 'daily' | 'play' | 'limitsMisses'>, today: TodayEntry | undefined, loaded: boolean | null,
-): { label: string; open: boolean; done?: boolean; foil?: 'gold' | 'holo' } {
+): { label: string; open: boolean; done?: boolean; missed?: boolean; foil?: 'gold' | 'holo' } {
   if (!card.daily) return { label: card.play ?? 'Play anytime', open: true };
   if (loaded === null) return { label: 'Checking today…', open: false };
   if (!today) return loaded ? { label: 'Coming soon', open: false } : { label: 'Play today', open: true };
@@ -49,7 +49,7 @@ export function cardStatus(
     case 'won':
       return { label: today.guesses === 1 ? 'Solved in 1 guess' : `Solved in ${today.guesses}`, open: true, done: true, foil: today.guesses === 1 ? 'gold' : 'holo' };
     case 'lost':
-      return { label: 'Missed', open: true, done: true };
+      return { label: 'Missed', open: true, done: true, missed: true };
     case 'playing':
       return { label: `Carry on · ${today.guesses} of ${today.maxGuesses}`, open: true };
     default:
@@ -128,7 +128,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
           <h2>{{ card.name }}</h2>
           <p>{{ card.blurb }}</p>
           @if (card.status.open) {
-            <a class="badge play" [class.done]="card.status.done" [routerLink]="card.link" [attr.aria-label]="card.name + (card.nfl ? ' NBA' : '') + ': ' + card.status.label">
+            <a class="badge play" [class.done]="card.status.done" [class.missed]="card.status.missed" [routerLink]="card.link" [attr.aria-label]="card.name + (card.nfl ? ' NBA' : '') + ': ' + card.status.label">
               {{ card.nfl ? 'NBA · ' : '' }}{{ card.status.label }}
             </a>
           } @else {
@@ -136,7 +136,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
           }
           @if (card.nfl; as nfl) {
             @if (nfl.open) {
-              <a class="badge play edition" [class.done]="nfl.done" [routerLink]="card.link + '/nfl'" [attr.aria-label]="card.name + ' NFL: ' + nfl.label">NFL · {{ nfl.label }}</a>
+              <a class="badge play edition" [class.done]="nfl.done" [class.missed]="nfl.missed" [routerLink]="card.link + '/nfl'" [attr.aria-label]="card.name + ' NFL: ' + nfl.label">NFL · {{ nfl.label }}</a>
             } @else {
               <span class="badge edition">NFL · {{ nfl.label }}</span>
             }
@@ -207,6 +207,8 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
     /* Its own touch area is the badge and a little above and below, not the whole card. */
     .badge.play.edition::after { inset: min(0px, (100% - 44px) / 2) 0; z-index: auto; }
     .badge.done { background: var(--ok); color: var(--ok-ink); }
+    /* A miss is finished too, but it doesn't wear a solve's green. */
+    .badge.done.missed { background: var(--miss); color: var(--miss-ink); }
     /* Stretch the link over the whole card so the card itself is the tap target. */
     .badge.play::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: 4px; }
     /* The card's number in the set, on a tab that breaks the bottom border. */
