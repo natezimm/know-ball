@@ -10,6 +10,7 @@
     <EmbeddedResource Include="Games\LetterJacket\Data\guess-words.txt" />
     <EmbeddedResource Include="Games\TeamPhoto\Data\finals-teams.json" />
     <EmbeddedResource Include="Games\TeamPhoto\Data\super-bowl-teams.json" />
+    <EmbeddedResource Include="Games\TeamPhoto\Data\world-series-teams.json" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="KnowBall.UnitTests" />

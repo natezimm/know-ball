@@ -1,8 +1,8 @@
 // Writes a small made-up MLB league in the layout of MLB's Stats API, as MlbStatsHistorySource and
 // MlbStatsRosterSource read it from disk, for the browser tests: enough current players to lose a game of Scouting
-// Report and enough well-travelled ones for Career Path. Each player spends each season with one club, so no
-// traded season needs the year-by-year lines. The seasons run up to this year, so the importer reads them as recent
-// whatever the date.
+// Report, enough well-travelled ones for Career Path, five seasons for Back of the Card, and a Dodgers nine for Team
+// Photo. Each player spends each season with one club, so no traded season needs the year-by-year lines. The seasons
+// run up to this year, so the importer reads them as recent whatever the date.
 // Usage: node mlb-fixtures.mjs <out-dir>; prints the first season, for Sources__MlbStats__FirstSeason.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -41,9 +41,20 @@ const players = [
   ['Ziggy Knuckler', 'P', 1991, '49', ['NYM', 'LAD', 'HOU', 'CWS', 'CWS']],
   ['Cal Utility', '2B', 1995, '15', ['CHC', 'CHC', 'CHC', 'CHC', 'CHC']],
   ['Rex Bigswing', '1B', 1994, '25', ['CWS', 'CWS', 'CWS', 'CWS', 'CWS']],
+  // With Dex Backstop behind the plate, a Los Angeles nine in every season: the Dodgers won the World Series in 2024 and
+  // 2025, so they are Team Photo's daily.
+  ['Sal Firstsack', '1B', 1993, '5', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Rip Twobagger', '2B', 1996, '9', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Bo Hotcorner', '3B', 1995, '10', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Pip Shortfield', 'SS', 1997, '6', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Lou Warningtrack', 'LF', 1994, '3', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Kip Centerfield', 'CF', 1996, '16', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Rex Cannonarm', 'RF', 1995, '50', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
+  ['Hal Strikeout', 'P', 1994, '22', ['LAD', 'LAD', 'LAD', 'LAD', 'LAD']],
 ];
 const pitcher = (pos) => pos === 'P';
-const starter = (i) => i % 3 !== 0;
+// Two of every three pitchers start, and so does the Dodgers' Hal Strikeout.
+const starter = (i) => i % 3 !== 0 || players[i][0] === 'Hal Strikeout';
 const teamOf = (p, s) => p[4][Math.min(s, 4)];
 
 const write = (path, obj) => {

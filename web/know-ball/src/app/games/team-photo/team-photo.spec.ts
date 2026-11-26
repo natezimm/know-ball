@@ -148,6 +148,8 @@ describe('Team Photo helpers', () => {
     expect(statLine(slot('C', 'back', 5.4))).toEqual(['5.4 pts', '5.0 reb · 3.0 ast']);
     expect(statLine({ position: 'TE', row: 'back', games: 16, stats: { rec: 97, wyd: 1229, wtd: 5 } })).toEqual(['1,229 rec yds', '97 rec · 5 TD']);
     expect(statLine({ position: 'QB', row: 'front', games: 16, stats: { pyd: 300 } })).toEqual(['300 pass yds', '0 TD · 0 INT']);
+    expect(statLine({ position: '3B', row: 'middle', games: 155, stats: { avg: 0.292, hr: 39, rbi: 102 } })).toEqual(['.292 avg', '39 HR · 102 RBI']);
+    expect(statLine({ position: 'SP', row: 'front', games: 32, stats: { w: 19, l: 5, era: 2.5, k: 197 } })).toEqual(['2.50 ERA', '19–5 · 197 K']);
   });
 
   it('numbers the Super Bowl from the season it closed', () => {
@@ -161,5 +163,18 @@ describe('Team Photo helpers', () => {
     const rows = photoRows(payload, [starter('Klay Thompson', 4)], null);
     expect(rows.back.map((s) => s.index)).toEqual([0, 1, 2]);
     expect(rows.front.map((s) => [s.index, s.person?.name ?? null])).toEqual([[3, null], [4, 'Klay Thompson']]);
+    expect(rows.middle).toEqual([]);
+  });
+
+  it('stands a baseball infield in a middle row', () => {
+    const spot = (position: string, row: 'back' | 'middle' | 'front') => ({ position, row, games: 150, stats: { avg: 0.3, hr: 20, rbi: 80 } });
+    const baseball: PhotoPayload = {
+      ...payload,
+      slots: [spot('LF', 'back'), spot('CF', 'back'), spot('RF', 'back'), spot('3B', 'middle'), spot('SS', 'middle'), spot('2B', 'middle'),
+        spot('1B', 'middle'), spot('SP', 'front'), spot('C', 'front')],
+    };
+    const rows = photoRows(baseball, [], null);
+    expect([rows.back.length, rows.middle.length, rows.front.length]).toEqual([3, 4, 2]);
+    expect(rows.middle.map((s) => s.slot.position)).toEqual(['3B', 'SS', '2B', '1B']);
   });
 });

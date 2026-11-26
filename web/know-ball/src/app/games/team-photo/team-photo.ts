@@ -16,12 +16,13 @@ export interface BasketballSlot {
 }
 
 /**
- * One blank in an NFL photo: the position and the season's totals it is known by, by card key (pyd, ptd, int for a
- * quarterback; car, ryd, rtd for a running back; rec, wyd, wtd for a receiver).
+ * One blank in an NFL or MLB photo: the position and the season's totals it is known by, by card key (pyd, ptd, int
+ * for a quarterback; car, ryd, rtd for a running back; rec, wyd, wtd for a receiver; avg, hr, rbi for a baseball
+ * fielder; w, l, era, k for the starting pitcher). A baseball photo puts the infield in a middle row.
  */
 export interface FootballSlot {
   position: string;
-  row: 'back' | 'front';
+  row: 'back' | 'middle' | 'front';
   games: number;
   stats: Record<string, number>;
 }
@@ -30,13 +31,13 @@ export type PhotoSlot = BasketballSlot | FootballSlot;
 
 export interface PhotoPayload {
   team: { city: string; name: string; abbreviation: string; logoUrl: string | null };
-  /** NBA: the year the season started, 2015 is 2015-16. NFL: the season's year, 2019 ended in Super Bowl LIV. */
+  /** NBA: the year the season started, 2015 is 2015-16. NFL and MLB: the season's year, 2019 ended in Super Bowl LIV. */
   season: number;
   wins: number | null;
   losses: number | null;
   /** NFL only. */
   ties?: number | null;
-  /** "won" or "lost" for a Finals (or Super Bowl) team; null for a practice team that did not get there. */
+  /** "won" or "lost" for a Finals (or Super Bowl, or World Series) team; null for a practice team that did not get there. */
   finals: 'won' | 'lost' | null;
   slots: PhotoSlot[];
 }
@@ -82,14 +83,19 @@ export function superBowl(season: number): string {
 }
 
 const count = (n: number | undefined) => Math.round(n ?? 0).toLocaleString('en-US');
+/** 0.292 → ".292". */
+const average = (n: number | undefined) => (n ?? 0).toFixed(3).replace(/^0/, '');
 
 /**
  * NBA: "30.1 pts" over "5.4 reb · 6.7 ast". NFL: "4,031 pass yds" over "26 TD · 5 INT", "1,229 rec yds" over
- * "97 rec · 5 TD", or "498 rush yds" over "111 car · 5 TD".
+ * "97 rec · 5 TD", or "498 rush yds" over "111 car · 5 TD". MLB: ".292 avg" over "39 HR · 102 RBI", or "2.53 ERA"
+ * over "19–5 · 197 K".
  */
 export function statLine(slot: PhotoSlot): [string, string] {
   if ('stats' in slot) {
     const s = slot.stats;
+    if ('era' in s) return [`${(s['era'] ?? 0).toFixed(2)} ERA`, `${count(s['w'])}–${count(s['l'])} · ${count(s['k'])} K`];
+    if ('avg' in s) return [`${average(s['avg'])} avg`, `${count(s['hr'])} HR · ${count(s['rbi'])} RBI`];
     if (slot.position === 'QB') return [`${count(s['pyd'])} pass yds`, `${count(s['ptd'])} TD · ${count(s['int'])} INT`];
     if (slot.position === 'RB') return [`${count(s['ryd'])} rush yds`, `${count(s['car'])} car · ${count(s['rtd'])} TD`];
     return [`${count(s['wyd'])} rec yds`, `${count(s['rec'])} rec · ${count(s['wtd'])} TD`];
@@ -97,8 +103,15 @@ export function statLine(slot: PhotoSlot): [string, string] {
   return [`${slot.points.toFixed(1)} pts`, `${slot.rebounds.toFixed(1)} reb · ${slot.assists.toFixed(1)} ast`];
 }
 
-/** Lays the slots out as the photo stands: the back row, then the front. A slot's index stays its place in the payload. */
-export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer: PhotoAnswer | null): { back: PhotoSpot[]; front: PhotoSpot[] } {
+/**
+ * Lays the slots out as the photo stands: the back row, a middle row in a baseball photo (empty otherwise), then the
+ * front. A slot's index stays its place in the payload.
+ */
+export function photoRows(
+  payload: PhotoPayload,
+  guesses: GuessRecord[],
+  answer: PhotoAnswer | null,
+): { back: PhotoSpot[]; middle: PhotoSpot[]; front: PhotoSpot[] } {
   const named = new Map<number, PhotoPerson>();
   for (const g of guesses) {
     const slot = (g.feedback as { slot?: number } | null)?.slot;
@@ -109,7 +122,11 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
     const revealed = answer?.slots[index] ?? null;
     return { index, slot, person: found ?? revealed, missed: !found && !!revealed };
   });
-  return { back: spots.filter((s) => s.slot.row === 'back'), front: spots.filter((s) => s.slot.row !== 'back') };
+  return {
+    back: spots.filter((s) => s.slot.row === 'back'),
+    middle: spots.filter((s) => s.slot.row === 'middle'),
+    front: spots.filter((s) => s.slot.row !== 'back' && s.slot.row !== 'middle'),
+  };
 }
 
 /**
@@ -122,7 +139,7 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
   providers: [GameStore],
   template: `
     <app-game-shell
-      name="Team Photo" trim="var(--red)" limitsMisses includeInactive practice [leagues]="['nba', 'nfl']"
+      name="Team Photo" trim="var(--red)" limitsMisses includeInactive practice [leagues]="['nba', 'nfl', 'mlb']"
       [shareRows]="rows()" [resultName]="teamName()" [resultImage]="state()?.payload?.team?.logoUrl ?? null"
     >
       <div help>
@@ -140,6 +157,21 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
             kickers too. Anyone else is a miss, and four misses ends the game.
           </p>
           <p>Practice rounds use other playoff teams since 1999.</p>
+        } @else if (baseball()) {
+          <p>
+            This is the team photo of one MLB team that played in the World Series, with the faces left blank. Name its
+            eight fielders and its top starting pitcher.
+          </p>
+          <p>
+            Each fielder is the player with the most games at his position for that team that season, and the pitcher is
+            the one with the most starts. The outfield stands at the back, the infield in the middle, and the pitcher and
+            catcher in front. Under each blank is his position and his season line.
+          </p>
+          <p>
+            Naming one of the nine puts him in the photo. Naming anyone else who played for that team that season is free.
+            Anyone else is a miss, and four misses ends the game.
+          </p>
+          <p>Practice rounds use other playoff teams since 1960.</p>
         } @else {
           <p>This is the team photo of one NBA team that reached the Finals, with the faces left blank. Name its starting five.</p>
           <p>
@@ -169,9 +201,9 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
             </div>
           </header>
 
-          @for (row of [layout().back, layout().front]; track $index) {
-            <ol class="row" [class.front]="$index === 1" [attr.aria-label]="$index === 0 ? 'Back row' : 'Front row'">
-              @for (spot of row; track spot.index) {
+          @for (row of rowsOf(layout()); track row.label) {
+            <ol class="row" [class.middle]="row.label === 'Middle row'" [class.front]="row.label === 'Front row'" [attr.aria-label]="row.label">
+              @for (spot of row.spots; track spot.index) {
                 <li class="spot" [class.found]="spot.person && !spot.missed" [class.missed]="spot.missed">
                   <span class="face">
                     @if (spot.person; as p) {
@@ -255,6 +287,9 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
 
     .row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
     .row.front { grid-template-columns: repeat(2, minmax(0, 104px)); justify-content: center; gap: 24px; }
+    /* A baseball infield: four across, a little smaller. */
+    .row.middle { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .row.middle .face { --face: 64px; }
     .spot { display: grid; justify-items: center; gap: 4px; min-width: 0; }
     .face {
       --face: 76px; position: relative; width: var(--face); height: var(--face); border-radius: 50%; overflow: hidden; display: grid; place-items: end center;
@@ -313,35 +348,38 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
 export class TeamPhoto {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" on the NFL edition's address. */
+  /** From the route's data: "nfl" or "mlb" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
 
   protected readonly football = computed(() => this.store.league() === 'nfl');
+  protected readonly baseball = computed(() => this.store.league() === 'mlb');
 
   protected readonly isMiss = isMiss;
   protected readonly line = statLine;
   protected readonly state = computed(() => this.store.state() as GameState<PhotoPayload, null, PhotoFeedback, PhotoAnswer> | null);
   protected readonly layout = computed(() => {
     const s = this.state();
-    return s ? photoRows(s.payload, s.guesses, s.answer) : { back: [], front: [] };
+    return s ? photoRows(s.payload, s.guesses, s.answer) : { back: [], middle: [], front: [] };
   });
   protected readonly found = computed(() => (this.state()?.guesses ?? []).filter((g) => g.correct).length);
   protected readonly latest = computed(() => this.state()?.guesses.at(-1) ?? null);
   protected readonly bench = computed(() => (this.state()?.guesses ?? []).filter((g) => !g.correct && !isMiss(g)));
   protected readonly misses = computed(() => (this.state()?.guesses ?? []).filter(isMiss).reverse());
-  /** "2015–16 Golden State Warriors"; an NFL season is one year, "2019 Kansas City Chiefs". */
+  /** "2015–16 Golden State Warriors"; an NFL or MLB season is one year, "2019 Kansas City Chiefs". */
   protected readonly teamName = computed(() => {
     const p = this.state()?.payload;
-    return p ? `${this.football() ? p.season : seasonName(p.season)} ${p.team.city} ${p.team.name}` : '';
+    return p ? `${this.store.league() === 'nba' ? seasonName(p.season) : p.season} ${p.team.city} ${p.team.name}` : '';
   });
-  /** "73–9 · Lost in the Finals", or "11–4–1 · Lost Super Bowl XLVII". */
+  /** "73–9 · Lost in the Finals", "11–4–1 · Lost Super Bowl XLVII", or "103–58 · Won the World Series". */
   protected readonly record = computed(() => {
     const p = this.state()?.payload;
     if (!p) return '';
     const football = this.football();
-    const finals = football
+    const finals = this.baseball()
+      ? p.finals === 'won' ? 'Won the World Series' : p.finals === 'lost' ? 'Lost the World Series' : 'Made the playoffs'
+      : football
       ? p.finals === 'won' ? `Won Super Bowl ${superBowl(p.season)}` : p.finals === 'lost' ? `Lost Super Bowl ${superBowl(p.season)}` : 'Made the playoffs'
       : p.finals === 'won' ? 'Won the title' : p.finals === 'lost' ? 'Lost in the Finals' : 'Made the playoffs';
     const ties = p.ties ? `–${p.ties}` : '';
@@ -354,6 +392,15 @@ export class TeamPhoto {
 
   constructor() {
     loadFromRoute(this.store, 'team-photo', this.puzzleId, this.league);
+  }
+
+  /** The photo's rows from back to front, leaving out the middle one a basketball or football photo does not have. */
+  protected rowsOf(layout: { back: PhotoSpot[]; middle: PhotoSpot[]; front: PhotoSpot[] }): { label: string; spots: PhotoSpot[] }[] {
+    return [
+      { label: 'Back row', spots: layout.back },
+      { label: 'Middle row', spots: layout.middle },
+      { label: 'Front row', spots: layout.front },
+    ].filter((row) => row.label !== 'Middle row' || row.spots.length > 0);
   }
 
   /** "Curry"; "Jr." and the like stay with the name before them. */
