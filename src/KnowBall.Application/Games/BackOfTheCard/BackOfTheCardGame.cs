@@ -25,8 +25,13 @@ public sealed record FootballCardSeason(int Season, int Games, IReadOnlyList<dou
 /// <summary>The career line: totals over every printed season, and rates worked out from them.</summary>
 public sealed record FootballCardCareer(int Seasons, int Games, IReadOnlyList<double> Values);
 
-/// <summary>A football card: the columns suit his position (passing, rushing, receiving or defence) and every number is a season total.</summary>
-public sealed record FootballCardPayload(IReadOnlyList<CardColumn> Columns, IReadOnlyList<FootballCardSeason> Seasons, FootballCardCareer Career);
+/// <summary>
+/// A card of season totals: the columns suit his position (for football passing, rushing, receiving or defence; for
+/// hockey a skater's or a goalie's line). <paramref name="SplitYears"/> is true when a season spans two years, as a
+/// hockey one does (2023 is 2023-24); a football season goes by its own year.
+/// </summary>
+public sealed record FootballCardPayload(
+    IReadOnlyList<CardColumn> Columns, IReadOnlyList<FootballCardSeason> Seasons, FootballCardCareer Career, bool SplitYears = false);
 
 /// <param name="Teams">The club for each printed season, in the same order: "OKC", or "BKN/PHX" for a season split by a trade.</param>
 /// <param name="Stamps">The award printed beside each season, or null; the best one when there were several.</param>
@@ -72,7 +77,7 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
     public int MaxGuesses => Steps.Count + 1;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Nhl];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -94,7 +99,7 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
             .FirstAsync(p => p.Id == answerId, cancellationToken);
 
         var awards = answer.Awards.ToLookup(a => a.Season, a => a.Type);
-        var hints = CareerPathGame.HintsFor(answer);
+        var hints = CareerPathGame.HintsFor(answer, context.League.Code);
         CardSecret Secret(IEnumerable<int> printed, List<string> teams, Func<IEnumerable<string>, string?> stamp) => new(
             answer.Id,
             answer.FullName,
@@ -111,6 +116,13 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
             var (lines, clubs) = Lines(answer.SeasonStats, answer.Stints, s => s.Games > 0 ? FootballLine.Read(s) : null);
             var payload = FootballCard(answer.Position, lines);
             var secret = Secret(lines.Select(l => l.Season), clubs, FootballStamp);
+            return new GeneratedPuzzle(answer.Id, GameJson.Write(payload), GameJson.Write(secret), Difficulty: lines.Count);
+        }
+        else if (context.League.Code == LeagueCodes.Nhl)
+        {
+            var (lines, clubs) = Lines(answer.SeasonStats, answer.Stints, s => s.Games > 0 ? FootballLine.Read(s) : null);
+            var payload = HockeyCard(answer.Position, lines);
+            var secret = Secret(lines.Select(l => l.Season), clubs, HockeyStamp);
             return new GeneratedPuzzle(answer.Id, GameJson.Write(payload), GameJson.Write(secret), Difficulty: lines.Count);
         }
         else
@@ -255,7 +267,28 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
         return null;
     }
 
-    /// <summary>One football season's totals, read from the stat row's card JSON.</summary>
+    /// <summary>
+    /// The award a hockey card prints beside a season, best first. The Stanley Cup is a team's, so it ranks under every
+    /// trophy a player wins on his own but over the Lady Byng.
+    /// </summary>
+    internal static string? HockeyStamp(IEnumerable<string> awards)
+    {
+        var won = awards.ToHashSet(StringComparer.Ordinal);
+        if (won.Contains(AwardTypes.Mvp)) return "Hart";
+        if (won.Contains(AwardTypes.ConnSmythe)) return "Conn Smythe";
+        if (won.Contains(AwardTypes.ArtRoss)) return "Art Ross";
+        if (won.Contains(AwardTypes.RocketRichard)) return "Rocket Richard";
+        if (won.Contains(AwardTypes.Norris)) return "Norris";
+        if (won.Contains(AwardTypes.Vezina)) return "Vezina";
+        if (won.Contains(AwardTypes.TedLindsay)) return "Lindsay";
+        if (won.Contains(AwardTypes.Selke)) return "Selke";
+        if (won.Contains(AwardTypes.Rookie)) return "Calder";
+        if (won.Contains(AwardTypes.StanleyCup)) return "Stanley Cup";
+        if (won.Contains(AwardTypes.LadyByng)) return "Lady Byng";
+        return null;
+    }
+
+    /// <summary>One season's totals (football or hockey), read from the stat row's card JSON.</summary>
     internal sealed record FootballLine(int Season, int Games, IReadOnlyDictionary<string, double> Totals)
     {
         public double this[string key] => Totals.GetValueOrDefault(key);
@@ -312,16 +345,49 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
         return new FootballCardPayload(columns.Columns, seasons, career);
     }
 
+    private static readonly CardColumn[] SkaterColumns = [new("G", 0), new("A", 0), new("Pts", 0), new("+/-", 0)];
+    private static readonly CardColumn[] GoalieColumns = [new("W", 0), new("GAA", 2), new("Sv%", 3), new("SO", 0)];
+
+    /// <summary>
+    /// The hockey card for a player's printed seasons: goals, assists, points and plus-minus for a skater, or wins,
+    /// goals-against average, save percentage and shutouts for a goalie. The career averages are weighted by the
+    /// games he started, since the card keeps no minutes or shots.
+    /// </summary>
+    internal static FootballCardPayload HockeyCard(string? position, IReadOnlyList<FootballLine> lines)
+    {
+        var goalie = position == "G";
+        double[] Skater(Func<string, double> t) => [t("g"), t("a"), t("pts"), t("pm")];
+        double[] Goalie(Func<string, double> t) => [t("w"), t("gaa"), t("svp"), t("so")];
+        var values = goalie ? (Func<Func<string, double>, double[]>)Goalie : Skater;
+
+        var seasons = lines.Select(l => new FootballCardSeason(l.Season, l.Games, values(key => l[key]))).ToList();
+        double[] career;
+        if (goalie)
+        {
+            var starts = lines.Sum(l => l["gs"]);
+            double Weighted(string key, int decimals) =>
+                starts > 0 ? Math.Round(lines.Sum(l => l[key] * l["gs"]) / starts, decimals) : 0;
+            career = [lines.Sum(l => l["w"]), Weighted("gaa", 2), Weighted("svp", 3), lines.Sum(l => l["so"])];
+        }
+        else
+        {
+            career = Skater(key => lines.Sum(l => l[key]));
+        }
+        var careerLine = new FootballCardCareer(lines.Count, lines.Sum(l => l.Games), career);
+        return new FootballCardPayload(goalie ? GoalieColumns : SkaterColumns, seasons, careerLine, SplitYears: true);
+    }
+
     /// <summary>Well-known players with enough printed seasons, loaded once per request or import run.</summary>
     private async Task<List<int>> PoolAsync(int leagueId, CancellationToken ct)
     {
         if (_pools.TryGetValue(leagueId, out var cached)) return cached;
 
-        // A football season is printed from its games and totals; a basketball one needs its scoring average.
-        var football = await db.Leagues.AnyAsync(l => l.Id == leagueId && l.Code == LeagueCodes.Nfl, ct);
+        // A football or hockey season is printed from its games and totals; a basketball one needs its scoring average.
+        var league = await db.Leagues.Where(l => l.Id == leagueId).Select(l => l.Code).FirstOrDefaultAsync(ct);
+        var football = league == LeagueCodes.Nfl;
         var rows = db.PlayerSeasonStats.AsNoTracking()
             .Where(s => s.Player!.LeagueId == leagueId && s.IsSeasonTotal && s.Games > 0);
-        if (!football) rows = rows.Where(s => s.PointsPerGame != null);
+        if (league == LeagueCodes.Nba) rows = rows.Where(s => s.PointsPerGame != null);
         var seasons = await rows
             .GroupBy(s => s.PlayerId)
             .Select(g => new { PlayerId = g.Key, Count = g.Select(s => s.Season).Distinct().Count() })
@@ -334,6 +400,11 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
         {
             players = players.Where(p => p.FromYear != null && p.FromYear >= NflMinFirstSeason
                                          && (p.Position == null || !ScoutingReportGame.NeverAnswers.Contains(p.Position)));
+        }
+        else if (league == LeagueCodes.Nhl)
+        {
+            // The card starts in 1979-80, so an earlier career would be printed with its first seasons missing.
+            players = players.Where(p => p.FromYear != null && p.FromYear >= CareerPathGame.NhlMinFirstSeason);
         }
         var candidates = await players.Select(p => new { p.Id, p.Popularity }).ToListAsync(ct);
 

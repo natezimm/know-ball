@@ -101,6 +101,15 @@ export const routes: Routes = [
     } satisfies PageMetaData & { league: 'nfl' },
     loadComponent: backOfTheCard,
   },
+  {
+    path: 'back-of-the-card/nhl',
+    title: 'Back of the Card NHL — Know Ball',
+    data: {
+      league: 'nhl',
+      description: "Back of the Card NHL: every season's totals from an NHL player's card, name blacked out. Who is it? A new puzzle every day.",
+    } satisfies PageMetaData & { league: 'nhl' },
+    loadComponent: backOfTheCard,
+  },
   { path: 'back-of-the-card/puzzle/:puzzleId', title: 'Back of the Card — Know Ball', data: archive, loadComponent: backOfTheCard },
   {
     path: 'team-photo',

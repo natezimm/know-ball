@@ -86,10 +86,28 @@ public sealed class NhlGameApiTests(ApiFactory factory) : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Back_of_the_card_and_team_photo_have_no_nhl_edition_yet()
+    public async Task Nhl_back_of_the_card_prints_a_skaters_seasons_by_two_year_season_and_is_won()
     {
         var client = NewPlayer();
-        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/back-of-the-card/daily?league=nhl")).StatusCode);
+        var daily = await Json(await client.GetAsync("/api/back-of-the-card/daily?league=nhl"));
+        Assert.Equal("nhl", daily.GetProperty("league").GetString());
+        var payload = daily.GetProperty("payload");
+        Assert.True(payload.GetProperty("splitYears").GetBoolean());
+        Assert.Equal(["G", "A", "Pts", "+/-"], payload.GetProperty("columns").EnumerateArray().Select(c => c.GetProperty("label").GetString()));
+        // Golf Journeyman is the one fixture player with five seasons.
+        Assert.Equal([2015, 2016, 2017, 2021, 2024], payload.GetProperty("seasons").EnumerateArray().Select(s => s.GetProperty("season").GetInt32()));
+        Assert.Equal(JsonValueKind.Null, daily.GetProperty("answer").ValueKind);
+
+        var puzzleId = daily.GetProperty("puzzleId").GetInt32();
+        var won = await Json(await client.PostAsJsonAsync($"/api/back-of-the-card/{puzzleId}/guess", new { playerId = await PlayerId(client, "Golf Journeyman", true) }));
+        Assert.Equal("won", won.GetProperty("status").GetString());
+        Assert.Equal(["WPG", "WPG", "VGK", "SEA", "UTA"], won.GetProperty("clues").GetProperty("teams").EnumerateArray().Select(t => t.GetString()));
+    }
+
+    [Fact]
+    public async Task Team_photo_has_no_nhl_edition_yet()
+    {
+        var client = NewPlayer();
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/team-photo/daily?league=nhl")).StatusCode);
     }
 }
