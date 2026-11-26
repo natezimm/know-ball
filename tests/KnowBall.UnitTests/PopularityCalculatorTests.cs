@@ -96,4 +96,37 @@ public class PopularityCalculatorTests
         Assert.Equal(100, PopularityCalculator.FromFootballCareer(Football(value: 400, fantasy: 9_000, proBowls: 20, allPros: 10, hof: true, seasons: 25, pick: 1, recent: 40)));
         Assert.Equal(0, PopularityCalculator.FromFootballCareer(Football()));
     }
+
+    private static HockeyCareer Hockey(string position = "C", int points = 0, int wins = 0, int seasons = 0, int harts = 0, int major = 0,
+        int cups = 0, bool hof = false, int? pick = null, double? recent = null) =>
+        new(position, points, wins, seasons, harts, major, cups, hof, pick, recent);
+
+    [Fact]
+    public void A_hockey_legend_outranks_a_long_serving_depth_player()
+    {
+        var legend = PopularityCalculator.FromHockeyCareer(Hockey(points: 1_700, seasons: 20, harts: 3, major: 10, cups: 1, pick: 1));
+        var depth = PopularityCalculator.FromHockeyCareer(Hockey(points: 250, seasons: 14, pick: 80));
+        Assert.True(legend > 80, $"legend {legend}");
+        Assert.True(depth < 25, $"depth {depth}");
+    }
+
+    [Fact]
+    public void A_defensemans_points_and_a_goalies_wins_count_like_a_forwards_points()
+    {
+        var forward = PopularityCalculator.FromHockeyCareer(Hockey("C", points: 800, seasons: 12));
+        var defenseman = PopularityCalculator.FromHockeyCareer(Hockey("D", points: 500, seasons: 12));
+        var goalie = PopularityCalculator.FromHockeyCareer(Hockey("G", points: 10, wins: 270, seasons: 12));
+        Assert.InRange(defenseman, forward - 2, forward + 2);
+        Assert.InRange(goalie, forward - 2, forward + 2);
+    }
+
+    [Fact]
+    public void A_current_scorer_outranks_a_forgotten_hockey_veteran_and_a_score_stays_between_0_and_100()
+    {
+        var current = PopularityCalculator.FromHockeyCareer(Hockey(points: 300, seasons: 5, pick: 3, recent: 1.2));
+        var veteran = PopularityCalculator.FromHockeyCareer(Hockey(points: 450, seasons: 13));
+        Assert.True(current > veteran, $"current {current} vs veteran {veteran}");
+        Assert.Equal(100, PopularityCalculator.FromHockeyCareer(Hockey(points: 3_000, seasons: 25, harts: 9, major: 20, cups: 4, hof: true, pick: 1, recent: 2)));
+        Assert.Equal(0, PopularityCalculator.FromHockeyCareer(Hockey()));
+    }
 }

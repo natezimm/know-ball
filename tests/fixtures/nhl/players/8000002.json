@@ -1,0 +1,107 @@
+{
+ "playerId": 8000002,
+ "firstName": {
+  "default": "Bravo"
+ },
+ "lastName": {
+  "default": "Wall"
+ },
+ "position": "G",
+ "birthDate": "1995-07-08",
+ "birthCountry": "SWE",
+ "heightInInches": 76,
+ "weightInPounds": 210,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000002.png",
+ "seasonTotals": [
+  {
+   "season": 20232024,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Philadelphia Flyers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 60,
+   "gamesStarted": 58,
+   "wins": 35,
+   "losses": 18,
+   "otLosses": 5,
+   "goalsAgainst": 150,
+   "shotsAgainst": 1700,
+   "shutouts": 4,
+   "timeOnIce": "3600:00",
+   "goalsAgainstAvg": 9.99,
+   "savePctg": 0.5
+  },
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Philadelphia Flyers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 55,
+   "gamesStarted": 54,
+   "wins": 30,
+   "losses": 20,
+   "otLosses": 4,
+   "goalsAgainst": 140,
+   "shotsAgainst": 1500,
+   "shutouts": 3,
+   "timeOnIce": "3300:00",
+   "goalsAgainstAvg": 9.99,
+   "savePctg": 0.5
+  },
+  {
+   "season": 20252026,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Philadelphia Flyers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 18,
+   "gamesStarted": 18,
+   "wins": 11,
+   "losses": 5,
+   "otLosses": 2,
+   "goalsAgainst": 40,
+   "shotsAgainst": 500,
+   "shutouts": 2,
+   "timeOnIce": "1080:00",
+   "goalsAgainstAvg": 9.99,
+   "savePctg": 0.5
+  }
+ ],
+ "awards": [
+  {
+   "trophy": {
+    "default": "Vezina Trophy",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 20242025,
+     "gameTypeId": 2
+    }
+   ]
+  }
+ ],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 133,
+   "points": 0,
+   "wins": 76
+  }
+ },
+ "sweaterNumber": 35,
+ "draftDetails": {
+  "year": 2013,
+  "overallPick": 40,
+  "round": 1,
+  "pickInRound": 40,
+  "teamAbbrev": "TOR"
+ }
+}

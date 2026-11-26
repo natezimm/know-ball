@@ -127,14 +127,14 @@ public class HistoryImportServiceTests : IDisposable
 
         await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("SEA", 1995, 64, 18, true)));
         await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("SEA", 1995, 64, 18, true)));
-        // A tie is kept too: an NFL record can have one.
-        await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("OKC", 2025, 68, 13, true, Ties: 1)));
+        // A tie is kept too: an NFL record can have one. So are overtime losses, which an NHL record has.
+        await Import(WithRecords(new("GSW", 2015, 73, 9, true), new("OKC", 2025, 68, 13, true, Ties: 1, OvertimeLosses: 2)));
 
         await using var ctx = _db.NewContext();
         var rows = await ctx.TeamSeasons.Include(t => t.Team).OrderBy(t => t.Season).ToListAsync();
         Assert.Equal(
-            ["SEA 1995 64-18-0", "GSW 2015 73-9-0", "OKC 2025 68-13-1"],
-            rows.Select(r => $"{r.Team!.Abbreviation} {r.Season} {r.Wins}-{r.Losses}-{r.Ties}"));
+            ["SEA 1995 64-18-0-0", "GSW 2015 73-9-0-0", "OKC 2025 68-13-1-2"],
+            rows.Select(r => $"{r.Team!.Abbreviation} {r.Season} {r.Wins}-{r.Losses}-{r.Ties}-{r.OvertimeLosses}"));
         Assert.All(rows, r => Assert.True(r.MadePlayoffs));
     }
 

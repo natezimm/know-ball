@@ -1,0 +1,39 @@
+{
+ "forwards": [
+  {
+   "id": 8000005,
+   "firstName": {
+    "default": "Echo"
+   },
+   "lastName": {
+    "default": "Rookie"
+   },
+   "positionCode": "R",
+   "sweaterNumber": 0,
+   "heightInInches": 72,
+   "weightInPounds": 190,
+   "birthDate": "2006-09-09",
+   "birthCountry": "CZE",
+   "headshot": "https://assets.nhle.com/mugs/nhl/20252026/x/8000005.png"
+  }
+ ],
+ "defensemen": [
+  {
+   "id": 8000007,
+   "firstName": {
+    "default": "Foxtrot"
+   },
+   "lastName": {
+    "default": "Newcomer"
+   },
+   "positionCode": "D",
+   "sweaterNumber": 44,
+   "heightInInches": 72,
+   "weightInPounds": 190,
+   "birthDate": "2005-02-02",
+   "birthCountry": "XYZ",
+   "headshot": "https://assets.nhle.com/mugs/nhl/20252026/x/8000007.png"
+  }
+ ],
+ "goalies": []
+}

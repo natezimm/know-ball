@@ -1,0 +1,22 @@
+{
+ "forwards": [
+  {
+   "id": 8000001,
+   "firstName": {
+    "default": "Alpha"
+   },
+   "lastName": {
+    "default": "Sniper"
+   },
+   "positionCode": "C",
+   "sweaterNumber": 91,
+   "heightInInches": 73,
+   "weightInPounds": 190,
+   "birthDate": "1997-03-04",
+   "birthCountry": "CAN",
+   "headshot": "https://assets.nhle.com/mugs/nhl/20252026/x/8000001.png"
+  }
+ ],
+ "defensemen": [],
+ "goalies": []
+}

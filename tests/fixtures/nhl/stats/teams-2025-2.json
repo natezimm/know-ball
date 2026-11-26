@@ -1,0 +1,28 @@
+{
+ "data": [
+  {
+   "teamFullName": "Boston Bruins",
+   "gamesPlayed": 22,
+   "wins": 12,
+   "losses": 8,
+   "otLosses": 2,
+   "ties": null
+  },
+  {
+   "teamFullName": "Utah Mammoth",
+   "gamesPlayed": 22,
+   "wins": 10,
+   "losses": 9,
+   "otLosses": 3,
+   "ties": null
+  },
+  {
+   "teamFullName": "Philadelphia Flyers",
+   "gamesPlayed": 0,
+   "wins": 0,
+   "losses": 0,
+   "otLosses": 0,
+   "ties": null
+  }
+ ]
+}

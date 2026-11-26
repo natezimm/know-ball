@@ -185,6 +185,7 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
             if (row.Wins != r.Wins) row.Wins = r.Wins;
             if (row.Losses != r.Losses) row.Losses = r.Losses;
             if (row.Ties != r.Ties) row.Ties = r.Ties;
+            if (row.OvertimeLosses != r.OvertimeLosses) row.OvertimeLosses = r.OvertimeLosses;
             if (row.MadePlayoffs != r.MadePlayoffs) row.MadePlayoffs = r.MadePlayoffs;
         }
     }
@@ -208,6 +209,7 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
         Set(p.WeightLbs, hp.WeightLbs ?? p.WeightLbs, v => p.WeightLbs = v);
         Set(p.BirthDate, hp.BirthDate ?? p.BirthDate, v => p.BirthDate = v);
         Set(p.College, hp.College ?? p.College, v => p.College = v);
+        Set(p.Country, hp.Country ?? p.Country, v => p.Country = v);
         Set(p.FromYear, hp.FromYear ?? p.FromYear, v => p.FromYear = v);
         Set(p.ToYear, hp.ToYear ?? p.ToYear, v => p.ToYear = v);
         Set(p.DraftYear, hp.DraftYear ?? p.DraftYear, v => p.DraftYear = v);

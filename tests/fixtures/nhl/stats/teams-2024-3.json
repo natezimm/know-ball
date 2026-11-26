@@ -1,0 +1,12 @@
+{
+ "data": [
+  {
+   "teamFullName": "Toronto Maple Leafs",
+   "gamesPlayed": 13,
+   "wins": 6,
+   "losses": 7,
+   "otLosses": null,
+   "ties": null
+  }
+ ]
+}

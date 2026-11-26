@@ -128,6 +128,7 @@ public static class LeagueCodes
 {
     public const string Nba = "nba";
     public const string Nfl = "nfl";
+    public const string Nhl = "nhl";
 }
 
 public sealed class GameLeagueOptions

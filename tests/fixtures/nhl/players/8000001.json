@@ -1,0 +1,225 @@
+{
+ "playerId": 8000001,
+ "firstName": {
+  "default": "Alpha"
+ },
+ "lastName": {
+  "default": "Sniper"
+ },
+ "position": "C",
+ "birthDate": "1997-03-04",
+ "birthCountry": "CAN",
+ "heightInInches": 73,
+ "weightInPounds": 200,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000001.png",
+ "seasonTotals": [
+  {
+   "season": 20142015,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NCAA",
+   "teamName": {
+    "default": "Boston University"
+   },
+   "sequence": 1,
+   "gamesPlayed": 35,
+   "goals": 20,
+   "assists": 25,
+   "points": 45,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20152016,
+   "gameTypeId": 2,
+   "leagueAbbrev": "AHL",
+   "teamName": {
+    "default": "Toronto Marlies"
+   },
+   "sequence": 1,
+   "gamesPlayed": 40,
+   "goals": 10,
+   "assists": 10,
+   "points": 20,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20232024,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Toronto Maple Leafs"
+   },
+   "sequence": 1,
+   "gamesPlayed": 82,
+   "goals": 40,
+   "assists": 50,
+   "points": 90,
+   "plusMinus": 12,
+   "pim": 20,
+   "powerPlayGoals": 12,
+   "gameWinningGoals": 7,
+   "shots": 280,
+   "avgToi": "19:30"
+  },
+  {
+   "season": 20232024,
+   "gameTypeId": 3,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Toronto Maple Leafs"
+   },
+   "sequence": 1,
+   "gamesPlayed": 7,
+   "goals": 3,
+   "assists": 2,
+   "points": 5,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Boston Bruins"
+   },
+   "sequence": 2,
+   "gamesPlayed": 30,
+   "goals": 15,
+   "assists": 15,
+   "points": 30,
+   "plusMinus": -4,
+   "pim": 6,
+   "powerPlayGoals": 5,
+   "gameWinningGoals": 2,
+   "shots": 100,
+   "avgToi": "18:00"
+  },
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Toronto Maple Leafs"
+   },
+   "sequence": 1,
+   "gamesPlayed": 50,
+   "goals": 25,
+   "assists": 30,
+   "points": 55,
+   "plusMinus": 10,
+   "pim": 10,
+   "powerPlayGoals": 8,
+   "gameWinningGoals": 4,
+   "shots": 170,
+   "avgToi": "20:00"
+  },
+  {
+   "season": 20252026,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Boston Bruins"
+   },
+   "sequence": 1,
+   "gamesPlayed": 20,
+   "goals": 12,
+   "assists": 14,
+   "points": 26,
+   "plusMinus": 6,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 60,
+   "avgToi": "19:00"
+  }
+ ],
+ "awards": [
+  {
+   "trophy": {
+    "default": "Hart Memorial Trophy",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 20242025,
+     "gameTypeId": 2
+    }
+   ]
+  },
+  {
+   "trophy": {
+    "default": "Art Ross Trophy",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 20242025,
+     "gameTypeId": 2
+    }
+   ]
+  },
+  {
+   "trophy": {
+    "default": "Maurice “Rocket” Richard Trophy",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 20232024,
+     "gameTypeId": 2
+    }
+   ]
+  },
+  {
+   "trophy": {
+    "default": "Stanley Cup",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 20232024,
+     "gameTypeId": 3
+    }
+   ]
+  },
+  {
+   "trophy": {
+    "default": "Mark Messier NHL Leadership Award",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 20242025,
+     "gameTypeId": 2
+    }
+   ]
+  }
+ ],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 182,
+   "points": 201,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 91,
+ "draftDetails": {
+  "year": 2015,
+  "overallPick": 1,
+  "round": 1,
+  "pickInRound": 1,
+  "teamAbbrev": "TOR"
+ }
+}

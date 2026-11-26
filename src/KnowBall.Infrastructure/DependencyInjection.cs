@@ -37,6 +37,7 @@ public static class DependencyInjection
         services.Configure<BrefOptions>(config.GetSection("Sources:Bref"));
         services.Configure<WikidataOptions>(config.GetSection("Sources:Wikidata"));
         services.Configure<NflverseOptions>(config.GetSection("Sources:Nflverse"));
+        services.Configure<NhlApiOptions>(config.GetSection("Sources:Nhl"));
         services.Configure<SourceRetryOptions>(config.GetSection("Sources:Retry"));
         services.Configure<KnowBall.Application.Games.GameLeagueOptions>(config.GetSection("Games"));
 
@@ -63,13 +64,20 @@ public static class DependencyInjection
         services.AddHttpClient<NflverseRosterSource>()
             .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds);
 
+        services.AddHttpClient<NhlHistorySource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds);
+        services.AddHttpClient<NhlRosterSource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds);
+
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<EspnRosterSource>());
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NbaStatsPlayerSource>());
         services.AddScoped<IPlayerSource, SeedFilePlayerSource>();
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NflverseRosterSource>());
+        services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NhlRosterSource>());
         services.AddScoped<PlayerSourceResolver>();
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<BrefCsvSource>());
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<NflverseHistorySource>());
+        services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<NhlHistorySource>());
         services.AddScoped<HistorySourceResolver>();
         services.AddScoped<ICrosswalkSource>(sp => sp.GetRequiredService<WikidataCrosswalkSource>());
 

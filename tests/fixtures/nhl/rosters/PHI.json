@@ -1,0 +1,22 @@
+{
+ "forwards": [],
+ "defensemen": [],
+ "goalies": [
+  {
+   "id": 8000002,
+   "firstName": {
+    "default": "Bravo"
+   },
+   "lastName": {
+    "default": "Wall"
+   },
+   "positionCode": "G",
+   "sweaterNumber": 35,
+   "heightInInches": 76,
+   "weightInPounds": 190,
+   "birthDate": "1995-07-08",
+   "birthCountry": "SWE",
+   "headshot": "https://assets.nhle.com/mugs/nhl/20252026/x/8000002.png"
+  }
+ ]
+}

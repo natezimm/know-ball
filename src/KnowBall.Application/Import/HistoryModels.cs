@@ -29,7 +29,8 @@ public sealed record HistorySnapshot(
     IReadOnlyList<HistoryTeamSeason>? TeamSeasons = null);
 
 /// <summary>A team's regular-season record. <paramref name="TeamKey"/> is what season rows call the team.</summary>
-public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs, int Ties = 0);
+/// <param name="OvertimeLosses">Hockey's losses in overtime or a shootout, which are not in <paramref name="Losses"/>.</param>
+public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs, int Ties = 0, int OvertimeLosses = 0);
 
 /// <param name="Key">What season rows call the team.</param>
 /// <param name="ActiveTo">Last season under this name; null while it still plays.</param>
@@ -40,6 +41,7 @@ public sealed record HistoryTeam(string Key, SourceTeam Team, int? ActiveFrom, i
 /// <param name="HeadshotUrl">A link to the player's photo, when the record has one.</param>
 /// <param name="Popularity">A fame score the source worked out itself; null to score the career from its season lines and awards.</param>
 /// <param name="KeepSeasonLines">False when the lines only say which team he was on: they build his stops, but no stat rows are stored.</param>
+/// <param name="Country">The country he was born in, when the record has it.</param>
 public sealed record HistoryPlayer(
     string ExternalId,
     string FirstName,
@@ -59,7 +61,8 @@ public sealed record HistoryPlayer(
     string? JerseyNumber = null,
     string? HeadshotUrl = null,
     double? Popularity = null,
-    bool KeepSeasonLines = true);
+    bool KeepSeasonLines = true,
+    string? Country = null);
 
 /// <summary>
 /// One line of a player's record, in the order played. A season split between teams has one
@@ -102,6 +105,21 @@ public static class AwardTypes
     /// <summary>Followed by 1 or 2 for the AP first or second team.</summary>
     public const string AllPro = "AllPro";
     public const string ProBowl = "ProBowl";
+
+    // Hockey. MVP (the Hart) and ROY (the Calder) are shared with basketball.
+    public const string ArtRoss = "ArtRoss";
+    public const string RocketRichard = "RocketRichard";
+    public const string Norris = "Norris";
+    public const string Vezina = "Vezina";
+    public const string ConnSmythe = "ConnSmythe";
+    public const string TedLindsay = "TedLindsay";
+    public const string Selke = "Selke";
+    public const string LadyByng = "LadyByng";
+    public const string StanleyCup = "StanleyCup";
+
+    /// <summary>The hockey trophies, apart from the Hart, that make a player famous.</summary>
+    public static readonly IReadOnlySet<string> MajorHockeyAwards =
+        new HashSet<string> { ArtRoss, RocketRichard, Norris, Vezina, ConnSmythe, TedLindsay, Selke };
 }
 
 /// <summary>Links between data sources, and facts only the linking source has (birthplaces).</summary>

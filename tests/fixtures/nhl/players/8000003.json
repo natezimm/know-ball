@@ -1,0 +1,112 @@
+{
+ "playerId": 8000003,
+ "firstName": {
+  "default": "Charlie"
+ },
+ "lastName": {
+  "default": "Oldtimer"
+ },
+ "position": "D",
+ "birthDate": "1968-01-02",
+ "birthCountry": "FIN",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 1,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000003.png",
+ "seasonTotals": [
+  {
+   "season": 19891990,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Quebec Nordiques"
+   },
+   "sequence": 1,
+   "gamesPlayed": 70,
+   "goals": 5,
+   "assists": 20,
+   "points": 25,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 19901991,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Quebec Nordiques"
+   },
+   "sequence": 1,
+   "gamesPlayed": 80,
+   "goals": 10,
+   "assists": 40,
+   "points": 50,
+   "plusMinus": 5,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 19911992,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Hartford Whalers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 78,
+   "goals": 12,
+   "assists": 45,
+   "points": 57,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 19921993,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Hartford Whalers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 60,
+   "goals": 8,
+   "assists": 30,
+   "points": 38,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [
+  {
+   "trophy": {
+    "default": "James Norris Memorial Trophy",
+    "fr": "x"
+   },
+   "seasons": [
+    {
+     "seasonId": 19911992,
+     "gameTypeId": 2
+    }
+   ]
+  }
+ ],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 288,
+   "points": 170,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 4
+}
