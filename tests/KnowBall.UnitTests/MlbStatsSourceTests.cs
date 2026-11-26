@@ -70,9 +70,9 @@ public class MlbStatsSourceTests
         var snapshot = await History(MidSeason);
         var bravo = snapshot.Players.Single(p => p.ExternalId == "1002");
 
-        // The season list files his 2025 under the Yankees; his year-by-year lines put the Nationals first. Minor-league
+        // The season list files his 2025 under the Yankees; his year-by-year lines put the Nationals first, after a 2024 in Oakland. Minor-league
         // lines are ignored.
-        Assert.Equal("2024 120, 2025 120*, 2025 147*, 2025 ", Path(bravo));
+        Assert.Equal("2024 133-2024, 2025 120*, 2025 147*, 2025 ", Path(bravo));
         var total = bravo.Seasons[^1];
         Assert.Equal(30, total.Games);
         Assert.Equal("""{"gs":30,"w":14,"l":8,"outs":540,"er":60,"ha":150,"pbb":45,"k":220,"pg":30,"fpos":{"P":30},"pos":"P"}""", total.StatsJson);
@@ -181,7 +181,7 @@ public class MlbStatsSourceTests
         var bravo = await check.Players.Include(p => p.Stints.OrderBy(s => s.Order)).ThenInclude(s => s.Team).Include(p => p.CurrentTeam)
             .SingleAsync(p => p.ExternalId == "1002");
         Assert.Equal("NYY", bravo.CurrentTeam!.Abbreviation);
-        Assert.Equal(["WSH 2024-2025", "NYY 2025-now"], bravo.Stints.Select(s => $"{s.Team!.Abbreviation} {s.StartSeason}-{s.EndSeason?.ToString() ?? "now"}"));
+        Assert.Equal(["OAK 2024-2024", "WSH 2025-2025", "NYY 2025-now"], bravo.Stints.Select(s => $"{s.Team!.Abbreviation} {s.StartSeason}-{s.EndSeason?.ToString() ?? "now"}"));
         Assert.Equal(("Santo Domingo, Dominican Republic", "SP"), (bravo.BirthPlace, bravo.Position));
         var athletics = await check.Teams.Include(t => t.Franchise).SingleAsync(t => t.ExternalId == "133-2024");
         Assert.Equal("ATH", athletics.Franchise!.Abbreviation);
