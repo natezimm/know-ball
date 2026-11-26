@@ -117,6 +117,26 @@ describe('Home', () => {
     expect([...el.querySelectorAll('.card.kb-foil h2')].map((h) => h.textContent)).toEqual(['Career Path']);
   });
 
+  it('shows an NHL badge under the NFL one, and foils the card only once all three are solved', async () => {
+    const el = await render([
+      entry({ status: 'won', guesses: 1 }),
+      entry({ league: 'nfl', status: 'won', guesses: 1 }),
+      entry({ league: 'nhl', status: 'won', guesses: 1 }),
+      entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 1 }),
+      entry({ game: 'career-path', name: 'Career Path', league: 'nhl', number: 3 }),
+      entry({ game: 'back-of-the-card' }),
+      entry({ game: 'team-photo' }),
+    ]);
+
+    expect(badges(el)).toEqual([
+      'Play anytime', 'NBA · Solved in 1 guess', 'NFL · Solved in 1 guess', 'NHL · Solved in 1 guess',
+      'NBA · Solved in 1 guess', 'NHL · Play No. 3', 'Play No. 12', 'Play No. 12', "Play today's quiz",
+    ]);
+    expect([...el.querySelectorAll('a.badge.edition')].map((a) => a.getAttribute('href'))).toEqual(['/scouting-report/nfl', '/scouting-report/nhl', '/career-path/nhl']);
+    expect(el.querySelector('a[href="/career-path/nhl"]')!.getAttribute('aria-label')).toBe('Career Path NHL: Play No. 3');
+    expect([...el.querySelectorAll('.card.kb-foil h2')].map((h) => h.textContent)).toEqual(['Scouting Report']);
+  });
+
   it('words each state of a card', () => {
     const daily = { daily: 'scouting-report' as const };
     expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true)).toEqual({ label: 'Solved in 1 guess', open: true, done: true, foil: 'gold' });

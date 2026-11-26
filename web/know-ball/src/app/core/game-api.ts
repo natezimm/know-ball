@@ -3,9 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export type GameSlug = 'scouting-report' | 'career-path' | 'back-of-the-card' | 'team-photo';
-/** The leagues a game can have an edition in. NBA is every game's first; Scouting Report, Career Path and Back of the Card also have an NFL one. */
-export type League = 'nba' | 'nfl';
-export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL' };
+/** The leagues a game can have an edition in. NBA is every game's first; the others also have NFL ones, and Scouting Report and Career Path NHL ones. */
+export type League = 'nba' | 'nfl' | 'nhl';
+export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL', nhl: 'NHL' };
 export type PlayStatus = 'playing' | 'won' | 'lost';
 /** As shown in lists: a puzzle not yet started is "new". */
 export type ResultStatus = PlayStatus | 'new';

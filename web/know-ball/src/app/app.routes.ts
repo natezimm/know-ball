@@ -47,6 +47,15 @@ export const routes: Routes = [
     } satisfies PageMetaData & { league: 'nfl' },
     loadComponent: scoutingReport,
   },
+  {
+    path: 'scouting-report/nhl',
+    title: 'Scouting Report NHL — Know Ball',
+    data: {
+      league: 'nhl',
+      description: 'Scouting Report NHL: guess the NHL player in 8 tries with team, position, height, age and number clues. A new puzzle every day.',
+    } satisfies PageMetaData & { league: 'nhl' },
+    loadComponent: scoutingReport,
+  },
   { path: 'scouting-report/puzzle/:puzzleId', title: 'Scouting Report — Know Ball', data: archive, loadComponent: scoutingReport },
   {
     path: 'career-path',
@@ -63,6 +72,15 @@ export const routes: Routes = [
       league: 'nfl',
       description: 'Career Path NFL: every team an NFL player suited up for, in order. Who is it? A new puzzle every day.',
     } satisfies PageMetaData & { league: 'nfl' },
+    loadComponent: careerPath,
+  },
+  {
+    path: 'career-path/nhl',
+    title: 'Career Path NHL — Know Ball',
+    data: {
+      league: 'nhl',
+      description: 'Career Path NHL: every team an NHL player suited up for, in order. Who is it? A new puzzle every day.',
+    } satisfies PageMetaData & { league: 'nhl' },
     loadComponent: careerPath,
   },
   { path: 'career-path/puzzle/:puzzleId', title: 'Career Path — Know Ball', data: archive, loadComponent: careerPath },

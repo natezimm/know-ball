@@ -24,6 +24,7 @@ public sealed class GameWorld : IDisposable
     public FakeTimeProvider Clock { get; } = new(Start);
     public League League { get; }
     public League Nfl { get; }
+    public League Nhl { get; }
     public Dictionary<string, Team> Teams { get; } = [];
     public Dictionary<string, Player> Players { get; } = [];
 
@@ -125,6 +126,29 @@ public sealed class GameWorld : IDisposable
         AddFootballSeasons("Cee Back", "nfl-PHI", (2020, 16, """{"tkl":60,"dint":3}"""), (2021, 16, """{"tkl":55}"""),
             (2022, 17, """{"tkl":70,"sk":1.5,"ff":1}"""), (2023, 17, """{"tkl":50,"dint":2}"""));
         AddFootballSeasons("Kenny Kicker", "nfl-NE", (2012, 16, "{}"), (2013, 16, "{}"), (2014, 16, "{}"), (2015, 16, "{}"), (2016, 16, "{}"));
+
+        // A small NHL: two conferences, and the Nordiques filed under the Avalanche they became.
+        Nhl = new League { Code = "nhl", Name = "NHL", Sport = "Hockey" };
+        ctx.Leagues.Add(Nhl);
+        Team H(string abbr, string city, string name, string conference, string division) =>
+            Teams["nhl-" + abbr] = new Team { League = Nhl, ExternalId = abbr, Abbreviation = abbr, City = city, Name = name, Conference = conference, Division = division };
+        H("TOR", "Toronto", "Maple Leafs", "Eastern", "Atlantic");
+        H("BOS", "Boston", "Bruins", "Eastern", "Atlantic");
+        H("EDM", "Edmonton", "Oilers", "Western", "Pacific");
+        H("COL", "Colorado", "Avalanche", "Western", "Central");
+        Teams["nhl-QUE"] = new Team { League = Nhl, ExternalId = "QUE", Abbreviation = "QUE", City = "Quebec", Name = "Nordiques", Franchise = Teams["nhl-COL"], ActiveFrom = 1979, ActiveTo = 1994 };
+        ctx.Teams.AddRange(Teams.Values.Where(t => t.League == Nhl));
+
+        AddPlayer("Center Ice", "nhl-TOR", "C", 73, "1997-09-17", "34", 95, [("nhl-TOR", 2016, null)], league: Nhl, country: "USA", draft: (2016, 1));
+        AddPlayer("Left Winger", "nhl-BOS", "LW", 72, "1996-05-21", "63", 80, [("nhl-BOS", 2014, null)], league: Nhl, country: "Canada");
+        AddPlayer("Blue Liner", "nhl-EDM", "D", 75, "1998-01-01", "2", 70, [("nhl-EDM", 2018, null)], league: Nhl, country: "Sweden");
+        AddPlayer("Net Minder", "nhl-COL", "G", 76, "1994-02-02", "31", 60, [("nhl-COL", 2017, null)], league: Nhl, country: "Finland");
+        // Career Path: one road from Quebec on, and one that begins before the NHL record does.
+        AddPlayer("Road Tripper", null, "RW", 72, "1971-04-04", null, 85,
+            [("nhl-QUE", 1990, 1994), ("nhl-COL", 1995, 1997), ("nhl-TOR", 1998, 2001), ("nhl-BOS", 2002, 2004), ("nhl-EDM", 2005, 2006)],
+            active: false, league: Nhl, college: "Boston University", country: "Sweden", draft: (1989, 4));
+        AddPlayer("Pre Merger", null, "C", 70, "1956-05-05", null, 99,
+            [("nhl-TOR", 1975, 1985), ("nhl-BOS", 1986, 1990), ("nhl-EDM", 1991, 1991)], active: false, league: Nhl);
 
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();

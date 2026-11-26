@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
-import { GameState, GuessRecord, League } from '../../core/game-api';
+import { GameState, GuessRecord, LEAGUE_NAMES, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { loadFromRoute } from '../../core/puzzle-route';
 import { Avatar } from '../../shared/avatar/avatar';
@@ -44,7 +44,7 @@ export const CLUES: { key: ClueKey; label: string; header: string }[] = [
 
 /** Division names are too long for a seventh of a phone screen. */
 const DIVISIONS: Record<string, string> = {
-  Atlantic: 'ATL', Central: 'CEN', Southeast: 'SE', Northwest: 'NW', Pacific: 'PAC', Southwest: 'SW',
+  Atlantic: 'ATL', Central: 'CEN', Southeast: 'SE', Northwest: 'NW', Pacific: 'PAC', Southwest: 'SW', Metropolitan: 'MET',
 };
 
 /** An NFL division is named with its conference, "AFC West"; the conference has its own column, so the cell shows "W". */
@@ -69,7 +69,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl']" [shareRows]="rows()">
+    <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl', 'nhl']" [shareRows]="rows()">
       <div help>
         <p>Guess the current {{ leagueName() }} player in eight tries. Start with anyone.</p>
         <p>Every guess adds a row of seven clues, colored by how that player compares with the answer:</p>
@@ -78,7 +78,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
           <li>
             <i class="close"></i>
             <span>
-              <b>Mustard</b> is close: a team the answer used to play for, a shared position{{ leagueName() === 'NFL' ? ' or one from the same unit (offensive line, secondary and so on)' : '' }}, or within 2 inches,
+              <b>Mustard</b> is close: a team the answer used to play for, a shared position{{ positionNote() }}, or within 2 inches,
               2 years or 2 jersey numbers.
             </span>
           </li>
@@ -218,11 +218,17 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
 export class ScoutingReport {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" on the NFL edition's address. */
+  /** From the route's data: "nfl" or "nhl" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
-  protected readonly leagueName = computed(() => (this.store.league() === 'nfl' ? 'NFL' : 'NBA'));
+  protected readonly leagueName = computed(() => LEAGUE_NAMES[this.store.league()]);
+  /** What else counts as a close position in this edition. */
+  protected readonly positionNote = computed(() => ({
+    nba: '',
+    nfl: ' or one from the same unit (offensive line, secondary and so on)',
+    nhl: ' or another forward (center, left or right wing)',
+  })[this.store.league()]);
   protected readonly clues = CLUES;
 
   protected readonly state = computed(() => this.store.state() as GameState<unknown, { rosterSnapshot: boolean }, ScoutingFeedback, ScoutingAnswer> | null);

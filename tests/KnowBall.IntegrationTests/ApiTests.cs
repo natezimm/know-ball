@@ -76,7 +76,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         .UseSetting("LetterJacket:GamesPerMinute", "10000")
         .UseSetting("LetterJacket:GuessesPerMinute", "10000")
         .UseSetting("Games:GuessesPerMinute", "10000")
-        .UseSetting("Games:Leagues", "nba,nfl");
+        .UseSetting("Games:Leagues", "nba,nfl,nhl");
 
     private readonly SemaphoreSlim _nflLock = new(1, 1);
     private bool _nflLoaded;
@@ -111,6 +111,41 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         finally
         {
             _nflLock.Release();
+        }
+    }
+
+    private readonly SemaphoreSlim _nhlLock = new(1, 1);
+    private bool _nhlLoaded;
+
+    /// <summary>
+    /// Loads the NHL from tests/fixtures/nhl as of 15 November 2025 (the files cover 1990-2025), history first and then
+    /// today's rosters, as the nightly job does. Done once for the whole test run.
+    /// </summary>
+    public async Task EnsureNhlAsync()
+    {
+        await _nhlLock.WaitAsync();
+        try
+        {
+            if (_nhlLoaded) return;
+            var options = Microsoft.Extensions.Options.Options.Create(new NhlApiOptions
+            {
+                Directory = Path.Combine(Path.GetDirectoryName(FindFixtures())!, "nhl"),
+                FirstSeason = 1990,
+            });
+            var asOf = new FixedClock(new DateTimeOffset(2025, 11, 15, 12, 0, 0, TimeSpan.Zero));
+
+            await using var scope = Services.CreateAsyncScope();
+            var history = await scope.ServiceProvider.GetRequiredService<HistoryImportService>().RunAsync(
+                new NhlHistorySource(new HttpClient(), options, asOf, Microsoft.Extensions.Logging.Abstractions.NullLogger<NhlHistorySource>.Instance));
+            Assert.Equal(KnowBall.Domain.ImportStatus.Succeeded, history.Status);
+            var roster = await scope.ServiceProvider.GetRequiredService<PlayerImportService>().RunAsync(
+                new NhlRosterSource(new HttpClient(), options, asOf, Microsoft.Extensions.Logging.Abstractions.NullLogger<NhlRosterSource>.Instance));
+            Assert.Equal(KnowBall.Domain.ImportStatus.Succeeded, roster.Status);
+            _nhlLoaded = true;
+        }
+        finally
+        {
+            _nhlLock.Release();
         }
     }
 
