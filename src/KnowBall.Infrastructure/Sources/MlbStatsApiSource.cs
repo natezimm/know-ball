@@ -203,7 +203,9 @@ internal sealed class MlbTeams
                 MlbStatsFiles.Str(MlbStatsFiles.Obj(t, "venue"), "name"), season, season);
 
             if (!_byTeam.TryGetValue(id, out var names)) _byTeam[id] = names = [];
-            var same = names.FindIndex(n => n.Name == name);
+            // Only a run of seasons is one name: the Los Angeles Angels of 1961-64 are not the ones of 2016 on, with the
+            // California and Anaheim years between.
+            var same = names.FindIndex(n => n.Name == name && season >= n.From - 1 && season <= n.To + 1);
             if (same < 0) names.Add(seen);
             else
             {

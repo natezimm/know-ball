@@ -187,6 +187,29 @@ public class MlbStatsSourceTests
         Assert.Equal("ATH", athletics.Franchise!.Abbreviation);
     }
 
+    [Fact]
+    public void A_name_that_comes_back_is_a_second_spell_not_one_long_one()
+    {
+        var teams = new MlbTeams();
+        foreach (var (season, name, club) in new[]
+                 {
+                     (1961, "Los Angeles Angels", "Angels"), (1962, "Los Angeles Angels", "Angels"),
+                     (1965, "California Angels", "Angels"), (1966, "California Angels", "Angels"),
+                     (2016, "Los Angeles Angels", "Angels"), (2017, "Los Angeles Angels", "Angels"),
+                 })
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(System.Text.Json.JsonSerializer.Serialize(new
+            {
+                teams = new[] { new { id = 108, name, clubName = club, abbreviation = "LAA", sport = new { id = 1 } } },
+            }));
+            teams.AddSeason(season, doc.RootElement);
+        }
+
+        Assert.Equal(("108-1961", "108-1965", "108"), (teams.Key("108", 1962), teams.Key("108", 1966), teams.Key("108", 2017)));
+        Assert.Equal(["108", "108-1961", "108-1965"], teams.HistoryTeams().Select(t => t.Key));
+        Assert.Equal((1961, 1962), (teams.HistoryTeams()[1].ActiveFrom!.Value, teams.HistoryTeams()[1].ActiveTo!.Value));
+    }
+
     private sealed class FakeHistory(HistorySnapshot snapshot) : IHistorySource
     {
         public string Name => MlbStatsHistorySource.SourceName;
