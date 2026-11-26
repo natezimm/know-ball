@@ -16,7 +16,7 @@ public sealed record CardCareer(int Seasons, int Games, double Points, double Re
 
 public sealed record CardPayload(IReadOnlyList<CardSeason> Seasons, CardCareer Career);
 
-/// <summary>A football card's stat column after games, and how many decimals it prints with.</summary>
+/// <summary>A football or baseball card's stat column after games, and how many decimals it prints with.</summary>
 public sealed record CardColumn(string Label, int Decimals);
 
 /// <summary>One printed football season: games and the season totals, one value per column.</summary>
@@ -25,7 +25,10 @@ public sealed record FootballCardSeason(int Season, int Games, IReadOnlyList<dou
 /// <summary>The career line: totals over every printed season, and rates worked out from them.</summary>
 public sealed record FootballCardCareer(int Seasons, int Games, IReadOnlyList<double> Values);
 
-/// <summary>A football card: the columns suit his position (passing, rushing, receiving or defence) and every number is a season total.</summary>
+/// <summary>
+/// A football card: the columns suit his position (passing, rushing, receiving or defence) and every number is a season total.
+/// A baseball card has the same shape, with hitting or pitching columns.
+/// </summary>
 public sealed record FootballCardPayload(IReadOnlyList<CardColumn> Columns, IReadOnlyList<FootballCardSeason> Seasons, FootballCardCareer Career);
 
 /// <param name="Teams">The club for each printed season, in the same order: "OKC", or "BKN/PHX" for a season split by a trade.</param>
@@ -43,7 +46,7 @@ public sealed record CardSecret(
 
 /// <summary>
 /// The back of a player's trading card with the name blacked out: every season's games, points,
-/// rebounds and assists, or for a football player the season totals his position is known by. Five guesses; each of the first four misses uncovers more of the card: the
+/// rebounds and assists, or for a football or baseball player the season totals his position is known by. Five guesses; each of the first four misses uncovers more of the card: the
 /// clubs, then position and height, then award stamps, then the draft line and college, so the last
 /// guess is made with the whole card showing.
 /// </summary>
@@ -59,6 +62,8 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
     public const int MinLastSeason = 1980;
     /// <summary>Football answers began their careers this season or later: the first with season stats.</summary>
     public const int NflMinFirstSeason = 1999;
+    /// <summary>Baseball answers debuted this season or later, the first the MLB import reads, so no season is missing.</summary>
+    public const int MlbMinFirstSeason = 1960;
 
     /// <summary>What each miss uncovers, in order. The labels are shown before they open.</summary>
     public static readonly IReadOnlyList<string> Steps = ["Teams", "Position", "Awards", "Draft"];
@@ -72,7 +77,7 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
     public int MaxGuesses => Steps.Count + 1;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -94,7 +99,7 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
             .FirstAsync(p => p.Id == answerId, cancellationToken);
 
         var awards = answer.Awards.ToLookup(a => a.Season, a => a.Type);
-        var hints = CareerPathGame.HintsFor(answer);
+        var hints = CareerPathGame.HintsFor(answer, bornHint: context.League.Code == LeagueCodes.Mlb);
         CardSecret Secret(IEnumerable<int> printed, List<string> teams, Func<IEnumerable<string>, string?> stamp) => new(
             answer.Id,
             answer.FullName,
@@ -111,6 +116,13 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
             var (lines, clubs) = Lines(answer.SeasonStats, answer.Stints, s => s.Games > 0 ? FootballLine.Read(s) : null);
             var payload = FootballCard(answer.Position, lines);
             var secret = Secret(lines.Select(l => l.Season), clubs, FootballStamp);
+            return new GeneratedPuzzle(answer.Id, GameJson.Write(payload), GameJson.Write(secret), Difficulty: lines.Count);
+        }
+        if (context.League.Code == LeagueCodes.Mlb)
+        {
+            var (lines, clubs) = Lines(answer.SeasonStats, answer.Stints, s => s.Games > 0 ? FootballLine.Read(s) : null);
+            var payload = BaseballCard(answer.Position, lines);
+            var secret = Secret(lines.Select(l => l.Season), clubs, BaseballStamp);
             return new GeneratedPuzzle(answer.Id, GameJson.Write(payload), GameJson.Write(secret), Difficulty: lines.Count);
         }
         else
@@ -255,7 +267,24 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
         return null;
     }
 
-    /// <summary>One football season's totals, read from the stat row's card JSON.</summary>
+    /// <summary>
+    /// The award a baseball card prints beside a season, best first. The Stats API's awards are kept as
+    /// <see cref="AwardTypes"/> by the MLB import.
+    /// </summary>
+    internal static string? BaseballStamp(IEnumerable<string> awards)
+    {
+        var won = awards.ToHashSet(StringComparer.Ordinal);
+        if (won.Contains(AwardTypes.Mvp)) return "MVP";
+        if (won.Contains(AwardTypes.CyYoung)) return "Cy Young";
+        if (won.Contains(AwardTypes.WorldSeriesMvp)) return "WS MVP";
+        if (won.Contains(AwardTypes.Rookie)) return "ROY";
+        if (won.Contains(AwardTypes.AllStar)) return "All-Star";
+        if (won.Contains(AwardTypes.SilverSlugger)) return "Silver Slugger";
+        if (won.Contains(AwardTypes.GoldGlove)) return "Gold Glove";
+        return null;
+    }
+
+    /// <summary>One football or baseball season's totals, read from the stat row's card JSON.</summary>
     internal sealed record FootballLine(int Season, int Games, IReadOnlyDictionary<string, double> Totals)
     {
         public double this[string key] => Totals.GetValueOrDefault(key);
@@ -312,16 +341,49 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
         return new FootballCardPayload(columns.Columns, seasons, career);
     }
 
+    /// <summary>Hits over at-bats, printed to three places: .287.</summary>
+    private static double Average(double hits, double atBats) => atBats > 0 ? Math.Round(hits / atBats, 3) : 0;
+
+    /// <summary>Earned runs per nine innings, from outs recorded (27 a game).</summary>
+    private static double EarnedRunAverage(double earnedRuns, double outs) => outs > 0 ? Math.Round(earnedRuns * 27 / outs, 2) : 0;
+
+    private static readonly FootballColumns Hitting = new(
+        [new("H", 0), new("HR", 0), new("RBI", 0), new("AVG", 3)],
+        t => [t("h"), t("hr"), t("rbi"), Average(t("h"), t("ab"))]);
+
+    private static readonly FootballColumns Starting = new(
+        [new("W", 0), new("L", 0), new("ERA", 2), new("SO", 0)],
+        t => [t("w"), t("l"), EarnedRunAverage(t("er"), t("outs")), t("k")]);
+
+    /// <summary>A reliever is known by his saves more than his losses.</summary>
+    private static readonly FootballColumns Relieving = new(
+        [new("W", 0), new("SV", 0), new("ERA", 2), new("SO", 0)],
+        t => [t("w"), t("sv"), EarnedRunAverage(t("er"), t("outs")), t("k")]);
+
+    /// <summary>
+    /// The baseball card for a player's printed seasons: pitching columns for a pitcher (saves for a reliever), hitting
+    /// for anyone else (a two-way player is printed as a hitter), and a career line of totals with the rates worked out
+    /// from them.
+    /// </summary>
+    internal static FootballCardPayload BaseballCard(string? position, IReadOnlyList<FootballLine> lines)
+    {
+        var columns = position switch { "RP" => Relieving, "P" or "SP" => Starting, _ => Hitting };
+        var seasons = lines.Select(l => new FootballCardSeason(l.Season, l.Games, columns.Values(key => l[key]))).ToList();
+        var career = new FootballCardCareer(lines.Count, lines.Sum(l => l.Games), columns.Values(key => lines.Sum(l => l[key])));
+        return new FootballCardPayload(columns.Columns, seasons, career);
+    }
+
     /// <summary>Well-known players with enough printed seasons, loaded once per request or import run.</summary>
     private async Task<List<int>> PoolAsync(int leagueId, CancellationToken ct)
     {
         if (_pools.TryGetValue(leagueId, out var cached)) return cached;
 
-        // A football season is printed from its games and totals; a basketball one needs its scoring average.
-        var football = await db.Leagues.AnyAsync(l => l.Id == leagueId && l.Code == LeagueCodes.Nfl, ct);
+        // A football or baseball season is printed from its games and totals; a basketball one needs its scoring average.
+        var code = await db.Leagues.Where(l => l.Id == leagueId).Select(l => l.Code).FirstOrDefaultAsync(ct);
+        var football = code == LeagueCodes.Nfl;
         var rows = db.PlayerSeasonStats.AsNoTracking()
             .Where(s => s.Player!.LeagueId == leagueId && s.IsSeasonTotal && s.Games > 0);
-        if (!football) rows = rows.Where(s => s.PointsPerGame != null);
+        if (code is not (LeagueCodes.Nfl or LeagueCodes.Mlb)) rows = rows.Where(s => s.PointsPerGame != null);
         var seasons = await rows
             .GroupBy(s => s.PlayerId)
             .Select(g => new { PlayerId = g.Key, Count = g.Select(s => s.Season).Distinct().Count() })
@@ -335,6 +397,7 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
             players = players.Where(p => p.FromYear != null && p.FromYear >= NflMinFirstSeason
                                          && (p.Position == null || !ScoutingReportGame.NeverAnswers.Contains(p.Position)));
         }
+        if (code == LeagueCodes.Mlb) players = players.Where(p => p.FromYear != null && p.FromYear >= MlbMinFirstSeason);
         var candidates = await players.Select(p => new { p.Id, p.Popularity }).ToListAsync(ct);
 
         var pool = candidates
