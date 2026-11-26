@@ -1,0 +1,33 @@
+{
+ "roster": [
+  {
+   "person": {
+    "id": 1004,
+    "fullName": "Delta Rookie Jr.",
+    "primaryNumber": "2",
+    "birthDate": "2002-05-05",
+    "birthCity": "Oak Park",
+    "birthCountry": "USA",
+    "height": "6' 2\"",
+    "weight": 210,
+    "active": true,
+    "primaryPosition": {
+     "abbreviation": "SS"
+    },
+    "mlbDebutDate": "2025-04-01",
+    "birthStateProvince": "IL",
+    "currentTeam": {
+     "id": 120
+    },
+    "draftYear": 2024
+   },
+   "jerseyNumber": "2",
+   "position": {
+    "abbreviation": "SS"
+   },
+   "status": {
+    "code": "A"
+   }
+  }
+ ]
+}

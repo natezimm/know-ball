@@ -1,0 +1,94 @@
+{
+ "stats": [
+  {
+   "totalSplits": 5,
+   "splits": [
+    {
+     "season": "2024",
+     "stat": {
+      "games": 140
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1001,
+      "fullName": "Alpha Slugger"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "RF"
+     }
+    },
+    {
+     "season": "2024",
+     "stat": {
+      "games": 10
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1001,
+      "fullName": "Alpha Slugger"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "LF"
+     }
+    },
+    {
+     "season": "2024",
+     "stat": {
+      "games": 32
+     },
+     "team": {
+      "id": 120
+     },
+     "player": {
+      "id": 1002,
+      "fullName": "Bravo Arm"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "P"
+     }
+    },
+    {
+     "season": "2024",
+     "stat": {
+      "games": 100
+     },
+     "team": {
+      "id": 133
+     },
+     "player": {
+      "id": 1005,
+      "fullName": "Echo Catcher"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "C"
+     }
+    },
+    {
+     "season": "2024",
+     "stat": {
+      "games": 18
+     },
+     "team": {
+      "id": 133
+     },
+     "player": {
+      "id": 1003,
+      "fullName": "Charlie Cup"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "2B"
+     }
+    }
+   ]
+  }
+ ]
+}

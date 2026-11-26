@@ -1,0 +1,31 @@
+{
+ "stats": [
+  {
+   "totalSplits": 1,
+   "splits": [
+    {
+     "season": "2024",
+     "stat": {
+      "gamesPitched": 32,
+      "gamesStarted": 32,
+      "wins": 12,
+      "losses": 9,
+      "outs": 570,
+      "earnedRuns": 70,
+      "hits": 170,
+      "baseOnBalls": 50,
+      "strikeOuts": 210
+     },
+     "team": {
+      "id": 120
+     },
+     "player": {
+      "id": 1002,
+      "fullName": "Bravo Arm"
+     },
+     "numTeams": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "people": [
+  {
+   "id": 1001,
+   "fullName": "Alpha Slugger",
+   "primaryNumber": "99",
+   "birthDate": "1995-04-01",
+   "birthCity": "Oak Park",
+   "birthCountry": "USA",
+   "height": "6' 2\"",
+   "weight": 210,
+   "active": true,
+   "primaryPosition": {
+    "abbreviation": "RF"
+   },
+   "mlbDebutDate": "2020-05-01",
+   "birthStateProvince": "IL",
+   "currentTeam": {
+    "id": 147
+   }
+  },
+  {
+   "id": 1002,
+   "fullName": "Bravo Arm",
+   "primaryNumber": "45",
+   "birthDate": "1994-02-02",
+   "birthCity": "Santo Domingo",
+   "birthCountry": "Dominican Republic",
+   "height": "6' 2\"",
+   "weight": 210,
+   "active": true,
+   "primaryPosition": {
+    "abbreviation": "P"
+   },
+   "mlbDebutDate": "2018-06-01",
+   "currentTeam": {
+    "id": 120
+   }
+  },
+  {
+   "id": 1003,
+   "fullName": "Charlie Cup",
+   "primaryNumber": "7",
+   "birthDate": "1997-03-03",
+   "birthCity": "Oak Park",
+   "birthCountry": "USA",
+   "height": "6' 2\"",
+   "weight": 210,
+   "active": true,
+   "primaryPosition": {
+    "abbreviation": "2B"
+   },
+   "mlbDebutDate": "2024-09-01",
+   "birthStateProvince": "IL",
+   "currentTeam": {
+    "id": 133
+   }
+  },
+  {
+   "id": 1005,
+   "fullName": "Echo Catcher",
+   "primaryNumber": "24",
+   "birthDate": "1990-06-06",
+   "birthCity": "Oak Park",
+   "birthCountry": "USA",
+   "height": "6' 2\"",
+   "weight": 210,
+   "active": true,
+   "primaryPosition": {
+    "abbreviation": "C"
+   },
+   "mlbDebutDate": "2015-04-01",
+   "birthStateProvince": "IL",
+   "currentTeam": {
+    "id": 133
+   }
+  }
+ ]
+}
