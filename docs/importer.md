@@ -93,7 +93,10 @@ for again, one at a time; the load fails only if more than `MaxFailedShare` (2%)
 a trade gets a line per team in the order he played for them and a combined line with no team, like a basketball one.
 Goalies' goals-against average and save percentage are worked out from their totals, and a traded season's average
 ice time is left out rather than added up. `nhl-teams.json` maps the site's team names, old ones with their year
-("Winnipeg Jets (1979)"), to our team keys and each former team to the franchise it became. MEASURED_NHL
+("Winnipeg Jets (1979)"), to our team keys and each former team to the franchise it became. Measured 2026-11-26 on a full load:
+4,439 players, 1,279 team records and 41 teams in about 22 minutes, almost all of it the paced player requests,
+with about 500 MB resident at the peak (no heap cap; the site still answered 429 about 50 times, and every request
+was read on a retry).
 
 More on each source, and the ones that were rejected, in [research.md](research.md).
 
