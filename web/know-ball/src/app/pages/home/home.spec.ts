@@ -117,6 +117,25 @@ describe('Home', () => {
     expect([...el.querySelectorAll('.card.kb-foil h2')].map((h) => h.textContent)).toEqual(['Career Path']);
   });
 
+  it('shows a badge for each live edition, NFL then MLB, and foils only when every one is solved', async () => {
+    const el = await render([
+      entry({ status: 'won', guesses: 1 }),
+      entry({ league: 'mlb', number: 3 }),
+      entry({ league: 'nfl', status: 'won', guesses: 1 }),
+      entry({ game: 'career-path', name: 'Career Path', status: 'won', guesses: 1 }),
+      entry({ game: 'career-path', name: 'Career Path', league: 'nfl', status: 'won', guesses: 1 }),
+      entry({ game: 'career-path', name: 'Career Path', league: 'mlb', status: 'won', guesses: 2 }),
+    ]);
+
+    expect([...el.querySelectorAll('a.badge.edition')].map((a) => a.getAttribute('href')))
+      .toEqual(['/scouting-report/nfl', '/scouting-report/mlb', '/career-path/nfl', '/career-path/mlb']);
+    expect(el.querySelector('a[href="/scouting-report/mlb"]')!.getAttribute('aria-label')).toBe('Scouting Report MLB: Play No. 3');
+    // Career Path is all solved, one of them in two, so it is holo rather than gold.
+    const foil = [...el.querySelectorAll('.card.kb-foil')];
+    expect(foil.map((c) => c.querySelector('h2')!.textContent)).toEqual(['Career Path']);
+    expect(foil[0].querySelector('.kb-shine.gold')).toBeNull();
+  });
+
   it('words each state of a card', () => {
     const daily = { daily: 'scouting-report' as const };
     expect(cardStatus(daily, entry({ status: 'won', guesses: 1 }), true)).toEqual({ label: 'Solved in 1 guess', open: true, done: true, foil: 'gold' });
