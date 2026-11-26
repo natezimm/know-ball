@@ -160,10 +160,11 @@ public sealed partial class TeamPhotoGame
             record.Wins,
             record.Losses,
             finals,
-            nine.Select(n => new FootballSlot(n.Position, n.Row, n.Line.Games, BaseballSlotStats(n.Position, n.Line))).ToList());
+            nine.Select(n => new FootballSlot(n.Position, n.Row, SlotGames(n.Position, n.Line), BaseballSlotStats(n.Position, n.Line))).ToList());
         var starters = nine.Select(n => n.Line.PlayerId).ToHashSet();
+        // Keyed by the MLBAM id, as the World Series list is, so a daily team-season is known as used.
         var secret = new PhotoSecret(
-            $"{season}-{team.Abbreviation}",
+            $"{season}-{team.ExternalId.Split('-')[0]}",
             nine.Select(n => new PhotoAnswer(n.Line.PlayerId, players[n.Line.PlayerId].FullName, players[n.Line.PlayerId].HeadshotUrl)).ToList(),
             players.Keys.Where(id => !starters.Contains(id)).Order().ToList());
 
@@ -172,6 +173,10 @@ public sealed partial class TeamPhotoGame
         var difficulty = (int)Math.Clamp(Math.Round(100 - fame + Math.Max(0, 2000 - season) / 3.0), 0, 100);
         return new GeneratedPuzzle(null, GameJson.Write(payload), GameJson.Write(secret), difficulty);
     }
+
+    /// <summary>The pitcher's games pitched: a row's games also count games he only batted or ran in.</summary>
+    internal static int SlotGames(string position, BaseballRosterLine line) =>
+        position == "SP" && line["pg"] > 0 ? (int)line["pg"] : line.Games;
 
     /// <summary>
     /// The team with that MLBAM id in that season, under the name it had then: the id is the current name's key, and a

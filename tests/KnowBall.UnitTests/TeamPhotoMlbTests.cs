@@ -149,6 +149,10 @@ public class TeamPhotoMlbTests : IDisposable
         // A left fielder in 90 of 162 games is clear; in 90 of 200 he is not. No catcher at all makes no photo.
         Assert.False(TeamPhotoGame.IsClearBaseball(lines, 200));
         Assert.Null(TeamPhotoGame.BaseballLineup([.. lines.Where(l => l.PlayerId != 1)], null));
+
+        // A pitcher's games are his games pitched, though his row counts two he only pinch-ran in.
+        var ace = new TeamPhotoGame.BaseballRosterLine(9, 34, new Dictionary<string, int>(), new Dictionary<string, double> { ["gs"] = 32, ["pg"] = 32 });
+        Assert.Equal((32, 150), (TeamPhotoGame.SlotGames("SP", ace), TeamPhotoGame.SlotGames("SS", lines[4])));
     }
 
     [Fact]
@@ -170,6 +174,9 @@ public class TeamPhotoMlbTests : IDisposable
         Assert.Equal((19, 5, 2.53, 197), (slots[7]!["stats"]!["w"]!.GetValue<int>(), slots[7]!["stats"]!["l"]!.GetValue<int>(),
             slots[7]!["stats"]!["era"]!.GetValue<double>(), slots[7]!["stats"]!["k"]!.GetValue<int>()));
         Assert.DoesNotContain("Bryant", payload.ToJsonString());
+        // Keyed like the World Series list, so tomorrow's daily knows this team-season was used.
+        await using (var db = _db.NewContext())
+            Assert.Equal("2016-112", JsonNode.Parse((await db.Puzzles.SingleAsync(p => p.Id == state.PuzzleId)).SecretJson)!["key"]!.GetValue<string>());
 
         // Bryant is at third though he played left too; Zobrist then takes second, Baez is on the bench and costs nothing.
         var baez = await Guess(state.PuzzleId, "Javier Baez");
