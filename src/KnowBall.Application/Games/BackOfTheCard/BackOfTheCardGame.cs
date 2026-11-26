@@ -368,8 +368,11 @@ public sealed class BackOfTheCardGame(ITriviaDb db) : IGame
     internal static FootballCardPayload BaseballCard(string? position, IReadOnlyList<FootballLine> lines)
     {
         var columns = position switch { "RP" => Relieving, "P" or "SP" => Starting, _ => Hitting };
-        var seasons = lines.Select(l => new FootballCardSeason(l.Season, l.Games, columns.Values(key => l[key]))).ToList();
-        var career = new FootballCardCareer(lines.Count, lines.Sum(l => l.Games), columns.Values(key => lines.Sum(l => l[key])));
+        // A row's games are the more of games batted and games pitched; a pitcher who also pinch-ran or pinch-hit is
+        // printed with his games pitched.
+        int Games(FootballLine l) => columns == Hitting || l["pg"] <= 0 ? l.Games : (int)l["pg"];
+        var seasons = lines.Select(l => new FootballCardSeason(l.Season, Games(l), columns.Values(key => l[key]))).ToList();
+        var career = new FootballCardCareer(lines.Count, lines.Sum(Games), columns.Values(key => lines.Sum(l => l[key])));
         return new FootballCardPayload(columns.Columns, seasons, career);
     }
 

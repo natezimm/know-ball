@@ -134,6 +134,11 @@ public class MlbEditionTests : IDisposable
             new Dictionary<string, double> { ["w"] = 3, ["l"] = 4, ["sv"] = 38, ["k"] = 80, ["outs"] = 195, ["er"] = 13 });
         var card = KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("RP", [line]);
         Assert.Equal(["W", "SV", "ERA", "SO"], card.Columns.Select(c => c.Label));
+        // He pitched in 60 games; a row also counting games he only pinch-ran in has more, but the card prints his 60.
+        var pinchRunner = line with { Games = 64, Totals = new Dictionary<string, double>(line.Totals) { ["pg"] = 60 } };
+        var pitched = KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("RP", [pinchRunner]);
+        Assert.Equal((60, 60), (pitched.Seasons[0].Games, pitched.Career.Games));
+        Assert.Equal(64, KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("TWP", [pinchRunner]).Seasons[0].Games);
         Assert.Equal([3, 38, 1.8, 80], card.Seasons[0].Values);
         Assert.Equal(["W", "L", "ERA", "SO"], KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("P", [line]).Columns.Select(c => c.Label));
         Assert.Equal("AVG", KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("TWP", [line]).Columns[^1].Label);
