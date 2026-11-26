@@ -32,7 +32,8 @@ public class NhlApiSourceTests
 
         Assert.Equal(("nhl", "nhl", 2025), (snapshot.LeagueCode, snapshot.IdSource, snapshot.LatestSeason));
         // 8000004 has too few games; 8000006 is listed this season but has no record.
-        Assert.Equal(["8000001", "8000002", "8000003", "8000005", "8000008"], snapshot.Players.Select(p => p.ExternalId));
+        Assert.Equal(["8000001", "8000002", "8000003", "8000005", "8000008", "8000011", "8000012", "8000013", "8000014", "8000015", "8000016", "8000017"],
+            snapshot.Players.Select(p => p.ExternalId));
     }
 
     [Fact]
@@ -120,7 +121,7 @@ public class NhlApiSourceTests
         // A team with no games yet has no record; the lockout season has none at all.
         Assert.Equal(
             ["1991 HFD 26-41-13 OTL 0 playoffs", "1991 QUE 20-48-12 OTL 0",
-             "2024 UTA 38-31-0 OTL 13", "2024 TOR 52-26-0 OTL 4 playoffs",
+             "2024 UTA 38-31-0 OTL 13", "2024 TOR 52-26-0 OTL 4 playoffs", "2024 FLA 52-24-0 OTL 6 playoffs",
              "2025 BOS 12-8-0 OTL 2", "2025 UTA 10-9-0 OTL 3"],
             snapshot.TeamSeasons!.Select(r => $"{r.Season} {r.TeamKey} {r.Wins}-{r.Losses}-{r.Ties} OTL {r.OvertimeLosses}{(r.MadePlayoffs ? " playoffs" : "")}"));
     }

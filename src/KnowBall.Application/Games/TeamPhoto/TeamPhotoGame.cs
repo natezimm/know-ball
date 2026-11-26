@@ -38,7 +38,8 @@ public sealed record RosterLine(int PlayerId, int Games, double Minutes, int? St
 /// A blank team photo of one team-season: name its five starters. Starters are free and so are
 /// bench players; four names that were not on the team end the round. Daily puzzles are the teams
 /// that reached the Finals since the 1976 merger; practice draws from every playoff team since
-/// 1981-82 whose starting five is clear. The NFL edition is in TeamPhotoGame.Football.cs.
+/// 1981-82 whose starting five is clear. The NFL edition is in TeamPhotoGame.Football.cs, the NHL's in
+/// TeamPhotoGame.Hockey.cs.
 /// </summary>
 public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
 {
@@ -66,7 +67,7 @@ public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
     public bool ReadsRecentSecrets => true;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Nhl];
 
     public int AnswersIn(Puzzle puzzle) => GameJson.Read<PhotoSecret>(puzzle.SecretJson).Slots.Count;
 
@@ -78,6 +79,12 @@ public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
             return context.Practice
                 ? await FootballPracticeAsync(context, teams, cancellationToken)
                 : await DailyAsync(context, teams, SuperBowlTeams, (team, entry) => BuildFootballAsync(team, entry.Season, entry.Finals, entry.Swap, cancellationToken));
+        }
+        if (context.League.Code == LeagueCodes.Nhl)
+        {
+            return context.Practice
+                ? await HockeyPracticeAsync(context, teams, cancellationToken)
+                : await DailyAsync(context, teams, StanleyCupTeams, (team, entry) => BuildHockeyAsync(team, entry.Season, entry.Finals, entry.Swap, cancellationToken));
         }
         return context.Practice
             ? await PracticeAsync(context, teams, cancellationToken)

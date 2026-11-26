@@ -30,8 +30,8 @@ A guess at a player from another league is refused with 400, and a league a game
 The NFL editions are live only when `Games:Leagues` lists `nfl` (`nba,nfl,nhl` in appsettings); the importer reads
 the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl`, `/career-path/nfl`, `/back-of-the-card/nfl` and `/team-photo/nfl`.
 
-Scouting Report, Career Path and Back of the Card also have an NHL edition (`?league=nhl`), live when `Games:Leagues`
-lists `nhl`. Its pages are `/scouting-report/nhl`, `/career-path/nhl` and `/back-of-the-card/nhl`. NHL Career Path answers began their careers in 1979-80 or
+Every player game also has an NHL edition (`?league=nhl`), live when `Games:Leagues` lists `nhl`. Its pages are
+`/scouting-report/nhl`, `/career-path/nhl`, `/back-of-the-card/nhl` and `/team-photo/nhl`. NHL Career Path answers began their careers in 1979-80 or
 later, and their country of birth is the hint in place of a college. In NHL Scouting Report the position is close
 when both players are forwards (C, LW, RW); defence and goal match only exactly.
 
@@ -58,6 +58,14 @@ player with the most pass attempts, carries or receiving yards at his position f
 and `stats`, the season totals by card key (`pyd`, `ptd`, `int` for the quarterback; `car`, `ryd`, `rtd` for the
 running back; `rec`, `wyd`, `wtd` for a receiver). Anyone else on that team's roster that season, linemen and
 kickers included, is a free bench guess. Practice rounds are other playoff teams since 1999 whose five are clear.
+
+The NHL Team Photo is one of the two Stanley Cup Final teams of a season since 1979-80 (`season` is the start year,
+`finals` the Final's result, and the record adds `ties` and `overtimeLosses`). It has six `slots`: a left wing, centre
+and right wing in the `back` row, the team's three top-scoring forwards each at his own position where it is free,
+then its top-scoring defenceman, the goalie who started the most games and the next defenceman in `front`. A skater's
+`stats` are `g`, `a` and `pts`; the goalie's `w`, `gaa` and `svp`. The game is won once all six are named. Practice
+uses other playoff teams since 1979-80 whose skaters each played 50 games and whose goalie started half as often again
+as his backup.
 
 ## Letter Jacket
 

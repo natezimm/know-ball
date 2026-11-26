@@ -1,0 +1,45 @@
+{
+ "playerId": 8000015,
+ "firstName": {
+  "default": "Lima"
+ },
+ "lastName": {
+  "default": "Pair"
+ },
+ "position": "D",
+ "birthDate": "1996-01-01",
+ "birthCountry": "CAN",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000015.png",
+ "seasonTotals": [
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Florida Panthers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 66,
+   "goals": 8,
+   "assists": 25,
+   "points": 33,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 66,
+   "points": 33,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 15
+}

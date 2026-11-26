@@ -105,9 +105,25 @@ public sealed class NhlGameApiTests(ApiFactory factory) : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Team_photo_has_no_nhl_edition_yet()
+    public async Task Nhl_team_photo_is_a_stanley_cup_final_teams_starting_six()
     {
         var client = NewPlayer();
-        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/team-photo/daily?league=nhl")).StatusCode);
+        var daily = await Json(await client.GetAsync("/api/team-photo/daily?league=nhl"));
+        Assert.Equal("nhl", daily.GetProperty("league").GetString());
+        var payload = daily.GetProperty("payload");
+        Assert.Equal(("FLA", 2024, "won"), (payload.GetProperty("team").GetProperty("abbreviation").GetString(),
+            payload.GetProperty("season").GetInt32(), payload.GetProperty("finals").GetString()));
+        Assert.Equal((52, 24, 6), (payload.GetProperty("wins").GetInt32(), payload.GetProperty("losses").GetInt32(), payload.GetProperty("overtimeLosses").GetInt32()));
+        Assert.Equal(["LW", "C", "RW", "D", "G", "D"], payload.GetProperty("slots").EnumerateArray().Select(s => s.GetProperty("position").GetString()));
+        Assert.DoesNotContain("Pivot", payload.GetRawText());
+
+        var puzzleId = daily.GetProperty("puzzleId").GetInt32();
+        var bench = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = await PlayerId(client, "Mike Spare", true) }));
+        Assert.True(bench.GetProperty("guesses")[0].GetProperty("feedback").GetProperty("bench").GetBoolean());
+
+        JsonElement last = bench;
+        foreach (var name in new[] { "Hotel Winger", "India Pivot", "Juliet Flank", "Kilo Rear", "November Crease", "Lima Pair" })
+            last = await Json(await client.PostAsJsonAsync($"/api/team-photo/{puzzleId}/guess", new { playerId = await PlayerId(client, name, true) }));
+        Assert.Equal("won", last.GetProperty("status").GetString());
     }
 }

@@ -1,5 +1,5 @@
 import { APIRequestContext } from '@playwright/test';
-import { Player, asPlayer, expect, guessPlayer, nflPlayers, players, test } from './support';
+import { Player, asPlayer, expect, guessPlayer, nflPlayers, nhlPlayers, players, test } from './support';
 
 let starters: Player[];
 let misses: Player[];
@@ -8,7 +8,7 @@ let misses: Player[];
  * Learns today's five, and four players who count as misses, by losing the daily through the API as a throwaway
  * player. A bench player is skipped, since he costs nothing.
  */
-async function learnPhoto(request: APIRequestContext, pool: Player[], league: 'nba' | 'nfl') {
+async function learnPhoto(request: APIRequestContext, pool: Player[], league: 'nba' | 'nfl' | 'nhl') {
   const api = await asPlayer(request);
   let state = await api.daily('team-photo', league);
   const wrong: Player[] = [];
@@ -20,7 +20,7 @@ async function learnPhoto(request: APIRequestContext, pool: Player[], league: 'n
   }
   expect(state.status).toBe('lost');
   const five = (state.answer as unknown as { slots: { playerId: number; name: string }[] }).slots.map((s) => ({ id: s.playerId, fullName: s.name }));
-  expect(five).toHaveLength(5);
+  expect(five).toHaveLength(league === 'nhl' ? 6 : 5);
   return { five, wrong };
 }
 
@@ -98,5 +98,39 @@ test.describe('NFL edition', () => {
     await page.goto('/');
     const home = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Team Photo' }) });
     await expect(home.getByRole('link', { name: /^Team Photo NFL: / })).toHaveAttribute('href', '/team-photo/nfl');
+  });
+});
+
+test.describe('NHL edition', () => {
+  let six: Player[];
+  let outsiders: Player[];
+
+  test.beforeAll(async ({ request }) => {
+    // The made-up league's players, last first: its Florida six is listed first, and the misses come first here.
+    const pool = (await nhlPlayers(request)).reverse();
+    const probe = await learnPhoto(request, pool, 'nhl');
+    six = probe.five;
+    outsiders = probe.wrong;
+  });
+
+  test("a Stanley Cup Final team's starting six is named and won", async ({ page }) => {
+    await page.goto('/team-photo/nhl');
+    await expect(page.getByRole('navigation', { name: 'League' }).getByRole('link', { name: 'NHL' })).toHaveAttribute('aria-current', 'page');
+    await expect(page.locator('.meta')).toContainText('No. 1 ·');
+    await expect(page.locator('.plaque b')).toHaveText(/^20\d\d–\d\d Florida Panthers$/);
+    await expect(page.locator('.plaque small')).toHaveText(/^\d+–\d+(–\d+)? · (Won the Stanley Cup|Lost the Stanley Cup Final)$/);
+    await expect(page.locator('.row:not(.front) .pos')).toHaveText(['LW', 'C', 'RW']);
+    await expect(page.locator('.row.front .pos')).toHaveText(['D', 'G', 'D']);
+    await expect(page.locator('.row.front .plate').nth(1)).toContainText('GAA');
+
+    await guessPlayer(page, outsiders[0].fullName);
+    await expect(page.getByRole('img', { name: '1 of 4 misses used' })).toBeVisible();
+    for (const player of six) await guessPlayer(page, player.fullName);
+    await expect(page.locator('.spot.found')).toHaveCount(6);
+    await expect(page.locator('.result')).toContainText('Every name, 1 miss');
+
+    await page.goto('/');
+    const home = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Team Photo' }) });
+    await expect(home.getByRole('link', { name: /^Team Photo NHL: / })).toHaveAttribute('href', '/team-photo/nhl');
   });
 });
