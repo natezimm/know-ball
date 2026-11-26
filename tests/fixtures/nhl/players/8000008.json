@@ -1,0 +1,124 @@
+{
+ "playerId": 8000008,
+ "firstName": {
+  "default": "Golf"
+ },
+ "lastName": {
+  "default": "Journeyman"
+ },
+ "position": "LW",
+ "birthDate": "1993-08-08",
+ "birthCountry": "USA",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000008.png",
+ "seasonTotals": [
+  {
+   "season": 20152016,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Winnipeg Jets"
+   },
+   "sequence": 1,
+   "gamesPlayed": 70,
+   "goals": 10,
+   "assists": 12,
+   "points": 22,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20162017,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Winnipeg Jets"
+   },
+   "sequence": 1,
+   "gamesPlayed": 75,
+   "goals": 12,
+   "assists": 15,
+   "points": 27,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20172018,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Vegas Golden Knights"
+   },
+   "sequence": 1,
+   "gamesPlayed": 80,
+   "goals": 15,
+   "assists": 15,
+   "points": 30,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20212022,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Seattle Kraken"
+   },
+   "sequence": 1,
+   "gamesPlayed": 60,
+   "goals": 8,
+   "assists": 10,
+   "points": 18,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  },
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Utah Hockey Club"
+   },
+   "sequence": 1,
+   "gamesPlayed": 40,
+   "goals": 4,
+   "assists": 6,
+   "points": 10,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 325,
+   "points": 107,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 17,
+ "draftDetails": {
+  "year": 2012,
+  "overallPick": 20,
+  "round": 1,
+  "pickInRound": 20,
+  "teamAbbrev": "TOR"
+ }
+}

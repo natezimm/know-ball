@@ -8,6 +8,7 @@ dotnet run --project src/KnowBall.Importer -- --once                            
 dotnet run --project src/KnowBall.Importer -- --once --history                   # reload the full history now, due or not
 dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history --leagues nba  # offline: ~36 bundled players
 dotnet run --project src/KnowBall.Importer -- --once --leagues nfl --history     # just the NFL, history included
+dotnet run --project src/KnowBall.Importer -- --once --leagues nhl --history     # just the NHL (about 20 minutes)
 dotnet run --project src/KnowBall.Importer -- --nightly                          # one night's work (import, then the Numbers queue), then exit
 dotnet run --project src/KnowBall.Importer                                       # the nightly worker
 ```
@@ -19,7 +20,7 @@ worker does.
 
 ## What a run does
 
-For each league in `Import:Leagues` (NBA first, then NFL; one failing never stops the other):
+For each league in `Import:Leagues` (NBA, then NFL, then NHL; one failing never stops the others):
 
 1. Reload the player history if it is due (every `Import:HistoryRefreshDays`). For the NBA, then link each player
    to their NBA.com id and birthplace through Wikidata.
@@ -56,6 +57,9 @@ run hits it.
 | ESPN core API (`sports.core.api.espn.com`) | AP MVP, Offensive and Defensive Player and Rookie of the Year, Comeback Player and Super Bowl MVP for each season since 1999, linked by the `espn_id` in nflverse's players file | With the NFL history |
 | `nfl-honors.json` (bundled, from Wikipedia) | AP All-Pro first and second teams and Pro Bowl rosters for each season since 1999 | With the NFL history; the file is refreshed by hand once a year (below) |
 | nflverse current-season roster | Current team, jersey number, active status, new players | Nightly |
+| NHL stats API (`api.nhle.com/stats/rest`) | Who to load (50+ games since 1979-80, or a game this season), and each team's won-lost-tied-overtime record and playoff flag by season | With the NHL history |
+| NHL site API (`api-web.nhle.com/v1/player/{id}/landing`) | Each NHL player: bio, birth country, draft slot, number, headshot URL, Hall of Fame flag, every NHL regular season by team with a skater's or goalie's totals, and trophies | With the NHL history |
+| NHL site API (`api-web.nhle.com/v1/roster/{team}/current`) | Current team, jersey number, active status and new players, for all 32 teams (the run fails if any is missing) | Nightly |
 
 The NFL history reads the season roster file up to 2015 and the weekly roster files from 2016, because from 2016
 the season files list each player once and lose mid-season trades. A season counts for a team when the player was
@@ -82,13 +86,22 @@ places each name on the player of that name who was on that franchise that seaso
 Watt") and a different first name on the same team ("Darius" and "Shaquille Leonard"); it logs how many it could
 not place, and names them at debug level (4 of about 4,800 on the 2026-11 load).
 
+The NHL history is one request per player, so the importer keeps to `Sources:Nhl:RequestsPerSecond` (5) across
+both NHL sources: the site answers 429 to a client that asks faster for long. A request still turned away after the
+quick retries is tried once more after `RetryPauseSeconds`, and the player records still missing after that are asked
+for again, one at a time; the load fails only if more than `MaxFailedShare` (2%) are still missing. A season split by
+a trade gets a line per team in the order he played for them and a combined line with no team, like a basketball one.
+Goalies' goals-against average and save percentage are worked out from their totals, and a traded season's average
+ice time is left out rather than added up. `nhl-teams.json` maps the site's team names, old ones with their year
+("Winnipeg Jets (1979)"), to our team keys and each former team to the franchise it became. MEASURED_NHL
+
 More on each source, and the ones that were rejected, in [research.md](research.md).
 
 ## Settings
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
-| `Import:Leagues` | `nba,nfl` | Leagues to import; `--leagues` sets it for one run |
+| `Import:Leagues` | `nba,nfl,nhl` | Leagues to import; `--leagues` sets it for one run |
 | `Games:Leagues` | `nba,nfl` | Leagues whose game editions are live (the API reads it too); the importer fills a puzzle queue for each (Scouting Report, Career Path and Back of the Card have `nfl` editions) |
 | `Import:Source` | `espn` | NBA roster source: `espn` (live), `seed` (bundled sample) or `nba-stats` (stats.nba.com) |
 | `Import:FallbackSource` | empty | NBA source to try if the primary fails |
@@ -106,6 +119,10 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | `Sources:Nflverse:StatLinesFromSeason` | `1999` | Season stat lines are kept from this season on |
 | `Sources:Nflverse:EspnAwardsUrl` | ESPN core API seasons URL | Where the AP awards are read; empty leaves them out. With `Directory` set they are read from `espn-awards/{season}/{id}.json` there |
 | `Sources:Nflverse:AwardsFromSeason` | `1999` | First season whose ESPN awards are read |
+| `Sources:Nhl:Directory` | empty | Read the NHL's answers from a folder of saved files (`stats/skaters.json`, `players/{id}.json`, `rosters/{team}.json`; see `tests/fixtures/nhl`) |
+| `Sources:Nhl:FirstSeason` / `MinGames` | `1979` / `50` | First season read, and the fewest games since then for a player who is not playing this season |
+| `Sources:Nhl:Parallelism` / `RequestsPerSecond` | `4` / `5` | Player records read at once, and the most requests a second to the NHL's sites |
+| `Sources:Nhl:RetryPauseSeconds` / `MaxFailedShare` | `60` / `0.02` | Rest before asking again when the site turns requests away, and the share of player records that may still be missing |
 | `NumbersDontLie:QueueEnabled` | `false` | Queue approved Numbers Don't Lie snapshots (needs `CatalogueId` and `LaunchDate`) |
 
 ## Numbers Don't Lie content tools

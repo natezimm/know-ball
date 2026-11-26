@@ -64,10 +64,15 @@ public static class DependencyInjection
         services.AddHttpClient<NflverseRosterSource>()
             .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds);
 
+        // The throttle sits inside the retries, so a retried request waits its turn too.
+        services.AddSingleton<NhlThrottle>();
+        services.AddTransient<NhlThrottleHandler>();
         services.AddHttpClient<NhlHistorySource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
-            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds);
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds)
+            .AddHttpMessageHandler<NhlThrottleHandler>();
         services.AddHttpClient<NhlRosterSource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
-            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds);
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds)
+            .AddHttpMessageHandler<NhlThrottleHandler>();
 
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<EspnRosterSource>());
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NbaStatsPlayerSource>());

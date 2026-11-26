@@ -33,14 +33,44 @@ public sealed class NhlApiOptions
     /// <summary>How many player records are downloaded at once.</summary>
     public int Parallelism { get; set; } = 4;
     /// <summary>
-    /// The most player records asked for a second. The site answers 429 to a client that asks too fast for too long, so
-    /// a full load of about 4,500 records is spread over a quarter of an hour.
+    /// The most requests a second to the NHL's sites, from both sources together. The site answers 429 to a client that
+    /// asks too fast for too long, so a full load of about 4,500 player records is spread over a quarter of an hour.
     /// </summary>
     public double RequestsPerSecond { get; set; } = 5;
-    /// <summary>How long to wait before asking again for the records the site turned away.</summary>
+    /// <summary>How long to wait before asking once more when the site is still turning requests away (0 = don't).</summary>
     public int RetryPauseSeconds { get; set; } = 60;
     /// <summary>The load fails when more than this share of the player records still cannot be read.</summary>
     public double MaxFailedShare { get; set; } = 0.02;
+}
+
+/// <summary>
+/// One pace for every request to the NHL's sites, shared by both sources: each request waits for a token, so the
+/// player records, reports and rosters together stay under <see cref="NhlApiOptions.RequestsPerSecond"/>.
+/// </summary>
+public sealed class NhlThrottle(IOptions<NhlApiOptions> options) : IDisposable
+{
+    private readonly TokenBucketRateLimiter limiter = new(new TokenBucketRateLimiterOptions
+    {
+        TokenLimit = Math.Max(1, options.Value.Parallelism),
+        TokensPerPeriod = 1,
+        ReplenishmentPeriod = TimeSpan.FromSeconds(1 / Math.Max(0.1, options.Value.RequestsPerSecond)),
+        QueueLimit = int.MaxValue,
+        AutoReplenishment = true,
+    });
+
+    public ValueTask<RateLimitLease> WaitAsync(CancellationToken ct) => limiter.AcquireAsync(1, ct);
+
+    public void Dispose() => limiter.Dispose();
+}
+
+/// <summary>Holds each request to the NHL, retries included, to the shared <see cref="NhlThrottle"/>.</summary>
+public sealed class NhlThrottleHandler(NhlThrottle throttle) : DelegatingHandler
+{
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        using (await throttle.WaitAsync(cancellationToken)) { }
+        return await base.SendAsync(request, cancellationToken);
+    }
 }
 
 /// <summary>NHL dates: which season a day belongs to.</summary>
@@ -177,6 +207,7 @@ internal static class NhlApiFiles
     /// <summary>The answer, or null when there is none (a player id the site no longer knows).</summary>
     public static async Task<JsonDocument?> OpenAsync(HttpClient http, NhlApiOptions opts, string file, string url, CancellationToken ct)
     {
+        var pause = TimeSpan.FromSeconds(Math.Max(0, opts.RetryPauseSeconds));
         if (!string.IsNullOrWhiteSpace(opts.Directory))
         {
             var local = Path.Combine(opts.Directory, file);
@@ -185,11 +216,21 @@ internal static class NhlApiFiles
             return await JsonDocument.ParseAsync(stream, cancellationToken: ct);
         }
 
-        using var response = await http.GetAsync(new Uri(url), HttpCompletionOption.ResponseHeadersRead, ct);
-        if (response.StatusCode == HttpStatusCode.NotFound) return null;
-        response.EnsureSuccessStatusCode();
-        await using var body = await response.Content.ReadAsStreamAsync(ct);
-        return await JsonDocument.ParseAsync(body, cancellationToken: ct);
+        var response = await http.GetAsync(new Uri(url), HttpCompletionOption.ResponseHeadersRead, ct);
+        if (response.StatusCode == HttpStatusCode.TooManyRequests && pause > TimeSpan.Zero)
+        {
+            // Still turned away once the quick retries are spent: the site wants a longer rest before one more try.
+            response.Dispose();
+            await Task.Delay(pause, ct);
+            response = await http.GetAsync(new Uri(url), HttpCompletionOption.ResponseHeadersRead, ct);
+        }
+        using (response)
+        {
+            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+            response.EnsureSuccessStatusCode();
+            await using var body = await response.Content.ReadAsStreamAsync(ct);
+            return await JsonDocument.ParseAsync(body, cancellationToken: ct);
+        }
     }
 
     /// <summary>
@@ -201,10 +242,12 @@ internal static class NhlApiFiles
     {
         var rows = new List<JsonElement>();
         const int page = 100;
-        var sort = Uri.EscapeDataString("""[{"property":"playerId","direction":"ASC"}]""");
+        // The order keeps the pages stable; a team report has no player id, and is read one season at a time.
+        var teamReport = report.StartsWith("team/", StringComparison.Ordinal);
+        var sort = Uri.EscapeDataString($$"""[{"property":"{{(teamReport ? "teamId" : "playerId")}}","direction":"ASC"}]""");
         for (var start = 0; ; start += page)
         {
-            var url = $"{opts.StatsUrl}{report}?isAggregate=true&isGame=false&limit={page}&start={start}&sort={sort}"
+            var url = $"{opts.StatsUrl}{report}?isAggregate={(teamReport ? "false" : "true")}&isGame=false&limit={page}&start={start}&sort={sort}"
                       + $"&cayenneExp={Uri.EscapeDataString(filter)}"
                       + (factFilter is null ? "" : $"&factCayenneExp={Uri.EscapeDataString(factFilter)}");
             using var doc = await OpenAsync(http, opts, file, url, ct);
@@ -329,6 +372,8 @@ public sealed class NhlHistorySource(HttpClient http, IOptions<NhlApiOptions> op
         var teams = NhlTeams.Instance.Value;
         var latest = NhlCalendar.LatestPlayedSeason(clock.GetUtcNow());
 
+        // The team records are a few dozen requests, read first so that a bad answer fails the load before the long part.
+        var records = await ReadRecordsAsync(opts, latest, teams, cancellationToken);
         var ids = await PlayerIdsAsync(opts, latest, cancellationToken);
         if (ids.Count == 0) throw new InvalidOperationException("The NHL stats reports list no players.");
         logger.LogInformation("The NHL lists {Players} players with {Games}+ games since {First} or a game this season",
@@ -338,19 +383,8 @@ public sealed class NhlHistorySource(HttpClient http, IOptions<NhlApiOptions> op
         var unknownTeams = new ConcurrentDictionary<string, int>();
         var failed = new ConcurrentBag<string>();
         var missing = 0;
-        var offline = !string.IsNullOrWhiteSpace(opts.Directory);
-        using var limiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
-        {
-            TokenLimit = Math.Max(1, opts.Parallelism),
-            TokensPerPeriod = 1,
-            ReplenishmentPeriod = TimeSpan.FromSeconds(1 / Math.Max(0.1, opts.RequestsPerSecond)),
-            QueueLimit = int.MaxValue,
-            AutoReplenishment = true,
-        });
-
         async Task ReadAsync(string id, CancellationToken ct)
         {
-            if (!offline) using (await limiter.AcquireAsync(1, ct)) { }
             try
             {
                 using var doc = await NhlApiFiles.OpenAsync(http, opts, NhlApiFiles.Player(id), $"{opts.WebUrl}player/{id}/landing", ct);
@@ -397,7 +431,6 @@ public sealed class NhlHistorySource(HttpClient http, IOptions<NhlApiOptions> op
             seen[key] = seen.TryGetValue(key, out var span) ? (Math.Min(span.From, s.Season), Math.Max(span.To, s.Season)) : (s.Season, s.Season);
         }
 
-        var records = await ReadRecordsAsync(opts, Math.Min(newest, latest), teams, cancellationToken);
         logger.LogInformation("The NHL has {Players} players, {Teams} teams and {Records} team records from {First} through {Season}",
             ordered.Count, seen.Count, records.Count, opts.FirstSeason, newest);
         return new HistorySnapshot("nhl", IdSource, newest, teams.HistoryTeams(seen, newest), ordered, TeamSeasons: records);

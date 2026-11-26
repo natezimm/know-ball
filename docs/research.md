@@ -14,8 +14,9 @@ Each finding is marked by how it is known:
 | --- | --- | --- | --- | --- |
 | NBA | Basketball-Reference CSV mirror | ESPN roster feed, on either of its two hosts (balldontlie as a later fallback, not built) | Wikidata | Champions by season (not entered yet) |
 | NFL | nflverse | nflverse (it updates daily); ESPN roster feed as a cross-check | nflverse's own id columns, plus Wikidata for birthplaces | MVPs, Super Bowl winners before 1999, stadium coordinates |
+| NHL | The NHL's public stats and site APIs (`api.nhle.com`, `api-web.nhle.com`) | The same site's team rosters | The NHL's own player ids; birth country is on each player | Team names, divisions and franchise moves (`nhl-teams.json`) |
 
-No paid API is needed for either league. No API key is needed either.
+No paid API is needed for any league. No API key is needed either.
 
 ## NBA
 
@@ -168,12 +169,44 @@ nflverse covers more than any of these, for free, so none is needed.
 | Sound It Out, Letter Jacket | No player stats needed | None |
 | Who's the GOAT? | Partly | Comparing a quarterback with a linebacker needs a position-neutral number. Approximate Value is the only one available, and only for players drafted since 1980. Likely a per-position ranking instead |
 
+## NHL
+
+### The NHL's own APIs (the NHL backbone)
+
+The league's website reads two public JSON APIs that need no key. Neither is documented by the NHL, so the importer
+reads only fields it checks and fails loudly on a bad answer. Tested 2026-11-26.
+
+| Endpoint | What it gives |
+| --- | --- |
+| `api.nhle.com/stats/rest/en/skater/summary`, `goalie/summary` | Every player's games and totals, for one season or (with `isAggregate=true`) a range. Filtered with `cayenneExp` and `factCayenneExp`; at most 100 rows a page, so read with `start` and a fixed sort. 4,439 players have 50 or more games since 1979-80 or a game this season |
+| `api.nhle.com/stats/rest/en/team/summary` | Each team's wins, losses, ties and overtime losses by season (`gameTypeId=2`), and who reached the playoffs (`gameTypeId=3`) |
+| `api-web.nhle.com/v1/player/{id}/landing` | One player: bio, birth country, draft, sweater number, Hall of Fame flag, headshot URL, every season line by league with the order of a traded season's teams (`sequence`), trophies by season and career totals |
+| `api-web.nhle.com/v1/roster/{team}/current` | Today's forwards, defencemen and goalies for one of the 32 teams (804 players on 2026-11-26) |
+
+The site answers 429 to a client that asks too fast (it began after about 2,000 requests in a minute or two), so
+the importer reads at five requests a second and asks again later for the few that still fail. The stats API names
+a team by its full name, with the year for a reused one ("Winnipeg Jets (1979)"); `nhl-teams.json` maps those names
+to our team keys and each former team to the franchise it became.
+
+Hockey-Reference has the same history but its terms bar automated downloads (Reported), and no open data set has
+the NHL's trophies and rosters together, so none other was needed.
+
+### What each game needs for the NHL
+
+| Game | Ready from the NHL API? | Design change from the NBA version |
+| --- | --- | --- |
+| Scouting Report | Yes | Divisions are Atlantic, Metropolitan, Central and Pacific; forwards (C, LW, RW) are close to each other |
+| Career Path | Yes, from 1979-80 (the WHA merger) | Country of birth is the hint, since most players never played college hockey |
+| Back of the Card | Yes | A skater's line (goals, assists, points, plus-minus) or a goalie's (wins, goals-against average, save percentage) |
+| Team Photo | Needs the Stanley Cup Final teams by season | A lineup of three forwards, two defencemen and a goalie |
+
 ## Images
 
 - **Who's That photo catalog**: [selected photos, attribution text and iconic-moment search backlog](archive/whos-that-photo-catalog.md),
   researched 2026-10-18. Prepare LeBron's chalk toss first, then Dirk's fadeaway; other exact moments remain sourcing leads.
 - **Headshots**: NBA CDN by NBA id (current and retired), ESPN by ESPN id (current), NFL.com URLs in nflverse (99% of players).
-- **Logos**: NBA CDN for the 30 current teams; ESPN logo URLs for NFL teams are listed in nflverse.
+- **Logos**: NBA CDN for the 30 current teams; ESPN logo URLs for NFL teams are listed in nflverse; the NHL's
+  `assets.nhle.com/logos/nhl/svg/{team}_light.svg` for its 32 teams. NHL headshots are the URLs on each player's landing.
 - **Iconic photos**: no feed exists; they are collected and cut out by hand. Licensed photo libraries (AP, Getty, Imagn) are the
   commercial route, per Sportradar's own terms.
 - For curated Who's That photos, track each file's license and attribution in the catalog above; the selected

@@ -32,7 +32,7 @@ public class NhlApiSourceTests
 
         Assert.Equal(("nhl", "nhl", 2025), (snapshot.LeagueCode, snapshot.IdSource, snapshot.LatestSeason));
         // 8000004 has too few games; 8000006 is listed this season but has no record.
-        Assert.Equal(["8000001", "8000002", "8000003", "8000005"], snapshot.Players.Select(p => p.ExternalId));
+        Assert.Equal(["8000001", "8000002", "8000003", "8000005", "8000008"], snapshot.Players.Select(p => p.ExternalId));
     }
 
     [Fact]
