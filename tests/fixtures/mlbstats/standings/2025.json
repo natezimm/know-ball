@@ -1,0 +1,40 @@
+{
+ "records": [
+  {
+   "teamRecords": [
+    {
+     "team": {
+      "id": 147
+     },
+     "wins": 94,
+     "losses": 68,
+     "clinched": true,
+     "divisionChamp": false,
+     "clinchIndicator": "w"
+    },
+    {
+     "team": {
+      "id": 133
+     },
+     "wins": 76,
+     "losses": 86,
+     "clinched": false,
+     "divisionChamp": false
+    }
+   ]
+  },
+  {
+   "teamRecords": [
+    {
+     "team": {
+      "id": 120
+     },
+     "wins": 66,
+     "losses": 96,
+     "clinched": false,
+     "divisionChamp": false
+    }
+   ]
+  }
+ ]
+}

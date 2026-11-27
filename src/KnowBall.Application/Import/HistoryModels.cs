@@ -40,6 +40,8 @@ public sealed record HistoryTeam(string Key, SourceTeam Team, int? ActiveFrom, i
 /// <param name="HeadshotUrl">A link to the player's photo, when the record has one.</param>
 /// <param name="Popularity">A fame score the source worked out itself; null to score the career from its season lines and awards.</param>
 /// <param name="KeepSeasonLines">False when the lines only say which team he was on: they build his stops, but no stat rows are stored.</param>
+/// <param name="BirthPlace">"Oak Park, IL", when the record has it.</param>
+/// <param name="Country">The country of birth, when the record has it.</param>
 public sealed record HistoryPlayer(
     string ExternalId,
     string FirstName,
@@ -59,7 +61,9 @@ public sealed record HistoryPlayer(
     string? JerseyNumber = null,
     string? HeadshotUrl = null,
     double? Popularity = null,
-    bool KeepSeasonLines = true);
+    bool KeepSeasonLines = true,
+    string? BirthPlace = null,
+    string? Country = null);
 
 /// <summary>
 /// One line of a player's record, in the order played. A season split between teams has one
@@ -102,6 +106,12 @@ public static class AwardTypes
     /// <summary>Followed by 1 or 2 for the AP first or second team.</summary>
     public const string AllPro = "AllPro";
     public const string ProBowl = "ProBowl";
+
+    // Baseball. MVP, Rookie of the Year and All-Star are shared with basketball.
+    public const string CyYoung = "CyYoung";
+    public const string WorldSeriesMvp = "WSMVP";
+    public const string GoldGlove = "GoldGlove";
+    public const string SilverSlugger = "SilverSlugger";
 }
 
 /// <summary>Links between data sources, and facts only the linking source has (birthplaces).</summary>

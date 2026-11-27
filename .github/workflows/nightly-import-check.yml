@@ -1,5 +1,5 @@
 # Daily canary: do the live sources still parse? A fresh database loads the full history
-# (Basketball-Reference mirror, Wikidata), then the ESPN rosters. Catches upstream changes
+# (Basketball-Reference mirror, Wikidata, nflverse, MLB Stats API), then the rosters. Catches upstream changes
 # before the production importer's nightly run does. Uses a throwaway SQLite database.
 name: Nightly import check
 
@@ -14,7 +14,7 @@ permissions:
 jobs:
   live-import:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40
     env:
       TriviaTfm: net11.0
       Database__Provider: Sqlite

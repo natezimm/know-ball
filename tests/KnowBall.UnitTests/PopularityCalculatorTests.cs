@@ -96,4 +96,43 @@ public class PopularityCalculatorTests
         Assert.Equal(100, PopularityCalculator.FromFootballCareer(Football(value: 400, fantasy: 9_000, proBowls: 20, allPros: 10, hof: true, seasons: 25, pick: 1, recent: 40)));
         Assert.Equal(0, PopularityCalculator.FromFootballCareer(Football()));
     }
+
+    private static BaseballCareer Baseball(double hits = 0, double homeRuns = 0, double wins = 0, double strikeouts = 0, double saves = 0,
+        int allStars = 0, int mvps = 0, int cyYoungs = 0, int other = 0, bool hof = false, int seasons = 0, double? recent = null) =>
+        new(hits, homeRuns, wins, strikeouts, saves, allStars, mvps, cyYoungs, other, hof, seasons, recent);
+
+    [Fact]
+    public void A_baseball_career_counts_the_better_of_hitting_and_pitching()
+    {
+        // 3,000 hits, 500 home runs, 300 wins, 3,000 strikeouts and 400 saves are each the top of the career score.
+        var hitter = PopularityCalculator.FromBaseballCareer(Baseball(hits: 3_000));
+        Assert.Equal(30, hitter);
+        Assert.Equal(hitter, PopularityCalculator.FromBaseballCareer(Baseball(homeRuns: 500)));
+        Assert.Equal(hitter, PopularityCalculator.FromBaseballCareer(Baseball(wins: 300)));
+        Assert.Equal(hitter, PopularityCalculator.FromBaseballCareer(Baseball(strikeouts: 3_000)));
+        Assert.Equal(hitter, PopularityCalculator.FromBaseballCareer(Baseball(saves: 400)));
+        // A pitcher's few hits do not add to his pitching.
+        Assert.Equal(hitter, PopularityCalculator.FromBaseballCareer(Baseball(wins: 300, hits: 50)));
+    }
+
+    [Fact]
+    public void Baseball_honours_and_a_star_season_now_lift_the_score()
+    {
+        var plain = PopularityCalculator.FromBaseballCareer(Baseball(hits: 1_500, seasons: 10));
+        var star = PopularityCalculator.FromBaseballCareer(Baseball(hits: 1_500, seasons: 10, allStars: 6, mvps: 1, hof: true));
+        Assert.Equal(15 + 5, plain);
+        Assert.Equal(20 + 12 + 7.5 + 10, star);
+
+        var current = PopularityCalculator.FromBaseballCareer(Baseball(hits: 500, seasons: 4, recent: PopularityCalculator.BaseballSeasonValue(170, 40, 10, 0, 0, 0)));
+        Assert.True(current > plain, $"current {current} vs veteran {plain}");
+        Assert.Equal(100, PopularityCalculator.FromBaseballCareer(Baseball(hits: 4_000, allStars: 20, mvps: 3, cyYoungs: 3, other: 20, hof: true, seasons: 20, recent: 25)));
+    }
+
+    [Fact]
+    public void A_baseball_season_is_scored_on_its_better_side()
+    {
+        Assert.Equal(25, PopularityCalculator.BaseballSeasonValue(180, 50, 20, 0, 0, 0));
+        Assert.Equal(24, PopularityCalculator.BaseballSeasonValue(0, 0, 0, 0, 0, 40));
+        Assert.Equal(PopularityCalculator.BaseballSeasonValue(0, 0, 0, 15, 200, 0), PopularityCalculator.BaseballSeasonValue(10, 0, 0, 15, 200, 0));
+    }
 }
