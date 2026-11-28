@@ -1,0 +1,31 @@
+{
+ "stats": [
+  {
+   "totalSplits": 1,
+   "splits": [
+    {
+     "season": "2025",
+     "stat": {
+      "gamesPitched": 30,
+      "gamesStarted": 30,
+      "wins": 14,
+      "losses": 8,
+      "outs": 540,
+      "earnedRuns": 60,
+      "hits": 150,
+      "baseOnBalls": 45,
+      "strikeOuts": 220
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1002,
+      "fullName": "Bravo Arm"
+     },
+     "numTeams": 2
+    }
+   ]
+  }
+ ]
+}

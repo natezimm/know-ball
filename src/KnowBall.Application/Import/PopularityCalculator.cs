@@ -50,6 +50,23 @@ public sealed record HockeyCareer(
     bool HallOfFame,
     int? DraftPick,
     double? RecentPerGame);
+/// <summary>What an MLB career adds up to, for <see cref="PopularityCalculator.FromBaseballCareer"/>.</summary>
+/// <param name="OtherAwards">Rookie of the Year, Gold Gloves, Silver Sluggers and World Series MVPs.</param>
+/// <param name="Seasons">Seasons with a game in the majors.</param>
+/// <param name="RecentValue">The better of the last two seasons by <see cref="PopularityCalculator.BaseballSeasonValue"/>, for current players only.</param>
+public sealed record BaseballCareer(
+    double Hits,
+    double HomeRuns,
+    double Wins,
+    double Strikeouts,
+    double Saves,
+    int AllStars,
+    int Mvps,
+    int CyYoungs,
+    int OtherAwards,
+    bool HallOfFame,
+    int Seasons,
+    double? RecentValue);
 
 /// <summary>Rough 0-100 "how likely is a casual fan to know this player" score.</summary>
 public static class PopularityCalculator
@@ -177,4 +194,37 @@ public static class PopularityCalculator
         null => 0.8,
         _ => 0.9,
     };
+
+    /// <summary>
+    /// The score for an MLB player. The career earns up to about 90: the better of what he did at the plate (3,000 hits
+    /// or 500 home runs is the top) and on the mound (300 wins, 3,000 strikeouts or 400 saves), All-Star picks, MVPs and
+    /// Cy Youngs, the other awards, the Hall of Fame and years in the majors. Current players add up to 25 for how they
+    /// are playing now, so today's stars outrank forgotten veterans.
+    /// </summary>
+    public static double FromBaseballCareer(BaseballCareer c)
+    {
+        var batting = Math.Max(Math.Min(c.Hits / 3_000 * 30, 30), Math.Min(c.HomeRuns / 500 * 30, 30));
+        var pitching = Math.Max(Math.Max(Math.Min(c.Wins / 300 * 30, 30), Math.Min(c.Strikeouts / 3_000 * 30, 30)), Math.Min(c.Saves / 400 * 30, 30));
+
+        var score = Math.Max(batting, pitching)
+                    + Math.Min(c.AllStars * 2.0, 20)
+                    + Math.Min((c.Mvps + c.CyYoungs) * 7.5, 15)
+                    + Math.Min(c.OtherAwards * 1.0, 8)
+                    + (c.HallOfFame ? 10 : 0)
+                    + Math.Min(c.Seasons, 15) * 0.5
+                    + Math.Min(c.RecentValue ?? 0, 25);
+
+        return Math.Round(Math.Clamp(score, 0, 100), 1);
+    }
+
+    /// <summary>
+    /// One season on a 0-25 scale: a 40-homer, 170-hit season, a 250-strikeout one or a 40-save one is near the top.
+    /// The better of hitting and pitching counts, so a two-way player is not added twice.
+    /// </summary>
+    public static double BaseballSeasonValue(double hits, double homeRuns, double steals, double wins, double strikeouts, double saves)
+    {
+        var batting = homeRuns * 0.35 + hits * 0.06 + steals * 0.08;
+        var pitching = Math.Max(strikeouts * 0.09 + wins * 0.5, saves * 0.6);
+        return Math.Round(Math.Min(Math.Max(batting, pitching), 25), 2);
+    }
 }

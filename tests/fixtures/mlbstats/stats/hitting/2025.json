@@ -1,0 +1,64 @@
+{
+ "stats": [
+  {
+   "totalSplits": 3,
+   "splits": [
+    {
+     "season": "2025",
+     "stat": {
+      "gamesPlayed": 155,
+      "atBats": 560,
+      "hits": 180,
+      "homeRuns": 50,
+      "rbi": 130,
+      "runs": 120
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1001,
+      "fullName": "Alpha Slugger"
+     },
+     "numTeams": 1
+    },
+    {
+     "season": "2025",
+     "stat": {
+      "gamesPlayed": 100,
+      "atBats": 380,
+      "hits": 100,
+      "homeRuns": 10,
+      "stolenBases": 30
+     },
+     "team": {
+      "id": 120
+     },
+     "player": {
+      "id": 1004,
+      "fullName": "Delta Rookie Jr."
+     },
+     "numTeams": 1
+    },
+    {
+     "season": "2025",
+     "stat": {
+      "gamesPlayed": 105,
+      "atBats": 360,
+      "hits": 88,
+      "homeRuns": 9,
+      "rbi": 44
+     },
+     "team": {
+      "id": 133
+     },
+     "player": {
+      "id": 1005,
+      "fullName": "Echo Catcher"
+     },
+     "numTeams": 1
+    }
+   ]
+  }
+ ]
+}

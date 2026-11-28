@@ -1,0 +1,75 @@
+{
+ "roster": [
+  {
+   "person": {
+    "id": 1001,
+    "fullName": "Alpha Slugger",
+    "primaryNumber": "99",
+    "birthDate": "1995-04-01",
+    "birthCity": "Oak Park",
+    "birthCountry": "USA",
+    "height": "6' 2\"",
+    "weight": 210,
+    "active": true,
+    "primaryPosition": {
+     "abbreviation": "RF"
+    },
+    "mlbDebutDate": "2020-05-01",
+    "birthStateProvince": "IL",
+    "currentTeam": {
+     "id": 147
+    }
+   },
+   "jerseyNumber": "99",
+   "position": {
+    "abbreviation": "RF"
+   },
+   "status": {
+    "code": "A"
+   }
+  },
+  {
+   "person": {
+    "id": 1002,
+    "fullName": "Bravo Arm",
+    "primaryNumber": "45",
+    "birthDate": "1994-02-02",
+    "birthCity": "Santo Domingo",
+    "birthCountry": "Dominican Republic",
+    "height": "6' 2\"",
+    "weight": 210,
+    "active": true,
+    "primaryPosition": {
+     "abbreviation": "P"
+    },
+    "mlbDebutDate": "2018-06-01",
+    "currentTeam": {
+     "id": 147
+    }
+   },
+   "jerseyNumber": "45",
+   "position": {
+    "abbreviation": "P"
+   },
+   "status": {
+    "code": "A"
+   }
+  },
+  {
+   "person": {
+    "id": 3000,
+    "fullName": "Never Called Up",
+    "primaryPosition": {
+     "abbreviation": "P"
+    }
+   },
+   "jerseyNumber": "77",
+   "position": {
+    "abbreviation": "P"
+   },
+   "status": {
+    "code": "A"
+   }
+  }
+ ]
+}

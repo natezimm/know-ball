@@ -1,0 +1,67 @@
+{
+ "stats": [
+  {
+   "totalSplits": 3,
+   "splits": [
+    {
+     "season": "2024",
+     "stat": {
+      "gamesPlayed": 150,
+      "atBats": 550,
+      "hits": 160,
+      "homeRuns": 35,
+      "rbi": 100,
+      "runs": 90,
+      "doubles": 30,
+      "triples": 2,
+      "stolenBases": 10,
+      "baseOnBalls": 70,
+      "strikeOuts": 150
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1001,
+      "fullName": "Alpha Slugger"
+     },
+     "numTeams": 1
+    },
+    {
+     "season": "2024",
+     "stat": {
+      "gamesPlayed": 20,
+      "atBats": 60,
+      "hits": 12
+     },
+     "team": {
+      "id": 133
+     },
+     "player": {
+      "id": 1003,
+      "fullName": "Charlie Cup"
+     },
+     "numTeams": 1
+    },
+    {
+     "season": "2024",
+     "stat": {
+      "gamesPlayed": 110,
+      "atBats": 380,
+      "hits": 95,
+      "homeRuns": 12,
+      "rbi": 50
+     },
+     "team": {
+      "id": 133
+     },
+     "player": {
+      "id": 1005,
+      "fullName": "Echo Catcher"
+     },
+     "numTeams": 1
+    }
+   ]
+  }
+ ]
+}

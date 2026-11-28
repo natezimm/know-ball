@@ -8,6 +8,7 @@ dotnet run --project src/KnowBall.Importer -- --once                            
 dotnet run --project src/KnowBall.Importer -- --once --history                   # reload the full history now, due or not
 dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history --leagues nba  # offline: ~36 bundled players
 dotnet run --project src/KnowBall.Importer -- --once --leagues nfl --history     # just the NFL, history included
+dotnet run --project src/KnowBall.Importer -- --once --leagues mlb --history     # just MLB, history included
 dotnet run --project src/KnowBall.Importer -- --once --leagues nhl --history     # just the NHL (about 20 minutes)
 dotnet run --project src/KnowBall.Importer -- --nightly                          # one night's work (import, then the Numbers queue), then exit
 dotnet run --project src/KnowBall.Importer                                       # the nightly worker
@@ -20,7 +21,7 @@ worker does.
 
 ## What a run does
 
-For each league in `Import:Leagues` (NBA, then NFL, then NHL; one failing never stops the others):
+For each league in `Import:Leagues` (NBA first, then NFL, then MLB, then NHL; one failing never stops the others):
 
 1. Reload the player history if it is due (every `Import:HistoryRefreshDays`). For the NBA, then link each player
    to their NBA.com id and birthplace through Wikidata.
@@ -57,6 +58,8 @@ run hits it.
 | ESPN core API (`sports.core.api.espn.com`) | AP MVP, Offensive and Defensive Player and Rookie of the Year, Comeback Player and Super Bowl MVP for each season since 1999, linked by the `espn_id` in nflverse's players file | With the NFL history |
 | `nfl-honors.json` (bundled, from Wikipedia) | AP All-Pro first and second teams and Pro Bowl rosters for each season since 1999 | With the NFL history; the file is refreshed by hand once a year (below) |
 | nflverse current-season roster | Current team, jersey number, active status, new players | Nightly |
+| MLB Stats API (`statsapi.mlb.com`), history | Every major leaguer since 1960 (two seasons or more, or playing this season): bio, birthplace, MLB headshot; a line for each team each season with hitting, pitching and games at each fielding position; draft slot and college since 1965; MVP, Cy Young, Rookie of the Year, All-Star, Gold Glove, Silver Slugger, World Series MVP and the Hall of Fame; each team's record and playoff flag | Every `Import:HistoryRefreshDays` (30) |
+| MLB Stats API 40-man rosters | Current team, jersey number, active status, new players who have played in the majors | Nightly |
 | NHL stats API (`api.nhle.com/stats/rest`) | Who to load (50+ games since 1979-80, or a game this season), and each team's won-lost-tied-overtime record and playoff flag by season | With the NHL history |
 | NHL site API (`api-web.nhle.com/v1/player/{id}/landing`) | Each NHL player: bio, birth country, draft slot, number, headshot URL, Hall of Fame flag, every NHL regular season by team with a skater's or goalie's totals, and trophies | With the NHL history |
 | NHL site API (`api-web.nhle.com/v1/roster/{team}/current`) | Current team, jersey number, active status and new players, for all 32 teams (the run fails if any is missing) | Nightly |
@@ -104,7 +107,7 @@ More on each source, and the ones that were rejected, in [research.md](research.
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
-| `Import:Leagues` | `nba,nfl,nhl` | Leagues to import; `--leagues` sets it for one run |
+| `Import:Leagues` | `nba,nfl,mlb,nhl` | Leagues to import; `--leagues` sets it for one run |
 | `Games:Leagues` | `nba,nfl` | Leagues whose game editions are live (the API reads it too); the importer fills a puzzle queue for each (Scouting Report, Career Path and Back of the Card have `nfl` editions) |
 | `Import:Source` | `espn` | NBA roster source: `espn` (live), `seed` (bundled sample) or `nba-stats` (stats.nba.com) |
 | `Import:FallbackSource` | empty | NBA source to try if the primary fails |
@@ -122,6 +125,10 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | `Sources:Nflverse:StatLinesFromSeason` | `1999` | Season stat lines are kept from this season on |
 | `Sources:Nflverse:EspnAwardsUrl` | ESPN core API seasons URL | Where the AP awards are read; empty leaves them out. With `Directory` set they are read from `espn-awards/{season}/{id}.json` there |
 | `Sources:Nflverse:AwardsFromSeason` | `1999` | First season whose ESPN awards are read |
+| `Sources:MlbStats:BaseUrl` | `https://statsapi.mlb.com/api/v1/` | MLB's Stats API |
+| `Sources:MlbStats:Directory` | empty | Read saved responses from a folder instead: `teams/{season}.json`, `players/{season}.json`, `stats/{hitting,pitching,fielding}/{season}.json`, `standings/{season}.json`, `awards/{id}.json`, `draft/{year}.json`, `rosters/{teamId}.json` |
+| `Sources:MlbStats:FirstSeason` / `FirstDraft` | `1960` / `1965` | First season read, and the first draft read for pick numbers and colleges |
+| `Sources:MlbStats:MinSeasons` | `2` | Players with fewer seasons in the majors are left out unless they played this season |
 | `Sources:Nhl:Directory` | empty | Read the NHL's answers from a folder of saved files (`stats/skaters.json`, `players/{id}.json`, `rosters/{team}.json`; see `tests/fixtures/nhl`) |
 | `Sources:Nhl:FirstSeason` / `MinGames` | `1979` / `50` | First season read, and the fewest games since then for a player who is not playing this season |
 | `Sources:Nhl:Parallelism` / `RequestsPerSecond` | `4` / `5` | Player records read at once, and the most requests a second to the NHL's sites |
