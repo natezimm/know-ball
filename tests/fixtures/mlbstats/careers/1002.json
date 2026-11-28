@@ -1,0 +1,145 @@
+{
+ "people": [
+  {
+   "id": 1002,
+   "fullName": "Bravo Arm",
+   "stats": [
+    {
+     "group": {
+      "displayName": "pitching"
+     },
+     "splits": [
+      {
+       "season": "2024",
+       "stat": {
+        "gamesPitched": 32,
+        "gamesStarted": 32,
+        "wins": 12,
+        "losses": 9,
+        "outs": 570,
+        "earnedRuns": 70,
+        "hits": 170,
+        "baseOnBalls": 50,
+        "strikeOuts": 210
+       },
+       "sport": {
+        "id": 1
+       },
+       "team": {
+        "id": 133
+       }
+      },
+      {
+       "season": "2025",
+       "stat": {
+        "gamesPitched": 18,
+        "gamesStarted": 18,
+        "wins": 8,
+        "losses": 5,
+        "outs": 330,
+        "earnedRuns": 38,
+        "hits": 90,
+        "baseOnBalls": 25,
+        "strikeOuts": 130
+       },
+       "sport": {
+        "id": 1
+       },
+       "team": {
+        "id": 120
+       }
+      },
+      {
+       "season": "2025",
+       "stat": {
+        "gamesPitched": 12,
+        "gamesStarted": 12,
+        "wins": 6,
+        "losses": 3,
+        "outs": 210,
+        "earnedRuns": 22,
+        "hits": 60,
+        "baseOnBalls": 20,
+        "strikeOuts": 90
+       },
+       "sport": {
+        "id": 1
+       },
+       "team": {
+        "id": 147
+       }
+      },
+      {
+       "season": "2025",
+       "stat": {
+        "gamesPitched": 30,
+        "gamesStarted": 30,
+        "wins": 14,
+        "losses": 8,
+        "outs": 540,
+        "earnedRuns": 60,
+        "hits": 150,
+        "baseOnBalls": 45,
+        "strikeOuts": 220
+       },
+       "sport": {
+        "id": 1
+       },
+       "numTeams": 2
+      },
+      {
+       "season": "2025",
+       "stat": {
+        "gamesPitched": 3,
+        "wins": 1
+       },
+       "sport": {
+        "id": 11
+       },
+       "team": {
+        "id": 999
+       }
+      }
+     ]
+    },
+    {
+     "group": {
+      "displayName": "fielding"
+     },
+     "splits": [
+      {
+       "season": "2025",
+       "stat": {
+        "games": 18
+       },
+       "sport": {
+        "id": 1
+       },
+       "team": {
+        "id": 120
+       },
+       "position": {
+        "abbreviation": "P"
+       }
+      },
+      {
+       "season": "2025",
+       "stat": {
+        "games": 12
+       },
+       "sport": {
+        "id": 1
+       },
+       "team": {
+        "id": 147
+       },
+       "position": {
+        "abbreviation": "P"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

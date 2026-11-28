@@ -23,9 +23,9 @@ stays with your browser.
 
 - **Letter Jacket**: find a sports word of 4, 5 or 6 letters in six tries, with category and letter hints. Play as many
   rounds as you like; there is no daily word.
-- **Scouting Report**: guess today's NBA or NFL player in eight tries; each guess is graded on team, conference,
+- **Scouting Report**: guess today's NBA, NFL or MLB player in eight tries; each guess is graded on team, conference,
   division, position, height, age and jersey number.
-- **Career Path**: name the NBA or NFL player from every team they played for, in order; each miss unlocks a hint.
+- **Career Path**: name the NBA, NFL or MLB player from every team they played for, in order; each miss unlocks a hint.
 - **Back of the Card**: name the NBA or NFL player from every season's stats on the back of their card; each miss uncovers
   their teams, then position and height, then award stamps, then draft and college.
 - **Team Photo**: a blank team photo of one of the 100 NBA Finals teams since the 1976 merger, or one of the NFL's
@@ -176,7 +176,7 @@ docs/                         architecture, ADRs, API and importer reference, ar
 
 ## Data and images
 
-Player data comes from the Basketball-Reference mirror, nflverse, Wikidata, ESPN's public feeds and, for NFL
+Player data comes from the Basketball-Reference mirror, nflverse, MLB's Stats API, Wikidata, ESPN's public feeds and, for NFL
 All-Pro teams and Pro Bowls, Wikipedia (CC BY-SA 4.0); headshots and logos are the leagues', linked from their CDNs
 and never stored. That is fine for a personal project and would need revisiting for
 anything commercial. Know Ball is not affiliated with or endorsed by the NBA, NFL, MLB or NHL. Details in

@@ -52,7 +52,7 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
     public int MaxGuesses => 6;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Nhl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb, LeagueCodes.Nhl];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -68,8 +68,8 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
             .FirstAsync(p => p.Id == answerId, cancellationToken);
 
         var stints = answer.Stints.OrderBy(s => s.Order).ToList();
-        // An NBA season (2003-04) ends the year after it starts; an NFL season is named for the year it starts.
-        var endsNextYear = context.League.Code != LeagueCodes.Nfl;
+        // An NBA season (2003-04) ends the year after it starts; an NFL or MLB season is named for the year it starts.
+        var endsNextYear = LeagueCodes.SeasonEndsNextYear(context.League.Code);
         var stops = stints
             .Select(s => new CareerStop(
                 s.Team!.FullName,
@@ -135,7 +135,11 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
         };
     }
 
-    /// <param name="league">The edition: most NHL players never went to college, so the NHL's hint is where he is from.</param>
+    /// <param name="league">
+    /// The edition. Most NHL players never went to college, so the NHL's hint is where he is from. In MLB, where most
+    /// players come from high school or abroad, a player with no college gets his birthplace
+    /// ("Born: Santo Domingo, Dominican Republic") rather than his country.
+    /// </param>
     internal static IReadOnlyList<CareerHint> HintsFor(Player player, string? league = null)
     {
         var draft = player.DraftYear is { } year
@@ -145,6 +149,8 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
             ? new CareerHint("From", player.Country)
             : player.College is not null
                 ? new CareerHint("College", player.College)
+                : league == LeagueCodes.Mlb && player.BirthPlace is not null
+                    ? new CareerHint("Born", player.BirthPlace)
                 : new CareerHint("From", player.Country ?? "No college listed");
 
         return

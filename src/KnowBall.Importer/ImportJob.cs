@@ -15,8 +15,8 @@ namespace KnowBall.Importer;
 
 public sealed class ImportOptions
 {
-    /// <summary>Leagues to import, comma-separated, from "nba", "nfl" and "nhl". The settings below without a league in their name are the NBA's.</summary>
-    public string Leagues { get; set; } = "nba,nfl,nhl";
+    /// <summary>Leagues to import, comma-separated: any of "nba", "nfl", "mlb" and "nhl". The settings below without a league in their name are the NBA's.</summary>
+    public string Leagues { get; set; } = "nba,nfl,mlb,nhl";
     /// <summary>NBA roster source: "espn" (live), "seed" (bundled sample) or "nba-stats" (the league's own feed, down since October 2026).</summary>
     public string Source { get; set; } = "espn";
     /// <summary>Source to try if the primary one fails, e.g. "seed" on a fresh dev machine. Empty = none.</summary>
@@ -50,6 +50,7 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
 {
     public const string Nba = "nba";
     public const string Nfl = "nfl";
+    public const string Mlb = "mlb";
     public const string Nhl = "nhl";
 
     public async Task<ImportRun> RunAsync(CancellationToken ct, bool forceHistory = false)
@@ -79,6 +80,14 @@ public sealed class ImportJob(IServiceScopeFactory scopes, IOptions<ImportOption
         {
             await RunHistoryIfDueAsync(NflverseHistorySource.SourceName, opts, forceHistory, ct);
             var run = await RunWithRetriesAsync(NflverseRosterSource.SourceName, opts, ct);
+            logger.LogInformation("{Run}", Describe(run));
+            runs.Add(run);
+        }
+
+        if (leagues.Contains(Mlb))
+        {
+            await RunHistoryIfDueAsync(MlbStatsHistorySource.SourceName, opts, forceHistory, ct);
+            var run = await RunWithRetriesAsync(MlbStatsRosterSource.SourceName, opts, ct);
             logger.LogInformation("{Run}", Describe(run));
             runs.Add(run);
         }

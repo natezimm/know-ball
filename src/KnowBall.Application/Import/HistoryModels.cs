@@ -41,7 +41,8 @@ public sealed record HistoryTeam(string Key, SourceTeam Team, int? ActiveFrom, i
 /// <param name="HeadshotUrl">A link to the player's photo, when the record has one.</param>
 /// <param name="Popularity">A fame score the source worked out itself; null to score the career from its season lines and awards.</param>
 /// <param name="KeepSeasonLines">False when the lines only say which team he was on: they build his stops, but no stat rows are stored.</param>
-/// <param name="Country">The country he was born in, when the record has it.</param>
+/// <param name="BirthPlace">"Oak Park, IL", when the record has it.</param>
+/// <param name="Country">The country of birth, when the record has it.</param>
 public sealed record HistoryPlayer(
     string ExternalId,
     string FirstName,
@@ -62,6 +63,7 @@ public sealed record HistoryPlayer(
     string? HeadshotUrl = null,
     double? Popularity = null,
     bool KeepSeasonLines = true,
+    string? BirthPlace = null,
     string? Country = null);
 
 /// <summary>
@@ -120,6 +122,11 @@ public static class AwardTypes
     /// <summary>The hockey trophies, apart from the Hart, that make a player famous.</summary>
     public static readonly IReadOnlySet<string> MajorHockeyAwards =
         new HashSet<string> { ArtRoss, RocketRichard, Norris, Vezina, ConnSmythe, TedLindsay, Selke };
+    // Baseball. MVP, Rookie of the Year and All-Star are shared with basketball.
+    public const string CyYoung = "CyYoung";
+    public const string WorldSeriesMvp = "WSMVP";
+    public const string GoldGlove = "GoldGlove";
+    public const string SilverSlugger = "SilverSlugger";
 }
 
 /// <summary>Links between data sources, and facts only the linking source has (birthplaces).</summary>
