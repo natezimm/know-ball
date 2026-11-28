@@ -120,6 +120,7 @@ describe('shortDivision', () => {
     expect(shortDivision('Atlantic')).toBe('ATL');
     expect(shortDivision('AFC West')).toBe('W');
     expect(shortDivision('NFC North')).toBe('N');
+    expect(shortDivision('Metropolitan')).toBe('MET');
     expect(shortDivision('AL Central')).toBe('C');
     expect(shortDivision('NL West')).toBe('W');
     expect(shortDivision('Somewhere')).toBe('Somewhere');

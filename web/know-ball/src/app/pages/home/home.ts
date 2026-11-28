@@ -209,7 +209,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
       font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
     }
     .badge.play { background: var(--accent); color: var(--accent-ink); text-decoration: none; }
-    /* A game with NFL or MLB editions shows a badge for each under the first, each a link of its own above the card's. */
+    /* A game with NFL, MLB or NHL editions shows a badge for each under the first, each a link of its own above the card's. */
     /* Spaced evenly, with room between them for each to take a full-size tap of its own. */
     .badge.edition { margin-top: 18px; position: relative; z-index: 4; }
     .card:has(.edition) .badge:not(.edition) { margin-top: 14px; }
@@ -282,7 +282,7 @@ export class Home {
       if (paused.includes(card.link.slice(1))) return { ...card, status: { label: 'Taking a break', open: false } as ReturnType<typeof cardStatus>, ...none, streak: 0 };
       if (card.quiz) return { ...card, status: quizStatus(card.play!, this.quiz), ...none, streak: this.quizStreak };
       const status = cardStatus(card, find(today, card.daily, 'nba'), loaded);
-      // The NFL edition shows only once the API lists it for today.
+      // Another league's edition shows only once the API lists it for today.
       const editions: Edition[] = OTHER_LEAGUES.flatMap((league) => {
         const entry = find(today, card.daily, league);
         return entry ? [{ league, name: LEAGUE_NAMES[league], status: cardStatus(card, entry, loaded) }] : [];
@@ -300,6 +300,7 @@ export class Home {
       };
     });
   });
+  protected readonly leagueNames = LEAGUE_NAMES;
   protected readonly countWord = computed(() => this.today() === undefined ? 'Six' : COUNT_WORDS[this.cards().filter((c) => c.status.open).length] ?? 'Six');
 
   constructor() {

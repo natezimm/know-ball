@@ -29,9 +29,10 @@ public sealed record ScoutingFeedback(Clue Team, Clue Conference, Clue Division,
 
 /// <summary>
 /// Guess the current player in eight tries. Every guess is compared with the answer on team,
-/// conference, division, position, height, age and jersey number. NBA, NFL and MLB editions; in the NFL
+/// conference, division, position, height, age and jersey number. NBA, NFL, MLB and NHL editions; in the NFL
 /// the conference is AFC or NFC and a position is close when it is in the same unit; in MLB the conference is the
-/// league (AL or NL) and a position is close when it is in the same part of the field.
+/// league (AL or NL) and a position is close when it is in the same part of the field; in the NHL the three forward
+/// positions are close to each other.
 /// </summary>
 public sealed class ScoutingReportGame(ITriviaDb db) : IGame
 {
@@ -46,7 +47,7 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
     public int MaxGuesses => 8;
     public bool IsGenerated => true;
     public bool IncludesRetired => false;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb, LeagueCodes.Nhl];
 
     /// <summary>Kickers, punters and long snappers are never the answer, however long their careers.</summary>
     public static readonly string[] NeverAnswers = ["K", "P", "LS"];
@@ -124,6 +125,7 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
         {
             LeagueCodes.Nfl => AttributeComparer.FootballPosition(guess.Position, answer.Position),
             LeagueCodes.Mlb => AttributeComparer.BaseballPosition(guess.Position, answer.Position),
+            LeagueCodes.Nhl => AttributeComparer.HockeyPosition(guess.Position, answer.Position),
             _ => AttributeComparer.Position(guess.Position, answer.Position),
         },
         Height: AttributeComparer.Height(guess.HeightInches, answer.HeightInches),

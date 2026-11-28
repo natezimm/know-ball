@@ -268,7 +268,9 @@ public sealed class GameApiTests(ApiFactory factory) : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, (await NewPlayer().GetAsync(path)).StatusCode);
         var today = await Json(await NewPlayer().GetAsync("/api/me/today"));
         Assert.Equal(
-            ["scouting-report nba", "scouting-report nfl", "scouting-report mlb", "career-path nba", "career-path nfl", "career-path mlb", "back-of-the-card nba", "back-of-the-card nfl", "team-photo nba", "team-photo nfl"],
+            ["scouting-report nba", "scouting-report nfl", "scouting-report mlb", "scouting-report nhl",
+             "career-path nba", "career-path nfl", "career-path mlb", "career-path nhl",
+             "back-of-the-card nba", "back-of-the-card nfl", "team-photo nba", "team-photo nfl"],
             today.EnumerateArray().Select(t => $"{t.GetProperty("game").GetString()} {t.GetProperty("league").GetString()}"));
     }
 

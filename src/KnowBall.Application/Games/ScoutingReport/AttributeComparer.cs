@@ -61,6 +61,16 @@ public static class AttributeComparer
         return new Clue(guess, answer is not null && FootballUnit(guess) is { } unit && unit == FootballUnit(answer) ? Close : Miss);
     }
 
+    /// <summary>Identical is right; two forwards (center, left wing, right wing) are close. Defensemen and goalies are only ever right or wrong.</summary>
+    public static Clue HockeyPosition(string? guess, string? answer)
+    {
+        if (guess is null) return new Clue(Unknown, Miss);
+        if (string.Equals(guess, answer, StringComparison.OrdinalIgnoreCase)) return new Clue(guess, Ok);
+        return new Clue(guess, answer is not null && IsForward(guess) && IsForward(answer) ? Close : Miss);
+    }
+
+    private static bool IsForward(string position) => position.ToUpperInvariant() is "C" or "LW" or "RW" or "F" or "W";
+
     /// <summary>"FS" → "DB", "OLB" → "LB", "OT" → "OL". Null for a position code this build does not know.</summary>
     public static string? FootballUnit(string position) => position.ToUpperInvariant() switch
     {

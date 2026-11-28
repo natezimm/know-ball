@@ -5,8 +5,8 @@ using KnowBall.Domain;
 namespace KnowBall.Application.Games.CareerPath;
 
 /// <summary>
-/// One stop on the journey. <see cref="To"/> is the year the last season ended (the NBA's season ends the year after
-/// it starts; the NFL's is named for the year it starts); null if the player is still there.
+/// One stop on the journey. <see cref="To"/> is the year the last season ended (an NBA or NHL season ends the year
+/// after it starts; the NFL's is named for the year it starts); null if the player is still there.
 /// </summary>
 public sealed record CareerStop(string Team, string Abbreviation, string? LogoUrl, int From, int? To, int Seasons);
 
@@ -26,8 +26,8 @@ public sealed record CareerSecret(
 
 /// <summary>
 /// Every team a player has been on, in order: who is it? Six guesses, and each miss unlocks a
-/// hint (position, draft, college, initials) and says which of the stops the guess shares.
-/// NBA and NFL editions.
+/// hint (position, draft, college or country, initials) and says which of the stops the guess shares.
+/// NBA, NFL and NHL editions.
 /// </summary>
 public sealed class CareerPathGame(ITriviaDb db) : IGame
 {
@@ -39,6 +39,8 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
     public const int MinLastSeason = 1990;
     /// <summary>The NFL record starts in 1990, so only careers that began then or later have every stop.</summary>
     public const int NflMinFirstSeason = 1990;
+    /// <summary>The NHL record starts with 1979-80, the first season after the WHA merger.</summary>
+    public const int NhlMinFirstSeason = 1979;
 
     private Dictionary<int, LeaguePaths> _paths = [];
 
@@ -50,7 +52,7 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
     public int MaxGuesses => 6;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb, LeagueCodes.Nhl];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -84,7 +86,7 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
         var secret = new CareerSecret(
             answer.Id, answer.FullName, answer.HeadshotUrl, accepted,
             stints.Select(s => s.Team!.FranchiseId ?? s.Team.Id).ToList(),
-            HintsFor(answer, bornHint: context.League.Code == LeagueCodes.Mlb));
+            HintsFor(answer, context.League.Code));
         return new GeneratedPuzzle(answer.Id, GameJson.Write(new CareerPayload(stops)), GameJson.Write(secret), Difficulty: stops.Count);
     }
 
@@ -133,19 +135,22 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
         };
     }
 
-    /// <param name="bornHint">
-    /// When the player went to no college, give his birthplace ("Born: Santo Domingo, Dominican Republic") rather than his
-    /// country. For baseball, where most players come from high school or abroad.
+    /// <param name="league">
+    /// The edition. Most NHL players never went to college, so the NHL's hint is where he is from. In MLB, where most
+    /// players come from high school or abroad, a player with no college gets his birthplace
+    /// ("Born: Santo Domingo, Dominican Republic") rather than his country.
     /// </param>
-    internal static IReadOnlyList<CareerHint> HintsFor(Player player, bool bornHint = false)
+    internal static IReadOnlyList<CareerHint> HintsFor(Player player, string? league = null)
     {
         var draft = player.DraftYear is { } year
             ? player.DraftNumber is { } pick ? $"{year}, pick {pick}" : year.ToString(System.Globalization.CultureInfo.InvariantCulture)
             : "Undrafted";
-        var origin = player.College is not null
-            ? new CareerHint("College", player.College)
-            : bornHint && player.BirthPlace is not null
-                ? new CareerHint("Born", player.BirthPlace)
+        var origin = league == LeagueCodes.Nhl && player.Country is not null
+            ? new CareerHint("From", player.Country)
+            : player.College is not null
+                ? new CareerHint("College", player.College)
+                : league == LeagueCodes.Mlb && player.BirthPlace is not null
+                    ? new CareerHint("Born", player.BirthPlace)
                 : new CareerHint("From", player.Country ?? "No college listed");
 
         return
@@ -195,13 +200,17 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
             .ToDictionary(g => g.Key, g => FranchisePath(g.OrderBy(s => s.Order).Select(s => s.Franchise)));
 
         var eligible = byPlayer.Where(p => p.Value.Length >= MinFranchises).Select(p => p.Key).ToHashSet();
-        var football = await db.Leagues.AnyAsync(l => l.Id == leagueId && l.Code == LeagueCodes.Nfl, ct);
+        var code = await db.Leagues.Where(l => l.Id == leagueId).Select(l => l.Code).FirstOrDefaultAsync(ct);
         var candidates = db.Players.AsNoTracking()
             .Where(p => p.LeagueId == leagueId && (p.ToYear == null || p.ToYear >= MinLastSeason));
-        if (football)
+        if (code == LeagueCodes.Nfl)
         {
             candidates = candidates.Where(p => p.FromYear != null && p.FromYear >= NflMinFirstSeason
                                                && (p.Position == null || !ScoutingReport.ScoutingReportGame.NeverAnswers.Contains(p.Position)));
+        }
+        else if (code == LeagueCodes.Nhl)
+        {
+            candidates = candidates.Where(p => p.FromYear != null && p.FromYear >= NhlMinFirstSeason);
         }
         var popularity = await candidates.Select(p => new { p.Id, p.Popularity }).ToListAsync(ct);
 

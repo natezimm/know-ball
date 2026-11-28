@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 export type Game = 'scouting-report' | 'career-path' | 'back-of-the-card' | 'team-photo';
-export type League = 'nba' | 'nfl' | 'mlb';
+export type League = 'nba' | 'nfl' | 'mlb' | 'nhl';
 
 export interface Player {
   id: number;
@@ -91,6 +91,20 @@ export async function mlbPlayers(request: APIRequestContext): Promise<Player[]> 
   const found: Player[] = [];
   for (const name of names) {
     const rows: Player[] = await ok(await request.get('/api/players/search', { params: { q: name, league: 'mlb', includeInactive: true, limit: 3 } }));
+    const match = rows.find((r) => r.fullName === name);
+    if (match) found.push({ id: match.id, fullName: match.fullName });
+  }
+  return found;
+}
+
+/** The made-up NHL players e2e/serve.sh writes with nhl-fixtures.mjs, as the guess box finds them. */
+export async function nhlPlayers(request: APIRequestContext): Promise<Player[]> {
+  const dir = resolve(repoRoot, 'artifacts/e2e/nhl/players');
+  const found: Player[] = [];
+  for (const file of readdirSync(dir).sort()) {
+    const p = JSON.parse(readFileSync(resolve(dir, file), 'utf8'));
+    const name = `${p.firstName.default} ${p.lastName.default}`;
+    const rows: Player[] = await ok(await request.get('/api/players/search', { params: { q: name, league: 'nhl', includeInactive: true, limit: 3 } }));
     const match = rows.find((r) => r.fullName === name);
     if (match) found.push({ id: match.id, fullName: match.fullName });
   }

@@ -44,7 +44,7 @@ export const CLUES: { key: ClueKey; label: string; header: string }[] = [
 
 /** Division names are too long for a seventh of a phone screen. */
 const DIVISIONS: Record<string, string> = {
-  Atlantic: 'ATL', Central: 'CEN', Southeast: 'SE', Northwest: 'NW', Pacific: 'PAC', Southwest: 'SW',
+  Atlantic: 'ATL', Central: 'CEN', Southeast: 'SE', Northwest: 'NW', Pacific: 'PAC', Southwest: 'SW', Metropolitan: 'MET',
 };
 
 /**
@@ -77,7 +77,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl', 'mlb']" [shareRows]="rows()">
+    <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl', 'mlb', 'nhl']" [shareRows]="rows()">
       <div help>
         <p>Guess the current {{ leagueName() }} player in eight tries. Start with anyone.</p>
         <p>Every guess adds a row of seven clues, colored by how that player compares with the answer:</p>
@@ -226,7 +226,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
 export class ScoutingReport {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" or "mlb" on those editions' addresses. */
+  /** From the route's data: "nfl", "mlb" or "nhl" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
@@ -235,6 +235,7 @@ export class ScoutingReport {
     switch (this.store.league()) {
       case 'nfl': return ' or one from the same unit (offensive line, secondary and so on)';
       case 'mlb': return ' or one from the same part of the field (pitchers, infielders, outfielders)';
+      case 'nhl': return ' or another forward (center, left or right wing)';
       default: return '';
     }
   });
