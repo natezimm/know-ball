@@ -1,0 +1,32 @@
+{
+ "drafts": {
+  "draftYear": 2024,
+  "rounds": [
+   {
+    "round": "1",
+    "picks": [
+     {
+      "pickNumber": 3,
+      "school": {
+       "name": "Vanderbilt",
+       "schoolClass": "JR"
+      },
+      "person": {
+       "id": 1004
+      }
+     },
+     {
+      "pickNumber": 9,
+      "school": {
+       "name": "Some High",
+       "schoolClass": "HS SR"
+      },
+      "person": {
+       "id": 2000
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

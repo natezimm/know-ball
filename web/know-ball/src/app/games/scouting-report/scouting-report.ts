@@ -47,10 +47,18 @@ const DIVISIONS: Record<string, string> = {
   Atlantic: 'ATL', Central: 'CEN', Southeast: 'SE', Northwest: 'NW', Pacific: 'PAC', Southwest: 'SW', Metropolitan: 'MET',
 };
 
-/** An NFL division is named with its conference, "AFC West"; the conference has its own column, so the cell shows "W". */
+/**
+ * An NFL or MLB division is named with its conference or league, "AFC West" or "AL Central"; that has its own column, so
+ * the cell shows "W" or "C".
+ */
 export function shortDivision(value: string): string {
-  const nfl = /^(AFC|NFC) (North|South|East|West)$/.exec(value);
-  return nfl ? nfl[2][0] : (DIVISIONS[value] ?? value);
+  const named = /^(AFC|NFC|AL|NL) (North|South|East|West|Central)$/.exec(value);
+  return named ? named[2][0] : (DIVISIONS[value] ?? value);
+}
+
+/** The clues for a league: MLB's conference is its league, AL or NL. */
+export function cluesFor(league: League): typeof CLUES {
+  return league === 'mlb' ? CLUES.map((c) => (c.key === 'conference' ? { ...c, label: 'League', header: 'Lg' } : c)) : CLUES;
 }
 
 const SQUARES: Record<ClueState, string> = { ok: '🟩', close: '🟨', miss: '⬜' };
@@ -69,7 +77,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl', 'nhl']" [shareRows]="rows()">
+    <app-game-shell name="Scouting Report" trim="var(--teal)" practice [leagues]="['nba', 'nfl', 'mlb', 'nhl']" [shareRows]="rows()">
       <div help>
         <p>Guess the current {{ leagueName() }} player in eight tries. Start with anyone.</p>
         <p>Every guess adds a row of seven clues, colored by how that player compares with the answer:</p>
@@ -95,7 +103,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
       @if (state(); as s) {
         <div class="board" role="table" aria-label="Your guesses, newest first">
           <div class="cols" role="row">
-            @for (c of clues; track c.key) {
+            @for (c of clues(); track c.key) {
               <span role="columnheader" [attr.aria-label]="c.label">{{ c.header }}</span>
             }
           </div>
@@ -106,7 +114,7 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
                 <app-avatar name="?" />
                 <span>Mystery player</span>
               </div>
-              @for (c of clues; track c.key) {
+              @for (c of clues(); track c.key) {
                 <div class="cell"></div>
               }
             </div>
@@ -114,13 +122,13 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
 
           @for (row of board(); track row.guess.playerId) {
             @let g = row.guess;
-            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="row.index >= settled()" [style.--cells]="clues.length">
+            <div class="row" role="row" [class.right]="g.correct" [class.fresh]="row.index >= settled()" [style.--cells]="clues().length">
               <div class="who" role="rowheader">
                 <app-avatar [src]="g.headshotUrl" [name]="g.name" />
                 <b>{{ g.name }}</b>
               </div>
               @if (g.feedback; as f) {
-                @for (c of clues; track c.key; let col = $index) {
+                @for (c of clues(); track c.key; let col = $index) {
                   @let clue = f[c.key];
                   <div role="cell" class="cell" [class]="clue.state" [style.--col]="col">
                     @if (c.key === 'team' && showLogo(clue)) {
@@ -218,18 +226,20 @@ export function shareRows(guesses: GuessRecord<ScoutingFeedback>[]): string[] {
 export class ScoutingReport {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" or "nhl" on those editions' addresses. */
+  /** From the route's data: "nfl", "mlb" or "nhl" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
   protected readonly leagueName = computed(() => LEAGUE_NAMES[this.store.league()]);
-  /** What else counts as a close position in this edition. */
-  protected readonly positionNote = computed(() => ({
-    nba: '',
-    nfl: ' or one from the same unit (offensive line, secondary and so on)',
-    nhl: ' or another forward (center, left or right wing)',
-  })[this.store.league()]);
-  protected readonly clues = CLUES;
+  protected readonly positionNote = computed(() => {
+    switch (this.store.league()) {
+      case 'nfl': return ' or one from the same unit (offensive line, secondary and so on)';
+      case 'mlb': return ' or one from the same part of the field (pitchers, infielders, outfielders)';
+      case 'nhl': return ' or another forward (center, left or right wing)';
+      default: return '';
+    }
+  });
+  protected readonly clues = computed(() => cluesFor(this.store.league()));
 
   protected readonly state = computed(() => this.store.state() as GameState<unknown, { rosterSnapshot: boolean }, ScoutingFeedback, ScoutingAnswer> | null);
   protected readonly over = computed(() => this.store.over());

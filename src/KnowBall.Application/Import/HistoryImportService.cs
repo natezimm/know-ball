@@ -209,6 +209,7 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
         Set(p.WeightLbs, hp.WeightLbs ?? p.WeightLbs, v => p.WeightLbs = v);
         Set(p.BirthDate, hp.BirthDate ?? p.BirthDate, v => p.BirthDate = v);
         Set(p.College, hp.College ?? p.College, v => p.College = v);
+        Set(p.BirthPlace, hp.BirthPlace ?? p.BirthPlace, v => p.BirthPlace = v);
         Set(p.Country, hp.Country ?? p.Country, v => p.Country = v);
         Set(p.FromYear, hp.FromYear ?? p.FromYear, v => p.FromYear = v);
         Set(p.ToYear, hp.ToYear ?? p.ToYear, v => p.ToYear = v);

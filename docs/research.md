@@ -14,6 +14,7 @@ Each finding is marked by how it is known:
 | --- | --- | --- | --- | --- |
 | NBA | Basketball-Reference CSV mirror | ESPN roster feed, on either of its two hosts (balldontlie as a later fallback, not built) | Wikidata | Champions by season (not entered yet) |
 | NFL | nflverse | nflverse (it updates daily); ESPN roster feed as a cross-check | nflverse's own id columns, plus Wikidata for birthplaces | MVPs, Super Bowl winners before 1999, stadium coordinates |
+| MLB | MLB Stats API | MLB Stats API 40-man rosters | Not needed: one id (MLBAM) everywhere, birthplaces included | World Series teams for Team Photo |
 | NHL | The NHL's public stats and site APIs (`api.nhle.com`, `api-web.nhle.com`) | The same site's team rosters | The NHL's own player ids; birth country is on each player | Team names, divisions and franchise moves (`nhl-teams.json`) |
 
 No paid API is needed for any league. No API key is needed either.
@@ -168,6 +169,31 @@ nflverse covers more than any of these, for free, so none is needed.
 | Back of the Card | Yes, from 1999 | A different stat line per position group |
 | Sound It Out, Letter Jacket | No player stats needed | None |
 | Who's the GOAT? | Partly | Comparing a quarterback with a linebacker needs a position-neutral number. Approximate Value is the only one available, and only for players drafted since 1980. Likely a per-position ranking instead |
+
+## MLB
+
+### MLB Stats API (the MLB backbone)
+
+`statsapi.mlb.com/api/v1/`, MLB's own JSON API, the one MLB.com uses. No key. Every response carries MLB Advanced
+Media's copyright line, and its terms allow individual, non-commercial use, the same footing as ESPN's feed. Checked
+on 2026-11-26 (Tested through a web fetch; the cloud sandbox cannot reach it, the production VM can).
+
+| Request | What it gives |
+| --- | --- |
+| `teams?sportId=1&season=Y` | The teams of a season under their names then ("MON" Expos, "CAL" Angels). A franchise keeps one id for life: the Expos and the Nationals are both 120 |
+| `sports/1/players?season=Y` | Everyone who played that season: name, position, height, weight, birth date and place, number, debut, draft year, current team |
+| `stats?stats=season&group=hitting\|pitching\|fielding&season=Y&sportId=1&playerPool=ALL` | Every player's season line; fielding comes per position. Old seasons (1965 checked) work. A traded player has one line with his whole season under the team he ended with (`numTeams: 2`) |
+| `people?personIds=…&hydrate=stats(type=[yearByYear],…)` | Year-by-year lines, which split a traded season into a line per team, in the order played, plus a line with no team for the whole season (Nomar Garciaparra's 2004 checked) |
+| `standings?leagueId=103,104&season=Y` | Wins, losses, and `clinched` / `divisionChamp` / `clinchIndicator` for a playoff berth (set for 1965 too) |
+| `awards/{id}/recipients?sportId=1` | Every winner of an award with MLBAM ids: ALMVP/NLMVP (from 1931), ALCY/NLCY, ALROY/NLROY, ALAS/NLAS, ALGG/NLGG (from 1958), ALSS/NLSS, WSMVP, MLBHOF (from 1936) |
+| `draft/{year}` | Every pick since 1965 with the overall number, the player's id and his school |
+| `teams/{id}/roster?rosterType=40Man&hydrate=person` | Today's 40-man roster with numbers, positions and full bios |
+
+Headshots come from `img.mlbstatic.com` and logos from `mlbstatic.com/team-logos/{id}.svg`, both by id, and are
+linked, not stored.
+
+The Lahman database (CC BY-SA, on SABR's site) was set aside: it is a year behind and its download links change with
+every release.
 
 ## NHL
 

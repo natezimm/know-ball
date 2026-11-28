@@ -1,0 +1,32 @@
+{
+ "roster": [
+  {
+   "person": {
+    "id": 1005,
+    "fullName": "Echo Catcher",
+    "primaryNumber": "24",
+    "birthDate": "1990-06-06",
+    "birthCity": "Oak Park",
+    "birthCountry": "USA",
+    "height": "6' 2\"",
+    "weight": 210,
+    "active": true,
+    "primaryPosition": {
+     "abbreviation": "C"
+    },
+    "mlbDebutDate": "2015-04-01",
+    "birthStateProvince": "IL",
+    "currentTeam": {
+     "id": 133
+    }
+   },
+   "jerseyNumber": "24",
+   "position": {
+    "abbreviation": "C"
+   },
+   "status": {
+    "code": "A"
+   }
+  }
+ ]
+}

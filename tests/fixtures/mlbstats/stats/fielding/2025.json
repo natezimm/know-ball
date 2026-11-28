@@ -1,0 +1,77 @@
+{
+ "stats": [
+  {
+   "totalSplits": 4,
+   "splits": [
+    {
+     "season": "2025",
+     "stat": {
+      "games": 150
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1001,
+      "fullName": "Alpha Slugger"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "RF"
+     }
+    },
+    {
+     "season": "2025",
+     "stat": {
+      "games": 30
+     },
+     "team": {
+      "id": 147
+     },
+     "player": {
+      "id": 1002,
+      "fullName": "Bravo Arm"
+     },
+     "numTeams": 2,
+     "position": {
+      "abbreviation": "P"
+     }
+    },
+    {
+     "season": "2025",
+     "stat": {
+      "games": 98
+     },
+     "team": {
+      "id": 120
+     },
+     "player": {
+      "id": 1004,
+      "fullName": "Delta Rookie Jr."
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "SS"
+     }
+    },
+    {
+     "season": "2025",
+     "stat": {
+      "games": 95
+     },
+     "team": {
+      "id": 133
+     },
+     "player": {
+      "id": 1005,
+      "fullName": "Echo Catcher"
+     },
+     "numTeams": 1,
+     "position": {
+      "abbreviation": "C"
+     }
+    }
+   ]
+  }
+ ]
+}

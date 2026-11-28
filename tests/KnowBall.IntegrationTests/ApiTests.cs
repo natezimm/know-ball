@@ -76,7 +76,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         .UseSetting("LetterJacket:GamesPerMinute", "10000")
         .UseSetting("LetterJacket:GuessesPerMinute", "10000")
         .UseSetting("Games:GuessesPerMinute", "10000")
-        .UseSetting("Games:Leagues", "nba,nfl,nhl");
+        .UseSetting("Games:Leagues", "nba,nfl,mlb,nhl");
 
     private readonly SemaphoreSlim _nflLock = new(1, 1);
     private bool _nflLoaded;
@@ -111,6 +111,42 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         finally
         {
             _nflLock.Release();
+        }
+    }
+
+    private readonly SemaphoreSlim _mlbLock = new(1, 1);
+    private bool _mlbLoaded;
+
+    /// <summary>
+    /// Loads the MLB from tests/fixtures/mlbstats as of 1 August 2025 (the files cover 2024-25), history first and then
+    /// the 40-man rosters, as the nightly job does. Done once for the whole test run.
+    /// </summary>
+    public async Task EnsureMlbAsync()
+    {
+        await _mlbLock.WaitAsync();
+        try
+        {
+            if (_mlbLoaded) return;
+            var options = Microsoft.Extensions.Options.Options.Create(new MlbStatsOptions
+            {
+                Directory = Path.Combine(Path.GetDirectoryName(FindFixtures())!, "mlbstats"),
+                FirstSeason = 2024,
+                FirstDraft = 2024,
+            });
+            var asOf = new FixedClock(new DateTimeOffset(2025, 8, 1, 12, 0, 0, TimeSpan.Zero));
+
+            await using var scope = Services.CreateAsyncScope();
+            var history = await scope.ServiceProvider.GetRequiredService<HistoryImportService>().RunAsync(
+                new MlbStatsHistorySource(new HttpClient(), options, asOf, Microsoft.Extensions.Logging.Abstractions.NullLogger<MlbStatsHistorySource>.Instance));
+            Assert.Equal(KnowBall.Domain.ImportStatus.Succeeded, history.Status);
+            var roster = await scope.ServiceProvider.GetRequiredService<PlayerImportService>().RunAsync(
+                new MlbStatsRosterSource(new HttpClient(), options, asOf, Microsoft.Extensions.Logging.Abstractions.NullLogger<MlbStatsRosterSource>.Instance));
+            Assert.Equal(KnowBall.Domain.ImportStatus.Succeeded, roster.Status);
+            _mlbLoaded = true;
+        }
+        finally
+        {
+            _mlbLock.Release();
         }
     }
 
