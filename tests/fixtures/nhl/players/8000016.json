@@ -1,0 +1,47 @@
+{
+ "playerId": 8000016,
+ "firstName": {
+  "default": "November"
+ },
+ "lastName": {
+  "default": "Crease"
+ },
+ "position": "G",
+ "birthDate": "1990-01-01",
+ "birthCountry": "RUS",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000016.png",
+ "seasonTotals": [
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Florida Panthers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 58,
+   "gamesStarted": 58,
+   "wins": 36,
+   "losses": 17,
+   "otLosses": 5,
+   "goalsAgainst": 137,
+   "shotsAgainst": 1620,
+   "shutouts": 4,
+   "timeOnIce": "3480:00",
+   "goalsAgainstAvg": 9.99,
+   "savePctg": 0.5
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 58,
+   "points": 0,
+   "wins": 36
+  }
+ },
+ "sweaterNumber": 72
+}

@@ -257,7 +257,7 @@ export class Home {
     },
     {
       name: 'Team Photo', kind: 'Daily', link: '/team-photo', daily: 'team-photo', icon: 'photo', trim: 'var(--red)', limitsMisses: true,
-      blurb: 'A blank team photo of a Finals or Super Bowl team. Name the starters before your fourth miss.',
+      blurb: 'A blank team photo of a Finals, Super Bowl or Stanley Cup Final team. Name the starters before your fourth miss.',
     },
     { name: "Numbers Don't Lie", kind: 'Daily quiz', link: '/numbers-dont-lie', icon: 'chart', trim: 'var(--navy)', play: "Play today's quiz", quiz: true,
       blurb: 'Five questions about records, nicknames, famous numbers and history. Choose your leagues in practice.' },

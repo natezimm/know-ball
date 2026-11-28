@@ -1,0 +1,45 @@
+{
+ "playerId": 8000012,
+ "firstName": {
+  "default": "India"
+ },
+ "lastName": {
+  "default": "Pivot"
+ },
+ "position": "C",
+ "birthDate": "1996-01-01",
+ "birthCountry": "CAN",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000012.png",
+ "seasonTotals": [
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Florida Panthers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 82,
+   "goals": 57,
+   "assists": 37,
+   "points": 94,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 82,
+   "points": 94,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 12
+}

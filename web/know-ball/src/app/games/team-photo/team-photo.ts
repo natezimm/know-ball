@@ -16,8 +16,9 @@ export interface BasketballSlot {
 }
 
 /**
- * One blank in an NFL photo: the position and the season's totals it is known by, by card key (pyd, ptd, int for a
- * quarterback; car, ryd, rtd for a running back; rec, wyd, wtd for a receiver).
+ * One blank in an NFL or NHL photo: the position and the season's totals it is known by, by card key (pyd, ptd, int for
+ * a quarterback; car, ryd, rtd for a running back; rec, wyd, wtd for a receiver; g, a, pts for a skater; w, gaa, svp for
+ * a goalie).
  */
 export interface FootballSlot {
   position: string;
@@ -30,12 +31,14 @@ export type PhotoSlot = BasketballSlot | FootballSlot;
 
 export interface PhotoPayload {
   team: { city: string; name: string; abbreviation: string; logoUrl: string | null };
-  /** NBA: the year the season started, 2015 is 2015-16. NFL: the season's year, 2019 ended in Super Bowl LIV. */
+  /** NBA and NHL: the year the season started, 2015 is 2015-16. NFL: the season's year, 2019 ended in Super Bowl LIV. */
   season: number;
   wins: number | null;
   losses: number | null;
-  /** NFL only. */
+  /** NFL and NHL only. */
   ties?: number | null;
+  /** NHL only: overtime and shootout losses, apart from losses. */
+  overtimeLosses?: number | null;
   /** "won" or "lost" for a Finals (or Super Bowl) team; null for a practice team that did not get there. */
   finals: 'won' | 'lost' | null;
   slots: PhotoSlot[];
@@ -83,13 +86,19 @@ export function superBowl(season: number): string {
 
 const count = (n: number | undefined) => Math.round(n ?? 0).toLocaleString('en-US');
 
+/** The places in a hockey photo, which no football photo uses. */
+const HOCKEY = new Set(['C', 'LW', 'RW', 'D', 'G']);
+
 /**
  * NBA: "30.1 pts" over "5.4 reb · 6.7 ast". NFL: "4,031 pass yds" over "26 TD · 5 INT", "1,229 rec yds" over
- * "97 rec · 5 TD", or "498 rush yds" over "111 car · 5 TD".
+ * "97 rec · 5 TD", or "498 rush yds" over "111 car · 5 TD". NHL: "88 pts" over "26 G · 62 A", or "36 W" over
+ * "2.37 GAA · .915".
  */
 export function statLine(slot: PhotoSlot): [string, string] {
   if ('stats' in slot) {
     const s = slot.stats;
+    if (slot.position === 'G') return [`${count(s['w'])} W`, `${(s['gaa'] ?? 0).toFixed(2)} GAA · ${(s['svp'] ?? 0).toFixed(3).replace(/^0/, '')}`];
+    if (HOCKEY.has(slot.position)) return [`${count(s['pts'])} pts`, `${count(s['g'])} G · ${count(s['a'])} A`];
     if (slot.position === 'QB') return [`${count(s['pyd'])} pass yds`, `${count(s['ptd'])} TD · ${count(s['int'])} INT`];
     if (slot.position === 'RB') return [`${count(s['ryd'])} rush yds`, `${count(s['car'])} car · ${count(s['rtd'])} TD`];
     return [`${count(s['wyd'])} rec yds`, `${count(s['rec'])} rec · ${count(s['wtd'])} TD`];
@@ -113,8 +122,9 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
 }
 
 /**
- * Team Photo: a blank photo of a Finals team's starting five, or in the NFL edition a Super Bowl team's quarterback,
- * running back, two receivers and tight end. Name all five before your fourth miss; naming a bench player is free.
+ * Team Photo: a blank photo of a Finals team's starting five, in the NFL edition a Super Bowl team's quarterback,
+ * running back, two receivers and tight end, and in the NHL edition a Stanley Cup Final team's starting six. Name them
+ * all before your fourth miss; naming a bench player is free.
  */
 @Component({
   selector: 'app-team-photo',
@@ -122,11 +132,25 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
   providers: [GameStore],
   template: `
     <app-game-shell
-      name="Team Photo" trim="var(--red)" limitsMisses includeInactive practice [leagues]="['nba', 'nfl']"
+      name="Team Photo" trim="var(--red)" limitsMisses includeInactive practice [leagues]="['nba', 'nfl', 'nhl']"
       [shareRows]="rows()" [resultName]="teamName()" [resultImage]="state()?.payload?.team?.logoUrl ?? null"
     >
       <div help>
-        @if (football()) {
+        @if (hockey()) {
+          <p>
+            This is the team photo of one NHL team that played in the Stanley Cup Final, with the faces left blank. Name
+            its starting six: a left wing, centre and right wing, two defencemen and the goalie.
+          </p>
+          <p>
+            The forwards are the team's three top scorers up front, the defencemen its two top scorers on the blue line,
+            and the goalie the one who started the most games. Under each blank is his position and his season totals.
+          </p>
+          <p>
+            Naming one of the six puts him in the photo. Naming anyone else on that team that season is free. Anyone else
+            is a miss, and four misses ends the game.
+          </p>
+          <p>Practice rounds use other playoff teams since 1979–80.</p>
+        } @else if (football()) {
           <p>
             This is the team photo of one NFL team that played in the Super Bowl, with the faces left blank. Name its
             quarterback, running back, two wide receivers and tight end.
@@ -170,7 +194,7 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
           </header>
 
           @for (row of [layout().back, layout().front]; track $index) {
-            <ol class="row" [class.front]="$index === 1" [attr.aria-label]="$index === 0 ? 'Back row' : 'Front row'">
+            <ol class="row" [class.front]="$index === 1" [class.trio]="row.length === 3" [attr.aria-label]="$index === 0 ? 'Back row' : 'Front row'">
               @for (spot of row; track spot.index) {
                 <li class="spot" [class.found]="spot.person && !spot.missed" [class.missed]="spot.missed">
                   <span class="face">
@@ -255,6 +279,8 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
 
     .row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
     .row.front { grid-template-columns: repeat(2, minmax(0, 104px)); justify-content: center; gap: 24px; }
+    /* A hockey photo has three in front too: the goalie between his defencemen. */
+    .row.front.trio { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
     .spot { display: grid; justify-items: center; gap: 4px; min-width: 0; }
     .face {
       --face: 76px; position: relative; width: var(--face); height: var(--face); border-radius: 50%; overflow: hidden; display: grid; place-items: end center;
@@ -313,12 +339,13 @@ export function photoRows(payload: PhotoPayload, guesses: GuessRecord[], answer:
 export class TeamPhoto {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" on the NFL edition's address. */
+  /** From the route's data: "nfl" or "nhl" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
 
   protected readonly football = computed(() => this.store.league() === 'nfl');
+  protected readonly hockey = computed(() => this.store.league() === 'nhl');
 
   protected readonly isMiss = isMiss;
   protected readonly line = statLine;
@@ -336,16 +363,19 @@ export class TeamPhoto {
     const p = this.state()?.payload;
     return p ? `${this.football() ? p.season : seasonName(p.season)} ${p.team.city} ${p.team.name}` : '';
   });
-  /** "73–9 · Lost in the Finals", or "11–4–1 · Lost Super Bowl XLVII". */
+  /** "73–9 · Lost in the Finals", "11–4–1 · Lost Super Bowl XLVII", or "52–24–6 · Won the Stanley Cup" (wins, losses, ties, then overtime losses). */
   protected readonly record = computed(() => {
     const p = this.state()?.payload;
     if (!p) return '';
     const football = this.football();
     const finals = football
       ? p.finals === 'won' ? `Won Super Bowl ${superBowl(p.season)}` : p.finals === 'lost' ? `Lost Super Bowl ${superBowl(p.season)}` : 'Made the playoffs'
-      : p.finals === 'won' ? 'Won the title' : p.finals === 'lost' ? 'Lost in the Finals' : 'Made the playoffs';
+      : this.hockey()
+        ? p.finals === 'won' ? 'Won the Stanley Cup' : p.finals === 'lost' ? 'Lost the Stanley Cup Final' : 'Made the playoffs'
+        : p.finals === 'won' ? 'Won the title' : p.finals === 'lost' ? 'Lost in the Finals' : 'Made the playoffs';
     const ties = p.ties ? `–${p.ties}` : '';
-    return [p.wins != null && p.losses != null ? `${p.wins}–${p.losses}${ties}` : null, finals].filter(Boolean).join(' · ');
+    const overtime = p.overtimeLosses ? `–${p.overtimeLosses}` : '';
+    return [p.wins != null && p.losses != null ? `${p.wins}–${p.losses}${ties}${overtime}` : null, finals].filter(Boolean).join(' · ');
   });
   /** One square per guess: green for a starter, yellow for a bench player, red for a miss. */
   protected readonly rows = computed(() => [

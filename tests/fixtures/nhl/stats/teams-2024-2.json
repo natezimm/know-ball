@@ -15,6 +15,14 @@
    "losses": 26,
    "otLosses": 4,
    "ties": null
+  },
+  {
+   "teamFullName": "Florida Panthers",
+   "gamesPlayed": 82,
+   "wins": 52,
+   "losses": 24,
+   "otLosses": 6,
+   "ties": null
   }
  ]
 }

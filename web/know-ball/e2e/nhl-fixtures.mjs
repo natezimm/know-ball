@@ -1,6 +1,7 @@
 // Writes a small made-up NHL league as the answers of the NHL's stats and site APIs, for the browser tests: enough
-// current players to lose a game of Scouting Report, enough well-travelled ones for Career Path, and five seasons
-// each for Back of the Card. The seasons run
+// current players to lose a game of Scouting Report, enough well-travelled ones for Career Path, five seasons
+// each for Back of the Card, and a Florida six (three forwards, two defencemen and a goalie) for Team Photo, whose
+// dailies are the Stanley Cup Final teams: Florida played in three from 2022-23 to 2024-25. The seasons run
 // up to the one being played now, so the importer reads them as recent whatever the date.
 // Usage: node nhl-fixtures.mjs <out-dir>; prints the first season, for Sources__Nhl__FirstSeason.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -21,11 +22,17 @@ const seasons = [latest - 4, latest - 3, latest - 2, latest - 1, latest];
 
 // Name, position, height, sweater, birth year, country, then the team each season (oldest first).
 const players = [
+  ['Sunrise Winger', 'L', 72, 19, 1997, 'USA', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
+  ['Sunrise Pivot', 'C', 74, 16, 1995, 'FIN', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
+  ['Sunrise Flank', 'R', 73, 13, 1995, 'CAN', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
+  ['Sunrise Anchor', 'D', 75, 42, 1996, 'SWE', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
+  ['Sunrise Partner', 'D', 74, 62, 1994, 'CAN', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
+  ['Sunrise Crease', 'G', 74, 72, 1988, 'RUS', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
   ['Blade Runner', 'C', 72, 97, 1997, 'CAN', ['EDM', 'EDM', 'EDM', 'EDM', 'EDM']],
   ['Wrist Shot', 'L', 71, 8, 1994, 'RUS', ['WSH', 'WSH', 'WSH', 'WSH', 'WSH']],
   ['Top Shelf', 'R', 73, 86, 1993, 'USA', ['TBL', 'TBL', 'TBL', 'TBL', 'TBL']],
   ['Blue Line', 'D', 75, 8, 1998, 'USA', ['COL', 'COL', 'COL', 'COL', 'COL']],
-  ['Glove Save', 'G', 76, 31, 1995, 'FIN', ['FLA', 'FLA', 'FLA', 'FLA', 'FLA']],
+  ['Glove Save', 'G', 76, 31, 1995, 'FIN', ['NJD', 'NJD', 'NJD', 'NJD', 'NJD']],
   ['Hat Trick', 'C', 74, 34, 1997, 'USA', ['TOR', 'TOR', 'TOR', 'TOR', 'TOR']],
   ['Slap Shot', 'R', 72, 16, 1999, 'SWE', ['MIN', 'MIN', 'MIN', 'MIN', 'MIN']],
   ['Back Check', 'L', 70, 21, 1996, 'CZE', ['BOS', 'BOS', 'BOS', 'BOS', 'BOS']],

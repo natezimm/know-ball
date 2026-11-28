@@ -138,6 +138,55 @@ describe('Team Photo NFL', () => {
   });
 });
 
+describe('Team Photo NHL', () => {
+  const spot = (position: string, row: 'back' | 'front', stats: Record<string, number>) => ({ position, row, games: 80, stats });
+  const panthers: PhotoPayload = {
+    team: { city: 'Florida', name: 'Panthers', abbreviation: 'FLA', logoUrl: null },
+    season: 2023,
+    wins: 52,
+    losses: 24,
+    ties: null,
+    overtimeLosses: 6,
+    finals: 'won',
+    slots: [
+      spot('LW', 'back', { g: 26, a: 62, pts: 88 }), spot('C', 'back', { g: 57, a: 37, pts: 94 }), spot('RW', 'back', { g: 23, a: 57, pts: 80 }),
+      spot('D', 'front', { g: 10, a: 29, pts: 39 }), spot('G', 'front', { w: 36, gaa: 2.37, svp: 0.915 }), spot('D', 'front', { g: 8, a: 25, pts: 33 }),
+    ],
+  };
+  let el: HTMLElement;
+  let http: HttpTestingController;
+
+  async function open(p: PhotoPayload) {
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])] });
+    const fixture = TestBed.createComponent(TeamPhoto);
+    fixture.componentRef.setInput('league', 'nhl');
+    http = TestBed.inject(HttpTestingController);
+    el = fixture.nativeElement;
+    await fixture.whenStable();
+    http.expectOne('/api/team-photo/daily?league=nhl').flush(gameState({ game: 'team-photo', league: 'nhl', maxGuesses: 4, payload: p }));
+    await fixture.whenStable();
+  }
+
+  afterEach(() => http.verify());
+
+  it('names the season across two years, with three forwards at the back and the goalie between his defencemen', async () => {
+    await open(panthers);
+
+    expect(el.querySelector('.plaque b')?.textContent).toBe('2023–24 Florida Panthers');
+    expect(el.querySelector('.plaque small')?.textContent).toBe('52–24–6 · Won the Stanley Cup');
+    expect([...el.querySelectorAll('.row:not(.front) .pos')].map((p) => p.textContent)).toEqual(['LW', 'C', 'RW']);
+    expect(el.querySelector('.row.front')?.classList).toContain('trio');
+    expect([...el.querySelectorAll('.row.front .plate')].map((p) => p.textContent?.replace(/\s+/g, ' ').trim()))
+      .toEqual(['39 pts10 G · 29 A', '36 W2.37 GAA · .915', '33 pts8 G · 25 A']);
+    expect(el.querySelector('.help')?.textContent).toContain('starting six');
+  });
+
+  it('shows a loss in the Final', async () => {
+    await open({ ...panthers, finals: 'lost', overtimeLosses: 0, ties: 7 });
+    expect(el.querySelector('.plaque small')?.textContent).toBe('52–24–7 · Lost the Stanley Cup Final');
+  });
+});
+
 describe('Team Photo helpers', () => {
   it('names the season across the century', () => {
     expect(seasonName(1999)).toBe('1999–00');

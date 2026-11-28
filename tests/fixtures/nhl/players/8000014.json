@@ -1,0 +1,45 @@
+{
+ "playerId": 8000014,
+ "firstName": {
+  "default": "Kilo"
+ },
+ "lastName": {
+  "default": "Rear"
+ },
+ "position": "D",
+ "birthDate": "1996-01-01",
+ "birthCountry": "CAN",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000014.png",
+ "seasonTotals": [
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Florida Panthers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 79,
+   "goals": 10,
+   "assists": 29,
+   "points": 39,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 79,
+   "points": 39,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 14
+}

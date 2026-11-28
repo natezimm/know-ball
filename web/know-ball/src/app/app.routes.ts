@@ -146,6 +146,15 @@ export const routes: Routes = [
     } satisfies PageMetaData & { league: 'nfl' },
     loadComponent: teamPhoto,
   },
+  {
+    path: 'team-photo/nhl',
+    title: 'Team Photo NHL — Know Ball',
+    data: {
+      league: 'nhl',
+      description: "Team Photo NHL: a blank team photo of a Stanley Cup Final team. Name its starting six before your fourth miss. A new puzzle every day.",
+    } satisfies PageMetaData & { league: 'nhl' },
+    loadComponent: teamPhoto,
+  },
   { path: 'team-photo/puzzle/:puzzleId', title: 'Team Photo — Know Ball', data: archive, loadComponent: teamPhoto },
   {
     path: 'mockups',

@@ -1,0 +1,45 @@
+{
+ "playerId": 8000011,
+ "firstName": {
+  "default": "Hotel"
+ },
+ "lastName": {
+  "default": "Winger"
+ },
+ "position": "L",
+ "birthDate": "1996-01-01",
+ "birthCountry": "CAN",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000011.png",
+ "seasonTotals": [
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Florida Panthers"
+   },
+   "sequence": 1,
+   "gamesPlayed": 80,
+   "goals": 26,
+   "assists": 62,
+   "points": 88,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 80,
+   "points": 88,
+   "wins": 0
+  }
+ },
+ "sweaterNumber": 11
+}
