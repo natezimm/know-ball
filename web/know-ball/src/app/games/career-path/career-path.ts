@@ -39,7 +39,7 @@ interface CareerAnswer {
   alsoAccepted: number;
 }
 
-/** "2011–17", "1998–2004" across a century, "2025–" when it has not ended, "2023" for one NFL season. */
+/** "2011–17", "1998–2004" across a century, "2025–" when it has not ended, "2023" for one NFL or MLB season. */
 export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
   if (stop.to == null) return `${stop.from}–`;
   if (stop.to === stop.from) return `${stop.from}`;
@@ -53,7 +53,7 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Career Path" trim="var(--mustard)" includeInactive practice [leagues]="['nba', 'nfl', 'nhl']" [shareRows]="rows()">
+    <app-game-shell name="Career Path" trim="var(--mustard)" includeInactive practice [leagues]="['nba', 'nfl', 'mlb', 'nhl']" [shareRows]="rows()">
       <div help>
         <p>These are all the teams one {{ leagueName() }} player has been on, in order. Name him in six guesses.</p>
         <p>The answer can be a current player or a retired one, and any player whose career ran through the same teams counts.</p>
@@ -171,7 +171,7 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
 export class CareerPath {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" or "nhl" on those editions' addresses. */
+  /** From the route's data: "nfl", "mlb" or "nhl" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);

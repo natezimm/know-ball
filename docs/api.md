@@ -27,8 +27,15 @@ Scouting Report, Career Path and Back of the Card also have an NFL edition. `dai
 `?league=nfl` (`nba` when left out); each league has its own daily, numbered from one, with its own archive,
 streak and stats. Every puzzle response carries `league`, and so does each entry from `me/stats` and `me/today`.
 A guess at a player from another league is refused with 400, and a league a game has no edition in returns 404.
-The NFL editions are live only when `Games:Leagues` lists `nfl` (`nba,nfl,nhl` in appsettings); the importer reads
+The NFL editions are live only when `Games:Leagues` lists `nfl` (`nba,nfl,mlb,nhl` in appsettings); the importer reads
 the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl`, `/career-path/nfl`, `/back-of-the-card/nfl` and `/team-photo/nfl`.
+
+Scouting Report and Career Path also have an MLB edition (`?league=mlb`, live when `Games:Leagues` lists `mlb`), at
+`/scouting-report/mlb` and `/career-path/mlb`. In MLB Scouting Report the conference is the league (`AL` or `NL`), the
+division is named with it (`AL East`), and a position is close when it is in the same part of the field (pitchers,
+infielders, outfielders; a two-way player is close to a pitcher and to a designated hitter). An MLB Career Path stop is
+named for its seasons' years (`2019–2023`), like the NFL's, and a player who went to no college has a `Born` hint
+with his birthplace in place of `From`.
 
 Scouting Report and Career Path also have an NHL edition (`?league=nhl`), live when `Games:Leagues` lists `nhl`. Its
 pages are `/scouting-report/nhl` and `/career-path/nhl`. NHL Career Path answers began their careers in 1979-80 or

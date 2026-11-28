@@ -86,6 +86,31 @@ public static class AttributeComparer
         _ => null,
     };
 
+    /// <summary>
+    /// Identical is right; the same part of the field is close: two pitchers (a starter and a reliever), two infielders,
+    /// two outfielders. A two-way player is close to any pitcher and to a designated hitter.
+    /// </summary>
+    public static Clue BaseballPosition(string? guess, string? answer)
+    {
+        if (guess is null) return new Clue(Unknown, Miss);
+        if (string.Equals(guess, answer, StringComparison.OrdinalIgnoreCase)) return new Clue(guess, Ok);
+        if (answer is null) return new Clue(guess, Miss);
+        var g = BaseballGroups(guess);
+        return new Clue(guess, g.Overlaps(BaseballGroups(answer)) ? Close : Miss);
+    }
+
+    /// <summary>"SS" → {IF}, "RP" → {P}, "TWP" → {P, DH}. Empty for a position code this build does not know.</summary>
+    public static IReadOnlySet<string> BaseballGroups(string position) => position.ToUpperInvariant() switch
+    {
+        "P" or "SP" or "RP" => new HashSet<string> { "P" },
+        "TWP" => new HashSet<string> { "P", "DH" },
+        "1B" or "2B" or "3B" or "SS" or "IF" => new HashSet<string> { "IF" },
+        "LF" or "CF" or "RF" or "OF" => new HashSet<string> { "OF" },
+        "C" => new HashSet<string> { "C" },
+        "DH" => new HashSet<string> { "DH" },
+        _ => new HashSet<string>(),
+    };
+
     public static Clue Height(int? guessInches, int? answerInches) =>
         Numeric(guessInches, answerInches, HeightWindow, guessInches is { } h ? FormatHeight(h) : Unknown);
 

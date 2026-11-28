@@ -1,0 +1,25 @@
+{
+ "awards": [
+  {
+   "id": "ALAS",
+   "season": "2025",
+   "player": {
+    "id": 1001
+   }
+  },
+  {
+   "id": "ALAS",
+   "season": "2024",
+   "player": {
+    "id": 1001
+   }
+  },
+  {
+   "id": "ALAS",
+   "season": "2025",
+   "player": {
+    "id": 1002
+   }
+  }
+ ]
+}
