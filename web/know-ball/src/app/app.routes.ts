@@ -128,6 +128,15 @@ export const routes: Routes = [
     } satisfies PageMetaData & { league: 'nfl' },
     loadComponent: teamPhoto,
   },
+  {
+    path: 'team-photo/mlb',
+    title: 'Team Photo MLB — Know Ball',
+    data: {
+      league: 'mlb',
+      description: "Team Photo MLB: a blank team photo of a World Series team. Name the eight fielders and the ace before your fourth miss. A new puzzle every day.",
+    } satisfies PageMetaData & { league: 'mlb' },
+    loadComponent: teamPhoto,
+  },
   { path: 'team-photo/puzzle/:puzzleId', title: 'Team Photo — Know Ball', data: archive, loadComponent: teamPhoto },
   {
     path: 'mockups',

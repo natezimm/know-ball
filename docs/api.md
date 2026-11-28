@@ -30,8 +30,8 @@ A guess at a player from another league is refused with 400, and a league a game
 The NFL editions are live only when `Games:Leagues` lists `nfl` (`nba,nfl,mlb` in appsettings); the importer reads
 the same setting to decide which queues to fill. The site's NFL pages are `/scouting-report/nfl`, `/career-path/nfl`, `/back-of-the-card/nfl` and `/team-photo/nfl`.
 
-Scouting Report, Career Path and Back of the Card also have an MLB edition (`?league=mlb`, live when `Games:Leagues`
-lists `mlb`), at `/scouting-report/mlb`, `/career-path/mlb` and `/back-of-the-card/mlb`. In MLB Scouting Report the conference is the league (`AL` or `NL`), the
+Every player game also has an MLB edition (`?league=mlb`, live when `Games:Leagues` lists `mlb`), at
+`/scouting-report/mlb`, `/career-path/mlb`, `/back-of-the-card/mlb` and `/team-photo/mlb`. In MLB Scouting Report the conference is the league (`AL` or `NL`), the
 division is named with it (`AL East`), and a position is close when it is in the same part of the field (pitchers,
 infielders, outfielders; a two-way player is close to a pitcher and to a designated hitter). An MLB Career Path stop is
 named for its seasons' years (`2019–2023`), like the NFL's, and a player who went to no college has a `Born` hint
@@ -58,6 +58,14 @@ player with the most pass attempts, carries or receiving yards at his position f
 and `stats`, the season totals by card key (`pyd`, `ptd`, `int` for the quarterback; `car`, `ryd`, `rtd` for the
 running back; `rec`, `wyd`, `wtd` for a receiver). Anyone else on that team's roster that season, linemen and
 kickers included, is a free bench guess. Practice rounds are other playoff teams since 1999 whose five are clear.
+
+The MLB Team Photo is one of the two World Series teams of a season since 1960 (`finals` is the World Series
+result, `season` the season's own year). It has nine `slots`: the outfield (`LF`, `CF`, `RF`) in the `back` row, the
+infield (`3B`, `SS`, `2B`, `1B`) in a `middle` row, then the starting pitcher (`SP`) and catcher (`C`) in `front`.
+Each fielder is the player with the most games at that position for the team, one place to a player, and the
+pitcher the one with the most starts; there is no designated hitter. A fielder's `stats` are `avg`, `hr` and `rbi`;
+the pitcher's are `w`, `l`, `era` and `k`. Anyone else who played for the team that season is a free bench guess.
+Practice rounds are other playoff teams since 1960 whose nine are clear.
 
 ## Letter Jacket
 

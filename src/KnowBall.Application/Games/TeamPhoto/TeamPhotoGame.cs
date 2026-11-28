@@ -38,7 +38,8 @@ public sealed record RosterLine(int PlayerId, int Games, double Minutes, int? St
 /// A blank team photo of one team-season: name its five starters. Starters are free and so are
 /// bench players; four names that were not on the team end the round. Daily puzzles are the teams
 /// that reached the Finals since the 1976 merger; practice draws from every playoff team since
-/// 1981-82 whose starting five is clear. The NFL edition is in TeamPhotoGame.Football.cs.
+/// 1981-82 whose starting five is clear. The NFL edition is in TeamPhotoGame.Football.cs, the MLB one in
+/// TeamPhotoGame.Baseball.cs.
 /// </summary>
 public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
 {
@@ -66,7 +67,7 @@ public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
     public bool ReadsRecentSecrets => true;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb];
 
     public int AnswersIn(Puzzle puzzle) => GameJson.Read<PhotoSecret>(puzzle.SecretJson).Slots.Count;
 
@@ -78,6 +79,13 @@ public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
             return context.Practice
                 ? await FootballPracticeAsync(context, teams, cancellationToken)
                 : await DailyAsync(context, teams, SuperBowlTeams, (team, entry) => BuildFootballAsync(team, entry.Season, entry.Finals, entry.Swap, cancellationToken));
+        }
+        if (context.League.Code == LeagueCodes.Mlb)
+        {
+            return context.Practice
+                ? await BaseballPracticeAsync(context, teams, cancellationToken)
+                : await DailyAsync(context, teams, WorldSeriesTeams, (team, entry) => BuildBaseballAsync(team, entry.Season, entry.Finals, entry.Swap, cancellationToken),
+                    (teams, entry) => FindMlbTeam(teams, entry.Team, entry.Season));
         }
         return context.Practice
             ? await PracticeAsync(context, teams, cancellationToken)
@@ -108,8 +116,10 @@ public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
     /// one shown longest ago comes round again, so the pool cycles rather than running dry.
     /// </summary>
     private static async Task<GeneratedPuzzle?> DailyAsync(
-        GenerationContext context, List<Team> teams, IReadOnlyList<FinalsTeam> pool, Func<Team, FinalsTeam, Task<GeneratedPuzzle?>> build)
+        GenerationContext context, List<Team> teams, IReadOnlyList<FinalsTeam> pool, Func<Team, FinalsTeam, Task<GeneratedPuzzle?>> build,
+        Func<List<Team>, FinalsTeam, Team?>? find = null)
     {
+        find ??= (all, entry) => FindTeam(all, entry.Team, entry.Season);
         var lastUsed = new Dictionary<string, int>();
         var recent = context.RecentSecrets ?? [];
         for (var i = 0; i < recent.Count; i++)
@@ -121,7 +131,7 @@ public sealed partial class TeamPhotoGame(ITriviaDb db) : IGame
         var stale = pool.Where(f => lastUsed.ContainsKey(f.Key)).OrderBy(f => lastUsed[f.Key]);
         foreach (var entry in fresh.Concat(stale))
         {
-            if (FindTeam(teams, entry.Team, entry.Season) is not { } team) continue;
+            if (find(teams, entry) is not { } team) continue;
             var puzzle = await build(team, entry);
             if (puzzle is not null) return puzzle;
         }
