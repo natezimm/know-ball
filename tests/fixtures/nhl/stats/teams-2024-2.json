@@ -1,0 +1,20 @@
+{
+ "data": [
+  {
+   "teamFullName": "Utah Hockey Club",
+   "gamesPlayed": 82,
+   "wins": 38,
+   "losses": 31,
+   "otLosses": 13,
+   "ties": null
+  },
+  {
+   "teamFullName": "Toronto Maple Leafs",
+   "gamesPlayed": 82,
+   "wins": 52,
+   "losses": 26,
+   "otLosses": 4,
+   "ties": null
+  }
+ ]
+}

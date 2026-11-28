@@ -1,0 +1,21 @@
+{
+ "data": [
+  {
+   "playerId": 8000001,
+   "gamesPlayed": 182
+  },
+  {
+   "playerId": 8000003,
+   "gamesPlayed": 218
+  },
+  {
+   "playerId": 8000004,
+   "gamesPlayed": 10
+  },
+  {
+   "playerId": 8000008,
+   "gamesPlayed": 325
+  }
+ ],
+ "total": 4
+}

@@ -185,6 +185,7 @@ public sealed class HistoryImportService(ITriviaDb db, TimeProvider clock, ILogg
             if (row.Wins != r.Wins) row.Wins = r.Wins;
             if (row.Losses != r.Losses) row.Losses = r.Losses;
             if (row.Ties != r.Ties) row.Ties = r.Ties;
+            if (row.OvertimeLosses != r.OvertimeLosses) row.OvertimeLosses = r.OvertimeLosses;
             if (row.MadePlayoffs != r.MadePlayoffs) row.MadePlayoffs = r.MadePlayoffs;
         }
     }

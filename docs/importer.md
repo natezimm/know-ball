@@ -9,6 +9,7 @@ dotnet run --project src/KnowBall.Importer -- --once --history                  
 dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history --leagues nba  # offline: ~36 bundled players
 dotnet run --project src/KnowBall.Importer -- --once --leagues nfl --history     # just the NFL, history included
 dotnet run --project src/KnowBall.Importer -- --once --leagues mlb --history     # just MLB, history included
+dotnet run --project src/KnowBall.Importer -- --once --leagues nhl --history     # just the NHL (about 20 minutes)
 dotnet run --project src/KnowBall.Importer -- --nightly                          # one night's work (import, then the Numbers queue), then exit
 dotnet run --project src/KnowBall.Importer                                       # the nightly worker
 ```
@@ -20,7 +21,7 @@ worker does.
 
 ## What a run does
 
-For each league in `Import:Leagues` (NBA first, then NFL, then MLB; one failing never stops the others):
+For each league in `Import:Leagues` (NBA first, then NFL, then MLB, then NHL; one failing never stops the others):
 
 1. Reload the player history if it is due (every `Import:HistoryRefreshDays`). For the NBA, then link each player
    to their NBA.com id and birthplace through Wikidata.
@@ -59,6 +60,9 @@ run hits it.
 | nflverse current-season roster | Current team, jersey number, active status, new players | Nightly |
 | MLB Stats API (`statsapi.mlb.com`), history | Every major leaguer since 1960 (two seasons or more, or playing this season): bio, birthplace, MLB headshot; a line for each team each season with hitting, pitching and games at each fielding position; draft slot and college since 1965; MVP, Cy Young, Rookie of the Year, All-Star, Gold Glove, Silver Slugger, World Series MVP and the Hall of Fame; each team's record and playoff flag | Every `Import:HistoryRefreshDays` (30) |
 | MLB Stats API 40-man rosters | Current team, jersey number, active status, new players who have played in the majors | Nightly |
+| NHL stats API (`api.nhle.com/stats/rest`) | Who to load (50+ games since 1979-80, or a game this season), and each team's won-lost-tied-overtime record and playoff flag by season | With the NHL history |
+| NHL site API (`api-web.nhle.com/v1/player/{id}/landing`) | Each NHL player: bio, birth country, draft slot, number, headshot URL, Hall of Fame flag, every NHL regular season by team with a skater's or goalie's totals, and trophies | With the NHL history |
+| NHL site API (`api-web.nhle.com/v1/roster/{team}/current`) | Current team, jersey number, active status and new players, for all 32 teams (the run fails if any is missing) | Nightly |
 
 The NFL history reads the season roster file up to 2015 and the weekly roster files from 2016, because from 2016
 the season files list each player once and lose mid-season trades. A season counts for a team when the player was
@@ -85,13 +89,25 @@ places each name on the player of that name who was on that franchise that seaso
 Watt") and a different first name on the same team ("Darius" and "Shaquille Leonard"); it logs how many it could
 not place, and names them at debug level (4 of about 4,800 on the 2026-11 load).
 
+The NHL history is one request per player, so the importer keeps to `Sources:Nhl:RequestsPerSecond` (5) across
+both NHL sources: the site answers 429 to a client that asks faster for long. A request still turned away after the
+quick retries is tried once more after `RetryPauseSeconds`, and the player records still missing after that are asked
+for again, one at a time; the load fails only if more than `MaxFailedShare` (2%) are still missing. A season split by
+a trade gets a line per team in the order he played for them and a combined line with no team, like a basketball one.
+Goalies' goals-against average and save percentage are worked out from their totals, and a traded season's average
+ice time is left out rather than added up. `nhl-teams.json` maps the site's team names, old ones with their year
+("Winnipeg Jets (1979)"), to our team keys and each former team to the franchise it became. Measured 2026-11-26 on a full load:
+4,439 players, 1,279 team records and 41 teams in about 22 minutes, almost all of it the paced player requests,
+with about 500 MB resident at the peak (no heap cap; the site still answered 429 about 50 times, and every request
+was read on a retry).
+
 More on each source, and the ones that were rejected, in [research.md](research.md).
 
 ## Settings
 
 | Setting | Default | Meaning |
 | --- | --- | --- |
-| `Import:Leagues` | `nba,nfl,mlb` | Leagues to import; `--leagues` sets it for one run |
+| `Import:Leagues` | `nba,nfl,mlb,nhl` | Leagues to import; `--leagues` sets it for one run |
 | `Games:Leagues` | `nba,nfl` | Leagues whose game editions are live (the API reads it too); the importer fills a puzzle queue for each (Scouting Report, Career Path and Back of the Card have `nfl` editions) |
 | `Import:Source` | `espn` | NBA roster source: `espn` (live), `seed` (bundled sample) or `nba-stats` (stats.nba.com) |
 | `Import:FallbackSource` | empty | NBA source to try if the primary fails |
@@ -113,6 +129,10 @@ More on each source, and the ones that were rejected, in [research.md](research.
 | `Sources:MlbStats:Directory` | empty | Read saved responses from a folder instead: `teams/{season}.json`, `players/{season}.json`, `stats/{hitting,pitching,fielding}/{season}.json`, `standings/{season}.json`, `awards/{id}.json`, `draft/{year}.json`, `rosters/{teamId}.json` |
 | `Sources:MlbStats:FirstSeason` / `FirstDraft` | `1960` / `1965` | First season read, and the first draft read for pick numbers and colleges |
 | `Sources:MlbStats:MinSeasons` | `2` | Players with fewer seasons in the majors are left out unless they played this season |
+| `Sources:Nhl:Directory` | empty | Read the NHL's answers from a folder of saved files (`stats/skaters.json`, `players/{id}.json`, `rosters/{team}.json`; see `tests/fixtures/nhl`) |
+| `Sources:Nhl:FirstSeason` / `MinGames` | `1979` / `50` | First season read, and the fewest games since then for a player who is not playing this season |
+| `Sources:Nhl:Parallelism` / `RequestsPerSecond` | `4` / `5` | Player records read at once, and the most requests a second to the NHL's sites |
+| `Sources:Nhl:RetryPauseSeconds` / `MaxFailedShare` | `60` / `0.02` | Rest before asking again when the site turns requests away, and the share of player records that may still be missing |
 | `NumbersDontLie:QueueEnabled` | `false` | Queue approved Numbers Don't Lie snapshots (needs `CatalogueId` and `LaunchDate`) |
 
 ## Numbers Don't Lie content tools

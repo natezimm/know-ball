@@ -1,6 +1,8 @@
 # Daily canary: do the live sources still parse? A fresh database loads the full history
 # (Basketball-Reference mirror, Wikidata, nflverse, MLB Stats API), then the rosters. Catches upstream changes
 # before the production importer's nightly run does. Uses a throwaway SQLite database.
+# The NHL's history is one request per player (about 15 minutes of the league's site at five
+# requests a second), so the canary reads only its 32 rosters.
 name: Nightly import check
 
 on:
@@ -28,4 +30,6 @@ jobs:
           global-json-file: global.json
       - run: dotnet build src/KnowBall.Importer -c Release
       - name: Live import (history, crosswalk, ESPN rosters)
-        run: dotnet src/KnowBall.Importer/bin/Release/net11.0/KnowBall.Importer.dll --once --source espn
+        run: dotnet src/KnowBall.Importer/bin/Release/net11.0/KnowBall.Importer.dll --once --source espn --leagues nba,nfl,mlb
+      - name: Live NHL rosters
+        run: dotnet src/KnowBall.Importer/bin/Release/net11.0/KnowBall.Importer.dll --once --no-history --leagues nhl

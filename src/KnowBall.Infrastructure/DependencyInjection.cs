@@ -37,6 +37,7 @@ public static class DependencyInjection
         services.Configure<BrefOptions>(config.GetSection("Sources:Bref"));
         services.Configure<WikidataOptions>(config.GetSection("Sources:Wikidata"));
         services.Configure<NflverseOptions>(config.GetSection("Sources:Nflverse"));
+        services.Configure<NhlApiOptions>(config.GetSection("Sources:Nhl"));
         services.Configure<MlbStatsOptions>(config.GetSection("Sources:MlbStats"));
         services.Configure<SourceRetryOptions>(config.GetSection("Sources:Retry"));
         services.Configure<KnowBall.Application.Games.GameLeagueOptions>(config.GetSection("Games"));
@@ -64,6 +65,15 @@ public static class DependencyInjection
         services.AddHttpClient<NflverseRosterSource>()
             .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NflverseOptions>>().Value.TimeoutSeconds);
 
+        // The throttle sits inside the retries, so a retried request waits its turn too.
+        services.AddSingleton<NhlThrottle>();
+        services.AddTransient<NhlThrottleHandler>();
+        services.AddHttpClient<NhlHistorySource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds)
+            .AddHttpMessageHandler<NhlThrottleHandler>();
+        services.AddHttpClient<NhlRosterSource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
+            .AddSourceResilience(sp => sp.GetRequiredService<IOptions<NhlApiOptions>>().Value.TimeoutSeconds)
+            .AddHttpMessageHandler<NhlThrottleHandler>();
         services.AddHttpClient<MlbStatsHistorySource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
             .AddSourceResilience(sp => sp.GetRequiredService<IOptions<MlbStatsOptions>>().Value.TimeoutSeconds);
         services.AddHttpClient<MlbStatsRosterSource>(http => http.DefaultRequestHeaders.Accept.ParseAdd("application/json"))
@@ -74,10 +84,12 @@ public static class DependencyInjection
         services.AddScoped<IPlayerSource, SeedFilePlayerSource>();
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NflverseRosterSource>());
         services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<MlbStatsRosterSource>());
+        services.AddScoped<IPlayerSource>(sp => sp.GetRequiredService<NhlRosterSource>());
         services.AddScoped<PlayerSourceResolver>();
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<BrefCsvSource>());
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<NflverseHistorySource>());
         services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<MlbStatsHistorySource>());
+        services.AddScoped<IHistorySource>(sp => sp.GetRequiredService<NhlHistorySource>());
         services.AddScoped<HistorySourceResolver>();
         services.AddScoped<ICrosswalkSource>(sp => sp.GetRequiredService<WikidataCrosswalkSource>());
 

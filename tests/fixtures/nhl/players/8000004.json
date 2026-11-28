@@ -1,0 +1,44 @@
+{
+ "playerId": 8000004,
+ "firstName": {
+  "default": "Delta"
+ },
+ "lastName": {
+  "default": "Callup"
+ },
+ "position": "LW",
+ "birthDate": "2001-05-05",
+ "birthCountry": "USA",
+ "heightInInches": 72,
+ "weightInPounds": 190,
+ "inHHOF": 0,
+ "headshot": "https://assets.nhle.com/mugs/nhl/latest/8000004.png",
+ "seasonTotals": [
+  {
+   "season": 20242025,
+   "gameTypeId": 2,
+   "leagueAbbrev": "NHL",
+   "teamName": {
+    "default": "Seattle Kraken"
+   },
+   "sequence": 1,
+   "gamesPlayed": 10,
+   "goals": 1,
+   "assists": 1,
+   "points": 2,
+   "plusMinus": 0,
+   "pim": 0,
+   "powerPlayGoals": 0,
+   "gameWinningGoals": 0,
+   "shots": 0
+  }
+ ],
+ "awards": [],
+ "careerTotals": {
+  "regularSeason": {
+   "gamesPlayed": 10,
+   "points": 2,
+   "wins": 0
+  }
+ }
+}

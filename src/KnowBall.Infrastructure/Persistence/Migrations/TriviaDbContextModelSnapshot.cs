@@ -670,6 +670,9 @@ namespace KnowBall.Infrastructure.Persistence.Migrations
                     b.Property<bool>("MadePlayoffs")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("OvertimeLosses")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Season")
                         .HasColumnType("integer");
 

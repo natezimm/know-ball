@@ -32,6 +32,24 @@ public sealed record FootballCareer(
     int? DraftPick,
     double? RecentPerGame);
 
+/// <summary>What an NHL career adds up to, for <see cref="PopularityCalculator.FromHockeyCareer"/>.</summary>
+/// <param name="Position">C, LW, RW, D or G.</param>
+/// <param name="CareerPoints">Regular-season points over the whole career.</param>
+/// <param name="CareerWins">A goalie's regular-season wins; 0 for a skater.</param>
+/// <param name="MajorAwards">Art Ross, Rocket Richard, Norris, Vezina, Conn Smythe, Ted Lindsay and Selke trophies.</param>
+/// <param name="DraftPick">Overall pick; null if undrafted.</param>
+/// <param name="RecentPerGame">Best points a game of the last two seasons (a goalie's win rate on the same scale); null for players who are no longer active.</param>
+public sealed record HockeyCareer(
+    string? Position,
+    int CareerPoints,
+    int CareerWins,
+    int Seasons,
+    int MvpAwards,
+    int MajorAwards,
+    int StanleyCups,
+    bool HallOfFame,
+    int? DraftPick,
+    double? RecentPerGame);
 /// <summary>What an MLB career adds up to, for <see cref="PopularityCalculator.FromBaseballCareer"/>.</summary>
 /// <param name="OtherAwards">Rookie of the Year, Gold Gloves, Silver Sluggers and World Series MVPs.</param>
 /// <param name="Seasons">Seasons with a game in the majors.</param>
@@ -133,6 +151,37 @@ public static class PopularityCalculator
                     + Math.Min((c.RecentPerGame ?? 0) * 1.1, 25);
 
         return Math.Round(Math.Clamp(score * PositionWeight(c.Position), 0, 100), 1);
+    }
+
+    /// <summary>
+    /// The score for an NHL player. The career earns up to 95 (points, or a goalie's wins, Hart trophies, the other
+    /// big trophies, Stanley Cups, the Hall of Fame, years in the league, draft slot) and current players add up to
+    /// 25 for how they are scoring now. Defensemen score fewer points than forwards for the same fame, so their
+    /// points count for more.
+    /// </summary>
+    public static double FromHockeyCareer(HockeyCareer c)
+    {
+        var career = c.Position == "G"
+            ? Math.Min(c.CareerWins / 400.0 * 35, 35)
+            : Math.Min(c.CareerPoints * (c.Position == "D" ? 1.6 : 1.0) / 1_200.0 * 35, 35);
+
+        var score = career
+                    + Math.Min(c.MvpAwards * 7.5, 15)
+                    + Math.Min(c.MajorAwards * 3.0, 15)
+                    + Math.Min(c.StanleyCups * 1.5, 6)
+                    + (c.HallOfFame ? 10 : 0)
+                    + Math.Min(c.Seasons, 15) * 0.5
+                    + c.DraftPick switch
+                    {
+                        null => 0,
+                        1 => 6.5,
+                        <= 5 => 4,
+                        <= 15 => 2,
+                        _ => 0,
+                    }
+                    + Math.Min((c.RecentPerGame ?? 0) * 20, 25);
+
+        return Math.Round(Math.Clamp(score, 0, 100), 1);
     }
 
     /// <summary>How much a casual fan notices each position, as a multiplier on the score.</summary>

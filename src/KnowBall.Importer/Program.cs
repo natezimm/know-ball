@@ -44,7 +44,7 @@ if (args.Contains("--validate-numbers"))
 //   dotnet run --project src/KnowBall.Importer -- --once             → one run, then exit (0 = the roster import succeeded)
 //   dotnet run --project src/KnowBall.Importer -- --once --source seed --no-history
 //   dotnet run --project src/KnowBall.Importer -- --once --history   → reload the full player history first, due or not
-//   dotnet run --project src/KnowBall.Importer -- --once --leagues nfl → only these leagues (default Import:Leagues, "nba,nfl,mlb")
+//   dotnet run --project src/KnowBall.Importer -- --once --leagues nfl → only these leagues (default Import:Leagues, "nba,nfl,mlb,nhl")
 //   dotnet run --project src/KnowBall.Importer -- --nightly          → what the worker does each night (import, then the
 //                                                                      Numbers queue), once, then exit; run-nightly.sh calls it
 var importNumbers = GetArg(args, "--import-numbers");

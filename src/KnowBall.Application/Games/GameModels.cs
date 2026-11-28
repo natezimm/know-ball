@@ -129,8 +129,9 @@ public static class LeagueCodes
     public const string Nba = "nba";
     public const string Nfl = "nfl";
     public const string Mlb = "mlb";
+    public const string Nhl = "nhl";
 
-    /// <summary>Whether a season runs into the next year and is named for both (2003-04), as the NBA's does; an NFL or MLB season is named for its one year.</summary>
+    /// <summary>Whether a season runs into the next year and is named for both (2003-04), as the NBA's and NHL's do; an NFL or MLB season is named for its one year.</summary>
     public static bool SeasonEndsNextYear(string code) => code is not (Nfl or Mlb);
 }
 

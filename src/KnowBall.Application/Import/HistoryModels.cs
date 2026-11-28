@@ -29,7 +29,8 @@ public sealed record HistorySnapshot(
     IReadOnlyList<HistoryTeamSeason>? TeamSeasons = null);
 
 /// <summary>A team's regular-season record. <paramref name="TeamKey"/> is what season rows call the team.</summary>
-public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs, int Ties = 0);
+/// <param name="OvertimeLosses">Hockey's losses in overtime or a shootout, which are not in <paramref name="Losses"/>.</param>
+public sealed record HistoryTeamSeason(string TeamKey, int Season, int Wins, int Losses, bool MadePlayoffs, int Ties = 0, int OvertimeLosses = 0);
 
 /// <param name="Key">What season rows call the team.</param>
 /// <param name="ActiveTo">Last season under this name; null while it still plays.</param>
@@ -107,6 +108,20 @@ public static class AwardTypes
     public const string AllPro = "AllPro";
     public const string ProBowl = "ProBowl";
 
+    // Hockey. MVP (the Hart) and ROY (the Calder) are shared with basketball.
+    public const string ArtRoss = "ArtRoss";
+    public const string RocketRichard = "RocketRichard";
+    public const string Norris = "Norris";
+    public const string Vezina = "Vezina";
+    public const string ConnSmythe = "ConnSmythe";
+    public const string TedLindsay = "TedLindsay";
+    public const string Selke = "Selke";
+    public const string LadyByng = "LadyByng";
+    public const string StanleyCup = "StanleyCup";
+
+    /// <summary>The hockey trophies, apart from the Hart, that make a player famous.</summary>
+    public static readonly IReadOnlySet<string> MajorHockeyAwards =
+        new HashSet<string> { ArtRoss, RocketRichard, Norris, Vezina, ConnSmythe, TedLindsay, Selke };
     // Baseball. MVP, Rookie of the Year and All-Star are shared with basketball.
     public const string CyYoung = "CyYoung";
     public const string WorldSeriesMvp = "WSMVP";

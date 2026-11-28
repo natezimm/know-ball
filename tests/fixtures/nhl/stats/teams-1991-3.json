@@ -1,0 +1,12 @@
+{
+ "data": [
+  {
+   "teamFullName": "Hartford Whalers",
+   "gamesPlayed": 7,
+   "wins": 3,
+   "losses": 4,
+   "otLosses": null,
+   "ties": null
+  }
+ ]
+}

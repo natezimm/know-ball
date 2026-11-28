@@ -142,8 +142,10 @@ public class TeamSeason
     public int Season { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
-    /// <summary>Tied games: only the NFL has them.</summary>
+    /// <summary>Tied games: the NFL, and the NHL before 2005-06.</summary>
     public int Ties { get; set; }
+    /// <summary>Hockey's overtime and shootout losses, counted apart from <see cref="Losses"/>.</summary>
+    public int OvertimeLosses { get; set; }
     public bool MadePlayoffs { get; set; }
 }
 
