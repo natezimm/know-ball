@@ -24,6 +24,7 @@ public sealed class GameWorld : IDisposable
     public FakeTimeProvider Clock { get; } = new(Start);
     public League League { get; }
     public League Nfl { get; }
+    public League Mlb { get; }
     public Dictionary<string, Team> Teams { get; } = [];
     public Dictionary<string, Player> Players { get; } = [];
 
@@ -126,6 +127,28 @@ public sealed class GameWorld : IDisposable
             (2022, 17, """{"tkl":70,"sk":1.5,"ff":1}"""), (2023, 17, """{"tkl":50,"dint":2}"""));
         AddFootballSeasons("Kenny Kicker", "nfl-NE", (2012, 16, "{}"), (2013, 16, "{}"), (2014, 16, "{}"), (2015, 16, "{}"), (2016, 16, "{}"));
 
+        // A small MLB: two divisions in each league, and the Expos filed under the Nationals.
+        Mlb = new League { Code = "mlb", Name = "MLB", Sport = "Baseball" };
+        ctx.Leagues.Add(Mlb);
+        Team B(string abbr, string city, string name, string league, string division) =>
+            Teams["mlb-" + abbr] = new Team { League = Mlb, ExternalId = abbr, Abbreviation = abbr, City = city, Name = name, Conference = league, Division = division };
+        B("NYY", "New York", "Yankees", "AL", "AL East");
+        B("BOS", "Boston", "Red Sox", "AL", "AL East");
+        B("LAD", "Los Angeles", "Dodgers", "NL", "NL West");
+        B("SF", "San Francisco", "Giants", "NL", "NL West");
+        B("WSH", "Washington", "Nationals", "NL", "NL East");
+        Teams["mlb-MON"] = new Team { League = Mlb, ExternalId = "120-1969", Abbreviation = "MON", City = "Montreal", Name = "Expos", Franchise = Teams["mlb-WSH"], ActiveFrom = 1969, ActiveTo = 2004 };
+        ctx.Teams.AddRange(Teams.Values.Where(t => t.League == Mlb));
+
+        AddPlayer("Ace Starter", "mlb-NYY", "SP", 77, "1992-06-15", "45", 95, [("mlb-NYY", 2019, null)], league: Mlb);
+        AddPlayer("Big Bopper", "mlb-LAD", "1B", 75, "1994-04-04", "5", 85, [("mlb-LAD", 2018, null)], league: Mlb);
+        AddPlayer("Short Stop", "mlb-BOS", "SS", 72, "1999-09-09", "2", 70, [("mlb-BOS", 2021, null)], league: Mlb);
+        AddPlayer("Shut Down", "mlb-SF", "RP", 76, "1993-03-03", "38", 60, [("mlb-SF", 2020, null)], league: Mlb);
+        // Career Path: a road through Montreal, by a player who went to no college.
+        AddPlayer("Journey Man", null, "CF", 73, "1975-07-07", null, 75,
+            [("mlb-MON", 1996, 1999), ("mlb-BOS", 2000, 2003), ("mlb-LAD", 2004, 2004)], active: false, league: Mlb,
+            country: "Dominican Republic", birthPlace: "Santo Domingo, Dominican Republic");
+
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();
     }
@@ -161,7 +184,7 @@ public sealed class GameWorld : IDisposable
     private void AddPlayer(
         string name, string? team, string position, int height, string born, string? number, double popularity,
         (string Team, int Start, int? End)[] stints, bool active = true, string? college = null, string? country = null, (int Year, int Pick)? draft = null,
-        League? league = null)
+        League? league = null, string? birthPlace = null)
     {
         var space = name.IndexOf(' ');
         var player = new Player
@@ -181,6 +204,7 @@ public sealed class GameWorld : IDisposable
             IsActive = active,
             College = college,
             Country = country,
+            BirthPlace = birthPlace,
             DraftYear = draft?.Year,
             DraftNumber = draft?.Pick,
             FromYear = stints[0].Start,

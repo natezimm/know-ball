@@ -29,8 +29,9 @@ public sealed record ScoutingFeedback(Clue Team, Clue Conference, Clue Division,
 
 /// <summary>
 /// Guess the current player in eight tries. Every guess is compared with the answer on team,
-/// conference, division, position, height, age and jersey number. NBA and NFL editions; in the NFL
-/// the conference is AFC or NFC and a position is close when it is in the same unit.
+/// conference, division, position, height, age and jersey number. NBA, NFL and MLB editions; in the NFL
+/// the conference is AFC or NFC and a position is close when it is in the same unit; in MLB the conference is the
+/// league (AL or NL) and a position is close when it is in the same part of the field.
 /// </summary>
 public sealed class ScoutingReportGame(ITriviaDb db) : IGame
 {
@@ -45,7 +46,7 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
     public int MaxGuesses => 8;
     public bool IsGenerated => true;
     public bool IncludesRetired => false;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb];
 
     /// <summary>Kickers, punters and long snappers are never the answer, however long their careers.</summary>
     public static readonly string[] NeverAnswers = ["K", "P", "LS"];
@@ -119,9 +120,12 @@ public sealed class ScoutingReportGame(ITriviaDb db) : IGame
         Team: AttributeComparer.Team(guess.Team, answer.Team, formerTeams, guess.TeamName, guess.TeamLogo),
         Conference: AttributeComparer.Exact(guess.Conference, answer.Conference),
         Division: AttributeComparer.Exact(guess.Division, answer.Division),
-        Position: league == LeagueCodes.Nfl
-            ? AttributeComparer.FootballPosition(guess.Position, answer.Position)
-            : AttributeComparer.Position(guess.Position, answer.Position),
+        Position: league switch
+        {
+            LeagueCodes.Nfl => AttributeComparer.FootballPosition(guess.Position, answer.Position),
+            LeagueCodes.Mlb => AttributeComparer.BaseballPosition(guess.Position, answer.Position),
+            _ => AttributeComparer.Position(guess.Position, answer.Position),
+        },
         Height: AttributeComparer.Height(guess.HeightInches, answer.HeightInches),
         Age: AttributeComparer.Age(guess.BirthDate, answer.BirthDate, asOf),
         Number: AttributeComparer.Number(guess.Number, answer.Number));

@@ -50,7 +50,7 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
     public int MaxGuesses => 6;
     public bool IsGenerated => true;
     public bool IncludesRetired => true;
-    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl];
+    public IReadOnlyList<string> Leagues => [LeagueCodes.Nba, LeagueCodes.Nfl, LeagueCodes.Mlb];
 
     public async Task<GeneratedPuzzle?> GenerateAsync(GenerationContext context, CancellationToken cancellationToken)
     {
@@ -66,8 +66,8 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
             .FirstAsync(p => p.Id == answerId, cancellationToken);
 
         var stints = answer.Stints.OrderBy(s => s.Order).ToList();
-        // An NBA season (2003-04) ends the year after it starts; an NFL season is named for the year it starts.
-        var endsNextYear = context.League.Code != LeagueCodes.Nfl;
+        // An NBA season (2003-04) ends the year after it starts; an NFL or MLB season is named for the year it starts.
+        var endsNextYear = LeagueCodes.SeasonEndsNextYear(context.League.Code);
         var stops = stints
             .Select(s => new CareerStop(
                 s.Team!.FullName,
@@ -84,7 +84,7 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
         var secret = new CareerSecret(
             answer.Id, answer.FullName, answer.HeadshotUrl, accepted,
             stints.Select(s => s.Team!.FranchiseId ?? s.Team.Id).ToList(),
-            HintsFor(answer));
+            HintsFor(answer, bornHint: context.League.Code == LeagueCodes.Mlb));
         return new GeneratedPuzzle(answer.Id, GameJson.Write(new CareerPayload(stops)), GameJson.Write(secret), Difficulty: stops.Count);
     }
 
@@ -133,14 +133,20 @@ public sealed class CareerPathGame(ITriviaDb db) : IGame
         };
     }
 
-    internal static IReadOnlyList<CareerHint> HintsFor(Player player)
+    /// <param name="bornHint">
+    /// When the player went to no college, give his birthplace ("Born: Santo Domingo, Dominican Republic") rather than his
+    /// country. For baseball, where most players come from high school or abroad.
+    /// </param>
+    internal static IReadOnlyList<CareerHint> HintsFor(Player player, bool bornHint = false)
     {
         var draft = player.DraftYear is { } year
             ? player.DraftNumber is { } pick ? $"{year}, pick {pick}" : year.ToString(System.Globalization.CultureInfo.InvariantCulture)
             : "Undrafted";
         var origin = player.College is not null
             ? new CareerHint("College", player.College)
-            : new CareerHint("From", player.Country ?? "No college listed");
+            : bornHint && player.BirthPlace is not null
+                ? new CareerHint("Born", player.BirthPlace)
+                : new CareerHint("From", player.Country ?? "No college listed");
 
         return
         [

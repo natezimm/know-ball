@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { gameState, guess } from '../../core/testing';
-import { ScoutingFeedback, ScoutingReport, shareRows, shortDivision } from './scouting-report';
+import { ScoutingFeedback, ScoutingReport, cluesFor, shareRows, shortDivision } from './scouting-report';
 
 const feedback = (overrides: Partial<ScoutingFeedback> = {}): ScoutingFeedback => ({
   team: { value: 'NYK', state: 'miss', label: 'Knicks' },
@@ -120,6 +120,16 @@ describe('shortDivision', () => {
     expect(shortDivision('Atlantic')).toBe('ATL');
     expect(shortDivision('AFC West')).toBe('W');
     expect(shortDivision('NFC North')).toBe('N');
+    expect(shortDivision('AL Central')).toBe('C');
+    expect(shortDivision('NL West')).toBe('W');
     expect(shortDivision('Somewhere')).toBe('Somewhere');
+  });
+});
+
+describe('cluesFor', () => {
+  it("heads MLB's conference column as the league", () => {
+    expect(cluesFor('mlb').map((c) => c.header)).toEqual(['Team', 'Lg', 'Div', 'Pos', 'Ht', 'Age', '#']);
+    expect(cluesFor('mlb')[1].label).toBe('League');
+    expect(cluesFor('nfl')[1]).toEqual({ key: 'conference', label: 'Conference', header: 'Conf' });
   });
 });

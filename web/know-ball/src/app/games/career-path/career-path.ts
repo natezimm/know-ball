@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
-import { GameState, League } from '../../core/game-api';
+import { GameState, LEAGUE_NAMES, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { noticeOnMiss } from '../../core/miss-notice';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -39,7 +39,7 @@ interface CareerAnswer {
   alsoAccepted: number;
 }
 
-/** "2011–17", "1998–2004" across a century, "2025–" when it has not ended, "2023" for one NFL season. */
+/** "2011–17", "1998–2004" across a century, "2025–" when it has not ended, "2023" for one NFL or MLB season. */
 export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
   if (stop.to == null) return `${stop.from}–`;
   if (stop.to === stop.from) return `${stop.from}`;
@@ -53,7 +53,7 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Career Path" trim="var(--mustard)" includeInactive practice [leagues]="['nba', 'nfl']" [shareRows]="rows()">
+    <app-game-shell name="Career Path" trim="var(--mustard)" includeInactive practice [leagues]="['nba', 'nfl', 'mlb']" [shareRows]="rows()">
       <div help>
         <p>These are all the teams one {{ leagueName() }} player has been on, in order. Name him in six guesses.</p>
         <p>The answer can be a current player or a retired one, and any player whose career ran through the same teams counts.</p>
@@ -171,11 +171,11 @@ export function stopYears(stop: Pick<CareerStop, 'from' | 'to'>): string {
 export class CareerPath {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" on the NFL edition's address. */
+  /** From the route's data: "nfl" or "mlb" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
-  protected readonly leagueName = computed(() => (this.store.league() === 'nfl' ? 'NFL' : 'NBA'));
+  protected readonly leagueName = computed(() => LEAGUE_NAMES[this.store.league()]);
   private readonly brokenLogos = signal<ReadonlySet<string>>(new Set());
 
   protected readonly years = stopYears;
