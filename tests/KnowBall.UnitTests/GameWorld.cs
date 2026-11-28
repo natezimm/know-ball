@@ -149,6 +149,23 @@ public sealed class GameWorld : IDisposable
             [("mlb-MON", 1996, 1999), ("mlb-BOS", 2000, 2003), ("mlb-LAD", 2004, 2004)], active: false, league: Mlb,
             country: "Dominican Republic", birthPlace: "Santo Domingo, Dominican Republic");
 
+        // Back of the Card: a starter's pitching lines and a slugger's hitting lines, five seasons each.
+        AddFootballSeasons("Ace Starter", "mlb-NYY",
+            (2019, 30, """{"gs":30,"w":12,"l":9,"outs":540,"er":70,"k":180}"""), (2020, 12, """{"gs":12,"w":5,"l":3,"outs":210,"er":20,"k":80}"""),
+            (2021, 32, """{"gs":32,"w":18,"l":5,"outs":630,"er":49,"k":250}"""), (2022, 31, """{"gs":31,"w":14,"l":8,"outs":580,"er":64,"k":220}"""),
+            (2023, 30, """{"gs":30,"w":11,"l":10,"outs":530,"er":80,"k":190}"""));
+        Players["Ace Starter"].Awards.Add(new Award { Season = 2021, Type = "CyYoung" });
+        Players["Ace Starter"].Awards.Add(new Award { Season = 2021, Type = "AllStar" });
+        Players["Ace Starter"].Awards.Add(new Award { Season = 2022, Type = "AllStar" });
+        AddFootballSeasons("Big Bopper", "mlb-LAD",
+            (2018, 140, """{"ab":500,"h":140,"hr":30,"rbi":95}"""), (2019, 150, """{"ab":560,"h":170,"hr":40,"rbi":110}"""),
+            (2020, 55, """{"ab":200,"h":50,"hr":12,"rbi":35}"""), (2021, 155, """{"ab":580,"h":180,"hr":45,"rbi":120}"""),
+            (2022, 150, """{"ab":550,"h":160,"hr":35,"rbi":100}"""));
+        Players["Big Bopper"].Awards.Add(new Award { Season = 2021, Type = "MVP" });
+        Players["Big Bopper"].Awards.Add(new Award { Season = 2021, Type = "SilverSlugger" });
+        Players["Big Bopper"].Awards.Add(new Award { Season = 2019, Type = "SilverSlugger" });
+        Players["Big Bopper"].Awards.Add(new Award { Season = 2022, Type = "GoldGlove" });
+
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();
     }

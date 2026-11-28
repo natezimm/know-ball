@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { GameStore } from '../../core/game-store';
 import { gameState, guess } from '../../core/testing';
-import { BackOfTheCard, CardClues, CardSeason, cardTable, seasonLabel } from './back-of-the-card';
+import { BackOfTheCard, CardClues, CardSeason, cardTable, figure, seasonLabel } from './back-of-the-card';
 
 const seasons: CardSeason[] = [
   { season: 2007, games: 80, points: 20.3, rebounds: 4.4, assists: 2.4 },
@@ -109,6 +109,14 @@ describe('Back of the Card', () => {
   });
 });
 
+describe('figure', () => {
+  it('prints an ERA with its two places and a .400 hitter without the zero', () => {
+    expect(figure(2.1, 2)).toBe('2.10');
+    expect(figure(0.4, 3)).toBe('.400');
+    expect(figure(1, 3)).toBe('1.000');
+  });
+});
+
 describe('cardTable', () => {
   it('prints a football card by year, with its own columns and decimals', () => {
     const table = cardTable({
@@ -120,6 +128,15 @@ describe('cardTable', () => {
     expect(table.headings).toEqual(['Cmp%', 'Yds', 'TD', 'Int']);
     expect(table.seasons[0]).toEqual({ season: 2018, label: '2018', games: 16, cells: ['66.0', '5,097', '50', '12'] });
     expect(table.career.cells).toEqual(['66.0', '5,097', '50', '12']);
+  });
+
+  it('prints a baseball card by year, with a batting average after no leading zero', () => {
+    const table = cardTable({
+      columns: [{ label: 'H', decimals: 0 }, { label: 'HR', decimals: 0 }, { label: 'RBI', decimals: 0 }, { label: 'AVG', decimals: 3 }],
+      seasons: [{ season: 2021, games: 155, values: [180, 45, 120, 0.31] }],
+      career: { seasons: 1, games: 155, values: [180, 45, 120, 0.31] },
+    });
+    expect(table.seasons[0]).toEqual({ season: 2021, label: '2021', games: 155, cells: ['180', '45', '120', '.310'] });
   });
 
   it('prints a basketball card by season, per game', () => {

@@ -26,8 +26,7 @@ public class MlbEditionTests : IDisposable
         var nfl = (await engine.Service.GetDailyAsync("scouting-report", User, CancellationToken.None, "nfl")).Result!;
         Assert.Equal(("mlb", 1), (mlb.League, mlb.Number));
         Assert.NotEqual(nfl.PuzzleId, mlb.PuzzleId);
-        // Back of the Card has no MLB edition yet.
-        Assert.Equal(GameFailure.NotFound, (await engine.Service.GetDailyAsync("back-of-the-card", User, CancellationToken.None, "mlb")).Failure);
+        Assert.Equal("mlb", (await engine.Service.GetDailyAsync("back-of-the-card", User, CancellationToken.None, "mlb")).Result!.League);
     }
 
     [Fact]
@@ -98,6 +97,52 @@ public class MlbEditionTests : IDisposable
     [InlineData("XX", "YY", "miss")]
     public void Baseball_positions_are_close_in_the_same_part_of_the_field(string guess, string answer, string expected) =>
         Assert.Equal(expected, AttributeComparer.BaseballPosition(guess, answer).State);
+
+    [Fact]
+    public async Task Mlb_back_of_the_card_prints_hitting_or_pitching_columns_and_baseball_stamps()
+    {
+        using var engine = Engine();
+        var puzzle = await engine.Scheduler.GetOrCreateDailyAsync(engine.Games.Find("back-of-the-card")!, GameWorld.Today, CancellationToken.None, "mlb");
+        var payload = System.Text.Json.Nodes.JsonNode.Parse(puzzle!.PayloadJson)!;
+        var secret = JsonSerializer.Deserialize<KnowBall.Application.Games.BackOfTheCard.CardSecret>(puzzle.SecretJson, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+        Assert.Contains(secret.Name, new[] { "Ace Starter", "Big Bopper" });
+        Assert.Equal(5, payload["seasons"]!.AsArray().Count);
+        Assert.DoesNotContain(secret.Name, puzzle.PayloadJson);
+
+        var labels = payload["columns"]!.AsArray().Select(c => c!["label"]!.GetValue<string>()).ToList();
+        if (secret.Name == "Ace Starter")
+        {
+            Assert.Equal(["W", "L", "ERA", "SO"], labels);
+            // 2021: 49 earned runs over 210 innings; the career ERA comes from the totals, not an average of seasons.
+            Assert.Equal([18, 5, 2.1, 250], payload["seasons"]![2]!["values"]!.AsArray().Select(v => v!.GetValue<double>()));
+            Assert.Equal(Math.Round(283 * 27 / 2490.0, 2), payload["career"]!["values"]![2]!.GetValue<double>());
+            Assert.Equal([null, null, "Cy Young", "All-Star", null], secret.Stamps);
+        }
+        else
+        {
+            Assert.Equal(["H", "HR", "RBI", "AVG"], labels);
+            Assert.Equal([170, 40, 110, 0.304], payload["seasons"]![1]!["values"]!.AsArray().Select(v => v!.GetValue<double>()));
+            Assert.Equal(Math.Round(700 / 2390.0, 3), payload["career"]!["values"]![3]!.GetValue<double>());
+            Assert.Equal([null, "Silver Slugger", null, "MVP", "Gold Glove"], secret.Stamps);
+        }
+    }
+
+    [Fact]
+    public void A_reliever_card_prints_saves_in_place_of_losses()
+    {
+        var line = new KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.FootballLine(2024, 60,
+            new Dictionary<string, double> { ["w"] = 3, ["l"] = 4, ["sv"] = 38, ["k"] = 80, ["outs"] = 195, ["er"] = 13 });
+        var card = KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("RP", [line]);
+        Assert.Equal(["W", "SV", "ERA", "SO"], card.Columns.Select(c => c.Label));
+        // He pitched in 60 games; a row also counting games he only pinch-ran in has more, but the card prints his 60.
+        var pinchRunner = line with { Games = 64, Totals = new Dictionary<string, double>(line.Totals) { ["pg"] = 60 } };
+        var pitched = KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("RP", [pinchRunner]);
+        Assert.Equal((60, 60), (pitched.Seasons[0].Games, pitched.Career.Games));
+        Assert.Equal(64, KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("TWP", [pinchRunner]).Seasons[0].Games);
+        Assert.Equal([3, 38, 1.8, 80], card.Seasons[0].Values);
+        Assert.Equal(["W", "L", "ERA", "SO"], KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("P", [line]).Columns.Select(c => c.Label));
+        Assert.Equal("AVG", KnowBall.Application.Games.BackOfTheCard.BackOfTheCardGame.BaseballCard("TWP", [line]).Columns[^1].Label);
+    }
 
     [Fact]
     public void Only_the_nba_names_a_season_for_two_years()

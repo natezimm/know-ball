@@ -26,7 +26,7 @@ stays with your browser.
 - **Scouting Report**: guess today's NBA, NFL or MLB player in eight tries; each guess is graded on team, conference,
   division, position, height, age and jersey number.
 - **Career Path**: name the NBA, NFL or MLB player from every team they played for, in order; each miss unlocks a hint.
-- **Back of the Card**: name the NBA or NFL player from every season's stats on the back of their card; each miss uncovers
+- **Back of the Card**: name the NBA, NFL or MLB player from every season's stats on the back of their card; each miss uncovers
   their teams, then position and height, then award stamps, then draft and college.
 - **Team Photo**: a blank team photo of one of the 100 NBA Finals teams since the 1976 merger, or one of the NFL's
   Super Bowl teams since 1999; name its starting five, or its quarterback, running back, two receivers and tight end,

@@ -34,7 +34,7 @@ HISTORY="$ROOT/tests/fixtures/bref"
 NFL="$WORK/nflverse"
 MLB="$WORK/mlbstats"
 
-# Every edition of Scouting Report and Career Path is live, as on the site.
+# Every edition is live, as on the site.
 export Games__Leagues=nba,nfl,mlb
 
 # Career Path needs the history, read here from the fixtures. Wikidata is pointed at a closed port,

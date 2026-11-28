@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
-import { GameState, League } from '../../core/game-api';
+import { GameState, LEAGUE_NAMES, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { noticeOnMiss } from '../../core/miss-notice';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -52,7 +52,10 @@ export interface CardTable {
 const TEAM_STAMPS = new Set(['All-Star', 'All-NBA', 'All-Pro', 'All-Pro 2nd', 'Pro Bowl']);
 
 /** On a narrow phone the longer stamps print short, so each fits on its season's line. */
-const SHORT_STAMPS: Record<string, string> = { 'All-Star': 'AS', 'All-NBA': 'A-NBA', 'All-Pro': 'AP', 'All-Pro 2nd': 'AP2', 'Pro Bowl': 'PB' };
+const SHORT_STAMPS: Record<string, string> = {
+  'All-Star': 'AS', 'All-NBA': 'A-NBA', 'All-Pro': 'AP', 'All-Pro 2nd': 'AP2', 'Pro Bowl': 'PB',
+  'Cy Young': 'CY', 'Silver Slugger': 'SLG', 'Gold Glove': 'GG', 'WS MVP': 'WSMVP',
+};
 
 /** What the misses have uncovered so far. A part that is still covered is left out. */
 export interface CardClues {
@@ -73,12 +76,13 @@ export function seasonLabel(season: number): string {
   return `${two(season)}–${two(season + 1)}`;
 }
 
-/** 5097 with no decimals → "5,097"; 66 with one → "66.0". */
-function figure(value: number, decimals: number): string {
-  return value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+/** 5097 with no decimals → "5,097"; 66 with one → "66.0"; a batting average, with three, → ".287". */
+export function figure(value: number, decimals: number): string {
+  const printed = value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  return decimals === 3 && value < 1 ? printed.replace(/^0/, '') : printed;
 }
 
-/** Either kind of card as rows of printed cells. A football season goes by its own year: 2023, not 23–24. */
+/** Either kind of card as rows of printed cells. A football or baseball season goes by its own year: 2023, not 23–24. */
 export function cardTable(payload: CardPayload | FootballCardPayload): CardTable {
   if ('columns' in payload) {
     const cells = (values: number[]) => values.map((v, i) => figure(v, payload.columns[i]?.decimals ?? 0));
@@ -102,7 +106,7 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [leagues]="['nba', 'nfl']" [shareRows]="rows()">
+    <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [leagues]="['nba', 'nfl', 'mlb']" [shareRows]="rows()">
       <div help>
         <p>This is the back of one {{ leagueName() }} player's card: every season he played, with his name blacked out. Name him in five guesses.</p>
         <p>The answer can be a current player or a retired one.</p>
@@ -115,6 +119,12 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
             Stats are season totals: games played, then the numbers his position is known by. Passing for quarterbacks, rushing
             for running backs, receiving for receivers and tight ends, and tackles, sacks, interceptions and forced fumbles for
             defenders. Every answer's career began in 1999 or later.
+          </p>
+        } @else if (baseball()) {
+          <p>
+            Stats are season totals: games played, then hits, home runs, runs batted in and batting average for a hitter, or
+            wins, losses (saves for a reliever), earned run average and strikeouts for a pitcher. Every answer debuted in 1960
+            or later.
           </p>
         } @else {
           <p>Stats are per game: games played, points, rebounds and assists.</p>
@@ -297,7 +307,7 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
 export class BackOfTheCard {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" on the NFL edition's address. */
+  /** From the route's data: "nfl" or "mlb" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
@@ -305,7 +315,8 @@ export class BackOfTheCard {
   protected readonly teamStamps = TEAM_STAMPS;
   protected readonly shortStamps = SHORT_STAMPS;
   protected readonly football = computed(() => this.store.league() === 'nfl');
-  protected readonly leagueName = computed(() => (this.football() ? 'NFL' : 'NBA'));
+  protected readonly baseball = computed(() => this.store.league() === 'mlb');
+  protected readonly leagueName = computed(() => LEAGUE_NAMES[this.store.league()]);
   protected readonly state = computed(() => this.store.state() as GameState<CardPayload | FootballCardPayload, CardClues> | null);
   protected readonly table = computed(() => {
     const payload = this.state()?.payload;
