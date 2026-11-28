@@ -26,7 +26,7 @@ public static partial class GameEndpoints
         games.MapGet($"/{Game}/daily", (string game, string? league, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => Respond(await service.GetDailyAsync(game, user, ct, league))))
             .WithName("DailyPuzzle")
-            .WithSummary("Today's puzzle with this player's progress, for ?league=nba (the default) or nfl. The answer is absent until the game is over.");
+            .WithSummary("Today's puzzle with this player's progress, for ?league=nba (the default), nfl or mlb. The answer is absent until the game is over.");
 
         games.MapGet($"/{Game}/puzzles/{{puzzleId:int}}", (string game, int puzzleId, HttpContext http, GameService service, CancellationToken ct) =>
                 WithPlayer(http, async user => Respond(await service.GetPuzzleAsync(game, puzzleId, user, ct))))

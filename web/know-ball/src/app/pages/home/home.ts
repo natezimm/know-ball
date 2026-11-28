@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GameApi, GameSlug, GameStats, League, TodayEntry } from '../../core/game-api';
+import { GameApi, GameSlug, GameStats, LEAGUE_NAMES, League, OTHER_LEAGUES, TodayEntry } from '../../core/game-api';
 import { NumbersToday, numbersStreak, numbersToday } from '../../core/numbers-today';
 import { Tilt } from '../../shared/tilt/tilt';
 
@@ -66,6 +66,13 @@ export function quizStatus(play: string, today: NumbersToday | null): ReturnType
   return today.answered ? { label: `Carry on · ${today.answered} of 5`, open: true } : { label: play, open: true };
 }
 
+/** A daily's edition in another league: a second badge on the card, with its own link. */
+interface Edition {
+  league: League;
+  name: string;
+  status: ReturnType<typeof cardStatus>;
+}
+
 const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
 
 @Component({
@@ -80,7 +87,7 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
 
     <ul class="grid" aria-label="Games">
       @for (card of cards(); track card.name; let i = $index) {
-        <li class="card" kbTilt [style.--trim]="card.trim" [class.off]="!card.status.open && !card.nfl?.open" [class.kb-foil]="card.status.foil">
+        <li class="card" kbTilt [style.--trim]="card.trim" [class.off]="!card.status.open && !card.anyEditionOpen" [class.kb-foil]="card.status.foil">
           <i class="kb-shine" [class.gold]="card.status.foil === 'gold'" aria-hidden="true"></i>
           <div class="top">
             <span class="no">{{ card.kind }}</span>
@@ -128,17 +135,17 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
           <h2>{{ card.name }}</h2>
           <p>{{ card.blurb }}</p>
           @if (card.status.open) {
-            <a class="badge play" [class.done]="card.status.done" [class.missed]="card.status.missed" [routerLink]="card.link" [attr.aria-label]="card.name + (card.nfl ? ' NBA' : '') + ': ' + card.status.label">
-              {{ card.nfl ? 'NBA · ' : '' }}{{ card.status.label }}
+            <a class="badge play" [class.done]="card.status.done" [class.missed]="card.status.missed" [routerLink]="card.link" [attr.aria-label]="card.name + (card.editions.length ? ' NBA' : '') + ': ' + card.status.label">
+              {{ card.editions.length ? 'NBA · ' : '' }}{{ card.status.label }}
             </a>
           } @else {
-            <span class="badge">{{ card.nfl ? 'NBA · ' : '' }}{{ card.status.label }}</span>
+            <span class="badge">{{ card.editions.length ? 'NBA · ' : '' }}{{ card.status.label }}</span>
           }
-          @if (card.nfl; as nfl) {
-            @if (nfl.open) {
-              <a class="badge play edition" [class.done]="nfl.done" [class.missed]="nfl.missed" [routerLink]="card.link + '/nfl'" [attr.aria-label]="card.name + ' NFL: ' + nfl.label">NFL · {{ nfl.label }}</a>
+          @for (e of card.editions; track e.league) {
+            @if (e.status.open) {
+              <a class="badge play edition" [class.done]="e.status.done" [class.missed]="e.status.missed" [routerLink]="card.link + '/' + e.league" [attr.aria-label]="card.name + ' ' + e.name + ': ' + e.status.label">{{ e.name }} · {{ e.status.label }}</a>
             } @else {
-              <span class="badge edition">NFL · {{ nfl.label }}</span>
+              <span class="badge edition">{{ e.name }} · {{ e.status.label }}</span>
             }
           }
           <span class="set-no" aria-hidden="true">No. {{ i + 1 }}</span>
@@ -202,8 +209,10 @@ const COUNT_WORDS = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
       font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
     }
     .badge.play { background: var(--accent); color: var(--accent-ink); text-decoration: none; }
-    /* A game with an NFL edition shows a second badge under the first, with a link of its own above the card's. */
-    .badge.edition { margin-top: 4px; position: relative; z-index: 4; }
+    /* A game with NFL or MLB editions shows a badge for each under the first, each a link of its own above the card's. */
+    /* Spaced evenly, with room between them for each to take a full-size tap of its own. */
+    .badge.edition { margin-top: 18px; position: relative; z-index: 4; }
+    .card:has(.edition) .badge:not(.edition) { margin-top: 14px; }
     /* Its own touch area is the badge and a little above and below, not the whole card. */
     .badge.play.edition::after { inset: min(0px, (100% - 44px) / 2) 0; z-index: auto; }
     .badge.done { background: var(--ok); color: var(--ok-ink); }
@@ -269,18 +278,25 @@ export class Home {
     const find = <T extends { game: GameSlug; league?: League }>(rows: T[] | null | undefined, game: GameSlug | undefined, league: League) =>
       rows?.find((r) => r.game === game && (r.league ?? 'nba') === league);
     return this.games.map((card) => {
-      if (paused.includes(card.link.slice(1))) return { ...card, status: { label: 'Taking a break', open: false } as ReturnType<typeof cardStatus>, nfl: null, streak: 0 };
-      if (card.quiz) return { ...card, status: quizStatus(card.play!, this.quiz), nfl: null, streak: this.quizStreak };
+      const none = { editions: [] as Edition[], anyEditionOpen: false };
+      if (paused.includes(card.link.slice(1))) return { ...card, status: { label: 'Taking a break', open: false } as ReturnType<typeof cardStatus>, ...none, streak: 0 };
+      if (card.quiz) return { ...card, status: quizStatus(card.play!, this.quiz), ...none, streak: this.quizStreak };
       const status = cardStatus(card, find(today, card.daily, 'nba'), loaded);
       // The NFL edition shows only once the API lists it for today.
-      const nflEntry = find(today, card.daily, 'nfl');
-      const nfl = nflEntry ? cardStatus(card, nflEntry, loaded) : null;
+      const editions: Edition[] = OTHER_LEAGUES.flatMap((league) => {
+        const entry = find(today, card.daily, league);
+        return entry ? [{ league, name: LEAGUE_NAMES[league], status: cardStatus(card, entry, loaded) }] : [];
+      });
+      const all = [status, ...editions.map((e) => e.status)];
       return {
         ...card,
         // Foil once every edition is solved; gold only if each took one guess.
-        status: nfl ? { ...status, foil: status.foil && nfl.foil ? (status.foil === 'gold' && nfl.foil === 'gold' ? 'gold' : 'holo') : undefined } as typeof status : status,
-        nfl,
-        streak: Math.max(find(stats, card.daily, 'nba')?.currentStreak ?? 0, find(stats, card.daily, 'nfl')?.currentStreak ?? 0),
+        status: editions.length
+          ? { ...status, foil: all.every((s) => s.foil) ? (all.every((s) => s.foil === 'gold') ? 'gold' : 'holo') : undefined } as typeof status
+          : status,
+        editions,
+        anyEditionOpen: editions.some((e) => e.status.open),
+        streak: Math.max(...(['nba', ...OTHER_LEAGUES] as League[]).map((league) => find(stats, card.daily, league)?.currentStreak ?? 0)),
       };
     });
   });

@@ -3,9 +3,11 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export type GameSlug = 'scouting-report' | 'career-path' | 'back-of-the-card' | 'team-photo';
-/** The leagues a game can have an edition in. NBA is every game's first; Scouting Report, Career Path and Back of the Card also have an NFL one. */
-export type League = 'nba' | 'nfl';
-export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL' };
+/** The leagues a game can have an edition in. NBA is every game's first; the player games also have an NFL one, and some an MLB one. */
+export type League = 'nba' | 'nfl' | 'mlb';
+export const LEAGUE_NAMES: Record<League, string> = { nba: 'NBA', nfl: 'NFL', mlb: 'MLB' };
+/** The editions after the NBA, in the order the switch and the home page show them. */
+export const OTHER_LEAGUES: League[] = ['nfl', 'mlb'];
 export type PlayStatus = 'playing' | 'won' | 'lost';
 /** As shown in lists: a puzzle not yet started is "new". */
 export type ResultStatus = PlayStatus | 'new';

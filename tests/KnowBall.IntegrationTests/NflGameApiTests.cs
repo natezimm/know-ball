@@ -125,7 +125,7 @@ public sealed class NflGameApiTests(ApiFactory factory) : IAsyncLifetime
     {
         var client = NewPlayer();
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/back-of-the-card/daily?league=nfl")).StatusCode);
-        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/career-path/daily?league=mlb")).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/api/back-of-the-card/daily?league=mlb")).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await client.PostAsync("/api/scouting-report/practice?league=nhl", null)).StatusCode);
     }
 
