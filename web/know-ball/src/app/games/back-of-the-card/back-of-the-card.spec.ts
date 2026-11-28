@@ -122,6 +122,18 @@ describe('cardTable', () => {
     expect(table.career.cells).toEqual(['66.0', '5,097', '50', '12']);
   });
 
+  it('prints a hockey card by two-year season, with a save percentage the way a card prints it', () => {
+    const table = cardTable({
+      columns: [{ label: 'W', decimals: 0 }, { label: 'GAA', decimals: 2 }, { label: 'Sv%', decimals: 3 }, { label: 'SO', decimals: 0 }],
+      splitYears: true,
+      seasons: [{ season: 2023, games: 60, values: [35, 2.5, 0.912, 4] }],
+      career: { seasons: 1, games: 60, values: [35, 2.5, 0.912, 4] },
+    });
+
+    expect(table.seasons[0]).toEqual({ season: 2023, label: '23–24', games: 60, cells: ['35', '2.50', '.912', '4'] });
+    expect(table.career.cells).toEqual(['35', '2.50', '.912', '4']);
+  });
+
   it('prints a basketball card by season, per game', () => {
     const table = cardTable(payload);
     expect(table.headings).toEqual(['Pts', 'Reb', 'Ast']);

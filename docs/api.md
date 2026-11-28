@@ -37,14 +37,18 @@ infielders, outfielders; a two-way player is close to a pitcher and to a designa
 named for its seasons' years (`2019–2023`), like the NFL's, and a player who went to no college has a `Born` hint
 with his birthplace in place of `From`.
 
-Scouting Report and Career Path also have an NHL edition (`?league=nhl`), live when `Games:Leagues` lists `nhl`. Its
-pages are `/scouting-report/nhl` and `/career-path/nhl`. NHL Career Path answers began their careers in 1979-80 or
+Scouting Report, Career Path and Back of the Card also have an NHL edition (`?league=nhl`), live when `Games:Leagues`
+lists `nhl`. Its pages are `/scouting-report/nhl`, `/career-path/nhl` and `/back-of-the-card/nhl`. NHL Career Path answers began their careers in 1979-80 or
 later, and their country of birth is the hint in place of a college. In NHL Scouting Report the position is close
 when both players are forwards (C, LW, RW); defence and goal match only exactly.
 
 An NFL Back of the Card payload has `columns` (`label` and `decimals`) for the player's position group (passing,
 rushing, receiving or defence), each season's `games` and `values` as season totals, and a career line of totals;
-seasons are by their own year. The NBA payload keeps `points`, `rebounds` and `assists` per game.
+seasons are by their own year. The NBA payload keeps `points`, `rebounds` and `assists` per game. An NHL payload has the
+same shape with `splitYears: true` (seasons span two years, 2023 being 2023-24): goals, assists, points and plus-minus
+for a skater, or wins, goals-against average, save percentage and shutouts for a goalie, whose career rates are
+weighted by games started. Its stamps are the NHL trophies and the Stanley Cup, and its last clue is the country of
+birth rather than a college.
 
 Team Photo has five answers instead of one. Its payload is a Finals team (`team`, `season`, `wins`, `losses`,
 `finals` of `won` or `lost`) and five `slots`, each with a `position`, a `row` (`back` or `front`) and that

@@ -1,5 +1,6 @@
 // Writes a small made-up NHL league as the answers of the NHL's stats and site APIs, for the browser tests: enough
-// current players to lose a game of Scouting Report and enough well-travelled ones for Career Path. The seasons run
+// current players to lose a game of Scouting Report, enough well-travelled ones for Career Path, and five seasons
+// each for Back of the Card. The seasons run
 // up to the one being played now, so the importer reads them as recent whatever the date.
 // Usage: node nhl-fixtures.mjs <out-dir>; prints the first season, for Sources__Nhl__FirstSeason.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';

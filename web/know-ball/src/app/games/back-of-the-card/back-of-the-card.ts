@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
-import { GameState, League } from '../../core/game-api';
+import { GameState, LEAGUE_NAMES, League } from '../../core/game-api';
 import { GameStore } from '../../core/game-store';
 import { noticeOnMiss } from '../../core/miss-notice';
 import { loadFromRoute } from '../../core/puzzle-route';
@@ -28,15 +28,17 @@ interface CardPayload {
   career: CardCareer;
 }
 
-/** A football card's stat column after games, and the decimals it prints with. */
+/** A football or hockey card's stat column after games, and the decimals it prints with. */
 export interface CardColumn {
   label: string;
   decimals: number;
 }
 
-/** A football card: columns that suit the player's position, and season totals. */
+/** A football or hockey card: columns that suit the player's position, and season totals. */
 export interface FootballCardPayload {
   columns: CardColumn[];
+  /** True when a season spans two years, as a hockey one does: printed 23–24 rather than 2023. */
+  splitYears?: boolean;
   seasons: { season: number; games: number; values: number[] }[];
   career: { seasons: number; games: number; values: number[] };
 }
@@ -49,10 +51,13 @@ export interface CardTable {
 }
 
 /** Stamps for making a team, printed in teal; the rest are individual awards, in red. */
-const TEAM_STAMPS = new Set(['All-Star', 'All-NBA', 'All-Pro', 'All-Pro 2nd', 'Pro Bowl']);
+const TEAM_STAMPS = new Set(['All-Star', 'All-NBA', 'All-Pro', 'All-Pro 2nd', 'Pro Bowl', 'Stanley Cup']);
 
 /** On a narrow phone the longer stamps print short, so each fits on its season's line. */
-const SHORT_STAMPS: Record<string, string> = { 'All-Star': 'AS', 'All-NBA': 'A-NBA', 'All-Pro': 'AP', 'All-Pro 2nd': 'AP2', 'Pro Bowl': 'PB' };
+const SHORT_STAMPS: Record<string, string> = {
+  'All-Star': 'AS', 'All-NBA': 'A-NBA', 'All-Pro': 'AP', 'All-Pro 2nd': 'AP2', 'Pro Bowl': 'PB',
+  'Conn Smythe': 'Smythe', 'Rocket Richard': 'Rocket', 'Art Ross': 'Ross', 'Stanley Cup': 'Cup', 'Lady Byng': 'Byng',
+};
 
 /** What the misses have uncovered so far. A part that is still covered is left out. */
 export interface CardClues {
@@ -73,9 +78,10 @@ export function seasonLabel(season: number): string {
   return `${two(season)}–${two(season + 1)}`;
 }
 
-/** 5097 with no decimals → "5,097"; 66 with one → "66.0". */
+/** 5097 with no decimals → "5,097"; 66 with one → "66.0"; a rate under one with three, like a save percentage, → ".912". */
 function figure(value: number, decimals: number): string {
-  return value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  const text = value.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  return decimals >= 3 && Math.abs(value) < 1 ? text.replace(/^(-?)0\./, '$1.') : text;
 }
 
 /** Either kind of card as rows of printed cells. A football season goes by its own year: 2023, not 23–24. */
@@ -84,7 +90,12 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
     const cells = (values: number[]) => values.map((v, i) => figure(v, payload.columns[i]?.decimals ?? 0));
     return {
       headings: payload.columns.map((c) => c.label),
-      seasons: payload.seasons.map((s) => ({ season: s.season, label: String(s.season), games: s.games, cells: cells(s.values) })),
+      seasons: payload.seasons.map((s) => ({
+        season: s.season,
+        label: payload.splitYears ? seasonLabel(s.season) : String(s.season),
+        games: s.games,
+        cells: cells(s.values),
+      })),
       career: { seasons: payload.career.seasons, games: payload.career.games, cells: cells(payload.career.values) },
     };
   }
@@ -102,15 +113,20 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
   imports: [Avatar, GameShell],
   providers: [GameStore],
   template: `
-    <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [leagues]="['nba', 'nfl']" [shareRows]="rows()">
+    <app-game-shell name="Back of the Card" trim="var(--gold)" includeInactive practice [leagues]="['nba', 'nfl', 'nhl']" [shareRows]="rows()">
       <div help>
         <p>This is the back of one {{ leagueName() }} player's card: every season he played, with his name blacked out. Name him in five guesses.</p>
         <p>The answer can be a current player or a retired one.</p>
         <p>
           Each wrong guess uncovers the next part of the card: first his team each season, then his position and height,
-          then the awards stamped on his best seasons, then his draft and college. Your last guess sees the whole card.
+          then the awards stamped on his best seasons, then his draft and {{ hockey() ? 'country' : 'college' }}. Your last guess sees the whole card.
         </p>
-        @if (football()) {
+        @if (hockey()) {
+          <p>
+            Stats are season totals: games played, then goals, assists, points and plus-minus for a skater, or wins,
+            goals-against average, save percentage and shutouts for a goalie. Every answer's career began in 1979-80 or later.
+          </p>
+        } @else if (football()) {
           <p>
             Stats are season totals: games played, then the numbers his position is known by. Passing for quarterbacks, rushing
             for running backs, receiving for receivers and tight ends, and tackles, sacks, interceptions and forced fumbles for
@@ -187,7 +203,7 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
           @if (clues()?.origin; as origin) {
             <p class="fact" [class.fresh]="fresh(3)"><b>{{ origin.label }}:</b> {{ origin.value }}</p>
           } @else {
-            <p class="fact locked">Draft and college: {{ originIn() }} {{ originIn() === 1 ? 'miss' : 'misses' }} away</p>
+            <p class="fact locked">Draft and {{ hockey() ? 'country' : 'college' }}: {{ originIn() }} {{ originIn() === 1 ? 'miss' : 'misses' }} away</p>
           }
         </article>
 
@@ -297,7 +313,7 @@ export function cardTable(payload: CardPayload | FootballCardPayload): CardTable
 export class BackOfTheCard {
   /** From the address: a past or practice puzzle's id; absent for today's. */
   readonly puzzleId = input<string>();
-  /** From the route's data: "nfl" on the NFL edition's address. */
+  /** From the route's data: "nfl" or "nhl" on those editions' addresses. */
   readonly league = input<League>();
 
   private readonly store = inject(GameStore);
@@ -305,7 +321,8 @@ export class BackOfTheCard {
   protected readonly teamStamps = TEAM_STAMPS;
   protected readonly shortStamps = SHORT_STAMPS;
   protected readonly football = computed(() => this.store.league() === 'nfl');
-  protected readonly leagueName = computed(() => (this.football() ? 'NFL' : 'NBA'));
+  protected readonly hockey = computed(() => this.store.league() === 'nhl');
+  protected readonly leagueName = computed(() => LEAGUE_NAMES[this.store.league()]);
   protected readonly state = computed(() => this.store.state() as GameState<CardPayload | FootballCardPayload, CardClues> | null);
   protected readonly table = computed(() => {
     const payload = this.state()?.payload;

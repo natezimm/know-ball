@@ -1,18 +1,20 @@
 import { Page } from '@playwright/test';
 import { Player, expect, guessPlayer, learnDaily, nhlPlayers, test } from './support';
 
-// The NHL editions of Scouting Report and Career Path, on the made-up league e2e/serve.sh writes with nhl-fixtures.mjs.
+// The NHL editions of Scouting Report, Career Path and Back of the Card, on the made-up league e2e/serve.sh writes with nhl-fixtures.mjs.
 let pool: Player[];
 let career: { answer: Player; wrong: Player[] };
 let scouting: { answer: Player; wrong: Player[] };
+let card: { answer: Player; wrong: Player[] };
 
 test.beforeAll(async ({ request }) => {
   pool = await nhlPlayers(request);
   career = await learnDaily(request, 'career-path', pool, 'nhl');
   scouting = await learnDaily(request, 'scouting-report', pool, 'nhl');
+  card = await learnDaily(request, 'back-of-the-card', pool, 'nhl');
 });
 
-async function openNhl(page: Page, game: 'career-path' | 'scouting-report') {
+async function openNhl(page: Page, game: 'career-path' | 'scouting-report' | 'back-of-the-card') {
   await page.goto(`/${game}/nhl`);
   const leagues = page.getByRole('navigation', { name: 'League' });
   await expect(leagues.getByRole('link', { name: 'NHL' })).toHaveAttribute('aria-current', 'page');
@@ -74,4 +76,31 @@ test('NHL Scouting Report is lost after eight misses', async ({ page }) => {
   const result = page.locator('.result');
   await expect(result).toContainText('The answer was');
   await expect(result.getByText(scouting.answer.fullName, { exact: true })).toBeVisible();
+});
+
+test('NHL Back of the Card prints a skater or goalie line by two-year season and is won', async ({ page }) => {
+  await openNhl(page, 'back-of-the-card');
+  await expect(page.getByRole('heading', { name: 'Whose card is this?' })).toBeVisible();
+  const headings = await page.locator('.back thead th').allTextContents();
+  expect(headings.slice(0, 3)).toEqual(['Year', 'Club', 'G']);
+  expect([['G', 'A', 'Pts', '+/-'], ['W', 'GAA', 'Sv%', 'SO']]).toContainEqual(headings.slice(3));
+  await expect(page.locator('.back tbody tr td:first-child').first()).toHaveText(/^\d\d–\d\d$/);
+
+  await guessPlayer(page, card.wrong[0].fullName);
+  await guessPlayer(page, card.answer.fullName);
+  await expect(page.locator('.result')).toContainText('Solved in 2 guesses');
+  await expect(page.locator('.strip .name')).toHaveText(card.answer.fullName);
+
+  await page.goto('/');
+  const home = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Back of the Card' }) });
+  await expect(home.getByRole('link', { name: 'Back of the Card NHL: Solved in 2' })).toHaveAttribute('href', '/back-of-the-card/nhl');
+});
+
+test('NHL Back of the Card is lost after five misses', async ({ page }) => {
+  await openNhl(page, 'back-of-the-card');
+  for (const player of card.wrong.slice(0, 5)) await guessPlayer(page, player.fullName);
+
+  const result = page.locator('.result');
+  await expect(result).toContainText('The answer was');
+  await expect(result.getByText(card.answer.fullName, { exact: true })).toBeVisible();
 });

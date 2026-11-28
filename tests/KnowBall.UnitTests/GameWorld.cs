@@ -172,6 +172,18 @@ public sealed class GameWorld : IDisposable
             active: false, league: Nhl, college: "Boston University", country: "Sweden", draft: (1989, 4));
         AddPlayer("Pre Merger", null, "C", 70, "1956-05-05", null, 99,
             [("nhl-TOR", 1975, 1985), ("nhl-BOS", 1986, 1990), ("nhl-EDM", 1991, 1991)], active: false, league: Nhl);
+        // Back of the Card: a skater's and a goalie's totals, and five seasons of a career that began before the record.
+        AddFootballSeasons("Road Tripper", "nhl-QUE", (1990, 80, """{"g":30,"a":40,"pts":70,"pm":5}"""), (1991, 78, """{"g":35,"a":45,"pts":80,"pm":-3}"""),
+            (1992, 82, """{"g":40,"a":50,"pts":90,"pm":12}"""), (1993, 70, """{"g":25,"a":30,"pts":55,"pm":0}"""));
+        AddFootballSeasons("Road Tripper", "nhl-COL", (1995, 81, """{"g":28,"a":35,"pts":63,"pm":20}"""));
+        Players["Road Tripper"].Awards.Add(new Award { Season = 1992, Type = "ArtRoss" });
+        Players["Road Tripper"].Awards.Add(new Award { Season = 1995, Type = "StanleyCup" });
+        AddFootballSeasons("Net Minder", "nhl-COL", (2017, 60, """{"gs":60,"w":35,"l":20,"otl":5,"gaa":2.4,"svp":0.92,"so":5}"""),
+            (2018, 50, """{"gs":40,"w":20,"l":15,"otl":5,"gaa":2.9,"svp":0.905,"so":2}"""), (2019, 55, """{"gs":55,"w":30,"gaa":2.5,"svp":0.915,"so":3}"""),
+            (2020, 40, """{"gs":40,"w":25,"gaa":2.2,"svp":0.925,"so":4}"""), (2021, 45, """{"gs":45,"w":22,"gaa":2.7,"svp":0.91,"so":1}"""));
+        Players["Net Minder"].Awards.Add(new Award { Season = 2020, Type = "Vezina" });
+        foreach (var season in new[] { 1979, 1980, 1981, 1982, 1983 })
+            AddFootballSeasons("Pre Merger", "nhl-TOR", (season, 80, """{"g":50,"a":50,"pts":100,"pm":30}"""));
 
         ctx.Players.AddRange(Players.Values);
         ctx.SaveChanges();
